@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct CheckList: View {
+public struct CheckOption: View {
   public enum CheckState: Equatable {
     case `default`
     case selected
@@ -66,3 +66,49 @@ public struct CheckList: View {
   }
 }
 
+
+#Preview {
+  ZStack {
+    HStack {
+      CheckOption(
+        state: .constant(.default),
+        title: "",
+        size: 14,
+        type: .empha,
+        selected: {
+          
+        }
+      )
+      
+      CheckOption(
+        state: .constant(.default),
+        title: "기본",
+        size: 14,
+        type: .empha,
+        selected: {
+          
+        }
+      )
+      
+      CheckOption(
+        state: .constant(.selected),
+        title: "선택",
+        size: 14,
+        type: .empha,
+        selected: {
+          
+        }
+      )
+      
+      CheckOption(
+        state: .constant(.disabled),
+        title: "선택 불가",
+        size: 14,
+        type: .empha,
+        selected: {
+          
+        }
+      )
+    }
+  }
+}
