@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public extension View {
+extension View {
   @ViewBuilder
   func applyIf<T: View>(_ condition: Bool, apply: (Self) -> T) -> some View {
     if condition {
