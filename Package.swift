@@ -6,6 +6,7 @@ import PackageDescription
 let package = Package(
   name: "ShoplDesignGuide",
   platforms: [
+    .macOS(.v12),
     .iOS(.v15)
   ],
   products: [
@@ -13,9 +14,15 @@ let package = Package(
       name: "ShoplDesignGuide",
       targets: ["ShoplDesignGuide"]),
   ],
+  dependencies: [
+    .package(url: "https://github.com/onevcat/Kingfisher", exact: "7.10.0"),
+  ],
   targets: [
     .target(
       name: "ShoplDesignGuide",
+      dependencies: [
+        "Kingfisher"
+      ],
       resources: [
         .process("Resources")
       ]
