@@ -10,7 +10,7 @@ import SwiftUI
 
 extension View {
   public func iconPopup<Content: View>(
-    isPresented: Binding<Bool>,
+    isPresented: Bool,
     @ViewBuilder icon: @escaping () -> Content,
     iconAlignment: Alignment,
     title: SDGPopupTitle?,
@@ -125,7 +125,7 @@ struct SDGIconPopup<IconAreaContent: View>: View {
 #Preview {
   Color.clear
     .iconPopup(
-      isPresented: .constant(true),
+      isPresented: true,
       icon: {
         Image(systemName: "exclamationmark.triangle.fill")
           .frame(width: 20, height: 20)
@@ -150,13 +150,13 @@ struct SDGIconPopup<IconAreaContent: View>: View {
           option1: .init(
             title: "취소",
             action: {
-              
+              print("취소")
             }
           ),
           option2: .init(
             title: "확인",
             action: {
-              
+              print("확인")
             }
           )
         )

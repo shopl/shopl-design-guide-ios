@@ -10,7 +10,7 @@ import SwiftUI
 
 extension View {
   public func centerInfoPopup(
-    isPresented: Binding<Bool>,
+    isPresented: Bool,
     title: String,
     bodyText: String,
     buttonOption: SDGPopupButton.Button.Option,

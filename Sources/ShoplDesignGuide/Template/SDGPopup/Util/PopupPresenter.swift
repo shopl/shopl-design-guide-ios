@@ -10,12 +10,12 @@ import SwiftUI
 
 public struct PopupPresenter<PopupContent: View>: View {
   
-  @Binding var isPresented: Bool
+  let isPresented: Bool
   @ViewBuilder let content: () -> PopupContent
   let tapOutsideAction: (() -> Void)?
   
-  public init(isPresented: Binding<Bool>, content: @escaping () -> PopupContent, tapOutsideAction: (() -> Void)?) {
-    self._isPresented = isPresented
+  public init(isPresented: Bool, content: @escaping () -> PopupContent, tapOutsideAction: (() -> Void)?) {
+    self.isPresented = isPresented
     self.content = content
     self.tapOutsideAction = tapOutsideAction
   }
