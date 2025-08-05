@@ -10,14 +10,13 @@ import SwiftUI
 
 extension View {
   public func centerInputPopup(
-    isPresented: Binding<Bool>,
+    isPresented: Bool,
     title: String,
     bodyText: String,
     inputTitle: String,
     placeholder: String,
     input: Binding<String>,
     maxLength: Int,
-    buttonState: Binding<SDGPopupButton.Status>,
     leftButtonOption: SDGPopupButton.Button.Option,
     rightButtonOption: SDGPopupButton.Button.Option,
     tapOutsideAction: (() -> Void)? = nil
@@ -34,7 +33,6 @@ extension View {
           placeholder: placeholder,
           input: input,
           maxLength: maxLength,
-          buttonState: buttonState,
           leftButtonOption: leftButtonOption,
           rightButtonOption: rightButtonOption
         )
@@ -51,7 +49,6 @@ private struct SDGInputPopup: View {
   let placeholder: String
   let input: Binding<String>
   let maxLength: Int
-  let buttonState: Binding<SDGPopupButton.Status>
   let leftButtonOption: SDGPopupButton.Button.Option
   let rightButtonOption: SDGPopupButton.Button.Option
   

@@ -10,7 +10,7 @@ import SwiftUI
 
 extension View {
   public func centerPopup<Content: View>(
-    isPresented: Binding<Bool>,
+    isPresented: Bool,
     title: SDGPopupTitle?,
     @ViewBuilder body: @escaping () -> Content,
     button: SDGPopupButton,
@@ -108,7 +108,7 @@ struct SDGCenterPopup<BodyContent: View>: View {
   VStack(spacing: 0) {
     Color.clear
       .centerPopup(
-        isPresented: .constant(true),
+        isPresented: true,
         title: .init(
           title: "타이틀",
           color: .neutral400,
@@ -123,17 +123,11 @@ struct SDGCenterPopup<BodyContent: View>: View {
           )
         },
         button: .init(
-          button: .twoOptions(
-            option1: .init(
-              title: "취소",
-              action: {
-                
-              }
-            ),
-            option2: .init(
+          button: .oneOption(
+            option: .init(
               title: "확인",
               action: {
-                
+                print("확인")
               }
             )
           )
@@ -142,7 +136,7 @@ struct SDGCenterPopup<BodyContent: View>: View {
     
     Color.clear
       .centerPopup(
-        isPresented: .constant(true),
+        isPresented: true,
         title: .init(
           title: "타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀",
           color: .neutral400,
@@ -178,13 +172,13 @@ struct SDGCenterPopup<BodyContent: View>: View {
             option1: .init(
               title: "취소취소취소취소취소취소취소취소취소취소취소취소",
               action: {
-                
+                print("취소")
               }
             ),
             option2: .init(
               title: "확인확인확인확인확인확인확인확인확인확인확인확인",
               action: {
-                
+                print("확인")
               }
             )
           )

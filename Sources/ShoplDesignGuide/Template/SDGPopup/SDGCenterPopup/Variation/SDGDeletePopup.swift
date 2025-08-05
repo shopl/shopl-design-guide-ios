@@ -10,7 +10,7 @@ import SwiftUI
 
 extension View {
   public func centerDeletePopup(
-    isPresented: Binding<Bool>,
+    isPresented: Bool,
     title: String,
     bodyText: String,
     leftButtonOption: SDGPopupButton.Button.Option,

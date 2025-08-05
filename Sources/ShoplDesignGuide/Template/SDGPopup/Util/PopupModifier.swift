@@ -9,16 +9,16 @@
 import SwiftUI
 
 public struct PopupModifier<PopupContent: View>: ViewModifier {
-  @Binding var isPresented: Bool
+  let isPresented: Bool
   let tapOutsideAction: (() -> Void)?
   @ViewBuilder let popupContent: () -> PopupContent
   
   public init(
-    isPresented: Binding<Bool>,
+    isPresented: Bool,
     tapOutsideAction: (() -> Void)? = nil,
     @ViewBuilder popupContent: @escaping () -> PopupContent
   ) {
-    self._isPresented = isPresented
+    self.isPresented = isPresented
     self.tapOutsideAction = tapOutsideAction
     self.popupContent = popupContent
   }
@@ -28,7 +28,7 @@ public struct PopupModifier<PopupContent: View>: ViewModifier {
       content
       
       PopupPresenter(
-        isPresented: $isPresented,
+        isPresented: isPresented,
         content: popupContent,
         tapOutsideAction: tapOutsideAction
       )
