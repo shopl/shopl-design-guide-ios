@@ -57,73 +57,81 @@ public struct SDGPopupButton: View {
       
       switch button {
       case let .oneOption(option):
-        GhostButton(
-          image: nil,
+        SDGGhostButton(
           title: option.title,
-          size: .l,
-          titleColor: TypoColor.neutral700.color,
-          weight: .SB,
-          isDisabled: isDisabledBinding,
+          titleColor: .neutral700,
+          size: .large,
+          labelWeight: .SB,
+          status: .default,
+          iconOption: nil,
           action: option.action
         )
+        .expandTouchArea {
+          option.action()
+        }
         
       case let .twoOptions(option1, option2):
         HStack(spacing: 0) {
-          GhostButton(
-            image: nil,
+          SDGGhostButton(
             title: option1.title,
-            size: .l,
-            titleColor: TypoColor.neutral700.color,
+            titleColor: .neutral700,
+            size: .large,
+            labelWeight: .SB,
+            status: .default,
+            iconOption: nil,
             action: option1.action
           )
-          .frame(maxWidth: .infinity, alignment: .center)
-          .onTapGesture {
+          .expandTouchArea {
             option1.action()
           }
           
           TypoColor.neutral200.color
             .frame(width: 1)
           
-          GhostButton(
-            image: nil,
+          SDGGhostButton(
             title: option2.title,
-            size: .l,
-            titleColor: TypoColor.neutral700.color,
-            weight: .SB,
-            isDisabled: isDisabledBinding,
+            titleColor: .neutral700,
+            size: .large,
+            labelWeight: .SB,
+            status: .default,
+            iconOption: nil,
             action: option2.action
           )
-          .frame(maxWidth: .infinity, alignment: .center)
-          .onTapGesture {
+          .expandTouchArea {
             option2.action()
           }
         }
         
       case let .delete(option1, option2):
         HStack(spacing: 0) {
-          
-          GhostButton(
-            image: nil,
+          SDGGhostButton(
             title: option1.title,
-            size: .l,
-            titleColor: TypoColor.neutral700.color,
-            fullSize: true,
+            titleColor: .neutral700,
+            size: .large,
+            labelWeight: .SB,
+            status: .default,
+            iconOption: nil,
             action: option1.action
           )
+          .expandTouchArea {
+            option1.action()
+          }
           
           TypoColor.neutral200.color
             .frame(width: 1)
-
-          GhostButton(
-            image: nil,
+          
+          SDGGhostButton(
             title: option2.title,
-            size: .l,
-            titleColor: TypoColor.red300.color,
-            weight: .SB,
-            fullSize: true,
-            isDisabled: isDisabledBinding,
+            titleColor: .red300,
+            size: .large,
+            labelWeight: .SB,
+            status: .default,
+            iconOption: nil,
             action: option2.action
           )
+          .expandTouchArea {
+            option2.action()
+          }
         }
       }
     }
@@ -138,11 +146,11 @@ struct SDGPopupButtonUnit_Preview: PreviewProvider {
       button: .twoOptions(
         option1: .init(
           title: "취소",
-          action: { }
+          action: { print("취소") }
         ),
         option2: .init(
           title: "확인",
-          action: { }
+          action: { print("확인") }
         )
       )
     )
