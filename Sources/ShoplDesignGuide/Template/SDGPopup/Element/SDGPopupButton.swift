@@ -31,23 +31,12 @@ public struct SDGPopupButton: View {
     case disabled
   }
   
-  @Binding private var status: Status
+  private let status: Status
   private let button: Button
   
-  private var isDisabledBinding: Binding<Bool> {
-    Binding(
-      get: {
-        self.status == .disabled
-      },
-      set: { newValue in
-        self.status = newValue ? .disabled : .active
-      }
-    )
-  }
-  
-  public init(status: Binding<Status> = .constant(.active), button: Button) {
-    self._status = status
+  public init(button: Button, status: Status = .active) {
     self.button = button
+    self.status = status
   }
   
   public var body: some View {
@@ -62,11 +51,11 @@ public struct SDGPopupButton: View {
           titleColor: .neutral700,
           size: .large,
           labelWeight: .SB,
-          status: .default,
+          status: status == .disabled ? .disabled : .default,
           iconOption: nil,
           action: option.action
         )
-        .expandTouchArea {
+        .expandTouchArea(isDisabled: status == .disabled) {
           option.action()
         }
         
@@ -81,7 +70,7 @@ public struct SDGPopupButton: View {
             iconOption: nil,
             action: option1.action
           )
-          .expandTouchArea {
+          .expandTouchArea(isDisabled: false) {
             option1.action()
           }
           
@@ -93,11 +82,11 @@ public struct SDGPopupButton: View {
             titleColor: .neutral700,
             size: .large,
             labelWeight: .SB,
-            status: .default,
+            status: status == .disabled ? .disabled : .default,
             iconOption: nil,
             action: option2.action
           )
-          .expandTouchArea {
+          .expandTouchArea(isDisabled: status == .disabled) {
             option2.action()
           }
         }
@@ -113,7 +102,7 @@ public struct SDGPopupButton: View {
             iconOption: nil,
             action: option1.action
           )
-          .expandTouchArea {
+          .expandTouchArea(isDisabled: false) {
             option1.action()
           }
           
@@ -125,11 +114,11 @@ public struct SDGPopupButton: View {
             titleColor: .red300,
             size: .large,
             labelWeight: .SB,
-            status: .default,
+            status: status == .disabled ? .disabled : .default,
             iconOption: nil,
             action: option2.action
           )
-          .expandTouchArea {
+          .expandTouchArea(isDisabled: status == .disabled) {
             option2.action()
           }
         }
@@ -141,18 +130,44 @@ public struct SDGPopupButton: View {
 
 struct SDGPopupButtonUnit_Preview: PreviewProvider {
   static var previews: some View {
-    SDGPopupButton(
-      status: .constant(.active),
-      button: .twoOptions(
-        option1: .init(
-          title: "취소",
-          action: { print("취소") }
+    VStack {
+      SDGPopupButton(
+        button: .oneOption(
+          option: .init(
+            title: "확인",
+            action: { print("확인") }
+          )
         ),
-        option2: .init(
-          title: "확인",
-          action: { print("확인") }
-        )
+        status: .active
       )
-    )
+      
+      SDGPopupButton(
+        button: .twoOptions(
+          option1: .init(
+            title: "취소",
+            action: { print("취소") }
+          ),
+          option2: .init(
+            title: "확인",
+            action: { print("확인") }
+          )
+        ),
+        status: .active
+      )
+      
+      SDGPopupButton(
+        button: .delete(
+          option1: .init(
+            title: "취소",
+            action: { print("취소") }
+          ),
+          option2: .init(
+            title: "삭제",
+            action: { print("삭제") }
+          )
+        ),
+        status: .disabled
+      )
+    }
   }
 }
