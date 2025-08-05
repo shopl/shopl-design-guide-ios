@@ -181,7 +181,8 @@ struct SDGCenterPopup<BodyContent: View>: View {
                 print("확인")
               }
             )
-          )
+          ),
+          status: .disabled
         )
       )
   }
