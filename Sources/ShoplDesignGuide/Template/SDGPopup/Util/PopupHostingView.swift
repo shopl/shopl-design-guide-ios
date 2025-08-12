@@ -25,7 +25,7 @@ public class PopupHostingViewController<BodyContent: View>: UIHostingController<
     }
     
     let rootView = PopupPresenter(
-      isPresented: true,
+      opacity: 1.0,
       content: popupContent,
       tapOutsideAction: tapOutsideAction
     )
