@@ -147,9 +147,7 @@ public struct SDGGhostButton: View {
         if let iconOption,
            iconOption.position == .left {
           iconOption.image
-            .resizable()
-            .foregroundStyle(iconOption.color)
-            .frame(width: iconSize, height: iconSize)
+            .templateIcon(size: iconSize, color: iconOption.color)
         }
         
         Text(title)
@@ -159,9 +157,7 @@ public struct SDGGhostButton: View {
         if let iconOption,
            iconOption.position == .right {
           iconOption.image
-            .resizable()
-            .foregroundStyle(iconOption.color)
-            .frame(width: iconSize, height: iconSize)
+            .templateIcon(size: iconSize, color: iconOption.color)
         }
       }
       .padding(.horizontal, size.horizontalPadding)
