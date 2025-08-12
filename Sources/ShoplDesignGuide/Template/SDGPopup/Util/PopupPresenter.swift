@@ -10,28 +10,20 @@ import SwiftUI
 
 public struct PopupPresenter<PopupContent: View>: View {
   
-  let isPresented: Bool
+  let opacity: Double
   @ViewBuilder let content: () -> PopupContent
   let tapOutsideAction: (() -> Void)?
-  
-  public init(isPresented: Bool, content: @escaping () -> PopupContent, tapOutsideAction: (() -> Void)?) {
-    self.isPresented = isPresented
-    self.content = content
-    self.tapOutsideAction = tapOutsideAction
-  }
-  
+
   public var body: some View {
-    if isPresented {
-      ZStack {
-        TypoColor.neutral900.color.opacity(0.4)
-          .ignoresSafeArea()
-          .onTapGesture {
-            tapOutsideAction?()
-          }
-        
-        content()
-      }
-      .transition(.opacity.animation(.easeInOut(duration: 0.2)))
+    ZStack {
+      TypoColor.neutral900.color.opacity(0.4)
+        .ignoresSafeArea()
+        .onTapGesture {
+          tapOutsideAction?()
+        }
+      
+      content()
     }
+    .opacity(opacity)
   }
 }

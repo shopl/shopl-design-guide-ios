@@ -9,29 +9,65 @@
 import SwiftUI
 
 public struct PopupModifier<PopupContent: View>: ViewModifier {
+  
   let isPresented: Bool
   let tapOutsideAction: (() -> Void)?
+  
   @ViewBuilder let popupContent: () -> PopupContent
   
-  public init(
-    isPresented: Bool,
-    tapOutsideAction: (() -> Void)? = nil,
-    @ViewBuilder popupContent: @escaping () -> PopupContent
-  ) {
-    self.isPresented = isPresented
-    self.tapOutsideAction = tapOutsideAction
-    self.popupContent = popupContent
-  }
+  @State private var showCover = false
+  @State private var opacity: Double = 0.0
   
   public func body(content: Content) -> some View {
-    ZStack {
-      content
+    content
+      .fullScreenCover(isPresented: $showCover) {
+        PopupPresenter(
+          opacity: opacity,
+          content: popupContent,
+          tapOutsideAction: tapOutsideAction
+        )
+        .background(FullScreenCoverBackgroundRemovalView())
+      }
+      .onChange(of: isPresented, perform: onPresentationChange)
+  }
+  
+  private func onPresentationChange(presented: Bool) {
+    if presented {
+      UIView.setAnimationsEnabled(false)
       
-      PopupPresenter(
-        isPresented: isPresented,
-        content: popupContent,
-        tapOutsideAction: tapOutsideAction
-      )
+      showCover = true
+      
+      DispatchQueue.main.async {
+        withAnimation(.easeInOut(duration: 0.2)) {
+          opacity = 1.0
+        }
+      }
+    } else {
+      withAnimation(.easeInOut(duration: 0.2)) {
+        opacity = 0.0
+      }
+      
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        showCover = false
+      }
+      
+      UIView.setAnimationsEnabled(true)
     }
   }
+}
+
+private struct FullScreenCoverBackgroundRemovalView: UIViewRepresentable {
+  
+  private class BackgroundRemovalView: UIView {
+    override func didMoveToWindow() {
+      super.didMoveToWindow()
+      superview?.superview?.backgroundColor = .clear
+    }
+  }
+  
+  func makeUIView(context: Context) -> UIView {
+    return BackgroundRemovalView()
+  }
+  
+  func updateUIView(_ uiView: UIView, context: Context) {}
 }
