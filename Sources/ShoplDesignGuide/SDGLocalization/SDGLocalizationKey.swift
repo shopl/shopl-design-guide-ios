@@ -94,6 +94,10 @@ public enum SDGLocalizationKey: String, CaseIterable {
   case assigned_workplace
   /// 등록된 구성원이 없습니다
   case no_registered_members
+  ///퇴사
+  case resign_title
+  ///탈퇴
+  case delete_account
   
   var string: String {
     return SDGString.shared.getSDGString(key: self)
