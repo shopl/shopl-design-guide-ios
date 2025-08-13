@@ -84,7 +84,7 @@ struct InfoPopup: View {
       .padding(.horizontal, 28)
       .padding(.top, 32)
       
-      PopupButton(
+      SDGPopupButton(
         isConfirmActionEnabled: .constant(true),
         confirmButtonTitle: _buttonText,
         confirmAction: {

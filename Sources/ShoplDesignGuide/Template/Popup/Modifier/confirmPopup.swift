@@ -118,7 +118,7 @@ struct ConfirmPopup: View {
       .padding(.horizontal, 28)
       .padding(.top, 32)
       
-      PopupButton(
+      SDGPopupButton(
         isConfirmActionEnabled: $_confirmable,
         confirmButtonTitle: _model.confirmButtonTitle,
         confirmButtonTitleColor: _model.confirmButtonTitleColor,

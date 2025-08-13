@@ -115,7 +115,7 @@ struct DeletePopup: View {
       .padding(.horizontal, 28)
       .padding(.top, 32)
       
-      PopupButton(
+      SDGPopupButton(
         isConfirmActionEnabled: $_confirmable,
         confirmButtonTitle: _model.deleteButtonTitle,
         confirmButtonTitleColor: .red300,

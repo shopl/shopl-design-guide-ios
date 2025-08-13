@@ -156,7 +156,7 @@ struct InputPopup: View {
         }
       }
       
-      PopupButton(
+      SDGPopupButton(
         isConfirmActionEnabled: $_confirmable,
         confirmButtonTitle: _model.confirmButtonTitle,
         cancelButtonTitle: _model.cancelButtonTitle,

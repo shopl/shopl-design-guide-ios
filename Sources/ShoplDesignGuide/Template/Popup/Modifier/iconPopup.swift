@@ -90,7 +90,7 @@ public struct IconPopup: View {
       .padding(.top, 20)
       .padding(.horizontal, 28)
       
-      PopupButton(
+      SDGPopupButton(
         isConfirmActionEnabled: .constant(true),
         confirmButtonTitle: "confirm (스크립트)",
         confirmAction: {

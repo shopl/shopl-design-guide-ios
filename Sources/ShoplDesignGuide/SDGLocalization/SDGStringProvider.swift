@@ -8,5 +8,5 @@
 import Foundation
 
 protocol SDGStringProvider {
-  func getString(key: String) -> String
+  func getString(key: String) -> String?
 }

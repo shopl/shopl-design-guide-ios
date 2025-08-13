@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 public enum SDGLocalizationKey: String, CaseIterable {
   /// 일
   case text_day

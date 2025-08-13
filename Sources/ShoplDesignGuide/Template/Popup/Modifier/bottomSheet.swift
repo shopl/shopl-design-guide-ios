@@ -11,7 +11,7 @@ extension View {
   public func bottomSheet(
     isPresented: Binding<Bool>,
     customView: () -> some View,
-    popupButtonUnitModel: (type: PopupButtonUnit.`Type`, state: PopupButtonUnit.State)?,
+    popupButtonUnitModel: (type: SDGPopupButtonUnit.`Type`, state: SDGPopupButtonUnit.State)?,
     tapOutsideAction: (() -> Void)? = nil,
     confirmAction: @escaping () -> Void
   ) -> some View {
@@ -29,7 +29,7 @@ extension View {
                 .padding(.horizontal, 28)
               
               if let popupButtonUnitModel = popupButtonUnitModel {
-                PopupButtonUnit(
+                SDGPopupButtonUnit(
                   type: popupButtonUnitModel.type,
                   state: popupButtonUnitModel.state
                 )

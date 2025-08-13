@@ -76,9 +76,6 @@ public struct SDGTopBasicNavi: View {
   private let _backgroundColor: Color
   private let _buttons: [ButtonOption]
   
-  @State private var _searchState: Bool = false
-  @State private var _searchText: String = ""
-  
   public init(
     naviType: NaviType,
     title: TextOption?,
@@ -94,61 +91,58 @@ public struct SDGTopBasicNavi: View {
   public var body: some View {
     HStack(alignment: .center, spacing: 0) {
       
-      if !self._searchState {
-        
-        if case let .pop(tintColor, onDismiss) = _naviType {
-          Button {
-            onDismiss()
-          } label: {
-            Image(.icNaviBack)
-              .frame(width: 40, height: 40)
-              .foregroundStyle(tintColor ?? .neutral700)
-          }
-          .padding(.leading, -6)
-          .padding(.trailing, 2)
+      if case let .pop(tintColor, onDismiss) = _naviType {
+        Button {
+          onDismiss()
+        } label: {
+          Image(.icNaviBack)
+            .frame(width: 40, height: 40)
+            .foregroundStyle(tintColor ?? .neutral700)
         }
-        
-        if let title = _title {
-          Text(title.string)
-            .font(.system(size: 19, weight: .regular))
-            .foregroundStyle(title.tintColor)
-            .lineLimit(1)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .truncationMode(.tail)
-        } else {
-          Spacer()
-        }
-        
-        if !_buttons.isEmpty {
-          HStack(spacing: 0) {
-            ForEach(_buttons, id: \.id) { button in
-              
-              Button {
-                button.touchUpInside?()
-              } label: {
-                switch button.isBullet {
-                case true:
-                  ZStack {
-                    button.image
-                      .foregroundStyle(button.tintColor)
-                    
-                    Color.red350
-                      .frame(width: 8, height: 8)
-                      .cornerRadius(4)
-                      .padding([.bottom, .leading], 16)
-                    
-                  }
-                case false:
+        .padding(.leading, -6)
+        .padding(.trailing, 2)
+      }
+      
+      if let title = _title {
+        Text(title.string)
+          .font(.system(size: 19, weight: .regular))
+          .foregroundStyle(title.tintColor)
+          .lineLimit(1)
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .truncationMode(.tail)
+      } else {
+        Spacer()
+      }
+      
+      if !_buttons.isEmpty {
+        HStack(spacing: 0) {
+          ForEach(_buttons, id: \.id) { button in
+            
+            Button {
+              button.touchUpInside?()
+            } label: {
+              switch button.isBullet {
+              case true:
+                ZStack {
                   button.image
                     .foregroundStyle(button.tintColor)
+                  
+                  Color.red350
+                    .frame(width: 8, height: 8)
+                    .cornerRadius(4)
+                    .padding([.bottom, .leading], 16)
+                  
                 }
+              case false:
+                button.image
+                  .foregroundStyle(button.tintColor)
               }
-              .frame(width: 40, height: 40)
-              .disabled(!button.isEnable)
             }
+            .frame(width: 40, height: 40)
+            .disabled(!button.isEnable)
           }
         }
-      } 
+      }
       
       if case let .dismiss(tintColor, onDismiss) = _naviType {
         Button {
