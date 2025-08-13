@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct PopupButton: View {
+public struct SDGPopupButton: View {
   
   @Binding private var _isConfirmActionEnabled: Bool
   

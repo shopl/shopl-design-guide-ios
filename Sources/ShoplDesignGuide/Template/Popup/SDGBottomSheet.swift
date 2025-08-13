@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct BottomSheet<BottomContent: View>: ViewModifier {
+public struct SDGBottomSheet<BottomContent: View>: ViewModifier {
   
   @Binding var isPresented: Bool
   

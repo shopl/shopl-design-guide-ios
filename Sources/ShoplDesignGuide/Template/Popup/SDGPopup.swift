@@ -16,7 +16,7 @@ extension View {
     @ViewBuilder view: @escaping () -> PopupContent
   ) -> some View {
     self.modifier(
-      Popup(
+      SDGPopup(
         isPresented: isPresented,
         backgroundColor: backgroundColor,
         viewAlignment: viewAlignment,
@@ -27,7 +27,7 @@ extension View {
   }
 }
 
-struct Popup<PopupContent: View>: ViewModifier {
+struct SDGPopup<PopupContent: View>: ViewModifier {
   
   @Binding var isPresented: Bool
   

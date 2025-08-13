@@ -16,7 +16,7 @@ extension View {
     confirmAction: @escaping () -> Void
   ) -> some View {
     self.modifier(
-      BottomSheet(
+      SDGBottomSheet(
         isPresented: isPresented,
         backgroundColor: .neutral900.opacity(0.4),
         tapOutsideAction: tapOutsideAction,

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct PopupButtonUnit: View {
+public struct SDGPopupButtonUnit: View {
   public enum `Type` {
     case option1(cancel: () -> Void)
     case option2(cancel: () -> Void, confirm: () -> Void)
@@ -113,27 +113,27 @@ public struct PopupButtonUnit: View {
 #Preview {
   ZStack {
     VStack(spacing: 10) {
-      PopupButtonUnit(
+      SDGPopupButtonUnit(
         type: .option1(cancel: { }),
         state: .default
       )
       
-      PopupButtonUnit(
+      SDGPopupButtonUnit(
         type: .option2(cancel: { }, confirm: { }),
         state: .isDisabled(.constant(true))
       )
       
-      PopupButtonUnit(
+      SDGPopupButtonUnit(
         type: .option2(cancel: { }, confirm: { }),
         state: .isDisabled(.constant(false))
       )
       
-      PopupButtonUnit(
+      SDGPopupButtonUnit(
         type: .delete(cancel: { }, delete: { }),
         state: .isDisabled(.constant(true))
       )
       
-      PopupButtonUnit(
+      SDGPopupButtonUnit(
         type: .delete(cancel: { }, delete: { }),
         state: .isDisabled(.constant(false))
       )
