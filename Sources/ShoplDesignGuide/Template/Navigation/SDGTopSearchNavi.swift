@@ -9,50 +9,6 @@ import SwiftUI
 
 public struct SDGTopSearchNavi: View {
   
-  public enum NaviType: Equatable {
-    public static func == (lhs: SDGTopSearchNavi.NaviType, rhs: SDGTopSearchNavi.NaviType) -> Bool {
-      switch (lhs, rhs) {
-      case (.none, .none):
-        return true
-      case (.dismiss, .dismiss):
-        return true
-      case (.pop, .pop):
-        return true
-      default:
-        return false
-      }
-    }
-    
-    case none
-    case dismiss(tintColor: Color? = nil, onDismiss: () -> Void)
-    case pop(tintColor: Color? = nil, onDismiss: () -> Void)
-  }
-  
-  public struct ButtonOption: Identifiable {
-    
-    public let id: String
-    public let image: Image
-    public let tintColor: Color
-    public let isBullet: Bool
-    public let isEnable: Bool
-    public let touchUpInside: (() -> ())?
-    
-    public init(
-      image: Image,
-      tintColor: Color,
-      isBullet: Bool = false,
-      isEnable: Bool = true,
-      touchUpInside: (() -> ())? = nil
-    ) {
-      self.id = UUID().uuidString
-      self.image = image
-      self.tintColor = tintColor
-      self.isBullet = isBullet
-      self.isEnable = isEnable
-      self.touchUpInside = touchUpInside
-    }
-  }
-  
   public struct SearchButtonOption {
     
     public let searchImage: Image
@@ -73,28 +29,11 @@ public struct SDGTopSearchNavi: View {
     }
   }
   
-  public struct TextOption {
-    public let string: String
-    public let tintColor: Color
-    
-    public init(
-      string: String,
-      tintColor: Color? = nil
-    ) {
-      self.string = string
-      if let tintColor = tintColor {
-        self.tintColor = tintColor
-      } else {
-        self.tintColor = .neutral700
-      }
-    }
-  }
-  
-  private let _naviType: NaviType
-  private let _title: TextOption?
+  private let _naviType: TopNaviType
+  private let _title: TopNaviTextOption?
   private let _backgroundColor: Color
   private let _searchButton: SearchButtonOption?
-  private let _buttons: [ButtonOption]
+  private let _buttons: [TopNaviButtonOption]
   
   @State private var _searchState: Bool = false
   @State private var _searchText: String = ""
@@ -102,11 +41,11 @@ public struct SDGTopSearchNavi: View {
   @FocusState private var isTextFieldFocused: Bool
   
   public init(
-    naviType: NaviType,
-    title: TextOption?,
+    naviType: TopNaviType,
+    title: TopNaviTextOption?,
     backgroundColor: Color,
     searchButton: SearchButtonOption,
-    buttons: [ButtonOption] = []
+    buttons: [TopNaviButtonOption] = []
   ) {
     _naviType = naviType
     _title = title
