@@ -1,5 +1,5 @@
 //
-//  BoxFixedTab.swift
+//  SDGBoxFixedTab.swift
 //  ShoplDesignGuide
 //
 //  Created by Jerry on 5/30/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct BoxFixedTab: View {
+public struct SDGBoxFixedTab: View {
   
   public struct Item: Equatable, Identifiable, Hashable {
     
@@ -55,7 +55,7 @@ public struct BoxFixedTab: View {
         Button {
           _didSelected(item)
         } label: {
-          BoxFixedTabItemView(
+          SDGBoxFixedTabItemView(
             title: item.title,
             subtitle: item.subtitle,
             isSelected: selectedItem.id == item.id
@@ -89,7 +89,7 @@ public struct BoxFixedTab: View {
 
 // MARK: - Item View
 
-struct BoxFixedTabItemView: View {
+struct SDGBoxFixedTabItemView: View {
   
   private let title: String
   private var subtitle: String = ""
@@ -125,7 +125,7 @@ struct BoxFixedTabItemView: View {
 #Preview {
   ZStack {
     VStack {
-      BoxFixedTab(
+      SDGBoxFixedTab(
         items: .constant([
           .init(id: UUID().uuidString, title: "1"),
           .init(id: UUID().uuidString, title: "2"),
@@ -138,7 +138,7 @@ struct BoxFixedTabItemView: View {
         didSelected: { _ in }
       )
 
-      BoxFixedTab(
+      SDGBoxFixedTab(
         items: .constant([
           .init(id: UUID().uuidString, title: "1"),
           .init(id: UUID().uuidString, title: "2"),

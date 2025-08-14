@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  SDGToggle.swift
 //  shopl-design-guide-ios
 //
 //  Created by Jerry on 5/28/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct Toggle: View {
+public struct SDGToggle: View {
   
   public enum ToggleState {
     case normal
@@ -78,15 +78,15 @@ public struct Toggle: View {
 
 #Preview {
   VStack {
-    Toggle(size: .m, toggleState: .normal, isOn: .constant(true))
-    Toggle(size: .m, toggleState: .disabled, isOn: .constant(true))
-    Toggle(size: .s, toggleState: .normal, isOn: .constant(true))
-    Toggle(size: .s, toggleState: .disabled, isOn: .constant(true))
+    SDGToggle(size: .m, toggleState: .normal, isOn: .constant(true))
+    SDGToggle(size: .m, toggleState: .disabled, isOn: .constant(true))
+    SDGToggle(size: .s, toggleState: .normal, isOn: .constant(true))
+    SDGToggle(size: .s, toggleState: .disabled, isOn: .constant(true))
     
-    Toggle(size: .m, toggleState: .normal, isOn: .constant(false))
-    Toggle(size: .m, toggleState: .disabled, isOn: .constant(false))
-    Toggle(size: .s, toggleState: .normal, isOn: .constant(false))
-    Toggle(size: .s, toggleState: .disabled, isOn: .constant(false))
+    SDGToggle(size: .m, toggleState: .normal, isOn: .constant(false))
+    SDGToggle(size: .m, toggleState: .disabled, isOn: .constant(false))
+    SDGToggle(size: .s, toggleState: .normal, isOn: .constant(false))
+    SDGToggle(size: .s, toggleState: .disabled, isOn: .constant(false))
   }
 }
 

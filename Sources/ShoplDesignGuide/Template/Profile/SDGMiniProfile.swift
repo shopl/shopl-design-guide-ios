@@ -27,7 +27,7 @@ public struct SDGMiniProfile: View {
     
     HStack(spacing: 8) {
       
-      Avatar(type: .round, model: _model.avatarModel, size: .xxs) { userId in
+      SDGAvatar(type: .round, model: _model.avatarModel, size: .xxs) { userId in
         _avaterAction(userId)
       }
       

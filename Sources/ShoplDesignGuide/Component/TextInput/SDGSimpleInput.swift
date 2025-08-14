@@ -1,5 +1,5 @@
 //
-//  SimpleInput.swift
+//  SDGSimpleInput.swift
 //  ShoplDesignGuide
 //
 //  Created by Jerry on 5/30/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct SimpleInput: View {
+public struct SDGSimpleInput: View {
   public enum InputState: Equatable {
     case `default`
     case active
@@ -16,7 +16,7 @@ public struct SimpleInput: View {
     case disabled
   }
   
-  @Binding private var _state: SimpleInput.InputState
+  @Binding private var _state: SDGSimpleInput.InputState
   @Binding private var _text: String
   
   private let _backgroundColor: Color
@@ -26,7 +26,7 @@ public struct SimpleInput: View {
   private let _maxCount: Int
   
   public init(
-    state: Binding<SimpleInput.InputState>,
+    state: Binding<SDGSimpleInput.InputState>,
     text: Binding<String>,
     hint: String,
     keyboardType: UIKeyboardType = .default,
@@ -111,31 +111,31 @@ public struct SimpleInput: View {
 #Preview {
   ZStack {
     VStack {
-      SimpleInput(
+      SDGSimpleInput(
         state: .constant(.active),
         text: .constant(""),
         hint: "hint"
       )
       
-      SimpleInput(
+      SDGSimpleInput(
         state: .constant(.completed),
         text: .constant(""),
         hint: "hint"
       )
       
-      SimpleInput(
+      SDGSimpleInput(
         state: .constant(.default),
         text: .constant(""),
         hint: "hint"
       )
       
-      SimpleInput(
+      SDGSimpleInput(
         state: .constant(.disabled),
         text: .constant(""),
         hint: "hint"
       )
       
-      SimpleInput(
+      SDGSimpleInput(
         state: .constant(.error),
         text: .constant(""),
         hint: "hint"

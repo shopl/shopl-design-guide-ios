@@ -1,5 +1,5 @@
 //
-//  Radio.swift
+//  SDGRadio.swift
 //  ShoplDesignGuide
 //
 //  Created by Jerry on 5/30/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct Radio: View {
+public struct SDGRadio: View {
   
   private let _isSelected: Bool
   private let _size: CGFloat
@@ -38,11 +38,11 @@ public struct Radio: View {
   }
 }
 
-struct Radio_Previews: PreviewProvider {
+struct SDGRadio_Previews: PreviewProvider {
   static var previews: some View {
     VStack(spacing: 10) {
-      Radio(isSelected: true)
-      Radio(isSelected: false)
+      SDGRadio(isSelected: true)
+      SDGRadio(isSelected: false)
     }
   }
 }

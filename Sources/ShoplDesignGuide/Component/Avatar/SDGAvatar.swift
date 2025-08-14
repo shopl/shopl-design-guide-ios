@@ -46,7 +46,7 @@ public struct AvatarModel: Equatable, Hashable {
   }
 }
 
-public struct Avatar: View {
+public struct SDGAvatar: View {
   
   public enum AvatarType {
     case round
@@ -151,7 +151,7 @@ struct Avatar_Preview: PreviewProvider {
         Text("XXS")
         
         HStack(spacing: 10) {
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -164,7 +164,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -177,7 +177,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -190,7 +190,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -210,7 +210,7 @@ struct Avatar_Preview: PreviewProvider {
       Group {
         Text("XS")
         HStack(spacing: 10) {
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -223,7 +223,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -236,7 +236,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -249,7 +249,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -269,7 +269,7 @@ struct Avatar_Preview: PreviewProvider {
       Group {
         Text("S")
         HStack(spacing: 10) {
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -282,7 +282,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -295,7 +295,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -308,7 +308,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -328,7 +328,7 @@ struct Avatar_Preview: PreviewProvider {
       Group {
         Text("M")
         HStack(spacing: 10) {
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -341,7 +341,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -354,7 +354,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -367,7 +367,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -387,7 +387,7 @@ struct Avatar_Preview: PreviewProvider {
       Group {
         Text("L")
         HStack(spacing: 10) {
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -400,7 +400,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -413,7 +413,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -426,7 +426,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -447,7 +447,7 @@ struct Avatar_Preview: PreviewProvider {
         Text("XL")
         HStack(spacing: 10) {
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -460,7 +460,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -473,7 +473,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",
@@ -486,7 +486,7 @@ struct Avatar_Preview: PreviewProvider {
             }
           )
           
-          Avatar(
+          SDGAvatar(
             type: .round,
             model: AvatarModel(
               userId: "",

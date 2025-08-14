@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  SDGGhostButton.swift
 //  ShoplDesignGuide
 //
 //  Created by Jerry on 7/8/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct GhostButton: View {
+public struct SDGGhostButton: View {
   
   public enum Size {
     case l
@@ -240,7 +240,7 @@ struct GhostButton_Previews: PreviewProvider {
         Text("Default")
         HStack {
           
-          GhostButton(
+          SDGGhostButton(
             image: .init(
               image: Image(.icClip),
               color: .neutral350,
@@ -255,7 +255,7 @@ struct GhostButton_Previews: PreviewProvider {
           )
           .background(.sdgGreen)
           
-          GhostButton(
+          SDGGhostButton(
             image: .init(
               image: Image(.icClip),
               color: .neutral350,
@@ -270,7 +270,7 @@ struct GhostButton_Previews: PreviewProvider {
           )
           .background(.sdgGreen)
           
-          GhostButton(
+          SDGGhostButton(
             image: nil,
             title: "버튼명",
             size: .m,

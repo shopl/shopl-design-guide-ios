@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TimePicker: View {
+struct SDGTimePicker: View {
   
   public enum `Type`: Equatable {
     case hour(Int), minute(Int)
@@ -47,7 +47,7 @@ struct TimePicker: View {
         ForEach(0..<options.count, id: \.self) { index in
           let item: Int = options[index]
           
-          TimePickerCell(
+          SDGTimePickerCell(
             isChanged: ((item % type.modular) != initValue % type.modular) && (item == selection),
             title: String(format: "%02d", item % type.modular),
             angle: Double(index - selectedIndex) * cellAngles + drag
@@ -82,7 +82,7 @@ struct TimePicker: View {
   
 }
 
-private struct TimePickerCell: View {
+private struct SDGTimePickerCell: View {
   
   let isChanged: Bool
   let title: String

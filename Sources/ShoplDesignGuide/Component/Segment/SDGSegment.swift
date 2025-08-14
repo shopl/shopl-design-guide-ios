@@ -1,5 +1,5 @@
 //
-//  Segment.swift
+//  SDGSegment.swift
 //  shopl-design-guide-ios
 //
 //  Created by Jerry on 5/28/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct Segment: UIViewRepresentable {
+public struct SDGSegment: UIViewRepresentable {
   public enum TextLine: CGFloat {
     case one = 32
     case two = 50
@@ -42,8 +42,8 @@ public struct Segment: UIViewRepresentable {
     self.rightPadding = rightPadding
   }
   
-  public func makeUIView(context: Context) -> SegmentView {
-    let segmentView = SegmentView(items: items)
+  public func makeUIView(context: Context) -> SDGSegmentView {
+    let segmentView = SDGSegmentView(items: items)
     
     segmentView.leftPadding = self.leftPadding
     segmentView.rightPadding = self.rightPadding
@@ -80,7 +80,7 @@ public struct Segment: UIViewRepresentable {
     return segmentView
   }
   
-  public func updateUIView(_ uiView: SegmentView, context: Context) {
+  public func updateUIView(_ uiView: SDGSegmentView, context: Context) {
     uiView.selectedSegmentIndex = selectedSegmentIndex ?? 0
   }
   
@@ -89,9 +89,9 @@ public struct Segment: UIViewRepresentable {
   }
   
   public class Coordinator: NSObject, UIScrollViewDelegate {
-    var parent: Segment
+    var parent: SDGSegment
     
-    init(parent: Segment) {
+    init(parent: SDGSegment) {
       self.parent = parent
     }
     

@@ -1,5 +1,5 @@
 //
-//  CheckList.swift
+//  SDGCheckOption.swift
 //  shopl-design-guide-ios
 //
 //  Created by Jerry on 5/28/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct CheckOption: View {
+public struct SDGCheckOption: View {
   public enum CheckState: Equatable {
     case `default`
     case selected
@@ -70,7 +70,7 @@ public struct CheckOption: View {
 #Preview {
   ZStack {
     HStack {
-      CheckOption(
+      SDGCheckOption(
         state: .constant(.default),
         title: "",
         size: 14,
@@ -80,7 +80,7 @@ public struct CheckOption: View {
         }
       )
       
-      CheckOption(
+      SDGCheckOption(
         state: .constant(.default),
         title: "기본",
         size: 14,
@@ -90,7 +90,7 @@ public struct CheckOption: View {
         }
       )
       
-      CheckOption(
+      SDGCheckOption(
         state: .constant(.selected),
         title: "선택",
         size: 14,
@@ -100,7 +100,7 @@ public struct CheckOption: View {
         }
       )
       
-      CheckOption(
+      SDGCheckOption(
         state: .constant(.disabled),
         title: "선택 불가",
         size: 14,

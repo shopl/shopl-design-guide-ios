@@ -1,5 +1,5 @@
 //
-//  CategorySearch.swift
+//  SDGCategorySearch.swift
 //  ShoplDesignGuide
 //
 //  Created by Jerry on 5/30/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct CategorySearch: View {
+public struct SDGCategorySearch: View {
   
   public struct IconModel: Equatable {
     public let id: String
@@ -63,7 +63,7 @@ public struct CategorySearch: View {
         }
       }
       
-      FocusableTextField(
+      SDGFocusableTextField(
         placeholder: $placeholder,
         text: $searchText,
         isFocused: $isFocused,
@@ -97,7 +97,7 @@ public struct CategorySearch: View {
 #Preview {
   ZStack {
     VStack {
-      CategorySearch(
+      SDGCategorySearch(
         searchText: .constant(""),
         placeholder: .constant("placeholder"),
         isFocused: .constant(false),

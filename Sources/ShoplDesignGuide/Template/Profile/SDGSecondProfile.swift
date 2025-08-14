@@ -34,7 +34,7 @@ public struct SDGSecondProfile: View {
     
     HStack(alignment: .top, spacing: 8) {
       
-      Avatar(type: .round, model: _model.avatarModel, size: .s) { userId in
+      SDGAvatar(type: .round, model: _model.avatarModel, size: .s) { userId in
         _avaterAction(userId)
       }
       

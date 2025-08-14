@@ -1,5 +1,5 @@
 //
-//  BodySearch.swift
+//  SDGBodySearch.swift
 //  ShoplDesignGuide
 //
 //  Created by Jerry on 5/30/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct BodySearch: View {
+public struct SDGBodySearch: View {
   
   private let _placeHolder: String
   private let _isDisabled: Bool
@@ -83,7 +83,7 @@ struct BodyRoundSearch_Preview: PreviewProvider {
   static var previews: some View {
     ZStack {
       VStack {
-        BodySearch(placeHolder: "힌트문구", isDisabled: true)
+        SDGBodySearch(placeHolder: "힌트문구", isDisabled: true)
       }
       .padding(20)
     }

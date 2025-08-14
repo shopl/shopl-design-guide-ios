@@ -137,7 +137,7 @@ struct InputPopup: View {
           .padding(.horizontal, 28)
       }
       
-      FixedInput(
+      SDGFixedInput(
         text: $_text,
         placeHolder: _model.placeHolder,
         backgroundColor: _model.inputBackgroundColor,

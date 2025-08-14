@@ -1,5 +1,5 @@
 //
-//  UnderlineInput.swift
+//  SDGUnderlineInput.swift
 //  ShoplDesignGuide
 //
 //  Created by Jerry on 5/30/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct UnderlineInput: View {
+public struct SDGUnderlineInput: View {
   
   private let _placeHolder: String
   private let _isSecureTextEntry: Bool
@@ -212,7 +212,7 @@ public struct UnderlineInput: View {
 #Preview {
   ZStack {
     VStack {
-      UnderlineInput(
+      SDGUnderlineInput(
         placeHolder: "placeHolder",
         text: .constant(""),
         option: .constant(

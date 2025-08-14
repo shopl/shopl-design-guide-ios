@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  SDGTime.swift
 //  shopl-design-guide-ios
 //
 //  Created by Jerry on 5/28/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct Time: View {
+public struct SDGTime: View {
   
   private var _changeHour: ((Int) -> ())
   private var _changeMinute: ((Int) -> ())
@@ -69,14 +69,14 @@ public struct Time: View {
         .cornerRadius(8)
       
       HStack {
-        TimePicker(.hour(24), _hour, _initHour, $_selectedHour)
+        SDGTimePicker(.hour(24), _hour, _initHour, $_selectedHour)
           .frame(maxWidth: .infinity)
         
         Text(":")
           .font(.system(size: 16))
           .foregroundStyle(.neutral700)
         
-        TimePicker(.minute(60), _minute, _initMinute, $_selectedMinute)
+        SDGTimePicker(.minute(60), _minute, _initMinute, $_selectedMinute)
           .frame(maxWidth: .infinity)
       }
       .frame(height: 160)
@@ -92,7 +92,7 @@ public struct Time: View {
 
 #Preview {
   ZStack {
-    Time(
+    SDGTime(
       model: .init(
         selectedHour: 10,
         selectedMinute: 0

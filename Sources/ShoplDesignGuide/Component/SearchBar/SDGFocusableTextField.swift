@@ -1,5 +1,5 @@
 //
-//  FocusableTextField.swift
+//  SDGFocusableTextField.swift
 //  ShoplDesignGuide
 //
 //  Created by Jerry on 5/30/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct FocusableTextField: UIViewRepresentable {
+public struct SDGFocusableTextField: UIViewRepresentable {
   
   private let placeholder: Binding<String>?
   @Binding private var text: String
@@ -65,9 +65,9 @@ public struct FocusableTextField: UIViewRepresentable {
   
   public class Coordinator: NSObject, UITextFieldDelegate {
     
-    private let parent: FocusableTextField
+    private let parent: SDGFocusableTextField
     
-    init(_ parent: FocusableTextField) {
+    init(_ parent: SDGFocusableTextField) {
       self.parent = parent
     }
     

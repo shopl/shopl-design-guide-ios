@@ -1,5 +1,5 @@
 //
-//  Dropdown.swift
+//  SDGDropdown.swift
 //  shopl-design-guide-ios
 //
 //  Created by Jerry on 5/28/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct Dropdown: View {
+public struct SDGDropdown: View {
   
   private let _placeHolder: String
   private let _text: String
@@ -77,14 +77,14 @@ struct BasicDropdown_Preview: PreviewProvider {
       Spacer()
       
       HStack(spacing: 8) {
-        Dropdown(
+        SDGDropdown(
           placeHolder: "Hint",
           text: "2023.08.04(금)",
           disabled: .constant(false),
           backgroundColor: .constant(.neutral50)
         )
         
-        Dropdown(
+        SDGDropdown(
           placeHolder: "Hint",
           text: "16:00",
           disabled: .constant(false),
@@ -93,7 +93,7 @@ struct BasicDropdown_Preview: PreviewProvider {
         .frame(width: 112)
       }
       
-      Dropdown(
+      SDGDropdown(
         placeHolder: "Hint",
         text: "Selected",
         disabled: .constant(false),
@@ -101,14 +101,14 @@ struct BasicDropdown_Preview: PreviewProvider {
       )
       
       
-      Dropdown(
+      SDGDropdown(
         placeHolder: "Hint",
         text: "",
         disabled: .constant(false),
         backgroundColor: .constant(.neutral0)
       )
       
-      Dropdown(
+      SDGDropdown(
         placeHolder: "Hint",
         text: "",
         disabled: .constant(true),

@@ -1,5 +1,5 @@
 //
-//  LineFixedTab.swift
+//  SDGLineFixedTab.swift
 //  ShoplDesignGuide
 //
 //  Created by Jerry on 5/30/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct LineFixedTab: View {
+public struct SDGLineFixedTab: View {
   
   public struct Item: Equatable, Identifiable, Hashable {
     
@@ -50,7 +50,7 @@ public struct LineFixedTab: View {
           selectedItem = item
           _didSelected(item)
         } label: {
-          LineFixedTabItemView(
+          SDGLineFixedTabItemView(
             text: item.text,
             isSelected: selectedItem.id == item.id
           )
@@ -60,7 +60,7 @@ public struct LineFixedTab: View {
   }
 }
 
-struct LineFixedTabItemView: View {
+struct SDGLineFixedTabItemView: View {
   
   private let _text: String
   private let _isSelected: Bool
@@ -106,7 +106,7 @@ struct LineFixedTabItemView: View {
 
 struct LineFixedTab_Preview: PreviewProvider {
   
-  @State static var items: [LineFixedTab.Item] = [
+  @State static var items: [SDGLineFixedTab.Item] = [
     .init(id: UUID().uuidString, text: "1", isInitial: true),
     .init(id: UUID().uuidString, text: "1", isInitial: true),
     .init(id: UUID().uuidString, text: "1", isInitial: true),
@@ -118,7 +118,7 @@ struct LineFixedTab_Preview: PreviewProvider {
   static var previews: some View {
     ZStack {
       VStack {
-        LineFixedTab(
+        SDGLineFixedTab(
           items: $items,
           didSelected: { _ in }
         )

@@ -8,7 +8,7 @@
 import SwiftUI
 import UIKit
 
-public struct FixedInput: View {
+public struct SDGFixedInput: View {
   
   @Binding private var _text: String
   @Binding private var _isFocused: Bool
@@ -46,7 +46,7 @@ public struct FixedInput: View {
       
       if #available(iOS 16.0, *) {
         
-        TextEditor(
+        SDGTextEditor(
           text: $_text,
           placeHolder: _placeHolder,
           backgroundColor: _backgroundColor,
@@ -68,7 +68,7 @@ public struct FixedInput: View {
         
       } else {
         
-        TextEditor(
+        SDGTextEditor(
           text: $_text,
           placeHolder: _placeHolder,
           backgroundColor: _backgroundColor,
@@ -102,7 +102,7 @@ public struct FixedInput: View {
 #Preview {
   ZStack {
     VStack {
-      FixedInput(
+      SDGFixedInput(
         text: .constant(""),
         placeHolder: "placeHolder",
         backgroundColor: .neutral50,

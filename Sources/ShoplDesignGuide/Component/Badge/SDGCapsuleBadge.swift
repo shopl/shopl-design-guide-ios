@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct CapsuleBadge: View {
+public struct SDGCapsuleBadge: View {
   
   public struct Option {
     
@@ -138,7 +138,7 @@ public struct CapsuleBadge: View {
 
 #Preview {
   VStack {
-    CapsuleBadge(
+    SDGCapsuleBadge(
       option: .init(
         style: .solid,
         size: .small,

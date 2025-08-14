@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct CheckBox: View {
+public struct SDGCheckBox: View {
   
   private let _isSelected: Bool
   private let _size: CGFloat
@@ -40,9 +40,9 @@ public struct CheckBox: View {
 struct CheckBox_Multi_Preview: PreviewProvider {
   static var previews: some View {
     VStack {
-      CheckBox(isSelected: false)
+      SDGCheckBox(isSelected: false)
         
-      CheckBox(isSelected: true)
+      SDGCheckBox(isSelected: true)
     }
     
   }

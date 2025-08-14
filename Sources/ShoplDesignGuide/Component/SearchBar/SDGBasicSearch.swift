@@ -1,5 +1,5 @@
 //
-//  BasicSearch.swift
+//  SDGBasicSearch.swift
 //  ShoplDesignGuide
 //
 //  Created by Jerry on 5/30/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct BasicSearch: View {
+public struct SDGBasicSearch: View {
   @Binding public var searchTerm: String
   
   private let _placeholder: String
@@ -111,7 +111,7 @@ public struct BasicSearch: View {
 #Preview {
   ZStack {
     VStack {
-      BasicSearch(
+      SDGBasicSearch(
         searchTerm: .constant(""),
         placeholder: "placeHolder",
         type: .box,
@@ -120,7 +120,7 @@ public struct BasicSearch: View {
         searchTermChanged: { _ in }
       )
       
-      BasicSearch(
+      SDGBasicSearch(
         searchTerm: .constant(""),
         placeholder: "placeHolder",
         type: .box,
@@ -129,7 +129,7 @@ public struct BasicSearch: View {
         searchTermChanged: { _ in }
       )
       
-      BasicSearch(
+      SDGBasicSearch(
         searchTerm: .constant(""),
         placeholder: "placeHolder",
         type: .round,
@@ -138,7 +138,7 @@ public struct BasicSearch: View {
         searchTermChanged: { _ in }
       )
       
-      BasicSearch(
+      SDGBasicSearch(
         searchTerm: .constant(""),
         placeholder: "placeHolder",
         type: .round,

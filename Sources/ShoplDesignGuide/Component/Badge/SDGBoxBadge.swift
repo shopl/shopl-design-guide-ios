@@ -1,5 +1,5 @@
 //
-//  BoxBadge.swift
+//  SDGBoxBadge.swift
 //  ShoplDesignGuide
 //
 //  Created by Jerry on 5/30/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct BoxBadge: View {
+public struct SDGBoxBadge: View {
   
   public enum `Type`: Equatable {
     case solid, line

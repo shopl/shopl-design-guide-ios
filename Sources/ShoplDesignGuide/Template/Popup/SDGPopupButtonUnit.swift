@@ -39,7 +39,7 @@ public struct SDGPopupButtonUnit: View {
     disabled: Binding<Bool> = .constant(false),
     action: @escaping () -> Void
   ) -> some View {
-    GhostButton(
+    SDGGhostButton(
       image: nil,
       title: title,
       size: .l,

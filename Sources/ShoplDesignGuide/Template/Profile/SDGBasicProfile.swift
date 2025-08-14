@@ -34,7 +34,7 @@ public struct SDGBasicProfile: View {
     
     HStack(spacing: 8) {
       
-      Avatar(type: .round, model: _model.avatarModel, size: .m) { userId in
+      SDGAvatar(type: .round, model: _model.avatarModel, size: .m) { userId in
         _avaterAction(userId)
       }
       
