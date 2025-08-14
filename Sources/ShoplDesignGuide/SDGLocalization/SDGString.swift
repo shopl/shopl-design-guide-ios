@@ -40,6 +40,7 @@ import Foundation
  - String(format: SDGLocalizationKey.quitting_limit_time.string, "8", "30") → Gets "8시간 30분" or "8 hours 30 minutes"
 */
 
+@MainActor
 public class SDGString {
   
   public static let shared = SDGString()
