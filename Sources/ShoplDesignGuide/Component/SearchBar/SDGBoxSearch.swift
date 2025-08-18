@@ -1,5 +1,5 @@
 //
-//  SDGCapsuleSearch.swift
+//  SDGBoxSearch.swift
 //  ShoplDesignGuide
 //
 //  Created by Jerry on 8/18/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct SDGCapsuleSearch: View {
+public struct SDGBoxSearch: View {
   
   public enum `Type` {
     case soild
@@ -20,7 +20,7 @@ public struct SDGCapsuleSearch: View {
   private let type: `Type`
   private let backgroundColor: Color
   
-  private var clear: () -> Void
+  private let clear: () -> Void
   private let searchButtonTapped: ((String) -> Void)?
   private let searchTextChanged: ((String) -> Void)?
   
@@ -89,9 +89,9 @@ public struct SDGCapsuleSearch: View {
       .padding(.horizontal, 12)
     }
     .background(self.backgroundColor)
-    .cornerRadius(20)
+    .cornerRadius(10)
     .overlay(
-      RoundedRectangle(cornerRadius: 20)
+      RoundedRectangle(cornerRadius: 10)
         .stroke(lineColor, lineWidth: 1)
     )
   }
@@ -103,7 +103,7 @@ public struct SDGCapsuleSearch: View {
     
     Spacer()
     
-    SDGCapsuleSearch(
+    SDGBoxSearch(
       placeHolder: "입력",
       searchText: .constant(""),
       type: .soild,
@@ -113,7 +113,7 @@ public struct SDGCapsuleSearch: View {
       }
     )
     
-    SDGCapsuleSearch(
+    SDGBoxSearch(
       placeHolder: "입력",
       searchText: .constant(""),
       type: .line(.neutral100),
@@ -123,7 +123,7 @@ public struct SDGCapsuleSearch: View {
       }
     )
     
-    SDGCapsuleSearch(
+    SDGBoxSearch(
       placeHolder: "입력",
       searchText: .constant(""),
       type: .soild,
@@ -133,7 +133,7 @@ public struct SDGCapsuleSearch: View {
       }
     )
     
-    SDGCapsuleSearch(
+    SDGBoxSearch(
       placeHolder: "입력",
       searchText: .constant(""),
       type: .line(.neutral0),
@@ -148,3 +148,4 @@ public struct SDGCapsuleSearch: View {
   .padding(20)
   .background(.black)
 }
+
