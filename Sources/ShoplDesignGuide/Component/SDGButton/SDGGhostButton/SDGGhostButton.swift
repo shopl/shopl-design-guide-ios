@@ -16,6 +16,7 @@ public struct SDGGhostButton: View {
   private let labelWeight: LabelWeight
   private let status: Status
   private let iconOption: IconOption?
+  private let fullSize: Bool
   private let action: () -> Void
   
   public enum LabelWeight {
@@ -121,21 +122,14 @@ public struct SDGGhostButton: View {
     size.iconSize - (iconOption?.downSized ?? false ? 2 : 0)
   }
   
-  public init(
-    title: String,
-    titleColor: TypoColor,
-    size: Size,
-    labelWeight: LabelWeight,
-    status: Status,
-    iconOption: IconOption?,
-    action: @escaping () -> Void
-  ) {
+  public init(title: String, titleColor: TypoColor, size: Size, labelWeight: LabelWeight, status: Status, iconOption: IconOption?, fullSize: Bool = false, action: @escaping () -> Void) {
     self.title = title
     self.titleColor = titleColor
     self.size = size
     self.labelWeight = labelWeight
-    self.iconOption = iconOption
     self.status = status
+    self.iconOption = iconOption
+    self.fullSize = fullSize
     self.action = action
   }
   
@@ -163,6 +157,9 @@ public struct SDGGhostButton: View {
       .padding(.horizontal, size.horizontalPadding)
       .padding(.vertical, size.verticalPadding)
       .frame(maxHeight: size.height)
+      .applyIf(fullSize) {
+        $0.frame(maxWidth: .infinity)
+      }
     }
     .opacity(status == .disabled ? 0.3 : 1)
     .disabled(status == .disabled)
@@ -170,172 +167,233 @@ public struct SDGGhostButton: View {
 }
 
 #Preview {
-  HStack {
-    VStack(spacing: 20) {
+  VStack(spacing: 20) {
+    HStack {
+      VStack(spacing: 20) {
+        
+        Text("Default")
+        
+        SDGGhostButton(
+          title: "Button",
+          titleColor: .neutral900,
+          size: .large,
+          labelWeight: .SB,
+          status: .default,
+          iconOption: nil,
+          action: {
+            
+          }
+        )
+        .background(.gray)
+        
+        SDGGhostButton(
+          title: "Button",
+          titleColor: .neutral900,
+          size: .medium,
+          labelWeight: .SB,
+          status: .default,
+          iconOption: .init(
+            image: Image(systemName: "heart.fill"),
+            color: .blue,
+            position: .left,
+            downSized: false
+          ),
+          action: {
+            
+          }
+        )
+        .background(.gray)
+        
+        SDGGhostButton(
+          title: "Button",
+          titleColor: .neutral900,
+          size: .small,
+          labelWeight: .SB,
+          status: .default,
+          iconOption: .init(
+            image: Image(systemName: "heart.fill"),
+            color: .blue,
+            position: .right,
+            downSized: false
+          ),
+          action: {
+            
+          }
+        )
+        .background(.gray)
+      }
       
-      Text("Default")
+      VStack(spacing: 20) {
+        
+        Text("Disabled")
+        
+        SDGGhostButton(
+          title: "Button",
+          titleColor: .neutral900,
+          size: .large,
+          labelWeight: .SB,
+          status: .disabled,
+          iconOption: nil,
+          action: {
+            
+          }
+        )
+        .background(.gray)
+        
+        SDGGhostButton(
+          title: "Button",
+          titleColor: .neutral900,
+          size: .medium,
+          labelWeight: .SB,
+          status: .disabled,
+          iconOption: .init(
+            image: Image(systemName: "heart.fill"),
+            color: .blue,
+            position: .left,
+            downSized: false
+          ),
+          action: {
+            
+          }
+        )
+        .background(.gray)
+        
+        SDGGhostButton(
+          title: "Button",
+          titleColor: .neutral900,
+          size: .small,
+          labelWeight: .SB,
+          status: .disabled,
+          iconOption: .init(
+            image: Image(systemName: "heart.fill"),
+            color: .blue,
+            position: .right,
+            downSized: false
+          ),
+          action: {
+            
+          }
+        )
+        .background(.gray)
+      }
       
-      SDGGhostButton(
-        title: "Button",
-        titleColor: .neutral900,
-        size: .large,
-        labelWeight: .SB,
-        status: .default,
-        iconOption: nil,
-        action: {
-          
-        }
-      )
-      .background(.gray)
-      
-      SDGGhostButton(
-        title: "Button",
-        titleColor: .neutral900,
-        size: .medium,
-        labelWeight: .SB,
-        status: .default,
-        iconOption: .init(
-          image: Image(systemName: "heart.fill"),
-          color: .blue,
-          position: .left,
-          downSized: false
-        ),
-        action: {
-          
-        }
-      )
-      .background(.gray)
-      
-      SDGGhostButton(
-        title: "Button",
-        titleColor: .neutral900,
-        size: .small,
-        labelWeight: .SB,
-        status: .default,
-        iconOption: .init(
-          image: Image(systemName: "heart.fill"),
-          color: .blue,
-          position: .right,
-          downSized: false
-        ),
-        action: {
-          
-        }
-      )
-      .background(.gray)
+      VStack(spacing: 20) {
+        
+        Text("DownSizedIcon")
+        
+        SDGGhostButton(
+          title: "Button",
+          titleColor: .neutral900,
+          size: .large,
+          labelWeight: .SB,
+          status: .default,
+          iconOption: .init(
+            image: Image(systemName: "heart.fill"),
+            color: .blue,
+            position: .left,
+            downSized: true
+          ),
+          action: {
+            
+          }
+        )
+        .background(.gray)
+        
+        SDGGhostButton(
+          title: "Button",
+          titleColor: .neutral900,
+          size: .medium,
+          labelWeight: .SB,
+          status: .default,
+          iconOption: .init(
+            image: Image(systemName: "heart.fill"),
+            color: .blue,
+            position: .left,
+            downSized: true
+          ),
+          action: {
+            
+          }
+        )
+        .background(.gray)
+        
+        SDGGhostButton(
+          title: "Button",
+          titleColor: .neutral900,
+          size: .small,
+          labelWeight: .SB,
+          status: .default,
+          iconOption: .init(
+            image: Image(systemName: "heart.fill"),
+            color: .blue,
+            position: .right,
+            downSized: true
+          ),
+          action: {
+            
+          }
+        )
+        .background(.gray)
+      }
     }
     
-    VStack(spacing: 20) {
-      
-      Text("Disabled")
-      
-      SDGGhostButton(
-        title: "Button",
-        titleColor: .neutral900,
-        size: .large,
-        labelWeight: .SB,
-        status: .disabled,
-        iconOption: nil,
-        action: {
-          
-        }
-      )
-      .background(.gray)
-      
-      SDGGhostButton(
-        title: "Button",
-        titleColor: .neutral900,
-        size: .medium,
-        labelWeight: .SB,
-        status: .disabled,
-        iconOption: .init(
-          image: Image(systemName: "heart.fill"),
-          color: .blue,
-          position: .left,
-          downSized: false
-        ),
-        action: {
-          
-        }
-      )
-      .background(.gray)
-      
-      SDGGhostButton(
-        title: "Button",
-        titleColor: .neutral900,
-        size: .small,
-        labelWeight: .SB,
-        status: .disabled,
-        iconOption: .init(
-          image: Image(systemName: "heart.fill"),
-          color: .blue,
-          position: .right,
-          downSized: false
-        ),
-        action: {
-          
-        }
-      )
-      .background(.gray)
+    VStack {
+      Text("fullSize")
+
+      HStack {
+        SDGGhostButton(
+          title: "Button",
+          titleColor: .neutral900,
+          size: .large,
+          labelWeight: .SB,
+          status: .default,
+          iconOption: nil,
+          fullSize: true,
+          action: {
+            
+          }
+        )
+        .background(.gray)
+        
+        SDGGhostButton(
+          title: "Button",
+          titleColor: .neutral900,
+          size: .medium,
+          labelWeight: .SB,
+          status: .default,
+          iconOption: .init(
+            image: Image(systemName: "heart.fill"),
+            color: .blue,
+            position: .left,
+            downSized: false
+          ),
+          fullSize: true,
+          action: {
+            
+          }
+        )
+        .background(.gray)
+        
+        SDGGhostButton(
+          title: "Button",
+          titleColor: .neutral900,
+          size: .small,
+          labelWeight: .SB,
+          status: .default,
+          iconOption: .init(
+            image: Image(systemName: "heart.fill"),
+            color: .blue,
+            position: .right,
+            downSized: false
+          ),
+          fullSize: true,
+          action: {
+            
+          }
+        )
+        .background(.gray)
+      }
     }
-    
-    VStack(spacing: 20) {
-      
-      Text("DownSizedIcon")
-      
-      SDGGhostButton(
-        title: "Button",
-        titleColor: .neutral900,
-        size: .large,
-        labelWeight: .SB,
-        status: .default,
-        iconOption: .init(
-          image: Image(systemName: "heart.fill"),
-          color: .blue,
-          position: .left,
-          downSized: true
-        ),
-        action: {
-          
-        }
-      )
-      .background(.gray)
-      
-      SDGGhostButton(
-        title: "Button",
-        titleColor: .neutral900,
-        size: .medium,
-        labelWeight: .SB,
-        status: .default,
-        iconOption: .init(
-          image: Image(systemName: "heart.fill"),
-          color: .blue,
-          position: .left,
-          downSized: true
-        ),
-        action: {
-          
-        }
-      )
-      .background(.gray)
-      
-      SDGGhostButton(
-        title: "Button",
-        titleColor: .neutral900,
-        size: .small,
-        labelWeight: .SB,
-        status: .default,
-        iconOption: .init(
-          image: Image(systemName: "heart.fill"),
-          color: .blue,
-          position: .right,
-          downSized: true
-        ),
-        action: {
-          
-        }
-      )
-      .background(.gray)
-    }
+    .padding(.horizontal, 16)
   }
 }
