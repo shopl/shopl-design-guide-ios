@@ -65,7 +65,7 @@ public struct SDGPopupButton: View {
             title: option1.title,
             titleColor: .neutral700,
             size: .large,
-            labelWeight: .SB,
+            labelWeight: .R,
             status: .default,
             iconOption: nil,
             action: option1.action
@@ -97,7 +97,7 @@ public struct SDGPopupButton: View {
             title: option1.title,
             titleColor: .neutral700,
             size: .large,
-            labelWeight: .SB,
+            labelWeight: .R,
             status: .default,
             iconOption: nil,
             action: option1.action
