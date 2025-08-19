@@ -99,6 +99,8 @@ public enum SDGLocalizationKey: String, CaseIterable {
   case resign_title
   ///탈퇴
   case delete_account
+  ///데이터 로딩 중
+  case loading_message
   
   var string: String {
     return SDGString.shared.getSDGString(key: self)
