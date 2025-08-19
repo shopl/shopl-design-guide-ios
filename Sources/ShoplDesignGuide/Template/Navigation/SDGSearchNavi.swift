@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct SDGTopSearchNavi: View {
+public struct SDGSearchNavi: View {
   
   public struct SearchButtonOption {
     
@@ -210,7 +210,7 @@ public struct SDGTopSearchNavi: View {
   
   ZStack(alignment: .top) {
     VStack {
-      SDGTopSearchNavi(
+      SDGSearchNavi(
         naviType: .pop(tintColor: nil, onDismiss: {
           
         }),
@@ -232,7 +232,7 @@ public struct SDGTopSearchNavi: View {
         ]
       )
       
-      SDGTopSearchNavi(
+      SDGSearchNavi(
         naviType: .dismiss(tintColor: nil, onDismiss: {
           
         }),

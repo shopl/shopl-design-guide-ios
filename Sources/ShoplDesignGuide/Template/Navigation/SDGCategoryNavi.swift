@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct SDGTopCategoryNavi: View {
+public struct SDGCategoryNavi: View {
   
   private let _naviType: TopNaviType
   private let _title: TopNaviTextOption?
@@ -123,7 +123,7 @@ public struct SDGTopCategoryNavi: View {
   
   ZStack(alignment: .top) {
     VStack {
-      SDGTopCategoryNavi(
+      SDGCategoryNavi(
         naviType: .pop(tintColor: nil, onDismiss: {
           
         }),
@@ -140,7 +140,7 @@ public struct SDGTopCategoryNavi: View {
         }
       )
       
-      SDGTopCategoryNavi(
+      SDGCategoryNavi(
         naviType: .dismiss(tintColor: nil, onDismiss: {
           
         }),

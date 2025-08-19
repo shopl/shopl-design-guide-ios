@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct SDGTopTextNavi: View {
+public struct SDGTextNavi: View {
   
   public enum NaviType: Equatable {
     
@@ -282,7 +282,7 @@ public struct SDGTopTextNavi: View {
 
 #Preview {
   VStack {
-    SDGTopTextNavi(
+    SDGTextNavi(
       naviType: .full(
         left: .init(image: Image(.icCommonCompany), action: { }),
         title: .init(
@@ -294,7 +294,7 @@ public struct SDGTopTextNavi: View {
       backgroundColor: .neutral100
     )
     
-    SDGTopTextNavi(
+    SDGTextNavi(
       naviType: .back(
         back: { },
         title: .init(
@@ -306,7 +306,7 @@ public struct SDGTopTextNavi: View {
       backgroundColor: .neutral100
     )
     
-    SDGTopTextNavi(
+    SDGTextNavi(
       naviType: .text(
         title: .init(
           text: "Title이 꽤 기다란 Title인데 이게 두줄 이상은 또 안보여야 돼",

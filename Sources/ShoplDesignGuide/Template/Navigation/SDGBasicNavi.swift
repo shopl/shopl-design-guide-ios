@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct SDGTopBasicNavi: View {
+public struct SDGBasicNavi: View {
   
   private let _naviType: TopNaviType
   private let _title: TopNaviTextOption?
@@ -103,7 +103,7 @@ struct TopBasicNavi_Preview: PreviewProvider {
   static var previews: some View {
     
     VStack {
-      SDGTopBasicNavi(
+      SDGBasicNavi(
         naviType:
             .pop(tintColor: nil, onDismiss: {
               
@@ -114,7 +114,7 @@ struct TopBasicNavi_Preview: PreviewProvider {
         backgroundColor: .neutral0
       )
       
-      SDGTopBasicNavi(
+      SDGBasicNavi(
         naviType:
             .dismiss(onDismiss: {
               
@@ -125,7 +125,7 @@ struct TopBasicNavi_Preview: PreviewProvider {
         backgroundColor: .neutral0
       )
       
-      SDGTopBasicNavi(
+      SDGBasicNavi(
         naviType:
             .dismiss(onDismiss: {
               
@@ -144,7 +144,7 @@ struct TopBasicNavi_Preview: PreviewProvider {
           )]
       )
       
-      SDGTopBasicNavi(
+      SDGBasicNavi(
         naviType:
             .pop(onDismiss: {
               
@@ -164,7 +164,7 @@ struct TopBasicNavi_Preview: PreviewProvider {
           )]
       )
       
-      SDGTopBasicNavi(
+      SDGBasicNavi(
         naviType:.none,
         title: .init(
           string: "pop 테스트 네비게이션"
@@ -180,12 +180,12 @@ struct TopBasicNavi_Preview: PreviewProvider {
           )]
       )
       
-      SDGTopBasicNavi(naviType: .pop(onDismiss: {
+      SDGBasicNavi(naviType: .pop(onDismiss: {
         
       }), title: .init(string: "some"),
                    backgroundColor: .neutral0)
       
-      SDGTopBasicNavi(naviType: .pop(tintColor: .neutral0, onDismiss: {
+      SDGBasicNavi(naviType: .pop(tintColor: .neutral0, onDismiss: {
         
       }), title: .init(string: "some"), backgroundColor: .neutral0)
     }
