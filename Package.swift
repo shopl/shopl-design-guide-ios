@@ -7,7 +7,7 @@ let package = Package(
   name: "ShoplDesignGuide",
   platforms: [
     .macOS(.v12),
-    .iOS(.v15)
+    .iOS(.v16)
   ],
   products: [
     .library(
