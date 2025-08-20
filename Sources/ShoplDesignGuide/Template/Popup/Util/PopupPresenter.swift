@@ -16,7 +16,7 @@ public struct PopupPresenter<PopupContent: View>: View {
 
   public var body: some View {
     ZStack {
-      TypoColor.neutral900.color.opacity(0.4)
+      Color.neutral900.opacity(0.4)
         .ignoresSafeArea()
         .onTapGesture {
           tapOutsideAction?()

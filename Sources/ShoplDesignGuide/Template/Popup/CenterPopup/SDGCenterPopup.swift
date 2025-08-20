@@ -13,7 +13,7 @@ extension View {
     isPresented: Bool,
     title: SDGPopupTitle?,
     @ViewBuilder body: @escaping () -> Content,
-    button: SDGPopupButton,
+    button: SDGCenterPopupButton,
     tapOutsideAction: (() -> Void)? = nil
   ) -> some View {
     self.modifier(
@@ -35,14 +35,14 @@ struct SDGCenterPopup<BodyContent: View>: View {
   
   private let title: SDGPopupTitle?
   private let bodyContent: BodyContent
-  private let button: SDGPopupButton
+  private let button: SDGCenterPopupButton
   
   @State private var titleHeight: CGFloat = 0
   @State private var buttonHeight: CGFloat = 0
   
   private let topPadding: CGFloat = 24
   private let contentSpacing: CGFloat = 12
-  private let spacing: CGFloat = 60 * 2
+  private let popupHeightLimitSpacing: CGFloat = 60 * 2
   private var totalContentSpacing: CGFloat {
     let result: CGFloat
     if title == nil && bodyContent.isEmpty {
@@ -60,7 +60,7 @@ struct SDGCenterPopup<BodyContent: View>: View {
   init(
     title: SDGPopupTitle?,
     @ViewBuilder bodyContent: () -> BodyContent,
-    button: SDGPopupButton
+    button: SDGCenterPopupButton
   ) {
     self.title = title
     self.bodyContent = bodyContent()
@@ -89,26 +89,46 @@ struct SDGCenterPopup<BodyContent: View>: View {
         button
           .readHeight(to: $buttonHeight)
       }
-      .background(TypoColor.neutral0.color)
+      .background(.neutral0)
       .cornerRadius(20)
       .padding(.horizontal, 20)
-      .frame(width: geometry.size.width, height: geometry.size.height)
+      .frame(height: geometry.size.height)
     }
   }
   
   private func calculateBodyHeight(in containerSize: CGSize) -> CGFloat {
     let fixedHeight = titleHeight + buttonHeight + topPadding + totalContentSpacing
-    let availableHeight = containerSize.height - fixedHeight - spacing
+    let availableHeight = containerSize.height - fixedHeight - popupHeightLimitSpacing
     return max(0, availableHeight)
   }
 }
 
-
 #Preview {
-  VStack(spacing: 0) {
-    Color.clear
+  struct PreviewWrapper: View {
+    @State private var showPopup = false
+    @State private var showScrollablePopup = false
+    
+    var body: some View {
+      VStack(spacing: 20) {
+        Button("팝업 띄우기") {
+          showPopup.toggle()
+        }
+        .padding()
+        .background(Color.blue)
+        .foregroundColor(.white)
+        .cornerRadius(8)
+        
+        
+        Button("내용이 긴 팝업 띄우기") {
+          showScrollablePopup.toggle()
+        }
+        .padding()
+        .background(Color.blue)
+        .foregroundColor(.white)
+        .cornerRadius(8)
+      }
       .centerPopup(
-        isPresented: true,
+        isPresented: showPopup,
         title: .init(
           title: "타이틀",
           color: .neutral400,
@@ -118,7 +138,7 @@ struct SDGCenterPopup<BodyContent: View>: View {
           SDGPopupBodyText(
             bodyText: "내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용",
             labelWeight: .R,
-            color: TypoColor.neutral700,
+            color: .neutral700,
             alignment: .leading
           )
         },
@@ -127,16 +147,14 @@ struct SDGCenterPopup<BodyContent: View>: View {
             option: .init(
               title: "확인",
               action: {
-                print("확인")
+                showPopup.toggle()
               }
             )
           )
         )
       )
-    
-    Color.clear
       .centerPopup(
-        isPresented: true,
+        isPresented: showScrollablePopup,
         title: .init(
           title: "타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀",
           color: .neutral400,
@@ -144,6 +162,16 @@ struct SDGCenterPopup<BodyContent: View>: View {
         ),
         body: {
           VStack(spacing: 0) {
+            Text("길어지면")
+            Text("길어지면")
+            Text("길어지면")
+            Text("길어지면")
+            Text("길어지면")
+            Text("길어지면")
+            Text("길어지면")
+            Text("길어지면")
+            Text("길어지면")
+            Text("길어지면")
             Text("길어지면")
             Text("길어지면")
             Text("길어지면")
@@ -172,19 +200,21 @@ struct SDGCenterPopup<BodyContent: View>: View {
             option1: .init(
               title: "취소취소취소취소취소취소취소취소취소취소취소취소",
               action: {
-                print("취소")
+                showScrollablePopup.toggle()
               }
             ),
             option2: .init(
               title: "확인확인확인확인확인확인확인확인확인확인확인확인",
               action: {
-                print("확인")
+                showScrollablePopup.toggle()
               }
             )
           ),
           status: .disabled
         )
       )
+    }
   }
+  
+  return PreviewWrapper()
 }
-

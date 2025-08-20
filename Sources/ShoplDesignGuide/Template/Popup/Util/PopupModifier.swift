@@ -38,7 +38,7 @@ public struct PopupModifier<PopupContent: View>: ViewModifier {
       showCover = true
       
       DispatchQueue.main.async {
-        withAnimation(.easeInOut(duration: 0.2)) {
+        withAnimation(.easeInOut(duration: 0.1)) {
           opacity = 1.0
         }
       }

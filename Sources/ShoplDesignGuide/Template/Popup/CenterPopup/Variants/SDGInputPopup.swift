@@ -17,8 +17,8 @@ extension View {
     placeholder: String,
     input: Binding<String>,
     maxLength: Int,
-    leftButtonOption: SDGPopupButton.Button.Option,
-    rightButtonOption: SDGPopupButton.Button.Option,
+    leftButtonOption: SDGCenterPopupButton.Button.Option,
+    rightButtonOption: SDGCenterPopupButton.Button.Option,
     tapOutsideAction: (() -> Void)? = nil
   ) -> some View {
     self.modifier(
@@ -49,8 +49,8 @@ private struct SDGInputPopup: View {
   let placeholder: String
   let input: Binding<String>
   let maxLength: Int
-  let leftButtonOption: SDGPopupButton.Button.Option
-  let rightButtonOption: SDGPopupButton.Button.Option
+  let leftButtonOption: SDGCenterPopupButton.Button.Option
+  let rightButtonOption: SDGCenterPopupButton.Button.Option
   
   var body: some View {
     SDGCenterPopup(
@@ -61,14 +61,16 @@ private struct SDGInputPopup: View {
       ),
       bodyContent: {
         VStack(spacing: 16) {
-          PopupBodyTextType(_title: .init(text: bodyText))
+          Text(bodyText)
+            .typo(.body1_R, .neutral600)
+            .frame(maxWidth: .infinity, alignment: .leading)
           
           VStack(spacing: 8) {
             Text(inputTitle)
               .typo(.body1_R, .neutral400)
               .frame(maxWidth: .infinity, alignment: .leading)
             
-            FixedInput(
+            SDGFixedInput(
               text: input,
               placeHolder: placeholder,
               backgroundColor: TypoColor.neutral50.color,
@@ -89,4 +91,45 @@ private struct SDGInputPopup: View {
       )
     )
   }
+}
+
+#Preview {
+  struct PreviewWrapper: View {
+    @State private var showPopup = false
+    @State private var input: String = ""
+    
+    var body: some View {
+      VStack(spacing: 20) {
+        Button("팝업 띄우기") {
+          showPopup.toggle()
+        }
+        .padding()
+        .background(Color.blue)
+        .foregroundColor(.white)
+        .cornerRadius(8)
+        
+        Text(input)
+      }
+      
+      .centerInputPopup(
+        isPresented: showPopup,
+        title: "타이틀",
+        bodyText: "내용",
+        inputTitle: "인풋 타이틀",
+        placeholder: "플레이스홀더",
+        input: $input,
+        maxLength: 50,
+        leftButtonOption: .init(
+          title: "취소",
+          action: { showPopup.toggle() }
+        ),
+        rightButtonOption: .init(
+          title: "확인",
+          action: { showPopup.toggle() }
+        )
+      )
+    }
+  }
+  
+  return PreviewWrapper()
 }

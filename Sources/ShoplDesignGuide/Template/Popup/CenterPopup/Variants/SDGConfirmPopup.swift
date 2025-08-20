@@ -13,8 +13,8 @@ extension View {
     isPresented: Bool,
     title: String,
     bodyText: String,
-    leftButtonOption: SDGPopupButton.Button.Option,
-    rightButtonOption: SDGPopupButton.Button.Option,
+    leftButtonOption: SDGCenterPopupButton.Button.Option,
+    rightButtonOption: SDGCenterPopupButton.Button.Option,
     tapOutsideAction: (() -> Void)? = nil
   ) -> some View {
     self.modifier(
@@ -37,8 +37,8 @@ private struct SDGConfirmPopup: View {
   
   let title: String
   let bodyText: String
-  let leftButtonOption: SDGPopupButton.Button.Option
-  let rightButtonOption: SDGPopupButton.Button.Option
+  let leftButtonOption: SDGCenterPopupButton.Button.Option
+  let rightButtonOption: SDGCenterPopupButton.Button.Option
   
   var body: some View {
     SDGCenterPopup(
@@ -48,7 +48,9 @@ private struct SDGConfirmPopup: View {
         alignment: .leading
       ),
       bodyContent: {
-        PopupBodyTextType(_title: .init(text: bodyText))
+        Text(bodyText)
+          .typo(.body1_R, .neutral600)
+          .frame(maxWidth: .infinity, alignment: .leading)
       },
       button: .init(
         button: .twoOptions(
@@ -58,4 +60,34 @@ private struct SDGConfirmPopup: View {
       )
     )
   }
+}
+
+#Preview {
+  struct PreviewWrapper: View {
+    @State private var showPopup = false
+    
+    var body: some View {
+      Button("팝업 띄우기") {
+        showPopup.toggle()
+      }
+      .padding()
+      .background(Color.blue)
+      .foregroundColor(.white)
+      .cornerRadius(8)
+      .centerConfirmPopup(
+        isPresented: showPopup,
+        title: "타이틀",
+        bodyText: "내용",
+        leftButtonOption: .init(
+          title: "취소",
+          action: { showPopup.toggle() }),
+        rightButtonOption: .init(
+          title: "확인",
+          action: { showPopup.toggle() }
+        )
+      )
+    }
+  }
+  
+  return PreviewWrapper()
 }

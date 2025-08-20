@@ -15,7 +15,7 @@ extension View {
     iconAlignment: Alignment,
     title: SDGPopupTitle?,
     subText: SDGPopupBodyText?,
-    button: SDGPopupButton,
+    button: SDGCenterPopupButton,
     tapOutsideAction: (() -> Void)? = nil
   ) -> some View {
     self.modifier(
@@ -41,7 +41,7 @@ struct SDGIconPopup<IconAreaContent: View>: View {
   private let iconAlignment: Alignment
   private let title: SDGPopupTitle?
   private let subText: SDGPopupBodyText?
-  private let button: SDGPopupButton
+  private let button: SDGCenterPopupButton
   
   @State private var iconHeight: CGFloat = 0
   @State private var titleHeight: CGFloat = 0
@@ -49,6 +49,7 @@ struct SDGIconPopup<IconAreaContent: View>: View {
   
   private let topPadding: CGFloat = 24
   private let contentSpacing: CGFloat = 12
+  private let popupHeightLimitSpacing: CGFloat = 60 * 2
   private var totalContentSpacing: CGFloat {
     let result: CGFloat
     if title == nil && subText == nil {
@@ -63,14 +64,12 @@ struct SDGIconPopup<IconAreaContent: View>: View {
     return result
   }
   
-  private let spacing: CGFloat = 60 * 2
-  
   init(
     @ViewBuilder iconAreaContent: () -> IconAreaContent,
     iconAlignment: Alignment,
     title: SDGPopupTitle?,
     subText: SDGPopupBodyText?,
-    button: SDGPopupButton
+    button: SDGCenterPopupButton
   ) {
     self.iconAreaContent = iconAreaContent()
     self.iconAlignment = iconAlignment
@@ -108,7 +107,7 @@ struct SDGIconPopup<IconAreaContent: View>: View {
         button
           .readHeight(to: $buttonHeight)
       }
-      .background(TypoColor.neutral0.color)
+      .background(.neutral0)
       .cornerRadius(20)
       .padding(.horizontal, 20)
       .frame(width: geometry.size.width, height: geometry.size.height)
@@ -117,49 +116,63 @@ struct SDGIconPopup<IconAreaContent: View>: View {
   
   private func calculateBodyHeight(in containerSize: CGSize) -> CGFloat {
     let fixedHeight = iconHeight + titleHeight + buttonHeight + topPadding + totalContentSpacing
-    let availableHeight = containerSize.height - fixedHeight - spacing
+    let availableHeight = containerSize.height - fixedHeight - popupHeightLimitSpacing
     return max(0, availableHeight)
   }
 }
 
 #Preview {
-  Color.clear
-    .iconPopup(
-      isPresented: true,
-      icon: {
-        Image(systemName: "exclamationmark.triangle.fill")
-          .frame(width: 20, height: 20)
-          .padding(10)
-          .background(TypoColor.neutral100.color)
-          .cornerRadius(8)
-      },
-      iconAlignment: .leading,
-      title: .init(
-        title: "타이틀",
-        color: .neutral400,
-        alignment: .leading
-      ),
-      subText: .init(
-        bodyText: "내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용",
-        labelWeight: .R,
-        color: .neutral700,
-        alignment: .leading
-      ),
-      button: .init(
-        button: .twoOptions(
-          option1: .init(
-            title: "취소",
-            action: {
-              print("취소")
-            }
-          ),
-          option2: .init(
-            title: "확인",
-            action: {
-              print("확인")
-            }
+  struct PreviewWrapper: View {
+    @State private var showPopup = false
+    
+    var body: some View {
+      Button("팝업 띄우기") {
+        showPopup.toggle()
+      }
+      .padding()
+      .background(Color.blue)
+      .foregroundColor(.white)
+      .cornerRadius(8)
+      .iconPopup(
+        isPresented: showPopup,
+        icon: {
+          Image(systemName: "exclamationmark.triangle.fill")
+            .frame(width: 20, height: 20)
+            .padding(10)
+            .background(.neutral100)
+            .cornerRadius(8)
+        },
+        iconAlignment: .leading,
+        title: .init(
+          title: "타이틀",
+          color: .neutral400,
+          alignment: .leading
+        ),
+        subText: .init(
+          bodyText: "내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용",
+          labelWeight: .R,
+          color: .neutral700,
+          alignment: .leading
+        ),
+        button: .init(
+          button: .twoOptions(
+            option1: .init(
+              title: "취소",
+              action: {
+                showPopup.toggle()
+              }
+            ),
+            option2: .init(
+              title: "확인",
+              action: {
+                showPopup.toggle()
+              }
+            )
           )
         )
       )
-    )
+    }
+  }
+  
+  return PreviewWrapper()
 }

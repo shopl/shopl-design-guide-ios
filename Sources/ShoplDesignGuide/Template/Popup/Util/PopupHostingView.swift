@@ -12,7 +12,7 @@ public class PopupHostingViewController<BodyContent: View>: UIHostingController<
   
   public init(
     title: SDGPopupTitle?,
-    button: SDGPopupButton,
+    button: SDGCenterPopupButton,
     tapOutsideAction: (() -> Void)? = nil,
     @ViewBuilder body: @escaping () -> BodyContent
   ) {

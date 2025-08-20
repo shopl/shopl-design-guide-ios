@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public struct SDGPopupButton: View {
+public struct SDGCenterPopupButton: View {
   
   public enum Button {
     case oneOption(option: Option)
@@ -41,7 +41,7 @@ public struct SDGPopupButton: View {
   
   public var body: some View {
     VStack(spacing: 0) {
-      TypoColor.neutral200.color
+      Color.neutral200
         .frame(height: 1)
       
       switch button {
@@ -74,7 +74,7 @@ public struct SDGPopupButton: View {
             option1.action()
           }
           
-          TypoColor.neutral200.color
+          Color.neutral200
             .frame(width: 1)
           
           SDGGhostButton(
@@ -106,7 +106,7 @@ public struct SDGPopupButton: View {
             option1.action()
           }
           
-          TypoColor.neutral200.color
+          Color.neutral200
             .frame(width: 1)
           
           SDGGhostButton(
@@ -128,46 +128,45 @@ public struct SDGPopupButton: View {
   }
 }
 
-struct SDGPopupButtonUnit_Preview: PreviewProvider {
-  static var previews: some View {
-    VStack {
-      SDGPopupButton(
-        button: .oneOption(
-          option: .init(
-            title: "확인",
-            action: { print("확인") }
-          )
+
+#Preview {
+  VStack {
+    SDGCenterPopupButton(
+      button: .oneOption(
+        option: .init(
+          title: "확인",
+          action: { print("확인") }
+        )
+      ),
+      status: .active
+    )
+    
+    SDGCenterPopupButton(
+      button: .twoOptions(
+        option1: .init(
+          title: "취소",
+          action: { print("취소") }
         ),
-        status: .active
-      )
-      
-      SDGPopupButton(
-        button: .twoOptions(
-          option1: .init(
-            title: "취소",
-            action: { print("취소") }
-          ),
-          option2: .init(
-            title: "확인",
-            action: { print("확인") }
-          )
+        option2: .init(
+          title: "확인",
+          action: { print("확인") }
+        )
+      ),
+      status: .active
+    )
+    
+    SDGCenterPopupButton(
+      button: .delete(
+        option1: .init(
+          title: "취소",
+          action: { print("취소") }
         ),
-        status: .active
-      )
-      
-      SDGPopupButton(
-        button: .delete(
-          option1: .init(
-            title: "취소",
-            action: { print("취소") }
-          ),
-          option2: .init(
-            title: "삭제",
-            action: { print("삭제") }
-          )
-        ),
-        status: .disabled
-      )
-    }
+        option2: .init(
+          title: "삭제",
+          action: { print("삭제") }
+        )
+      ),
+      status: .disabled
+    )
   }
 }
