@@ -29,12 +29,14 @@ private struct HeightReaderModifier: ViewModifier {
         }
       )
       .onPreferenceChange(HeightPreferenceKey.self) { newHeight in
-        self.height = newHeight
+        DispatchQueue.main.async {
+          self.height = newHeight
+        }
       }
   }
 }
 
 private struct HeightPreferenceKey: PreferenceKey {
-  static var defaultValue: CGFloat = .zero
+  static let defaultValue: CGFloat = .zero
   static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { }
 }
