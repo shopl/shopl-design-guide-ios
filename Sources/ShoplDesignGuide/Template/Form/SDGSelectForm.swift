@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct SDGDropdownForm: View {
+public struct SDGSelectForm: View {
   
   public enum `Type` {
     case empha
@@ -15,7 +15,7 @@ public struct SDGDropdownForm: View {
   }
   
   private let title: String
-  private let icon: FormIconModel?
+  private let iconList: [FormIconModel]?
   private let type: `Type`
   private let selectedText: String?
   private let placeHolder: String
@@ -39,16 +39,17 @@ public struct SDGDropdownForm: View {
   
   public init(
     title: String,
-    icon: FormIconModel? = nil,
+    iconList: [FormIconModel]? = nil,
     type: `Type`,
     selectedText: String?,
     placeHolder: String,
     isRequiered: Bool = false,
+    onImageTap: (() -> Void)? = nil,
     onRefresh: @escaping () -> Void,
     onSelect: @escaping () -> Void
   ) {
     self.title = title
-    self.icon = icon
+    self.iconList = iconList
     self.type = type
     self.selectedText = selectedText
     self.placeHolder = placeHolder
@@ -79,21 +80,30 @@ public struct SDGDropdownForm: View {
           .multilineTextAlignment(.leading)
           .lineLimit(nil)
         
-        if let icon = icon {
+        
+        
+        if let iconList = iconList,
+           !iconList.isEmpty {
           
-          Button {
-            icon.onImageTap?()
-          } label: {
-            ZStack {
-              icon.image
-                .resizable()
-                .frame(width: 14, height: 14)
-                .padding(.vertical, 3)
-                .padding(.leading, 4)
-                .padding(.trailing, 8)
+          HStack(spacing: 0) {
+            ForEach(iconList.indices, id: \.self) { index in
+              let icon = iconList[index]
+              
+              Button {
+                icon.onImageTap?()
+              } label: {
+                ZStack {
+                  icon.image
+                    .resizable()
+                    .foregroundStyle(icon.tintColor)
+                    .frame(width: 14, height: 14)
+                    .padding(.vertical, 3)
+                    .padding(.horizontal, 4)
+                }
+              }
+              .buttonStyle(NoTapAnimationButtonStyle())
             }
           }
-          .buttonStyle(NoTapAnimationButtonStyle())
         }
         
         Spacer(minLength: 8)
@@ -108,6 +118,7 @@ public struct SDGDropdownForm: View {
             ZStack {
               
               Image(.icCommonRefresh)
+                .renderingMode(.template)
                 .resizable()
                 .foregroundStyle(.neutral400)
                 .frame(width: 24, height: 24)
@@ -134,7 +145,7 @@ public struct SDGDropdownForm: View {
               .typo(.body1_R, isSelected ? .neutral700 : .neutral300)
               .frame(maxWidth: .infinity, alignment: .leading)
             
-            Image(.icCommonDropdown)
+            Image(.icCommonNext)
               .resizable()
               .foregroundStyle(.neutral700)
               .frame(width: 20, height: 20)
@@ -155,7 +166,7 @@ public struct SDGDropdownForm: View {
 
 #Preview {
   VStack {
-    SDGDropdownForm(
+    SDGSelectForm(
       title: "타이틀",
       type: .empha,
       selectedText: nil,
@@ -164,9 +175,9 @@ public struct SDGDropdownForm: View {
       onSelect: { }
     )
     
-    SDGDropdownForm(
+    SDGSelectForm(
       title: "타이틀",
-      icon: FormIconModel(image: Image(.icCommonEdit), tintColor: .neutral600),
+      iconList: [FormIconModel(image: Image(.icCommonEdit), tintColor: .neutral400)],
       type: .empha,
       selectedText: nil,
       placeHolder: "입력",
@@ -175,9 +186,9 @@ public struct SDGDropdownForm: View {
       onSelect: { }
     )
     
-    SDGDropdownForm(
+    SDGSelectForm(
       title: "타이틀",
-      icon: FormIconModel(image: Image(.icCommonEdit), tintColor: .neutral600),
+      iconList: [FormIconModel(image: Image(.icCommonEdit), tintColor: .neutral600)],
       type: .empha,
       selectedText: "입력했음",
       placeHolder: "입력",
@@ -186,18 +197,22 @@ public struct SDGDropdownForm: View {
       onSelect: { }
     )
     
-    SDGDropdownForm(
+    SDGSelectForm(
       title: "타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 ",
       type: .empha,
       selectedText: "입력했음",
       placeHolder: "입력",
+      isRequiered: true,
       onRefresh: { },
       onSelect: { }
     )
     
-    SDGDropdownForm(
+    SDGSelectForm(
       title: "타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 ",
-      icon: FormIconModel(image: Image(.icCommonEdit), tintColor: .neutral600),
+      iconList: [
+        FormIconModel(image: Image(.icCommonEdit), tintColor: .neutral600),
+        FormIconModel(image: Image(.icClip), tintColor: .neutral600)
+      ],
       type: .empha,
       selectedText: "입력했음",
       placeHolder: "입력",
@@ -207,3 +222,4 @@ public struct SDGDropdownForm: View {
   }
   .padding(20)
 }
+
