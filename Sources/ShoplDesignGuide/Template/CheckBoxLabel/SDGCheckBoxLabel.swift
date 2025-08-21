@@ -19,34 +19,16 @@ public struct SDGCheckBoxLabel: View {
     case disabled
   }
 
-  private var _status: Status {
-    if _model.isDisabled {
-      return .disabled
-    } else if _model.isSelected {
-      return .selected
-    } else {
-      return .default
-    }
-  }
-
-  private var _selectedImageColor: Color {
-    if _model.isSelected {
-      return _model.isSelectedColorPrimary ? .primary300 : .neutral700
-    }
-
-    return .neutral200
-  }
-
   private var _labelColor: TypoColor {
     if _model.isDisabled {
       return .neutral300
     }
 
     switch _model.labelColorOption {
-    case .option1:
+    case .neutral:
       return .neutral700
 
-    case .option2:
+    case .primary:
       return _model.isSelected ? .primary300 : .neutral400
     }
   }
@@ -88,7 +70,7 @@ struct SDGCheckBoxLabel_Wrapper: View {
   @State var items: [CheckBoxLabelModel] = [
     CheckBoxLabelModel(
       id: "simple1",
-      labelColorOption: .option1,
+      labelColorOption: .neutral,
       type: .normal,
       title: "Simple Item 1",
       isSelected: false,
@@ -96,7 +78,7 @@ struct SDGCheckBoxLabel_Wrapper: View {
     ),
     CheckBoxLabelModel(
       id: "simple2",
-      labelColorOption: .option1,
+      labelColorOption: .neutral,
       type: .normal,
       title: "Simple Item 2",
       isSelected: true,
@@ -104,7 +86,7 @@ struct SDGCheckBoxLabel_Wrapper: View {
     ),
     CheckBoxLabelModel(
       id: "simple3",
-      labelColorOption: .option1,
+      labelColorOption: .neutral,
       type: .normal,
       title: "Simple Item 3",
       isSelected: false,
@@ -113,7 +95,7 @@ struct SDGCheckBoxLabel_Wrapper: View {
 
     CheckBoxLabelModel(
       id: "simple4",
-      labelColorOption: .option1,
+      labelColorOption: .primary,
       type: .empha,
       title: "Simple Item 4",
       isSelected: false,
@@ -121,7 +103,7 @@ struct SDGCheckBoxLabel_Wrapper: View {
     ),
     CheckBoxLabelModel(
       id: "simple5",
-      labelColorOption: .option1,
+      labelColorOption: .primary,
       type: .empha,
       title: "Simple Item 5",
       isSelected: true,
@@ -129,7 +111,7 @@ struct SDGCheckBoxLabel_Wrapper: View {
     ),
     CheckBoxLabelModel(
       id: "simple6",
-      labelColorOption: .option1,
+      labelColorOption: .primary,
       type: .empha,
       title: "Simple Item 6",
       isSelected: false,

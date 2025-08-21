@@ -9,8 +9,8 @@ import Foundation
 
 public struct CheckBoxLabelModel: Equatable, Identifiable {
   public enum LabelColorOption: Equatable {
-    case option1
-    case option2
+    case neutral
+    case primary
   }
 
   public enum `Type`: Equatable {
