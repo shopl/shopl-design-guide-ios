@@ -12,13 +12,23 @@ public struct SDGCheckBox: View {
   private let _isSelected: Bool
   private let _size: CGFloat
   private let _isDisabled: Bool
+  private let _selectedColor: Color
   
-  public init(isSelected: Bool,
-              size: CGFloat = 16,
-              isDisabled: Bool = false) {
+  public init(
+    isSelected: Bool,
+    size: CGFloat = 16,
+    isDisabled: Bool = false,
+    selectedColor: Color? = nil
+  ) {
     _isSelected = isSelected
     _size = size
     _isDisabled = isDisabled
+    
+    if let selectedColor = selectedColor {
+      _selectedColor = selectedColor
+    } else {
+      _selectedColor = .primary300
+    }
   }
   
   public var body: some View {
@@ -29,7 +39,7 @@ public struct SDGCheckBox: View {
         .foregroundColor(.neutral0)
     }
     .frame(width: _size, height: _size)
-    .background(_isSelected ? .primary300 : .neutral200)
+    .background(_isSelected ? _selectedColor : .neutral200)
     .applyIf(_isDisabled) {
       $0.background(.neutral200)
     }
