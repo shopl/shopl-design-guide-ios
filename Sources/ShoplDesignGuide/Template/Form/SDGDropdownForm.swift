@@ -75,7 +75,7 @@ public struct SDGDropdownForm: View {
             ]
           )
           .typo(self.type == .empha ? .body1_SB : .body1_R, .neutral700)
-          .frame(alignment: .leading)
+          .frame(minHeight: 28, alignment: .leading)
           .multilineTextAlignment(.leading)
           .lineLimit(nil)
         
@@ -87,6 +87,7 @@ public struct SDGDropdownForm: View {
             ZStack {
               icon.image
                 .resizable()
+                .foregroundStyle(icon.tintColor)
                 .frame(width: 14, height: 14)
                 .padding(.vertical, 3)
                 .padding(.leading, 4)

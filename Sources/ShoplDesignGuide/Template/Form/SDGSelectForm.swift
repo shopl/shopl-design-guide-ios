@@ -76,11 +76,9 @@ public struct SDGSelectForm: View {
             ]
           )
           .typo(self.type == .empha ? .body1_SB : .body1_R, .neutral700)
-          .frame(alignment: .leading)
+          .frame(minHeight: 28, alignment: .leading)
           .multilineTextAlignment(.leading)
           .lineLimit(nil)
-        
-        
         
         if let iconList = iconList,
            !iconList.isEmpty {
