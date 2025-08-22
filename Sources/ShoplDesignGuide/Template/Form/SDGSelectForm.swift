@@ -9,14 +9,9 @@ import SwiftUI
 
 public struct SDGSelectForm: View {
   
-  public enum `Type` {
-    case empha
-    case normal
-  }
-  
   private let title: String
   private let iconList: [FormIconModel]?
-  private let type: `Type`
+  private let type: FormType
   private let selectedText: String?
   private let placeHolder: String
   private let isRequiered: Bool
@@ -40,7 +35,7 @@ public struct SDGSelectForm: View {
   public init(
     title: String,
     iconList: [FormIconModel]? = nil,
-    type: `Type`,
+    type: FormType,
     selectedText: String?,
     placeHolder: String,
     isRequiered: Bool = false,

@@ -9,14 +9,9 @@ import SwiftUI
 
 public struct SDGDropdownForm: View {
   
-  public enum `Type` {
-    case empha
-    case normal
-  }
-  
   private let title: String
   private let icon: FormIconModel?
-  private let type: `Type`
+  private let type: FormType
   private let selectedText: String?
   private let countText: String?
   private let placeHolder: String
@@ -42,7 +37,7 @@ public struct SDGDropdownForm: View {
   public init(
     title: String,
     icon: FormIconModel? = nil,
-    type: `Type`,
+    type: FormType,
     selectedText: String?,
     countText: String? = nil,
     placeHolder: String,

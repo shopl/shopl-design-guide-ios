@@ -9,14 +9,9 @@ import SwiftUI
 
 public struct SDGSimpleTextForm: View {
   
-  public enum `Type` {
-    case empha
-    case normal
-  }
-  
   private let title: String
   private let icon: FormIconModel?
-  private let type: `Type`
+  private let type: FormType
   @Binding private var searchText: String
   @Binding private var state: SDGSimpleInput.InputState
   private let keyboardType: UIKeyboardType
@@ -36,7 +31,7 @@ public struct SDGSimpleTextForm: View {
   public init(
     title: String,
     icon: FormIconModel? = nil,
-    type: `Type`,
+    type: FormType,
     searchText: Binding<String>,
     state: Binding<SDGSimpleInput.InputState> = .constant(.default),
     keyboardType: UIKeyboardType = .default,
