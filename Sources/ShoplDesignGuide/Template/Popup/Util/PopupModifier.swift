@@ -11,6 +11,7 @@ import SwiftUI
 public struct PopupModifier<PopupContent: View>: ViewModifier {
   
   let isPresented: Bool
+  let animation: PopupAnimation
   let tapOutsideAction: (() -> Void)?
   
   @ViewBuilder let popupContent: () -> PopupContent
@@ -18,11 +19,24 @@ public struct PopupModifier<PopupContent: View>: ViewModifier {
   @State private var showCover = false
   @State private var opacity: Double = 0.0
   
+  init(
+    isPresented: Bool,
+    animation: PopupAnimation,
+    tapOutsideAction: (() -> Void)?,
+    popupContent: @escaping () -> PopupContent
+  ) {
+    self.isPresented = isPresented
+    self.animation = animation
+    self.tapOutsideAction = tapOutsideAction
+    self.popupContent = popupContent
+  }
+  
   public func body(content: Content) -> some View {
     content
       .fullScreenCover(isPresented: $showCover) {
         PopupPresenter(
           opacity: opacity,
+          animation: animation,
           content: popupContent,
           tapOutsideAction: tapOutsideAction
         )
@@ -33,25 +47,36 @@ public struct PopupModifier<PopupContent: View>: ViewModifier {
   
   private func onPresentationChange(presented: Bool) {
     if presented {
-      UIView.setAnimationsEnabled(false)
-      
-      showCover = true
-      
-      DispatchQueue.main.async {
-        withAnimation(.easeInOut(duration: 0.1)) {
-          opacity = 1.0
-        }
-      }
+      present()
     } else {
-      withAnimation(.easeInOut(duration: 0.2)) {
-        opacity = 0.0
+      dismiss()
+    }
+  }
+  
+  private func present() {
+    if animation == .fadeInOut {
+      UIView.setAnimationsEnabled(false)
+    }
+    
+    showCover = true
+    
+    DispatchQueue.main.asyncAfter(deadline: .now() + animation.presentDuration) {
+      withAnimation(.easeInOut(duration: 0.1)) {
+        opacity = 1.0
       }
-      
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-        showCover = false
+    }
+  }
+  
+  private func dismiss() {
+    withAnimation(.easeInOut(duration: animation.dismissDuration)) {
+      opacity = 0.0
+    }
+    
+    DispatchQueue.main.asyncAfter(deadline: .now() + animation.dismissDuration) {
+      showCover = false
+      if animation == .fadeInOut {
+        UIView.setAnimationsEnabled(true)
       }
-      
-      UIView.setAnimationsEnabled(true)
     }
   }
 }

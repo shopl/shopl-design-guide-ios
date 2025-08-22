@@ -20,6 +20,7 @@ extension View {
     self.modifier(
       PopupModifier(
         isPresented: isPresented,
+        animation: .fadeInOut,
         tapOutsideAction: tapOutsideAction
       ) {
         SDGDeletePopup(

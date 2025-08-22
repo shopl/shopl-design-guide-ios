@@ -18,6 +18,7 @@ extension View {
     self.modifier(
       PopupModifier(
         isPresented: isPresented,
+        animation: .slideBottomTop,
         tapOutsideAction: tapOutsideAction
       ) {
         ListPopupView(
