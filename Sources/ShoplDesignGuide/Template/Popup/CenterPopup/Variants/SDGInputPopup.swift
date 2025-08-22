@@ -70,7 +70,7 @@ private struct SDGInputPopup: View {
               .typo(.body1_R, .neutral400)
               .frame(maxWidth: .infinity, alignment: .leading)
             
-            SDGFixedInput(
+            SDGFixTextForm(
               text: input,
               placeHolder: placeholder,
               backgroundColor: TypoColor.neutral50.color,

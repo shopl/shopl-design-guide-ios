@@ -18,8 +18,10 @@ public struct SDGDropdownForm: View {
   private let icon: FormIconModel?
   private let type: `Type`
   private let selectedText: String?
+  private let countText: String?
   private let placeHolder: String
   private let isRequiered: Bool
+  @Binding private var disabled: Bool
   
   private let onRefresh: () -> Void
   private let onSelect: () -> Void
@@ -42,8 +44,10 @@ public struct SDGDropdownForm: View {
     icon: FormIconModel? = nil,
     type: `Type`,
     selectedText: String?,
+    countText: String? = nil,
     placeHolder: String,
     isRequiered: Bool = false,
+    disabled: Binding<Bool> = .constant(false),
     onRefresh: @escaping () -> Void,
     onSelect: @escaping () -> Void
   ) {
@@ -51,8 +55,10 @@ public struct SDGDropdownForm: View {
     self.icon = icon
     self.type = type
     self.selectedText = selectedText
+    self.countText = countText
     self.placeHolder = placeHolder
     self.isRequiered = isRequiered
+    self._disabled = disabled
     self.onRefresh = onRefresh
     self.onSelect = onSelect
   }
@@ -122,32 +128,15 @@ public struct SDGDropdownForm: View {
       }
       
       Button {
-        
         onSelect()
-        
       } label: {
-       
-        ZStack {
-          
-          HStack(spacing: 10) {
-            
-            Text(text)
-              .typo(.body1_R, isSelected ? .neutral700 : .neutral300)
-              .frame(maxWidth: .infinity, alignment: .leading)
-            
-            Image(.icCommonDropdown)
-              .resizable()
-              .foregroundStyle(.neutral700)
-              .frame(width: 20, height: 20)
-              
-          }
-          .padding(.vertical, 10)
-          .padding(.horizontal, 12)
-          
-        }
-        .background(.neutral50)
-        .cornerRadius(12)
-        
+        SDGDropdown(
+          placeHolder: placeHolder,
+          text: selectedText ?? "",
+          disabled: $disabled,
+          backgroundColor: .constant(.neutral50),
+          countText: countText
+        )
       }
       .buttonStyle(NoTapAnimationButtonStyle())
     }
@@ -161,6 +150,7 @@ public struct SDGDropdownForm: View {
       type: .empha,
       selectedText: nil,
       placeHolder: "입력",
+      disabled: .constant(true),
       onRefresh: { },
       onSelect: { }
     )
@@ -172,6 +162,7 @@ public struct SDGDropdownForm: View {
       selectedText: nil,
       placeHolder: "입력",
       isRequiered: true,
+      disabled: .constant(false),
       onRefresh: { },
       onSelect: { }
     )
@@ -180,9 +171,11 @@ public struct SDGDropdownForm: View {
       title: "타이틀",
       icon: FormIconModel(image: Image(.icCommonEdit), tintColor: .neutral600),
       type: .empha,
-      selectedText: "입력했음",
+      selectedText: "누구누구",
+      countText: "(3)",
       placeHolder: "입력",
       isRequiered: true,
+      disabled: .constant(false),
       onRefresh: { },
       onSelect: { }
     )
@@ -192,6 +185,7 @@ public struct SDGDropdownForm: View {
       type: .empha,
       selectedText: "입력했음",
       placeHolder: "입력",
+      disabled: .constant(false),
       onRefresh: { },
       onSelect: { }
     )
@@ -202,6 +196,7 @@ public struct SDGDropdownForm: View {
       type: .empha,
       selectedText: "입력했음",
       placeHolder: "입력",
+      disabled: .constant(false),
       onRefresh: { },
       onSelect: { }
     )

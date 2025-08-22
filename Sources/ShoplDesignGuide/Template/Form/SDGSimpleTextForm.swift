@@ -18,9 +18,12 @@ public struct SDGSimpleTextForm: View {
   private let icon: FormIconModel?
   private let type: `Type`
   @Binding private var searchText: String
+  @Binding private var state: SDGSimpleInput.InputState
+  private let keyboardType: UIKeyboardType
   private let placeHolder: String
   private let isRequiered: Bool
   private let errorMessage: String?
+  private let maxCount: Int
   
   private let onRefresh: () -> Void
   private let onSearchButtonTap: (String) -> Void
@@ -35,9 +38,12 @@ public struct SDGSimpleTextForm: View {
     icon: FormIconModel? = nil,
     type: `Type`,
     searchText: Binding<String>,
+    state: Binding<SDGSimpleInput.InputState> = .constant(.default),
+    keyboardType: UIKeyboardType = .default,
     placeHolder: String,
     errorMessage: String? = nil,
     isRequiered: Bool = false,
+    maxCount: Int = 10000,
     onRefresh: @escaping () -> Void,
     onSearchButtonTap: @escaping (String) -> Void,
     onSearchTextChange: @escaping (String) -> Void
@@ -46,9 +52,12 @@ public struct SDGSimpleTextForm: View {
     self.icon = icon
     self.type = type
     self._searchText = searchText
+    self._state = state
+    self.keyboardType = keyboardType
     self.placeHolder = placeHolder
     self.isRequiered = isRequiered
     self.errorMessage = errorMessage
+    self.maxCount = maxCount
     self.onRefresh = onRefresh
     self.onSearchButtonTap = onSearchButtonTap
     self.onSearchTextChange = onSearchTextChange
@@ -118,40 +127,15 @@ public struct SDGSimpleTextForm: View {
         }
       }
       
-      ZStack {
-        
-        TextField(
-          "",
-          text: $searchText,
-          prompt: Text(placeHolder)
-            .font(.system(size: 14, weight: .regular))
-            .foregroundColor(.neutral300)
-        )
-        .font(.system(size: 14, weight: .regular))
-        .foregroundStyle(.neutral700)
-        .submitLabel(.search)
-        .frame(maxWidth: .infinity)
-        .onSubmit {
-          onSearchButtonTap(searchText)
-        }
-        .onChange(of: searchText) { search in
-          onSearchTextChange(search)
-        }
-        .padding(.vertical, 10)
-        .padding(.horizontal, 12)
-        
-      }
-      .background(errorMessage == nil ? .neutral50 : .red300.opacity(0.1))
-      .cornerRadius(12)
-      
-      if let errorMessage = errorMessage {
-        Text(errorMessage)
-          .typo(.body3_R, .red300)
-          .frame(maxWidth: .infinity, alignment: .leading)
-          .multilineTextAlignment(.leading)
-          .lineLimit(nil)
-          .fixedSize(horizontal: false, vertical: true)
-      }
+      SDGSimpleInput(
+        type: .solid,
+        state: $state,
+        text: $searchText,
+        hint: placeHolder,
+        keyboardType: keyboardType,
+        backgroundColor: .neutral50,
+        maxCount: maxCount
+      )
     }
   }
 }
@@ -193,8 +177,8 @@ struct SDGSimpleTextForm_Wrapper: View {
         title: "타이틀",
         type: .empha,
         searchText: $searchTextThree,
+        state: .constant(.error("에러메세지")),
         placeHolder: "입력",
-        errorMessage: "에러메세지",
         isRequiered: false,
         onRefresh: {
           searchTextTwo = ""
@@ -208,8 +192,8 @@ struct SDGSimpleTextForm_Wrapper: View {
         icon: FormIconModel(image: Image(.icClip), tintColor: .neutral500),
         type: .empha,
         searchText: $searchTextFour,
+        state: .constant(.error("긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지")),
         placeHolder: "입력",
-        errorMessage: "긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지",
         isRequiered: false,
         onRefresh: {
           searchTextTwo = ""
