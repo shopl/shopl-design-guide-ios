@@ -34,14 +34,14 @@ extension View {
   }
 }
 
-private struct SDGConfirmPopup: View {
+public struct SDGConfirmPopup: View {
   
   let title: String
   let bodyText: String
   let leftButtonOption: SDGCenterPopupButton.Button.Option
   let rightButtonOption: SDGCenterPopupButton.Button.Option
   
-  var body: some View {
+  public var body: some View {
     SDGCenterPopup(
       title: .init(
         title: title,

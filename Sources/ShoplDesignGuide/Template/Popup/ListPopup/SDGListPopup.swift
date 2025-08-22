@@ -59,7 +59,7 @@ public struct ListPopupModel: Equatable {
   }
 }
 
-struct ListPopupView: View {
+public struct ListPopupView: View {
   private let list: [ListPopupModel]
   private let selectAction: (String) -> Void
   
@@ -72,7 +72,7 @@ struct ListPopupView: View {
     screenHeight * 0.3
   }
   
-  init(
+  public init(
     list: [ListPopupModel],
     selectAction: @escaping (String) -> Void
   ) {
@@ -80,7 +80,7 @@ struct ListPopupView: View {
     self.selectAction = selectAction
   }
   
-  var body: some View {
+  public var body: some View {
     GeometryReader { geometry in
       VStack {
         Spacer()
