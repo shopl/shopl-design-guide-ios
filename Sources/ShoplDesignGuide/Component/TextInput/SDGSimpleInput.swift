@@ -11,7 +11,7 @@ public struct SDGSimpleInput: View {
   
   public enum `Type`: Equatable {
     case solid
-    case line
+    case line(color: Color)
   }
   
   public enum InputState: Equatable {
@@ -63,10 +63,10 @@ public struct SDGSimpleInput: View {
     case .solid:
       return .clear
       
-    case .line:
+    case .line(let color):
       switch _state {
       case .error: return .red300
-      default: return .neutral200
+      default: return color
       }
     }
   }
@@ -181,7 +181,7 @@ public struct SDGSimpleInput: View {
       )
       
       SDGSimpleInput(
-        type: .line,
+        type: .line(color: .neutral200),
         state: .constant(.completed),
         text: .constant(""),
         hint: "hint"
@@ -195,7 +195,7 @@ public struct SDGSimpleInput: View {
       )
       
       SDGSimpleInput(
-        type: .line,
+        type: .line(color: .neutral200),
         state: .constant(.error("ㅇㅇ")),
         text: .constant(""),
         hint: "hint"
