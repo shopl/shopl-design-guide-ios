@@ -70,15 +70,15 @@ private struct SDGInputPopup: View {
               .typo(.body1_R, .neutral400)
               .frame(maxWidth: .infinity, alignment: .leading)
             
-            SDGFixedInput(
+            SDGFixedTextInput(
+              type: .solid,
               text: input,
               placeHolder: placeholder,
               backgroundColor: TypoColor.neutral50.color,
-              outlineColor: nil,
               maxCharacterCount: maxLength,
               isFocused: .constant(false),
               inputViewHeight: 104,
-              isError: .constant(false)
+              isError: .constant(nil)
             )
           }
         }
