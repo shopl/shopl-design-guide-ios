@@ -2,14 +2,12 @@
 //  File.swift
 //  ShoplDesignGuide
 //
-//  Created by Jerry on 8/13/25.
+//  Created by Jerry on 9/1/25.
 //
 
 import SwiftUI
 
-import SwiftUI
-
-public struct SDGMiniProfile: View {
+public struct SDGSimpleProfile: View {
   
   public enum ProfileType {
     case normal, empha, sub
@@ -36,7 +34,7 @@ public struct SDGMiniProfile: View {
     
     HStack(alignment: .top, spacing: 8) {
       
-      SDGAvatar(type: .round, model: _model.avatarModel, size: .xxs) { userId in
+      SDGAvatar(type: .round, model: _model.avatarModel, size: .s) { userId in
         _avaterAction(userId)
       }
       
