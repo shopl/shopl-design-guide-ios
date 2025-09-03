@@ -56,6 +56,7 @@ public struct SDGFloatingButton: View {
         y: 6
       )
     }
+    .buttonStyle(NoTapAnimationButtonStyle())
   }
 }
 
