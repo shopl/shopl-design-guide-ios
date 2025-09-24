@@ -20,6 +20,8 @@ public enum Typography {
   case body2_R
   case body3_SB
   case body3_R
+  case body4_SB
+  case body4_R
   
   var size: CGFloat {
     switch self {
@@ -29,13 +31,14 @@ public enum Typography {
     case .body1_SB, .body1_R: 16
     case .body2_SB, .body2_R: 14
     case .body3_SB, .body3_R: 12
+    case .body4_SB, .body4_R: 10
     }
   }
   
   var weight: Font.Weight {
     switch self {
-    case .title1_SB, .title2_SB, .body1_SB, .body2_SB, .body3_SB: .semibold
-    case .naviTitle, .title1_R, .title2_R, .body1_R, .body2_R, .body3_R: .regular
+    case .title1_SB, .title2_SB, .body1_SB, .body2_SB, .body3_SB, .body4_SB: .semibold
+    case .naviTitle, .title1_R, .title2_R, .body1_R, .body2_R, .body3_R, .body4_R: .regular
     }
   }
   
@@ -47,6 +50,7 @@ public enum Typography {
     case .body1_SB, .body1_R: 20
     case .body2_SB, .body2_R: 18
     case .body3_SB, .body3_R: 16
+    case .body4_SB, .body4_R: 16
     }
   }
   
