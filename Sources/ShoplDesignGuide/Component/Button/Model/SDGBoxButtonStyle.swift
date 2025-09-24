@@ -11,21 +11,21 @@ struct SDGBoxButtonStyle: ButtonStyle {
   
   @Binding private var isSelected: Bool
   
-  private let size: SDGButtonSize
+  private let cornerRadius: CGFloat
   private let defaultTextColor: Color
   private let selectedColor: SDGButtonColor
   private var isDisable: Bool
   
   init(
     isSelected: Binding<Bool>,
-    size: SDGButtonSize,
+    cornerRadius: CGFloat,
     defaultTextColor: Color,
     selectedColor: SDGButtonColor,
     isDisable: Bool
   ) {
     self._isSelected = isSelected
     
-    self.size = size
+    self.cornerRadius = cornerRadius
     self.defaultTextColor = defaultTextColor
     self.selectedColor = selectedColor
     self.isDisable = isDisable
@@ -49,7 +49,7 @@ struct SDGBoxButtonStyle: ButtonStyle {
           .foregroundStyle(self.selectedColor.textColor)
           .background(self.selectedColor.backgroundColor)
           .overlay {
-            RoundedRectangle(cornerRadius: self.size.cornerRadius)
+            RoundedRectangle(cornerRadius: self.cornerRadius)
               .strokeBorder(self.selectedColor.lineColor, lineWidth: 1)
           }
       }

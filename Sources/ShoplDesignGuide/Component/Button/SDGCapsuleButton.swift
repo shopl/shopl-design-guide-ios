@@ -2,12 +2,12 @@
 //  File.swift
 //  ShoplDesignGuide
 //
-//  Created by Jerry on 8/18/25.
+//  Created by Jerry on 9/1/25.
 //
 
 import SwiftUI
 
-public struct SDGBoxButton: View {
+public struct SDGCapsuleButton: View {
   
   public struct Option {
     
@@ -16,7 +16,7 @@ public struct SDGBoxButton: View {
       case right(image: Image, color: Color)
     }
     
-    let size: SDGButtonSize
+    let size: SDGCapsuleButtonSize
     let icon: Icon?
     let title: String
     let color: SDGButtonColor
@@ -24,7 +24,7 @@ public struct SDGBoxButton: View {
     let fullSize: Bool
     
     public init(
-      size: SDGButtonSize,
+      size: SDGCapsuleButtonSize,
       icon: Icon? = nil,
       title: String,
       color: SDGButtonColor,
@@ -147,6 +147,7 @@ public struct SDGBoxButton: View {
   
 }
 
+
 #Preview {
   TabView {
     VStack {
@@ -156,7 +157,7 @@ public struct SDGBoxButton: View {
           
           Text("Solid")
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .medium,
               title: "테스트",
@@ -176,7 +177,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .medium,
               title: "테스트",
@@ -197,7 +198,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .medium,
               icon: .left(image: Image(.icClip), color: .neutral600),
@@ -218,7 +219,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .medium,
               icon: .left(image: Image(.icClip), color: .neutral600),
@@ -241,7 +242,7 @@ public struct SDGBoxButton: View {
           )
 
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .medium,
               icon: .right(image: Image(.icClip), color: .neutral600),
@@ -262,7 +263,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .medium,
               icon: .right(image: Image(.icClip), color: .neutral600),
@@ -289,7 +290,7 @@ public struct SDGBoxButton: View {
         VStack {
           
           Text("Line")
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .medium,
               title: "테스트",
@@ -311,7 +312,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .medium,
               title: "테스트",
@@ -334,7 +335,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .medium,
               icon: .left(image: Image(.icClip), color: .neutral600),
@@ -357,7 +358,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .medium,
               icon: .left(image: Image(.icClip), color: .neutral600),
@@ -381,7 +382,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .medium,
               icon: .right(image: Image(.icClip), color: .neutral600),
@@ -404,7 +405,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .medium,
               icon: .right(image: Image(.icClip), color: .neutral600),
@@ -432,7 +433,7 @@ public struct SDGBoxButton: View {
       
       Text("Solid")
       
-      SDGBoxButton(
+      SDGCapsuleButton(
         option: .init(
           size: .medium,
           icon: .left(image: Image(.icClip), color: .neutral600),
@@ -458,7 +459,7 @@ public struct SDGBoxButton: View {
       
       Text("Line")
       
-      SDGBoxButton(
+      SDGCapsuleButton(
         option: .init(
           size: .medium,
           icon: .right(image: Image(.icClip), color: .neutral600),
@@ -495,7 +496,7 @@ public struct SDGBoxButton: View {
           
           Text("Solid")
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .small,
               title: "테스트",
@@ -515,7 +516,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .small,
               title: "테스트",
@@ -536,7 +537,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .small,
               icon: .left(image: Image(.icClip), color: .neutral600),
@@ -557,7 +558,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .small,
               icon: .left(image: Image(.icClip), color: .neutral600),
@@ -579,7 +580,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .small,
               icon: .right(image: Image(.icClip), color: .neutral600),
@@ -600,7 +601,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .small,
               icon: .right(image: Image(.icClip), color: .neutral600),
@@ -627,7 +628,7 @@ public struct SDGBoxButton: View {
         VStack {
           
           Text("Line")
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .small,
               title: "테스트",
@@ -649,7 +650,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .small,
               title: "테스트",
@@ -672,7 +673,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .small,
               icon: .left(image: Image(.icClip), color: .neutral600),
@@ -695,7 +696,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .small,
               icon: .left(image: Image(.icClip), color: .neutral600),
@@ -719,7 +720,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .small,
               icon: .right(image: Image(.icClip), color: .neutral600),
@@ -742,7 +743,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .medium,
               icon: .right(image: Image(.icClip), color: .neutral600),
@@ -770,7 +771,7 @@ public struct SDGBoxButton: View {
       
       Text("Solid")
       
-      SDGBoxButton(
+      SDGCapsuleButton(
         option: .init(
           size: .small,
           icon: .left(image: Image(.icClip), color: .neutral600),
@@ -794,7 +795,7 @@ public struct SDGBoxButton: View {
       
       Text("Line")
       
-      SDGBoxButton(
+      SDGCapsuleButton(
         option: .init(
           size: .small,
           icon: .right(image: Image(.icClip), color: .neutral600),
@@ -829,7 +830,7 @@ public struct SDGBoxButton: View {
           
           Text("Solid")
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .xsmall,
               title: "테스트",
@@ -849,7 +850,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .xsmall,
               title: "테스트",
@@ -870,7 +871,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .xsmall,
               icon: .left(image: Image(.icClip), color: .neutral600),
@@ -891,7 +892,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .xsmall,
               icon: .left(image: Image(.icClip), color: .neutral600),
@@ -913,7 +914,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .xsmall,
               icon: .right(image: Image(.icClip), color: .neutral600),
@@ -934,7 +935,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .xsmall,
               icon: .right(image: Image(.icClip), color: .neutral600),
@@ -961,7 +962,7 @@ public struct SDGBoxButton: View {
         VStack {
           
           Text("Line")
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .xsmall,
               title: "테스트",
@@ -983,7 +984,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .xsmall,
               title: "테스트",
@@ -1006,7 +1007,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .xsmall,
               icon: .left(image: Image(.icClip), color: .neutral600),
@@ -1029,7 +1030,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .xsmall,
               icon: .left(image: Image(.icClip), color: .neutral600),
@@ -1053,7 +1054,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .xsmall,
               icon: .right(image: Image(.icClip), color: .neutral600),
@@ -1076,7 +1077,7 @@ public struct SDGBoxButton: View {
             }
           )
           
-          SDGBoxButton(
+          SDGCapsuleButton(
             option: .init(
               size: .xsmall,
               icon: .right(image: Image(.icClip), color: .neutral600),
@@ -1104,7 +1105,7 @@ public struct SDGBoxButton: View {
       
       Text("Solid")
       
-      SDGBoxButton(
+      SDGCapsuleButton(
         option: .init(
           size: .xsmall,
           icon: .left(image: Image(.icClip), color: .neutral600),
@@ -1128,7 +1129,7 @@ public struct SDGBoxButton: View {
       
       Text("Line")
       
-      SDGBoxButton(
+      SDGCapsuleButton(
         option: .init(
           size: .xsmall,
           icon: .right(image: Image(.icClip), color: .neutral600),
@@ -1157,3 +1158,4 @@ public struct SDGBoxButton: View {
     }
   }
 }
+
