@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  SDGLinearProgress.swift
 //  ShoplDesignGuide
 //
 //  Created by Jerry on 8/20/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct SDGLineProgress: View {
+public struct SDGLinearProgress: View {
   
   @State private var progress: CGFloat = 0.0
   @Binding private var isComplete: Bool
@@ -43,7 +43,7 @@ public struct SDGLineProgress: View {
             .animation(.easeInOut(duration: 2.0), value: progress)
         }
       }
-      .frame(maxWidth: .infinity, minHeight: 4, maxHeight: 4)
+      .frame(width: 160, height: 4)
       .clipShape(RoundedRectangle(cornerRadius: 2))
       
       Text(self.title)
@@ -66,7 +66,7 @@ public struct SDGLineProgress: View {
 
 #Preview {
   VStack {
-    SDGLineProgress(
+    SDGLinearProgress(
       isComplete: .constant(true),
       title: "업로드 중입니다."
     )
