@@ -60,12 +60,12 @@ public struct SDGTextIndicator: View {
         } else {
           
           ZStack {
-            Color.neutral700
+            Color.neutral100
               .frame(width: 10, height: 10)
               .cornerRadius(5)
               .padding(4)
           }
-          .background(.neutral100)
+          .background(.neutral200)
           .cornerRadius(9)
           
         }
