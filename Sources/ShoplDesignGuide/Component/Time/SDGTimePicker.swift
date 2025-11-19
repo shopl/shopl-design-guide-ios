@@ -7,108 +7,69 @@
 
 import SwiftUI
 
-struct SDGTimePicker: View {
+public struct SDGTimePicker: View {
   
-  public enum `Type`: Equatable {
-    case hour(Int), minute(Int)
-    
-    var modular: Int {
-      switch self {
-        case let .hour(modular): return modular
-        case let .minute(modular): return modular
-      }
-    }
-  }
+  @Binding var selectedDate: Date
+  private var is24HourFormat: Bool
   
-  let type: `Type`
-  let options: [Int]
-  let initValue: Int
-  @Binding var selection: Int
-  @State private var drag: Double = 0
-  
-  let cellAngles = 20.0
-  
-  init(
-    _ type: `Type`,
-    _ options: [Int],
-    _ initValue: Int,
-    _ selection: Binding<Int>
+  public init(
+    selectedDate: Binding<Date>,
+    is24HourFormat: Bool
   ) {
-    self.type = type
-    self.options = options
-    self.initValue = initValue
-    self._selection = selection
+    self._selectedDate = selectedDate
+    self.is24HourFormat = is24HourFormat
   }
   
-  var body: some View {
-    let selectedIndex = getSelectedIndex()
-    HStack {
-      ZStack {
-        ForEach(0..<options.count, id: \.self) { index in
-          let item: Int = options[index]
-          
-          SDGTimePickerCell(
-            isChanged: ((item % type.modular) != initValue % type.modular) && (item == selection),
-            title: String(format: "%02d", item % type.modular),
-            angle: Double(index - selectedIndex) * cellAngles + drag
-          )
-          .frame(maxWidth: .infinity, minHeight: 32, maxHeight: 32)
-        }
-      }
-      .frame(maxWidth: .infinity, minHeight: 160, maxHeight: 160)
-      .gesture(
-        DragGesture()
-          .onChanged { gesture in
-            drag = gesture.translation.height
-          }
-          .onEnded { _ in
-            var newIndex = selectedIndex - Int(round(drag / cellAngles))
-            if newIndex < 0 {
-              newIndex = 0
-            }
-            if newIndex >= options.count - 1 {
-              newIndex = options.count - 1
-            }
-            selection = options[newIndex]
-            drag = 0
-          }
-      )
+  public var body: some View {
+    VStack(spacing: 0) {
+      DatePicker(
+           "",
+           selection: $selectedDate,
+           displayedComponents: .hourAndMinute
+         )
+      .labelsHidden()
+      .datePickerStyle(.wheel)
+      .applyIf(is24HourFormat, apply: {
+        $0.environment(\.locale, Locale(identifier: "en_GB"))
+      })
     }
   }
-  
-  func getSelectedIndex() -> Int {
-    return options.firstIndex(of: selection) ?? 0
-  }
-  
 }
 
-private struct SDGTimePickerCell: View {
+struct SDGTimePicker_Previews: PreviewProvider {
   
-  let isChanged: Bool
-  let title: String
-  let angle: Double
-  
-  var body: some View {
-    if abs(angle) > 90 {
-      EmptyView()
-    }
+  struct PreviewWrapper: View {
     
-    else {
-      let sinValue = sin(rad(angle))
-      let cosValue = cos(rad(angle))
-      Text(title)
-        .font(.system(size: 16))
-        .foregroundColor(
-          isChanged ? .primary300 : .neutral700
-        )
-        .scaleEffect(y: cosValue)
-        .offset(y: sinValue * 85)
-        .opacity(abs(angle) < 5 ? 1.0 : cosValue/2)
-        .frame(maxWidth: .infinity, minHeight: 32, maxHeight: 32)
+    @State var selectedDate1 = Date()
+    @State var selectedDate2 = Date()
+
+    var body: some View {
+      VStack(spacing: 20) {
+        VStack(spacing: 0){
+          Text("24 Hour Format")
+          
+          SDGTimePicker(
+            selectedDate: $selectedDate1,
+            is24HourFormat: true
+          )
+        }
+        
+        Divider(color: .neutral700,
+                option: .init(direction: .horizental, thickness: 1))
+        
+        VStack(spacing: 0){
+          Text("12 Hour Format")
+          
+          SDGTimePicker(
+            selectedDate: $selectedDate2,
+            is24HourFormat: false
+          )
+        }
+      }
     }
   }
   
-  func rad(_ number: Double) -> Double {
-    return number * .pi / 180
+  static var previews: some View {
+    PreviewWrapper()
   }
 }
