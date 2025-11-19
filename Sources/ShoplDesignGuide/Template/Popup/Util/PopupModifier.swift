@@ -43,6 +43,11 @@ public struct PopupModifier<PopupContent: View>: ViewModifier {
         .background(FullScreenCoverBackgroundRemovalView())
       }
       .onChange(of: isPresented, perform: onPresentationChange)
+      .onAppear {
+        if isPresented {
+          onPresentationChange(presented: isPresented)
+        }
+      }
   }
   
   private func onPresentationChange(presented: Bool) {
