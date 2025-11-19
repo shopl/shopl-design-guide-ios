@@ -12,15 +12,10 @@ public struct SDGPopupBody<Content: View>: View {
   
   private let content: Content
   private let maxHeight: CGFloat
-  private let topPadding: CGFloat = 4
-  private let bottomPadding: CGFloat = 28
   @State private var contentHeight: CGFloat = 0
   
-  var contentHeightWithPadding: CGFloat {
-    contentHeight + topPadding + bottomPadding
-  }
-  var scrollDiabled: Bool {
-    contentHeightWithPadding <= maxHeight + 1
+  var scrollDisabled: Bool {
+    contentHeight <= maxHeight + 1
   }
   
   init(
@@ -36,9 +31,7 @@ public struct SDGPopupBody<Content: View>: View {
       content
         .readHeight(to: $contentHeight)
     }
-    .padding(.top, topPadding)
-    .padding(.bottom, bottomPadding)
-    .scrollDisabled(scrollDiabled)
-    .frame(maxHeight: min(maxHeight, contentHeightWithPadding))
+    .scrollDisabled(scrollDisabled)
+    .frame(maxHeight: min(maxHeight, contentHeight))
   }
 }

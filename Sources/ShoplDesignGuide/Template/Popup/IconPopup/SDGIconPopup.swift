@@ -50,6 +50,8 @@ struct SDGIconPopup<IconAreaContent: View>: View {
   private let topPadding: CGFloat = 24
   private let contentSpacing: CGFloat = 12
   private let popupHeightLimitSpacing: CGFloat = 60 * 2
+  private let bodyContentTopPadding: CGFloat = 4
+  private let bodyContentBottomPadding: CGFloat = 28
   private var totalContentSpacing: CGFloat {
     let result: CGFloat
     if title == nil && subText == nil {
@@ -98,6 +100,8 @@ struct SDGIconPopup<IconAreaContent: View>: View {
           if subText != nil {
             SDGPopupBody(maxHeight: calculateBodyHeight(in: geometry.size)) {
               subText
+                .padding(.top, bodyContentTopPadding)
+                .padding(.bottom, bodyContentBottomPadding)
             }
           }
         }
