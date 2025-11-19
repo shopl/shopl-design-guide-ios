@@ -57,6 +57,7 @@ public struct SDGFloatingButton: View {
       )
     }
     .buttonStyle(NoTapAnimationButtonStyle())
+    .hideWhenKeyboardAppear()
   }
 }
 
