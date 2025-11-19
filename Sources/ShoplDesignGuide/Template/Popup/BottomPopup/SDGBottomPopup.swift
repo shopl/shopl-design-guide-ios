@@ -19,6 +19,7 @@ extension View {
     self.modifier(
       PopupModifier(
         isPresented: isPresented,
+        animation: .slideBottomTop,
         tapOutsideAction: tapOutsideAction
       ) {
         SDGBottomPopup(
@@ -31,7 +32,7 @@ extension View {
   }
 }
 
-struct SDGBottomPopup<BodyContent: View>: View {
+public struct SDGBottomPopup<BodyContent: View>: View {
   
   private let title: SDGPopupTitle?
   private let bodyContent: BodyContent
@@ -60,7 +61,7 @@ struct SDGBottomPopup<BodyContent: View>: View {
     return result
   }
   
-  init(
+  public init(
     title: SDGPopupTitle?,
     @ViewBuilder bodyContent: () -> BodyContent,
     button: SDGBottomPopupButton
@@ -70,7 +71,7 @@ struct SDGBottomPopup<BodyContent: View>: View {
     self.button = button
   }
   
-  var body: some View {
+  public var body: some View {
     GeometryReader { geometry in
       VStack {
         Spacer()

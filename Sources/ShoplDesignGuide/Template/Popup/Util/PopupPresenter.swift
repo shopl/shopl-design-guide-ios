@@ -11,19 +11,28 @@ import SwiftUI
 public struct PopupPresenter<PopupContent: View>: View {
   
   let opacity: Double
+  let animation: PopupAnimation
   @ViewBuilder let content: () -> PopupContent
   let tapOutsideAction: (() -> Void)?
-
+  
   public var body: some View {
     ZStack {
-      Color.neutral900.opacity(0.4)
+      let background = Color.neutral900.opacity(0.4)
         .ignoresSafeArea()
         .onTapGesture {
           tapOutsideAction?()
         }
       
-      content()
+      if animation == .slideBottomTop {
+        background.opacity(opacity)
+        content()
+      } else {
+        Group {
+          background
+          content()
+        }
+        .opacity(opacity)
+      }
     }
-    .opacity(opacity)
   }
 }

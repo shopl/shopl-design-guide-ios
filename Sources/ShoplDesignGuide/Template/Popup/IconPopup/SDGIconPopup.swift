@@ -21,6 +21,7 @@ extension View {
     self.modifier(
       PopupModifier(
         isPresented: isPresented,
+        animation: .fadeInOut,
         tapOutsideAction: tapOutsideAction
       ) {
         SDGIconPopup(
@@ -35,7 +36,7 @@ extension View {
   }
 }
 
-struct SDGIconPopup<IconAreaContent: View>: View {
+public struct SDGIconPopup<IconAreaContent: View>: View {
   
   private let iconAreaContent: IconAreaContent
   private let iconAlignment: Alignment
@@ -66,7 +67,7 @@ struct SDGIconPopup<IconAreaContent: View>: View {
     return result
   }
   
-  init(
+  public init(
     @ViewBuilder iconAreaContent: () -> IconAreaContent,
     iconAlignment: Alignment,
     title: SDGPopupTitle?,
@@ -80,7 +81,7 @@ struct SDGIconPopup<IconAreaContent: View>: View {
     self.button = button
   }
   
-  var body: some View {
+  public var body: some View {
     GeometryReader { geometry in
       VStack(spacing: 0) {
         VStack(spacing: contentSpacing) {

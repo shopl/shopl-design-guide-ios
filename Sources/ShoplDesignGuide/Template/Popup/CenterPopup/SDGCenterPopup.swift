@@ -19,6 +19,7 @@ extension View {
     self.modifier(
       PopupModifier(
         isPresented: isPresented,
+        animation: .fadeInOut,
         tapOutsideAction: tapOutsideAction
       ) {
         SDGCenterPopup(
@@ -31,7 +32,7 @@ extension View {
   }
 }
 
-struct SDGCenterPopup<BodyContent: View>: View {
+public struct SDGCenterPopup<BodyContent: View>: View {
   
   private let title: SDGPopupTitle?
   private let bodyContent: BodyContent
@@ -59,7 +60,7 @@ struct SDGCenterPopup<BodyContent: View>: View {
     return result
   }
   
-  init(
+  public init(
     title: SDGPopupTitle?,
     @ViewBuilder bodyContent: () -> BodyContent,
     button: SDGCenterPopupButton
@@ -69,7 +70,7 @@ struct SDGCenterPopup<BodyContent: View>: View {
     self.button = button
   }
   
-  var body: some View {
+  public var body: some View {
     GeometryReader { geometry in
       VStack(spacing: 0) {
         VStack(spacing: contentSpacing) {

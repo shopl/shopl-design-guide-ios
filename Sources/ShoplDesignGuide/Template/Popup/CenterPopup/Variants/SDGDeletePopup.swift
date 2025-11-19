@@ -20,6 +20,7 @@ extension View {
     self.modifier(
       PopupModifier(
         isPresented: isPresented,
+        animation: .fadeInOut,
         tapOutsideAction: tapOutsideAction
       ) {
         SDGDeletePopup(
@@ -33,14 +34,14 @@ extension View {
   }
 }
 
-private struct SDGDeletePopup: View {
+public struct SDGDeletePopup: View {
   
   let title: String
   let bodyText: String
   let leftButtonOption: SDGCenterPopupButton.Button.Option
   let deleteButtonAction: (() -> Void)
   
-  var body: some View {
+  public var body: some View {
     SDGCenterPopup(
       title: .init(
         title: title,

@@ -24,6 +24,7 @@ extension View {
     self.modifier(
       PopupModifier(
         isPresented: isPresented,
+        animation: .fadeInOut,
         tapOutsideAction: tapOutsideAction
       ) {
         SDGInputPopup(
@@ -41,7 +42,7 @@ extension View {
   }
 }
 
-private struct SDGInputPopup: View {
+public struct SDGInputPopup: View {
   
   let title: String
   let bodyText: String
@@ -52,7 +53,7 @@ private struct SDGInputPopup: View {
   let leftButtonOption: SDGCenterPopupButton.Button.Option
   let rightButtonOption: SDGCenterPopupButton.Button.Option
   
-  var body: some View {
+  public var body: some View {
     SDGCenterPopup(
       title: .init(
         title: title,
