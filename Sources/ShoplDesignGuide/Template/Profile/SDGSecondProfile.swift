@@ -131,6 +131,7 @@ public struct SDGSecondProfile: View {
           }
           
           Text(_model.groupName ?? "")
+            .lineLimit(_lineLimit)
             .font(.system(size: 12, weight: .regular))
             .foregroundColor(.neutral700)
         }

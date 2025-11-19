@@ -43,6 +43,8 @@ struct SDGCenterPopup<BodyContent: View>: View {
   private let topPadding: CGFloat = 24
   private let contentSpacing: CGFloat = 12
   private let popupHeightLimitSpacing: CGFloat = 60 * 2
+  private let bodyContentTopPadding: CGFloat = 4
+  private let bodyContentBottomPadding: CGFloat = 28
   private var totalContentSpacing: CGFloat {
     let result: CGFloat
     if title == nil && bodyContent.isEmpty {
@@ -50,7 +52,7 @@ struct SDGCenterPopup<BodyContent: View>: View {
     } else if title == nil {
       result = 0
     } else if bodyContent.isEmpty {
-      result = contentSpacing
+      result = contentSpacing * 2
     } else {
       result = contentSpacing
     }
@@ -74,12 +76,14 @@ struct SDGCenterPopup<BodyContent: View>: View {
           if let title {
             title
               .readHeight(to: $titleHeight)
-              .padding(.bottom, bodyContent.isEmpty ? contentSpacing : 0)
+              .padding(.bottom, bodyContent.isEmpty ? contentSpacing * 2 : 0)
           }
           
           if !bodyContent.isEmpty {
             SDGPopupBody(maxHeight: calculateBodyHeight(in: geometry.size)) {
               bodyContent
+                .padding(.top, bodyContentTopPadding)
+                .padding(.bottom, bodyContentBottomPadding)
             }
           }
         }
