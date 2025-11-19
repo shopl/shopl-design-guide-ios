@@ -4,21 +4,32 @@
 import PackageDescription
 
 let package = Package(
-  name: "shopl-design-guide-ios",
+  name: "ShoplDesignGuide",
   platforms: [
-    .iOS(.v15)
+    .macOS(.v12),
+    .iOS(.v16)
   ],
   products: [
     .library(
-      name: "shopl-design-guide-ios",
-      targets: ["shopl-design-guide-ios"]),
+      name: "ShoplDesignGuide",
+      targets: ["ShoplDesignGuide"]),
+  ],
+  dependencies: [
+    .package(url: "https://github.com/onevcat/Kingfisher", exact: "7.10.0"),
   ],
   targets: [
     .target(
-      name: "shopl-design-guide-ios"),
+      name: "ShoplDesignGuide",
+      dependencies: [
+        "Kingfisher"
+      ],
+      resources: [
+        .process("Resources")
+      ]
+    ),
     .testTarget(
-      name: "shopl-design-guide-iosTests",
-      dependencies: ["shopl-design-guide-ios"]
+      name: "ShoplDesignGuideTests",
+      dependencies: ["ShoplDesignGuide"]
     ),
   ]
 )
