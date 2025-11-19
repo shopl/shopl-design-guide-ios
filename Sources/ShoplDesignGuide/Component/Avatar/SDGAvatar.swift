@@ -107,7 +107,7 @@ public struct SDGAvatar: View {
       
         KFImage(_model.imageURL)
           .placeholder {
-            Image(.avatarEmpty)
+            Image(.avatarEmptyDot)
               .resizable()
               .frame(width: _size.rawValue, height: _size.rawValue)
               .foregroundColor(.neutral250)
