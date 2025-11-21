@@ -1,0 +1,78 @@
+name: Create Release Draft
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  draft-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get current date
+        id: date
+        run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Get latest tag
+        id: latest_tag
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_OUTPUT
+
+      - name: Generate release notes
+        id: release_notes
+        run: |
+          DATE="${{ steps.date.outputs.DATE }}"
+          LATEST_TAG="${{ steps.latest_tag.outputs.LATEST_TAG }}"
+
+          echo "# Changelog" > release_notes.md
+          echo "" >> release_notes.md
+          echo "## [version] - $DATE" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "### Added" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "### Documentation" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "---" >> release_notes.md
+          echo "" >> release_notes.md
+          echo "**Recent Commits:**" >> release_notes.md
+          echo "" >> release_notes.md
+
+          # Get commits since last tag or all commits
+          if [ -z "$LATEST_TAG" ]; then
+            git log --pretty=format:"- %s (%h)" --no-merges -20 >> release_notes.md
+          else
+            git log ${LATEST_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges >> release_notes.md
+          fi
+
+      - name: Delete existing draft releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Delete all existing draft releases
+          gh release list --limit 100 | grep Draft | awk '{print $3}' | while read tag; do
+            gh release delete "$tag" --yes 2>/dev/null || true
+          done
+
+      - name: Create new draft release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Create a temporary tag for the draft
+          TEMP_TAG="draft-$(date +%Y%m%d-%H%M%S)"
+
+          gh release create "$TEMP_TAG" \
+            --draft \
+            --title "Draft Release" \
+            --notes-file release_notes.md \
+            --target main
+
+          echo "Created draft release with tag: $TEMP_TAG"
