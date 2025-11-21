@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension View {
-  public func systmProgress(
+  public func systemProgress(
     isLoading: Binding<Bool>,
     color: Color? = nil
   ) -> some View {
@@ -25,9 +25,11 @@ private struct BlurOverlay: ViewModifier {
   func body(content: Content) -> some View {
     ZStack {
       content
-        .blur(radius: 4)
+        .blur(radius: isLoading ? 4 : 0)
       
-      SDGSystemProgress(color: color)
+      if isLoading {
+        SDGSystemProgress(color: color)
+      }
     }
   }
 }
@@ -36,5 +38,5 @@ private struct BlurOverlay: ViewModifier {
   ZStack {
     Text("테스트 테스트 테스트")
   }
-  .systmProgress(isLoading: .constant(true))
+  .systemProgress(isLoading: .constant(true))
 }
