@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol SDGStringProvider {
+public protocol SDGStringProvider {
   func getString(key: String) -> String?
 }

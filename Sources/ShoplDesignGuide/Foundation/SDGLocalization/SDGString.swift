@@ -49,7 +49,7 @@ public class SDGString {
   
   private init() { }
   
-  func setProvider(provider: SDGStringProvider) {
+  public func setProvider(provider: SDGStringProvider) {
     self.provider = provider
   }
   
