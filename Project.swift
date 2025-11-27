@@ -39,6 +39,9 @@ let project = Project(
         .target(name: "ShoplDesignGuide")
       ]
     )
+  ],
+  resourceSynthesizers: [
+    .custom(name: "Assets", parser: .assets, extensions: ["xcassets"]),
   ]
 )
 

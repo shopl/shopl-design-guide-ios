@@ -1,0 +1,77 @@
+// swiftlint:disable all
+// swift-format-ignore-file
+// swiftformat:disable all
+// Generated using tuist — https://github.com/tuist/tuist
+
+import SwiftUI
+import UIKit
+
+public enum SDGImage: String, CaseIterable {
+    {% macro recursiveImageEnum assets %}
+      {% for asset in assets %}
+        {% if asset.type == "image" %}
+        case {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord}} = "{{asset.value}}"
+        {% elif asset.items %}
+        {% call recursiveImageEnum asset.items %}
+        {% endif %}
+      {% endfor %}
+    {% endmacro %}
+
+    {% for catalog in catalogs %}
+    {% call recursiveImageEnum catalog.assets %}
+    {% endfor %}
+}
+
+public extension Image {
+    init(_ asset: SDGImage) {
+        self.init(asset.rawValue, bundle: Bundle.module)
+    }
+}
+
+{% macro recursiveColor assets %}
+  {% for asset in assets %}
+    {% if asset.type == "color" %}
+    static let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord}} = Color("{{asset.value}}", bundle: Bundle.module)
+    {% elif asset.items %}
+    {% call recursiveColor asset.items %}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+public extension Color {
+    {% for catalog in catalogs %}
+    {% call recursiveColor catalog.assets %}
+    {% endfor %}
+}
+
+{% macro recursiveShapeStyle assets %}
+  {% for asset in assets %}
+    {% if asset.type == "color" %}
+    static var {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord}}: Color { .{{asset.name|swiftIdentifier:"pretty"|lowerFirstWord}} }
+    {% elif asset.items %}
+    {% call recursiveShapeStyle asset.items %}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+public extension ShapeStyle where Self == Color {
+    {% for catalog in catalogs %}
+    {% call recursiveShapeStyle catalog.assets %}
+    {% endfor %}
+}
+
+{% macro recursiveUIColor assets %}
+  {% for asset in assets %}
+    {% if asset.type == "color" %}
+    static let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord}} = UIColor(named: "{{asset.value}}", in: Bundle.module, compatibleWith: nil)!
+    {% elif asset.items %}
+    {% call recursiveUIColor asset.items %}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+public extension UIColor {
+    {% for catalog in catalogs %}
+    {% call recursiveUIColor catalog.assets %}
+    {% endfor %}
+}
