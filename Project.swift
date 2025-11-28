@@ -33,6 +33,9 @@ let project = Project(
       product: .app,
       bundleId: "com.shopl.designguide",
       deploymentTargets: .iOS("16.0"),
+      infoPlist: .extendingDefault(with: [
+        "UILaunchStoryboardName": "LaunchScreen",
+      ]),
       sources: ["SampleApp/Sources/**"],
       resources: ["SampleApp/Resources/**"],
       dependencies: [
