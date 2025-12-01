@@ -8,26 +8,24 @@ import UIKit
 
 {% if param.name == "ShoplDesignGuide" %}
 
-public enum SDGImage: String, CaseIterable {
-    {% macro recursiveImageEnum assets %}
+public extension Image {
+    {% macro recursiveImageVar assets %}
       {% for asset in assets %}
         {% if asset.type == "image" %}
-        case {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord}} = "{{asset.value}}"
+        
+        static var {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord}}: Image {
+            Image("{{asset.value}}", bundle: Bundle.module)
+        }
+        
         {% elif asset.items %}
-        {% call recursiveImageEnum asset.items %}
+        {% call recursiveImageVar asset.items %}
         {% endif %}
       {% endfor %}
     {% endmacro %}
 
     {% for catalog in catalogs %}
-    {% call recursiveImageEnum catalog.assets %}
+    {% call recursiveImageVar catalog.assets %}
     {% endfor %}
-}
-
-public extension Image {
-    init(asset: SDGImage) {
-        self.init(asset.rawValue, bundle: Bundle.module)
-    }
 }
 
 {% macro recursiveColor assets %}
