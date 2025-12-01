@@ -18,7 +18,7 @@ let project = Project(
     .target(
       name: "ShoplDesignGuide",
       destinations: .iOS,
-      product: .staticFramework,
+      product: .framework,
       bundleId: "com.shopl.designguide.framework",
       deploymentTargets: .iOS("16.0"),
       sources: ["Sources/ShoplDesignGuide/**"],

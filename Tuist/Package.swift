@@ -8,7 +8,7 @@
 
 let packageSettings = PackageSettings(
   productTypes: [
-    "Kingfisher": .staticFramework,
+    "Kingfisher": .framework,
   ]
 )
 
