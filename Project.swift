@@ -31,7 +31,7 @@ let project = Project(
       name: "ShoplDesignGuideSampleApp",
       destinations: .iOS,
       product: .app,
-      bundleId: "com.shopl.designguide",
+      bundleId: "com.shopl.designguide.ios",
       deploymentTargets: .iOS("16.0"),
       infoPlist: .extendingDefault(with: [
         "UILaunchStoryboardName": "LaunchScreen",
