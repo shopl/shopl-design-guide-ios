@@ -28,16 +28,20 @@ let project = Project(
       ]
     ),
     .target(
-      name: "ShoplDesignGuideSampleApp",
+      name: "SDGSampleApp",
       destinations: .iOS,
       product: .app,
+      productName: "SDG",
       bundleId: "com.shopl.designguide.ios",
       deploymentTargets: .iOS("16.0"),
-      infoPlist: .extendingDefault(with: [
-        "UILaunchStoryboardName": "LaunchScreen",
-      ]),
+      infoPlist: .file(path: "SampleApp/Resources/Info.plist"),
       sources: ["SampleApp/Sources/**"],
-      resources: ["SampleApp/Resources/**"],
+      resources: [
+        .glob(
+          pattern: "SampleApp/Resources/**",
+          excluding: ["SampleApp/Resources/Info.plist"]
+        )
+      ],
       dependencies: [
         .target(name: "ShoplDesignGuide")
       ]
