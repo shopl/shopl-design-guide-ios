@@ -11,6 +11,9 @@ setup:
 	
 	tuist install
 	
+	# Husky 설치
+	npm ci
+	
 	@echo "✅  Setup completed!"
 
 clean-install:
