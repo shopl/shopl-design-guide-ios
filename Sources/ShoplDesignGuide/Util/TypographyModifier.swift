@@ -23,7 +23,7 @@ public enum Typography {
   case body4_SB
   case body4_R
   
-  var size: CGFloat {
+  public var size: CGFloat {
     switch self {
     case .naviTitle: 19
     case .title1_SB, .title1_R: 20
@@ -148,7 +148,7 @@ public enum TypoColor {
       case .neutral700: Color.neutral700
       case .neutral900: Color.neutral900
       case .orange: Color.sdgOrange
-      case .pink: Color.sdgPink
+      case .pink: Color.sdgSpecialPink
       case .primary50: Color.primary50
       case .primary200: Color.primary200
       case .primary300: Color.primary300

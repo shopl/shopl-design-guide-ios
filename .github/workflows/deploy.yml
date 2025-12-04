@@ -1,0 +1,57 @@
+name: Deploy SDG Sample App
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump_type:
+        description:
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+          - skip
+          
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+  
+jobs:
+  deploy:
+    runs-on: [self-hosted, macOS, arm64, SpiderMan]
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # .tuist-version 파일이 바뀌지 않는 한, 매번 다운로드하지 않고 캐시 사용
+      - name: Cache Tuist
+        uses: actions/cache@v4
+        with:
+          path: ~/.tuist
+          key: ${{ runner.os }}-tuist-${{ hashFiles('.tuist-version') }}
+          restore-keys: |
+            ${{ runner.os }}-tuist-
+      
+      - name: Install Tuist
+        run: |
+            curl -Ls https://install.tuist.io | bash
+            
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Run Fastlane
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          SLACK_URL: ${{ secrets.SLACK_URL }}
+          BUMP_TYPE: ${{ inputs.bump_type }}
+        run: |
+          bundle exec fastlane distribute

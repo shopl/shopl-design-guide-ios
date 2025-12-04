@@ -1,0 +1,27 @@
+{
+  "name": "shopl-design-guide-ios",
+  "version": "1.0.0",
+  "description": "A comprehensive SwiftUI design system library for iOS and macOS applications.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shopl/shopl-design-guide-ios.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/shopl/shopl-design-guide-ios/issues"
+  },
+  "homepage": "https://github.com/shopl/shopl-design-guide-ios#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "husky": "^9.1.7"
+  }
+}

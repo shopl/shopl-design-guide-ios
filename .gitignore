@@ -128,3 +128,5 @@ Derived/
 *.xcodeproj/
 
 !Fixtures/**/*.xcodeproj/
+
+node_modules
