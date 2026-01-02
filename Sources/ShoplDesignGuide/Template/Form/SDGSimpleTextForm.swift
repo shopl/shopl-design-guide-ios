@@ -19,6 +19,7 @@ public struct SDGSimpleTextForm: View {
   private let isRequiered: Bool
   private let errorMessage: String?
   private let maxCount: Int
+  private let backgroundColor: Color
   
   private let onRefresh: () -> Void
   private let onSearchButtonTap: (String) -> Void
@@ -39,6 +40,7 @@ public struct SDGSimpleTextForm: View {
     errorMessage: String? = nil,
     isRequiered: Bool = false,
     maxCount: Int = 10000,
+    backgroundColor: Color? = nil,
     onRefresh: @escaping () -> Void,
     onSearchButtonTap: @escaping (String) -> Void,
     onSearchTextChange: @escaping (String) -> Void
@@ -47,6 +49,13 @@ public struct SDGSimpleTextForm: View {
     self.icon = icon
     self.type = type
     self._searchText = searchText
+    
+    if let backgroundColor = backgroundColor {
+      self.backgroundColor = backgroundColor
+    } else {
+      self.backgroundColor = .neutral50
+    }
+    
     self._state = state
     self.keyboardType = keyboardType
     self.placeHolder = placeHolder
@@ -128,9 +137,13 @@ public struct SDGSimpleTextForm: View {
         text: $searchText,
         hint: placeHolder,
         keyboardType: keyboardType,
-        backgroundColor: .neutral50,
+        backgroundColor: backgroundColor,
         maxCount: maxCount
       )
+      .frame(height: 40)
+      .onChange(of: searchText) { newValue in
+        onSearchTextChange(newValue)
+      }
     }
   }
 }
