@@ -56,7 +56,7 @@ public struct SDGDeletePopup: View {
       button: .init(
         button: .delete(
           option1: leftButtonOption,
-          option2: .init(title: "삭제 (스크립트)", action: deleteButtonAction)
+          option2: .init(title: SDGString.shared.getSDGString(key: .cm_delete), action: deleteButtonAction)
         )
       )
     )
