@@ -62,7 +62,7 @@ public struct SDGInputPopup: View {
       ) : nil,
       bodyContent: {
         VStack(spacing: 16) {
-          if let bodyText {
+          if let bodyText, !bodyText.isEmpty {
             Text(bodyText)
               .typo(.body1_R, .neutral600)
               .frame(maxWidth: .infinity, alignment: .leading)

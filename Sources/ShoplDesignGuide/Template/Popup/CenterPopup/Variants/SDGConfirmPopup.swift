@@ -42,6 +42,18 @@ public struct SDGConfirmPopup: View {
   let rightButtonOption: SDGCenterPopupButton.Button.Option
   
   public var body: some View {
+    if let bodyText, !bodyText.isEmpty {
+      let textView = Text(bodyText)
+        .typo(.body1_R, .neutral600)
+        .frame(maxWidth: .infinity, alignment: .leading)
+      
+      popupContent(contentView: textView)
+    } else {
+      popupContent(contentView: EmptyView())
+    }
+  }
+  
+  private func popupContent<Content: View>(contentView: Content) -> some View {
     SDGCenterPopup(
       title: title != nil ? .init(
         title: title!,
@@ -49,13 +61,7 @@ public struct SDGConfirmPopup: View {
         alignment: .leading
       ) : nil,
       bodyContent: {
-        if let bodyText {
-          Text(bodyText)
-            .typo(.body1_R, .neutral600)
-            .frame(maxWidth: .infinity, alignment: .leading)
-        } else {
-          EmptyView()
-        }
+        contentView
       },
       button: .init(
         button: .twoOptions(
