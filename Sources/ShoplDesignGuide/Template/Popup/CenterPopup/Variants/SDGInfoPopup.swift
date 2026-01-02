@@ -11,8 +11,8 @@ import SwiftUI
 extension View {
   public func centerInfoPopup(
     isPresented: Bool,
-    title: String,
-    bodyText: String,
+    title: String?,
+    bodyText: String?,
     buttonOption: SDGCenterPopupButton.Button.Option,
     tapOutsideAction: (() -> Void)? = nil
   ) -> some View {
@@ -34,21 +34,25 @@ extension View {
 
 public struct SDGInfoPopup: View {
   
-  let title: String
-  let bodyText: String
+  let title: String?
+  let bodyText: String?
   let buttonOption: SDGCenterPopupButton.Button.Option
   
   public var body: some View {
     SDGCenterPopup(
-      title: .init(
-        title: title,
+      title: title != nil ? .init(
+        title: title!,
         color: .neutral700,
         alignment: .leading
-      ),
+      ) : nil,
       bodyContent: {
-        Text(bodyText)
-          .typo(.body1_R, .neutral600)
-          .frame(maxWidth: .infinity, alignment: .leading)
+        if let bodyText {
+          Text(bodyText)
+            .typo(.body1_R, .neutral600)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        } else {
+          EmptyView()
+        }
       },
       button: .init(button: .oneOption(option: buttonOption))
     )

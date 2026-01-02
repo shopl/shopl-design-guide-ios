@@ -11,8 +11,8 @@ import SwiftUI
 extension View {
   public func centerInputPopup(
     isPresented: Bool,
-    title: String,
-    bodyText: String,
+    title: String?,
+    bodyText: String?,
     inputTitle: String,
     placeholder: String,
     input: Binding<String>,
@@ -44,8 +44,8 @@ extension View {
 
 public struct SDGInputPopup: View {
   
-  let title: String
-  let bodyText: String
+  let title: String?
+  let bodyText: String?
   let inputTitle: String
   let placeholder: String
   let input: Binding<String>
@@ -55,16 +55,18 @@ public struct SDGInputPopup: View {
   
   public var body: some View {
     SDGCenterPopup(
-      title: .init(
-        title: title,
+      title: title != nil ? .init(
+        title: title!,
         color: .neutral700,
         alignment: .leading
-      ),
+      ) : nil,
       bodyContent: {
         VStack(spacing: 16) {
-          Text(bodyText)
-            .typo(.body1_R, .neutral600)
-            .frame(maxWidth: .infinity, alignment: .leading)
+          if let bodyText {
+            Text(bodyText)
+              .typo(.body1_R, .neutral600)
+              .frame(maxWidth: .infinity, alignment: .leading)
+          }
           
           VStack(spacing: 8) {
             Text(inputTitle)

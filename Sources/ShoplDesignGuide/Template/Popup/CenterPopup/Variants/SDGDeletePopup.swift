@@ -11,8 +11,8 @@ import SwiftUI
 extension View {
   public func centerDeletePopup(
     isPresented: Bool,
-    title: String,
-    bodyText: String,
+    title: String?,
+    bodyText: String?,
     leftButtonOption: SDGCenterPopupButton.Button.Option,
     deleteButtonAction: @escaping (() -> Void),
     tapOutsideAction: (() -> Void)? = nil
@@ -36,22 +36,26 @@ extension View {
 
 public struct SDGDeletePopup: View {
   
-  let title: String
-  let bodyText: String
+  let title: String?
+  let bodyText: String?
   let leftButtonOption: SDGCenterPopupButton.Button.Option
   let deleteButtonAction: (() -> Void)
   
   public var body: some View {
     SDGCenterPopup(
-      title: .init(
-        title: title,
+      title: title != nil ? .init(
+        title: title!,
         color: .neutral700,
         alignment: .leading
-      ),
+      ) : nil,
       bodyContent: {
-        Text(bodyText)
-          .typo(.body1_R, .neutral600)
-          .frame(maxWidth: .infinity, alignment: .leading)
+        if let bodyText {
+          Text(bodyText)
+            .typo(.body1_R, .neutral600)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        } else {
+          EmptyView()
+        }
       },
       button: .init(
         button: .delete(
