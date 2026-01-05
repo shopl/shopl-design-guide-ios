@@ -16,11 +16,12 @@ const ALLOWED_TYPES = {
 
 const ERROR_MESSAGES = {
   'type-enum': '허용되지 않는 타입입니다. 아래 목록을 참고하세요.',
-  'type-case': '타입은 소문자여야 합니다.',
+  'type-case': '타입(prefix)은 소문자여야 합니다.',
   'type-empty': '타입(prefix)이 누락되었습니다.',
   'subject-empty': '커밋 내용이 비어있습니다.',
   'subject-full-stop': '제목 끝에 마침표(.)를 찍지 마세요.',
-  'header-max-length': '커밋 제목이 너무 깁니다. (100자 제한)'
+  'header-max-length': '커밋 제목이 너무 깁니다. (100자 제한)',
+  'subject-case': '커밋 내용의 대소문자 규칙 위반입니다.'
 };
 
 module.exports = function (report) {
