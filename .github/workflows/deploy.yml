@@ -28,25 +28,30 @@ jobs:
         with:
           fetch-depth: 0
 
-      # .tuist-version 파일이 바뀌지 않는 한, 매번 다운로드하지 않고 캐시 사용
-      - name: Cache Tuist
-        uses: actions/cache@v4
+      - name: Setup mise
+        uses: jdx/mise-action@v2
         with:
-          path: ~/.tuist
-          key: ${{ runner.os }}-tuist-${{ hashFiles('.tuist-version') }}
-          restore-keys: |
-            ${{ runner.os }}-tuist-
-      
-      - name: Install Tuist
-        run: |
-            curl -Ls https://install.tuist.io | bash
-            
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
+          cache: true
+          install: false
 
+      - name: Environment Setup
+        run: make setup
+      
+      # -----------------------------------------------------------------------
+      # Setup SSH
+      # -----------------------------------------------------------------------
+      - name: Setup SSH Keys
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: |
+            ${{ secrets.MATCH_GIT_SSH_PRIVATE_KEY }}
+            ${{ secrets.SDG_GIT_SSH_PRIVATE_KEY }}
+            
+      - name: Add Known Hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+                    
       - name: Run Fastlane
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
@@ -54,4 +59,6 @@ jobs:
           SLACK_URL: ${{ secrets.SLACK_URL }}
           BUMP_TYPE: ${{ inputs.bump_type }}
         run: |
+          git remote set-url origin git@github.com:${{ github.repository }}.git
+          
           bundle exec fastlane distribute

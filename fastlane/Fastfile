@@ -12,6 +12,8 @@ OUTPUT_DIR        = "./build_output"
 IPA_NAME          = "SDGSampleApp.ipa"
 INFO_PLIST_PATH   = "SampleApp/Resources/Info.plist"
 GIT_REMOTE        = "origin"
+KEYCHAIN_NAME     = "sdg_sample_keychain"
+TEAM_ID           = "4Z4H456LU8"
 
 platform :ios do
   
@@ -20,26 +22,37 @@ platform :ios do
 
     lane_context[:TRIGGERED_BY] = ENV["GITHUB_ACTOR"] || ENV["USER"] || "Unknown"
     
-    # 빌드 준비
-    prepare_build
-    
-    # 릴리즈 노트 생성
-    changelog = generate_changelog
-    
-    # 인증서 동기화
-    match_certificates
-    
-    # 앱 빌드
-    build_ipa
-    
-    # Firebase 업로드
-    upload_to_firebase(changelog: changelog)
-    
-    # 버전 커밋 & 태그 푸시 (배포 성공 시)
-    commit_and_tag_version
-    
-    # Slack 알림
-    notify_slack_success(changelog: changelog)
+    begin
+      
+      # 빌드 준비
+      prepare_build
+      
+      # 릴리즈 노트 생성
+      changelog = generate_changelog
+      
+      # 임시 키체인 생성 및 인증서 동기화
+      prepare_certificates_and_keychain
+      
+      # 앱 빌드
+      build_ipa
+      
+      # Firebase 업로드
+      upload_to_firebase(changelog: changelog)
+      
+      # 버전 커밋 & 태그 푸시 (배포 성공 시)
+      commit_and_tag_version
+      
+      # 성공 알림
+      notify_slack_success(changelog: changelog)
+      
+    rescue => exception
+      # 실패 알림
+      on_error(exception: exception)
+      raise exception
+      
+    ensure
+      cleanup_keychain
+    end
   end
 
   # 🛠 내부 사용 레인
@@ -156,27 +169,63 @@ platform :ios do
     final_changelog.strip
   end
 
-  private_lane :match_certificates do
+  private_lane :prepare_certificates_and_keychain do
+    
+    UI.message("🔐 SDG 전용 임시 키체인 생성 중: #{KEYCHAIN_NAME}")
+    
+    cleanup_keychain
+
+    # 새 키체인 생성
+    create_keychain(
+      name: KEYCHAIN_NAME,
+      password: "",
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      lock_when_sleeps: false
+    )
+    
+    # Match 실행
     match(
       type: "adhoc",
       app_identifier: APP_BUNDLE_ID,
-      readonly: true
+      readonly: true,
+      keychain_name: KEYCHAIN_NAME,
+      keychain_password: ""
     )
     
+    # 접근 권한 해제
+    UI.message("🔓 키체인 권한 해제 중...")
+    
+    kc_pasth = File.expand_path("~/Library/Keychains/#{KEYCHAIN_NAME}-db")
+        
+    sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k '' #{kc_pasth}")
+  end
+  
+  private_lane :cleanup_keychain do
+    UI.message("🧹 SDG 키체인 정리 중...")
+    
+    Actions.lane_context[SharedValues::KEYCHAIN_PATH] = nil
+    
+    keychain_path = File.expand_path("~/Library/Keychains/#{KEYCHAIN_NAME}-db")
+    
+    if File.exist?(keychain_path)
+      delete_keychain(name: KEYCHAIN_NAME)
+      UI.success("✅ 키체인 삭제 완료")
+    end
+  end
+  
+  private_lane :build_ipa do
     profile_name = ENV["sigh_#{APP_BUNDLE_ID}_adhoc_profile-name"]
     
     update_code_signing_settings(
       use_automatic_signing: false,
       path: XCODE_PROJ,
       targets: [APP_SCHEME],
-      code_sign_identity: "iPhone Distribution",
+      code_sign_identity: "Apple Distribution",
       bundle_identifier: APP_BUNDLE_ID,
       profile_name: profile_name
     )
-  end
-
-  private_lane :build_ipa do
-    profile_name = ENV["sigh_#{APP_BUNDLE_ID}_adhoc_profile-name"]
     
     build_app(
       workspace: XCODE_WORKSPACE,
@@ -185,9 +234,10 @@ platform :ios do
       clean: true,
       output_directory: OUTPUT_DIR,
       output_name: IPA_NAME,
-      xcargs: "PROVISIONING_PROFILE_SPECIFIER='#{profile_name}'",
       export_options: {
         method: "ad-hoc",
+        signingStyle: "manual",
+        teamID: TEAM_ID,
         provisioningProfiles: {
           APP_BUNDLE_ID => profile_name
         }
@@ -258,15 +308,14 @@ platform :ios do
     puts "✅ Git Commit & Tag Pushed: #{tag_name}"
   end
   
-  error do |lane, exception|
+  private_lane :on_error do |options|
+    exception = options[:exception]
     triggered_by = lane_context[:TRIGGERED_BY]
 
     slack(
       message: "🔥 SDG 샘플 앱 배포 실패: #{exception.message}",
       success: false,
-      payload: {
-        "Triggered By" => triggered_by
-      },
+      payload: { "Triggered By" => triggered_by },
       slack_url: ENV["SLACK_URL"]
     )
   end
