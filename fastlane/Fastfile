@@ -12,7 +12,6 @@ OUTPUT_DIR        = "./build_output"
 IPA_NAME          = "SDGSampleApp.ipa"
 INFO_PLIST_PATH   = "SampleApp/Resources/Info.plist"
 GIT_REMOTE        = "origin"
-KEYCHAIN_NAME     = "sdg_sample_keychain"
 TEAM_ID           = "4Z4H456LU8"
 
 platform :ios do
@@ -30,8 +29,8 @@ platform :ios do
       # 릴리즈 노트 생성
       changelog = generate_changelog
       
-      # 임시 키체인 생성 및 인증서 동기화
-      prepare_certificates_and_keychain
+      # 키체인 생성 및 Match 실행
+      prepare_certificates
       
       # 앱 빌드
       build_ipa
@@ -51,7 +50,7 @@ platform :ios do
       raise exception
       
     ensure
-      cleanup_keychain
+      cleanup_ci_keychain
     end
   end
 
@@ -169,20 +168,26 @@ platform :ios do
     final_changelog.strip
   end
 
-  private_lane :prepare_certificates_and_keychain do
+  private_lane :prepare_certificates do
     
-    UI.message("🔐 SDG 전용 임시 키체인 생성 중: #{KEYCHAIN_NAME}")
+    UI.message("🏗️ CI 환경 셋업 및 키체인 준비 중...")
     
-    cleanup_keychain
+    setup_ci(
+      force: true
+    )
+    
+    temp_keychain_name = "fastlane_tmp_keychain"
+    temp_keychain_password = ""
+        
+    keychain_path = Actions.lane_context[SharedValues::KEYCHAIN_PATH]
 
-    # 새 키체인 생성
-    create_keychain(
-      name: KEYCHAIN_NAME,
-      password: "",
-      default_keychain: true,
-      unlock: true,
-      timeout: 3600,
-      lock_when_sleeps: false
+    if keychain_path.nil?
+      keychain_path = File.expand_path("~/Library/Keychains/#{temp_keychain_name}-db")
+    end
+    
+    unlock_keychain(
+      path: keychain_path,
+      password: temp_keychain_password
     )
     
     # Match 실행
@@ -190,31 +195,18 @@ platform :ios do
       type: "adhoc",
       app_identifier: APP_BUNDLE_ID,
       readonly: true,
-      keychain_name: KEYCHAIN_NAME,
-      keychain_password: ""
+      keychain_name: temp_keychain_name,
+      keychain_password: temp_keychain_password
     )
     
+    UI.message("🗂️ 키체인 검색 목록 업데이트 중...")
+    sh("security list-keychains -s #{keychain_path} $(security list-keychains -d user)")
+    
     # 접근 권한 해제
-    UI.message("🔓 키체인 권한 해제 중...")
-    
-    kc_pasth = File.expand_path("~/Library/Keychains/#{KEYCHAIN_NAME}-db")
-        
-    sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k '' #{kc_pasth}")
+    UI.message("🔓 키체인 권한(ACL) 해제 중...")
+    sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k '' #{keychain_path}")
   end
-  
-  private_lane :cleanup_keychain do
-    UI.message("🧹 SDG 키체인 정리 중...")
     
-    Actions.lane_context[SharedValues::KEYCHAIN_PATH] = nil
-    
-    keychain_path = File.expand_path("~/Library/Keychains/#{KEYCHAIN_NAME}-db")
-    
-    if File.exist?(keychain_path)
-      delete_keychain(name: KEYCHAIN_NAME)
-      UI.success("✅ 키체인 삭제 완료")
-    end
-  end
-  
   private_lane :build_ipa do
     profile_name = ENV["sigh_#{APP_BUNDLE_ID}_adhoc_profile-name"]
     
@@ -299,7 +291,7 @@ platform :ios do
     end
     
     push_to_git_remote(
-      remote: ENV["GIT_REMOTE"],
+      remote: GIT_REMOTE,
       local_branch: current_branch,
       remote_branch: current_branch,
       tags: true
@@ -318,5 +310,20 @@ platform :ios do
       payload: { "Triggered By" => triggered_by },
       slack_url: ENV["SLACK_URL"]
     )
+  end
+  
+  private_lane :cleanup_ci_keychain do
+    keychain_path = Actions.lane_context[SharedValues::KEYCHAIN_PATH]
+    
+    if keychain_path && File.exist?(keychain_path)
+      UI.message("🧹 임시 키체인 뒷정리 중: #{keychain_path}")
+      
+      # setup_ci가 만든 기본 키체인 이름 = 'fastlane_tmp_keychain'
+      delete_keychain(name: "fastlane_tmp_keychain")
+      
+      UI.success("✨ 키체인 삭제 및 검색 목록 정리 완료")
+    else
+      UI.message("ℹ️ 삭제할 키체인이 없거나 이미 정리되었습니다.")
+    end
   end
 end
