@@ -114,6 +114,11 @@ platform :ios do
       match_lightweight_tag: false,
       pretty: "%s"
     )
+    
+    puts "---------------------------------------------------"
+    puts "🔍 Fastlane이 읽어온 Raw Changelog 목록:"
+    puts raw_changelog.empty? ? "(없음 - 커밋을 찾지 못함)" : raw_changelog
+    puts "---------------------------------------------------"
 
     # key: 커밋 prefix, value: 출력될 섹션 제목
     category_map = {
@@ -142,6 +147,8 @@ platform :ios do
         # 매핑된 섹션 제목으로 저장
         section_title = category_map[found_prefix]
         grouped_commits[section_title] << message_content
+      else
+        puts "⚠️ 분류 제외(무시됨): #{clean_line}"
       end
     end
 
