@@ -160,15 +160,18 @@ platform :ios do
         message_content = full_message.sub(/^#{found_prefix}(\(.*\))?\s*:/, "").strip
         
         # 커밋 해시로 소속 버전(Tag) 찾기
-        begin
-          found_tag = sh("git describe --contains #{commit_hash} --match '[0-9]*.[0-9]*.[0-9]*' --exclude 'deploy/*' 2>/dev/null", log: false).strip.split(/[~^]/).first
-          
+        cmd = "git describe --contains #{commit_hash} --match '[0-9]*.[0-9]*.[0-9]*' --exclude 'deploy/*' 2>/dev/null"
+        
+        output = `#{cmd}`.strip
+        
+        if $?.success? && !output.empty?
+          found_tag = output.split(/[~^]/).first
           version_badge = found_tag
-        rescue
+        else
           # 태그를 못 찾음 = 아직 태그가 안 달린 최신 커밋 (현재 빌드 버전)
           version_badge = current_target_version
         end
-
+        
         # 메시지 뒤에 버전 뱃지 부착
         formatted_message = "#{message_content} (v#{version_badge})"
         
