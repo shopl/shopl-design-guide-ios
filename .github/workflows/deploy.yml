@@ -2,17 +2,6 @@ name: Deploy SDG Sample App
 
 on:
   workflow_dispatch:
-    inputs:
-      bump_type:
-        description:
-        required: true
-        default: 'patch'
-        type: choice
-        options:
-          - patch
-          - minor
-          - major
-          - skip
           
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -57,7 +46,6 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
           SLACK_URL: ${{ secrets.SLACK_URL }}
-          BUMP_TYPE: ${{ inputs.bump_type }}
         run: |
           git remote set-url origin git@github.com:${{ github.repository }}.git
           

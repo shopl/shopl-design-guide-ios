@@ -56,37 +56,27 @@ platform :ios do
 
   # 🛠 내부 사용 레인
   private_lane :prepare_build do
+    UI.message("🏗️ 프로젝트 생성 및 버전 정보 동기화 중...")
+  
     sh("cd .. && tuist generate --no-open")
     
-    current_version = get_info_plist_value(path: INFO_PLIST_PATH, key: "CFBundleShortVersionString")
-    bump_type = ENV["BUMP_TYPE"] || "patch"
+    target_version = "0.0.1"
     
-    # 버전 올리기
-    version = current_version
-    
-    if bump_type != "skip"
-      major, minor, patch = current_version.split(".").map(&:to_i)
-
-      case bump_type
-      when "major"
-        major += 1
-        minor = 0
-        patch = 0
-      when "minor"
-        minor += 1
-        patch = 0
-      when "patch"
-        patch += 1
-      end
-
-      version = "#{major}.#{minor}.#{patch}"
+    begin
+      latest_lib_tag = sh("git describe --tags --match '[0-9]*.[0-9]*.[0-9]*' --exclude 'deploy/*' --abbrev=0 2>/dev/null").strip
       
-      set_info_plist_value(
-        path: INFO_PLIST_PATH,
-        key: "CFBundleShortVersionString",
-        value: version
-      )
+      target_version = latest_lib_tag
+      
+      UI.success("🏷️ 감지된 최신 라이브러리 버전: #{target_version} (Tag: #{latest_lib_tag})")
+    rescue
+      UI.error("⚠️ 라이브러리 버전 태그를 찾을 수 없습니다. 기본값(#{target_version})을 사용합니다.")
     end
+
+    set_info_plist_value(
+      path: INFO_PLIST_PATH,
+      key: "CFBundleShortVersionString",
+      value: target_version
+    )
     
     if ENV["CI"]
       offset = 0
@@ -101,18 +91,38 @@ platform :ios do
       value: build_number
     )
     
-    lane_context[:SDG_VERSION] = version
+    lane_context[:SDG_VERSION] = target_version
     lane_context[:SDG_BUILD_NUMBER] = build_number
-    lane_context[:SDG_BUMP_TYPE] = bump_type
     
-    puts "📱 Target Version: #{version} (#{build_number}) / Bump Type: #{bump_type}"
+    puts "📱 Target Version: #{target_version}(#{build_number})"
   end
 
   private_lane :generate_changelog do
+    tag_prefix = "deploy/sample-app/"
+    last_app_tag = nil
+    
+    begin
+      last_app_tag = sh("git describe --tags --match '#{tag_prefix}*' --abbrev=0 2>/dev/null", log: false).strip
+      UI.message("🔍 마지막 샘플 앱 배포 태그 발견: #{last_app_tag}")
+    rescue
+      UI.message("✨ 이전 배포 태그 없음. 전체 커밋을 가져옵니다.")
+    end
+    
+    if last_app_tag
+      # 기준 태그가 있으면 [태그 ~ HEAD]
+      range_options = { between: [last_app_tag, "HEAD"] }
+    else
+      # 기준 태그가 없으면 [뿌리 커밋 ~ HEAD]
+      # git rev-list --max-parents=0 HEAD : 저장소의 가장 첫 커밋 해시를 가져옴
+      root_commit = sh("git rev-list --max-parents=0 HEAD", log: false).strip
+      range_options = { between: [root_commit, "HEAD"] }
+    end
+    
     raw_changelog = changelog_from_git_commits(
       merge_commit_filtering: "exclude_merges",
       match_lightweight_tag: false,
-      pretty: "%s"
+      pretty: "%h|%s",
+      **range_options
     )
     
     puts "---------------------------------------------------"
@@ -129,26 +139,41 @@ platform :ios do
 
     # 그룹화할 저장소 초기화
     grouped_commits = Hash.new { |h, k| h[k] = [] }
-
+    
+    current_target_version = lane_context[:SDG_VERSION] || "Unreleased"
+    
     raw_changelog.split("\n").each do |line|
       clean_line = line.strip
       # 해당 카테고리에 커밋이 없으면 스킵
       next if clean_line.empty?
+      
+      # 해시와 메시지 분리
+      commit_hash, full_message = clean_line.split("|", 2)
+      full_message ||= ""
 
       # 시작이 prefix이고, 괄호(scope)가 있을 수도 있고, 콜론으로 끝남
       found_prefix = category_map.keys.find do |prefix|
-        clean_line.downcase.match?(/^#{prefix}(\(.*\))?:/)
+        full_message.downcase.match?(/^#{prefix}(\(.*\))?\s*:/)
       end
 
       if found_prefix
-        # 메시지 내용만 추출 (prefix 제거)
-        message_content = clean_line.sub(/^#{found_prefix}(\(.*\))?:/, "").strip
+        message_content = full_message.sub(/^#{found_prefix}(\(.*\))?\s*:/, "").strip
         
-        # 매핑된 섹션 제목으로 저장
+        # 커밋 해시로 소속 버전(Tag) 찾기
+        begin
+          found_tag = sh("git describe --contains #{commit_hash} --match '[0-9]*.[0-9]*.[0-9]*' --exclude 'deploy/*' 2>/dev/null", log: false).strip.split(/[~^]/).first
+          
+          version_badge = found_tag
+        rescue
+          # 태그를 못 찾음 = 아직 태그가 안 달린 최신 커밋 (현재 빌드 버전)
+          version_badge = current_target_version
+        end
+
+        # 메시지 뒤에 버전 뱃지 부착
+        formatted_message = "#{message_content} (v#{version_badge})"
+        
         section_title = category_map[found_prefix]
-        grouped_commits[section_title] << message_content
-      else
-        puts "⚠️ 분류 제외(무시됨): #{clean_line}"
+        grouped_commits[section_title] << formatted_message
       end
     end
 
@@ -159,18 +184,14 @@ platform :ios do
       next if commits.empty?
 
       final_changelog += "\n*#{title}*\n"
-      
-      commits.each do |msg|
-        final_changelog += "- #{msg}\n"
-      end
+      commits.each { |msg| final_changelog += "- #{msg}\n" }
     end
 
-    # 타입이 일치하는 커밋 없을 경우 기본값
     if final_changelog.strip.empty?
       final_changelog = "- 사소한 버그 수정 및 안정성 개선"
     end
 
-    puts "📝 Categorized Changelog:\n#{final_changelog}"
+    puts "📝 Categorized Changelog with Versions:\n#{final_changelog}"
     
     final_changelog.strip
   end
@@ -251,7 +272,7 @@ platform :ios do
     firebase_app_distribution(
       app: FIREBASE_APP_ID,
       groups: TESTER_GROUPS,
-      release_notes: "Ver: #{version} (Build: #{build_num})\n\n[변경 사항]\n#{options[:changelog]}",
+      release_notes: "Ver: #{version}(#{build_num})\n\n[변경 사항]\n#{options[:changelog]}",
       service_credentials_json_data: ENV["FIREBASE_SERVICE_ACCOUNT_JSON"]
     )
   end
@@ -259,7 +280,6 @@ platform :ios do
   private_lane :notify_slack_success do |options|
     version = lane_context[:SDG_VERSION]
     build_num = lane_context[:SDG_BUILD_NUMBER]
-    bump_type = lane_context[:SDG_BUMP_TYPE]
     triggered_by = lane_context[:TRIGGERED_BY]
 
     slack(
@@ -268,8 +288,7 @@ platform :ios do
       payload: {
         "Version" => "#{version} (#{build_num})",
         "Change Log" => options[:changelog],
-        "Triggered By" => triggered_by,
-        "Bump Type" => bump_type
+        "Triggered By" => triggered_by
       },
       default_payloads: [],
       slack_url: ENV["SLACK_URL"]
@@ -279,16 +298,11 @@ platform :ios do
   private_lane :commit_and_tag_version do
     version = lane_context[:SDG_VERSION]
     build_num = lane_context[:SDG_BUILD_NUMBER]
-    tag_name = "#{version}_#{build_num}"
-    
-    git_commit(
-      path: [INFO_PLIST_PATH],
-      message: "chore: bump version to #{version} (#{build_num}) [skip ci]"
-    )
+    tag_name = "deploy/sample-app/#{version}_#{build_num}"
     
     add_git_tag(
       tag: tag_name,
-      message: "Auto deployment release #{tag_name}"
+      message: "Sample App Deployment for Lib #{version}"
     )
     
     current_branch = git_branch
@@ -304,7 +318,7 @@ platform :ios do
       tags: true
     )
     
-    puts "✅ Git Commit & Tag Pushed: #{tag_name}"
+    puts "✅ Deployed Tag: #{tag_name}"
   end
   
   private_lane :on_error do |options|
