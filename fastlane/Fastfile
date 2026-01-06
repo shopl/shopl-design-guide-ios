@@ -336,15 +336,29 @@ platform :ios do
   private_lane :cleanup_ci_keychain do
     keychain_path = Actions.lane_context[SharedValues::KEYCHAIN_PATH]
     
-    if keychain_path && File.exist?(keychain_path)
-      UI.message("🧹 임시 키체인 뒷정리 중: #{keychain_path}")
+    target_name = "fastlane_tmp_keychain"
+    
+    real_path = keychain_path
+    if keychain_path && !File.exist?(keychain_path)
+      potential_db_path = "#{keychain_path}-db"
+      if File.exist?(potential_db_path)
+        real_path = potential_db_path
+      end
+    end
+    
+    real_path = keychain_path || File.expand_path("~/Library/Keychains/#{target_name}-db")
+    
+    if File.exist?(real_path)
+      UI.message("🧹 임시 키체인 뒷정리 중...")
       
-      # setup_ci가 만든 기본 키체인 이름 = 'fastlane_tmp_keychain'
-      delete_keychain(name: "fastlane_tmp_keychain")
+      # 임시 키체인 삭제하기 위해 기본 키체인을 로그인 키체인으로 원복
+      sh("security default-keychain -s login.keychain-db || true")
       
-      UI.success("✨ 키체인 삭제 및 검색 목록 정리 완료")
+      delete_keychain(name: target_name)
+      
+      UI.success("✨ 키체인 삭제 완료")
     else
-      UI.message("ℹ️ 삭제할 키체인이 없거나 이미 정리되었습니다.")
+      UI.message("ℹ️ 삭제할 키체인이 없습니다.")
     end
   end
 end
