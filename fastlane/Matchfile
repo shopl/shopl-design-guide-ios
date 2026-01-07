@@ -1,0 +1,7 @@
+git_url("git@github.com:shopl/shopl-ios-certificates.git")
+
+type("adhoc")
+
+storage_mode("git")
+
+git_branch("main")
