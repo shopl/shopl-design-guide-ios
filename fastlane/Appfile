@@ -1,0 +1,2 @@
+app_identifier("com.shopl.designguide.ios") # The bundle identifier of your app
+apple_id("dev@shoplworks.com") # Your Apple Developer Portal username
