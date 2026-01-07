@@ -130,6 +130,43 @@ public enum TypoColor {
   case secondary400
   case yellow
   
+  public init(color: Color) {
+    switch color {
+    case .neutral0: self = .neutral0
+    case .neutral50: self = .neutral50
+    case .neutral100: self = .neutral100
+    case .neutral150: self = .neutral150
+    case .neutral200: self = .neutral200
+    case .neutral250: self = .neutral250
+    case .neutral300: self = .neutral300
+    case .neutral350: self = .neutral350
+    case .neutral400: self = .neutral400
+    case .neutral500: self = .neutral500
+    case .neutral600: self = .neutral600
+    case .neutral700: self = .neutral700
+    case .neutral900: self = .neutral900
+    case .sdgGreen: self = .green
+    case .sdgLemon: self = .lemon
+    case .sdgOrange: self = .orange
+    case .sdgPink: self = .pink
+    case .sdgPurple: self = .purple
+    case .sdgYellow: self = .yellow
+    case .primary50: self = .primary50
+    case .primary200: self = .primary200
+    case .primary300: self = .primary300
+    case .primary400: self = .primary400
+    case .red50: self = .red50
+    case .red300: self = .red300
+    case .red350: self = .red350
+    case .red400: self = .red400
+    case .secondary50: self = .secondary50
+    case .secondary200: self = .secondary200
+    case .secondary300: self = .secondary300
+    case .secondary400: self = .secondary400
+    default: self = .neutral0  // fallback
+    }
+  }
+  
   var color: Color {
     switch self {
       case .green: Color.sdgGreen
