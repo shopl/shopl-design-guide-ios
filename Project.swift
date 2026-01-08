@@ -21,8 +21,18 @@ let project = Project(
       product: .framework,
       bundleId: "com.shopl.designguide.framework",
       deploymentTargets: .iOS("16.0"),
-      sources: ["Sources/ShoplDesignGuide/**"],
+      sources: [
+        .glob(
+          "Sources/ShoplDesignGuide/**",
+          excluding: [
+            "Sources/ShoplDesignGuide/Generated/**"
+          ]
+        )
+      ],
       resources: ["Sources/ShoplDesignGuide/Resources/**"],
+      scripts: [
+        .syncTuistGeneratedFiles
+      ],
       dependencies: [
         .external(name: "Kingfisher")
       ],
@@ -61,3 +71,24 @@ let project = Project(
   ]
 )
 
+extension TargetScript {
+  // Tuist가 자동 생성한 에셋 관련 파일들을 라이브러리 배포 범위에 포함시키기 위해 복사하는 스크립트
+  // 빌드 phase 때 실행
+  static let syncTuistGeneratedFiles: TargetScript = .pre(
+    script: """
+        mkdir -p "$SRCROOT/Sources/ShoplDesignGuide/Generated"
+        
+        echo "🔄 [Auto-Sync] Syncing ONLY library files..."
+        
+        rsync -av --delete \
+            --include '*+ShoplDesignGuide.swift' \
+            --exclude '*' \
+            "$SRCROOT/Derived/Sources/" \
+            "$SRCROOT/Sources/ShoplDesignGuide/Generated/"
+            
+        echo "✅ [Auto-Sync] Completed!"
+        """,
+    name: "Sync Tuist Generated Files",
+    basedOnDependencyAnalysis: false
+  )
+}
