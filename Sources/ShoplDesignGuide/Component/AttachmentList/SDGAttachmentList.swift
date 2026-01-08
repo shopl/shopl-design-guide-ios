@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import Kingfisher
+
 public struct SDGAttachmentList: View {
   
   public struct Model: Equatable {
@@ -102,16 +104,11 @@ public struct SDGAttachmentList: View {
     if let image {
       image.thumbnailStyle()
     } else if let url {
-      AsyncImage(url: url) { phase in
-        switch phase {
-        case .success(let image):
-          image.thumbnailStyle()
-        case .failure:
-          iconView(.icClip)
-        default:
-          ProgressView()
-        }
-      }
+      KFImage(url)
+        .resizable()
+        .aspectRatio(contentMode: .fill)
+        .frame(width: 36, height: 36)
+        .cornerRadius(4)
     }
   }
   
