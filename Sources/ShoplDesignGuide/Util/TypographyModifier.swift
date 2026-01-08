@@ -10,6 +10,12 @@ import SwiftUI
 public enum Typography {
   case naviTitle
   
+  case special1_SB
+  
+  case point1_SB
+  case point1_R
+  case point2_SB
+  case point2_R
   case title1_SB // semi bold
   case title1_R // regular
   case title2_SB
@@ -26,6 +32,9 @@ public enum Typography {
   public var size: CGFloat {
     switch self {
     case .naviTitle: 19
+	case .special1_SB: 44
+	case .point1_SB, .point1_R: 28
+	case .point2_SB, .point2_R: 24
     case .title1_SB, .title1_R: 20
     case .title2_SB, .title2_R: 18
     case .body1_SB, .body1_R: 16
@@ -37,14 +46,17 @@ public enum Typography {
   
   var weight: Font.Weight {
     switch self {
-    case .title1_SB, .title2_SB, .body1_SB, .body2_SB, .body3_SB, .body4_SB: .semibold
-    case .naviTitle, .title1_R, .title2_R, .body1_R, .body2_R, .body3_R, .body4_R: .regular
+	case  .special1_SB, .point1_SB, .point2_SB, .title1_SB, .title2_SB, .body1_SB, .body2_SB, .body3_SB, .body4_SB: .semibold
+	case .naviTitle, .point1_R, .point2_R, .title1_R, .title2_R, .body1_R, .body2_R, .body3_R, .body4_R: .regular
     }
   }
   
   var lineHeight: CGFloat {
     switch self {
     case .naviTitle: 24
+	case .special1_SB: 48
+	case .point1_SB, .point1_R: 32
+	case .point2_SB, .point2_R: 28
     case .title1_SB, .title1_R: 24
     case .title2_SB, .title2_R: 22
     case .body1_SB, .body1_R: 20
