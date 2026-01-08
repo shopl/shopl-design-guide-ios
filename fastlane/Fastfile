@@ -1,0 +1,367 @@
+
+default_platform(:ios)
+
+# 🔧 설정 변수
+APP_BUNDLE_ID     = "com.shopl.designguide.ios"
+APP_SCHEME        = "SDGSampleApp"
+XCODE_PROJ        = "ShoplDesignGuide.xcodeproj"
+XCODE_WORKSPACE   = "ShoplDesignGuide.xcworkspace"
+FIREBASE_APP_ID   = "1:358638001737:ios:ffecd4783bbf774960a998"
+TESTER_GROUPS     = "Design"
+OUTPUT_DIR        = "./build_output"
+IPA_NAME          = "SDGSampleApp.ipa"
+INFO_PLIST_PATH   = "SampleApp/Resources/Info.plist"
+GIT_REMOTE        = "origin"
+TEAM_ID           = "4Z4H456LU8"
+
+platform :ios do
+  
+  desc "SDG 샘플 앱 빌드 및 Firebase 배포"
+  lane :distribute do
+
+    lane_context[:TRIGGERED_BY] = ENV["GITHUB_ACTOR"] || ENV["USER"] || "Unknown"
+    
+    begin
+      
+      # 빌드 준비
+      prepare_build
+      
+      # 릴리즈 노트 생성
+      changelog = generate_changelog
+      
+      # 키체인 생성 및 Match 실행
+      prepare_certificates
+      
+      # 앱 빌드
+      build_ipa
+      
+      # Firebase 업로드
+      upload_to_firebase(changelog: changelog)
+      
+      # 버전 커밋 & 태그 푸시 (배포 성공 시)
+      commit_and_tag_version
+      
+      # 성공 알림
+      notify_slack_success(changelog: changelog)
+      
+    rescue => exception
+      # 실패 알림
+      on_error(exception: exception)
+      raise exception
+      
+    ensure
+      cleanup_ci_keychain
+    end
+  end
+
+  # 🛠 내부 사용 레인
+  private_lane :prepare_build do
+    UI.message("🏗️ 프로젝트 생성 및 버전 정보 동기화 중...")
+  
+    sh("cd .. && tuist generate --no-open")
+    
+    target_version = "0.0.1"
+    
+    begin
+      latest_lib_tag = sh("git describe --tags --match '[0-9]*.[0-9]*.[0-9]*' --exclude 'deploy/*' --abbrev=0 2>/dev/null").strip
+      
+      target_version = latest_lib_tag
+      
+      UI.success("🏷️ 감지된 최신 라이브러리 버전: #{target_version} (Tag: #{latest_lib_tag})")
+    rescue
+      UI.error("⚠️ 라이브러리 버전 태그를 찾을 수 없습니다. 기본값(#{target_version})을 사용합니다.")
+    end
+
+    set_info_plist_value(
+      path: INFO_PLIST_PATH,
+      key: "CFBundleShortVersionString",
+      value: target_version
+    )
+    
+    if ENV["CI"]
+      offset = 0
+      build_number = (ENV["GITHUB_RUN_NUMBER"].to_i + offset).to_s
+    else
+      build_number = Time.now.strftime("%Y%m%d%H%M")
+    end
+    
+    set_info_plist_value(
+      path: INFO_PLIST_PATH,
+      key: "CFBundleVersion",
+      value: build_number
+    )
+    
+    lane_context[:SDG_VERSION] = target_version
+    lane_context[:SDG_BUILD_NUMBER] = build_number
+    
+    puts "📱 Target Version: #{target_version}(#{build_number})"
+  end
+
+  private_lane :generate_changelog do
+    tag_prefix = "deploy/sample-app/"
+    last_app_tag = nil
+    
+    begin
+      last_app_tag = sh("git describe --tags --match '#{tag_prefix}*' --abbrev=0 2>/dev/null", log: false).strip
+      UI.message("🔍 마지막 샘플 앱 배포 태그 발견: #{last_app_tag}")
+    rescue
+      UI.message("✨ 이전 배포 태그 없음. 전체 커밋을 가져옵니다.")
+    end
+    
+    if last_app_tag
+      # 기준 태그가 있으면 [태그 ~ HEAD]
+      range_options = { between: [last_app_tag, "HEAD"] }
+    else
+      # 기준 태그가 없으면 [뿌리 커밋 ~ HEAD]
+      # git rev-list --max-parents=0 HEAD : 저장소의 가장 첫 커밋 해시를 가져옴
+      root_commit = sh("git rev-list --max-parents=0 HEAD", log: false).strip
+      range_options = { between: [root_commit, "HEAD"] }
+    end
+    
+    raw_changelog = changelog_from_git_commits(
+      merge_commit_filtering: "exclude_merges",
+      match_lightweight_tag: false,
+      pretty: "%h|%s",
+      **range_options
+    )
+    
+    puts "---------------------------------------------------"
+    puts "🔍 Fastlane이 읽어온 Raw Changelog 목록:"
+    puts raw_changelog.empty? ? "(없음 - 커밋을 찾지 못함)" : raw_changelog
+    puts "---------------------------------------------------"
+
+    # key: 커밋 prefix, value: 출력될 섹션 제목
+    category_map = {
+      "feat" => "✨ Features",
+      "design" => "🎨 Design",
+      "fix" => "🐛 Bug Fixes"
+    }
+
+    # 그룹화할 저장소 초기화
+    grouped_commits = Hash.new { |h, k| h[k] = [] }
+    
+    current_target_version = lane_context[:SDG_VERSION] || "Unreleased"
+    
+    raw_changelog.split("\n").each do |line|
+      clean_line = line.strip
+      # 해당 카테고리에 커밋이 없으면 스킵
+      next if clean_line.empty?
+      
+      # 해시와 메시지 분리
+      commit_hash, full_message = clean_line.split("|", 2)
+      full_message ||= ""
+
+      # 시작이 prefix이고, 괄호(scope)가 있을 수도 있고, 콜론으로 끝남
+      found_prefix = category_map.keys.find do |prefix|
+        full_message.downcase.match?(/^#{prefix}(\(.*\))?\s*:/)
+      end
+
+      if found_prefix
+        message_content = full_message.sub(/^#{found_prefix}(\(.*\))?\s*:/, "").strip
+        
+        # 커밋 해시로 소속 버전(Tag) 찾기
+        cmd = "git describe --contains #{commit_hash} --match '[0-9]*.[0-9]*.[0-9]*' --exclude 'deploy/*' 2>/dev/null"
+        
+        output = `#{cmd}`.strip
+        
+        if $?.success? && !output.empty?
+          found_tag = output.split(/[~^]/).first
+          version_badge = found_tag
+        else
+          # 태그를 못 찾음 = 아직 태그가 안 달린 최신 커밋 (현재 빌드 버전)
+          version_badge = current_target_version
+        end
+        
+        # 메시지 뒤에 버전 뱃지 부착
+        formatted_message = "#{message_content} (v#{version_badge})"
+        
+        section_title = category_map[found_prefix]
+        grouped_commits[section_title] << formatted_message
+      end
+    end
+
+    final_changelog = ""
+
+    category_map.values.each do |title|
+      commits = grouped_commits[title]
+      next if commits.empty?
+
+      final_changelog += "\n*#{title}*\n"
+      commits.each { |msg| final_changelog += "- #{msg}\n" }
+    end
+
+    if final_changelog.strip.empty?
+      final_changelog = "- 사소한 버그 수정 및 안정성 개선"
+    end
+
+    puts "📝 Categorized Changelog with Versions:\n#{final_changelog}"
+    
+    final_changelog.strip
+  end
+
+  private_lane :prepare_certificates do
+    
+    UI.message("🏗️ CI 환경 셋업 및 키체인 준비 중...")
+    
+    setup_ci(
+      force: true
+    )
+    
+    temp_keychain_name = "fastlane_tmp_keychain"
+    temp_keychain_password = ""
+        
+    keychain_path = Actions.lane_context[SharedValues::KEYCHAIN_PATH]
+
+    if keychain_path.nil?
+      keychain_path = File.expand_path("~/Library/Keychains/#{temp_keychain_name}-db")
+    end
+    
+    unlock_keychain(
+      path: keychain_path,
+      password: temp_keychain_password
+    )
+    
+    # Match 실행
+    match(
+      type: "adhoc",
+      app_identifier: APP_BUNDLE_ID,
+      readonly: true,
+      keychain_name: temp_keychain_name,
+      keychain_password: temp_keychain_password
+    )
+    
+    UI.message("🗂️ 키체인 검색 목록 업데이트 중...")
+    sh("security list-keychains -s #{keychain_path} $(security list-keychains -d user)")
+    
+    # 접근 권한 해제
+    UI.message("🔓 키체인 권한(ACL) 해제 중...")
+    sh("security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k '' #{keychain_path}")
+  end
+    
+  private_lane :build_ipa do
+    profile_name = ENV["sigh_#{APP_BUNDLE_ID}_adhoc_profile-name"]
+    
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: XCODE_PROJ,
+      targets: [APP_SCHEME],
+      code_sign_identity: "Apple Distribution",
+      bundle_identifier: APP_BUNDLE_ID,
+      profile_name: profile_name
+    )
+    
+    build_app(
+      workspace: XCODE_WORKSPACE,
+      scheme: APP_SCHEME,
+      export_method: "ad-hoc",
+      clean: true,
+      output_directory: OUTPUT_DIR,
+      output_name: IPA_NAME,
+      export_options: {
+        method: "ad-hoc",
+        signingStyle: "manual",
+        teamID: TEAM_ID,
+        provisioningProfiles: {
+          APP_BUNDLE_ID => profile_name
+        }
+      }
+    )
+  end
+
+  private_lane :upload_to_firebase do |options|
+    version = lane_context[:SDG_VERSION]
+    build_num = lane_context[:SDG_BUILD_NUMBER]
+    
+    firebase_app_distribution(
+      app: FIREBASE_APP_ID,
+      groups: TESTER_GROUPS,
+      release_notes: "Ver: #{version}(#{build_num})\n\n[변경 사항]\n#{options[:changelog]}",
+      service_credentials_json_data: ENV["FIREBASE_SERVICE_ACCOUNT_JSON"]
+    )
+  end
+
+  private_lane :notify_slack_success do |options|
+    version = lane_context[:SDG_VERSION]
+    build_num = lane_context[:SDG_BUILD_NUMBER]
+    triggered_by = lane_context[:TRIGGERED_BY]
+
+    slack(
+      message: "🚀 SDG 샘플앱(iOS) 배포 완료!",
+      success: true,
+      payload: {
+        "Version" => "#{version} (#{build_num})",
+        "Change Log" => options[:changelog],
+        "Triggered By" => triggered_by
+      },
+      default_payloads: [],
+      slack_url: ENV["SLACK_URL"]
+    )
+  end
+  
+  private_lane :commit_and_tag_version do
+    version = lane_context[:SDG_VERSION]
+    build_num = lane_context[:SDG_BUILD_NUMBER]
+    tag_name = "deploy/sample-app/#{version}_#{build_num}"
+    
+    add_git_tag(
+      tag: tag_name,
+      message: "Sample App Deployment for Lib #{version}"
+    )
+    
+    current_branch = git_branch
+    
+    if current_branch.to_s.empty? || current_branch == "HEAD"
+      current_branch = ENV["GITHUB_REF_NAME"]
+    end
+    
+    push_to_git_remote(
+      remote: GIT_REMOTE,
+      local_branch: current_branch,
+      remote_branch: current_branch,
+      tags: true
+    )
+    
+    puts "✅ Deployed Tag: #{tag_name}"
+  end
+  
+  private_lane :on_error do |options|
+    exception = options[:exception]
+    triggered_by = lane_context[:TRIGGERED_BY]
+
+    slack(
+      message: "🔥 SDG 샘플 앱 배포 실패: #{exception.message}",
+      success: false,
+      payload: { "Triggered By" => triggered_by },
+      slack_url: ENV["SLACK_URL"]
+    )
+  end
+  
+  private_lane :cleanup_ci_keychain do
+    keychain_path = Actions.lane_context[SharedValues::KEYCHAIN_PATH]
+    
+    target_name = "fastlane_tmp_keychain"
+    
+    real_path = keychain_path
+    if keychain_path && !File.exist?(keychain_path)
+      potential_db_path = "#{keychain_path}-db"
+      if File.exist?(potential_db_path)
+        real_path = potential_db_path
+      end
+    end
+    
+    real_path = keychain_path || File.expand_path("~/Library/Keychains/#{target_name}-db")
+    
+    if File.exist?(real_path)
+      UI.message("🧹 임시 키체인 뒷정리 중...")
+      
+      # 임시 키체인 삭제하기 위해 기본 키체인을 로그인 키체인으로 원복
+      sh("security default-keychain -s login.keychain-db || true")
+      
+      delete_keychain(name: target_name)
+      
+      UI.success("✨ 키체인 삭제 완료")
+    else
+      UI.message("ℹ️ 삭제할 키체인이 없습니다.")
+    end
+  end
+end

@@ -1,0 +1,52 @@
+name: Deploy SDG Sample App
+
+on:
+  workflow_dispatch:
+          
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+  
+jobs:
+  deploy:
+    runs-on: [self-hosted, macOS, arm64, SpiderMan]
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup mise
+        uses: jdx/mise-action@v2
+        with:
+          cache: true
+          install: false
+
+      - name: Environment Setup
+        run: make setup
+      
+      # -----------------------------------------------------------------------
+      # Setup SSH
+      # -----------------------------------------------------------------------
+      - name: Setup SSH Keys
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: |
+            ${{ secrets.MATCH_GIT_SSH_PRIVATE_KEY }}
+            ${{ secrets.SDG_GIT_SSH_PRIVATE_KEY }}
+            
+      - name: Add Known Hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+                    
+      - name: Run Fastlane
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          SLACK_URL: ${{ secrets.SLACK_URL }}
+        run: |
+          git remote set-url origin git@github.com:${{ github.repository }}.git
+          
+          bundle exec fastlane distribute
