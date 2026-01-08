@@ -25,7 +25,15 @@ let project = Project(
       resources: ["Sources/ShoplDesignGuide/Resources/**"],
       dependencies: [
         .external(name: "Kingfisher")
-      ]
+      ],
+      settings: .settings(
+        base: [
+          "ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS": "NO",
+          "ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS": "NO"
+        ],
+        configurations: [],
+        defaultSettings: .recommended
+      )
     ),
     .target(
       name: "SDGSampleApp",
