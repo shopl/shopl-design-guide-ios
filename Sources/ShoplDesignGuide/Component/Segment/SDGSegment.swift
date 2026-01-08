@@ -28,6 +28,34 @@ public struct SDGSegment: View {
     }
   }
   
+  public struct ColorType {
+	let trackColor: TypoColor
+	let thumbColor: TypoColor
+	let selectedTextColor: TypoColor
+	let unselectedTextColor: TypoColor
+	
+	public init(
+	  trackColor: TypoColor,
+	  thumbColor: TypoColor,
+	  selectedTextColor: TypoColor,
+	  unselectedTextColor: TypoColor
+	) {
+	  self.trackColor = trackColor
+	  self.thumbColor = thumbColor
+	  self.selectedTextColor = selectedTextColor
+	  self.unselectedTextColor = unselectedTextColor
+	}
+	
+	public static var defaultValue: Self {
+	  return .init(
+		trackColor: .neutral100,
+		thumbColor: .neutral0,
+		selectedTextColor: .neutral700,
+		unselectedTextColor: .neutral500
+	  )
+	}
+  }
+  
   private struct Constants {
     static let trackCornerRadius: CGFloat = 12
     static let thumbCornerRadius: CGFloat = 8
@@ -51,10 +79,7 @@ public struct SDGSegment: View {
   private let items: [String]
   private let style: SegmentedControlStyle
   
-  private let trackColor: Color = .neutral100
-  private let thumbColor: Color = .neutral0
-  private let selectedTextColor: TypoColor = .neutral700
-  private let unselectedTextColor: TypoColor = .neutral500
+  private let color: ColorType
   
   @Namespace private var segmentNamespace
   
@@ -62,12 +87,15 @@ public struct SDGSegment: View {
     selectedSegmentIndex: Binding<Int>,
     textLine: TextLine,
     items: [String],
-    style: SegmentedControlStyle = .fixed
+    style: SegmentedControlStyle = .fixed,
+	color: ColorType = .defaultValue
   ) {
     self._selectedSegmentIndex = selectedSegmentIndex
     self.textLine = textLine
     self.items = items
     self.style = style
+	
+	self.color = color
   }
   
   public var body: some View {
@@ -85,11 +113,11 @@ public struct SDGSegment: View {
       ZStack {
         // 배경
         RoundedRectangle(cornerRadius: Constants.trackCornerRadius)
-          .fill(trackColor)
+		  .fill(self.color.trackColor.color)
         
         // 선택 썸
         RoundedRectangle(cornerRadius: Constants.thumbCornerRadius)
-          .fill(thumbColor)
+		  .fill(self.color.thumbColor.color)
           .shadow(color: .black.opacity(0.05), radius: 4, x: 1, y: 1)
           .matchedGeometryEffect(id: "\(selectedSegmentIndex)", in: segmentNamespace, isSource: false)
           .frame(height: textLine.rawValue)
@@ -100,7 +128,7 @@ public struct SDGSegment: View {
           ForEach(items.indices, id: \.self) { index in
             // 타이틀
             Text(items[index])
-              .typo(.body2_R, selectedSegmentIndex == index ? selectedTextColor : unselectedTextColor)
+			  .typo(.body2_R, selectedSegmentIndex == index ? self.color.selectedTextColor : self.color.unselectedTextColor)
               .lineLimit(textLine.numberOfLines)
               .padding(.horizontal, Constants.Dynamic.textInternalPadding)
               .frame(height: textLine.rawValue)
@@ -140,11 +168,11 @@ public struct SDGSegment: View {
       ZStack(alignment: .leading) {
         // 배경
         RoundedRectangle(cornerRadius: Constants.trackCornerRadius)
-          .fill(trackColor)
+		  .fill(self.color.trackColor.color)
         
         // 선택 썸
         RoundedRectangle(cornerRadius: Constants.thumbCornerRadius)
-          .fill(thumbColor)
+		  .fill(self.color.thumbColor.color)
           .frame(width: segmentWidth, height: textLine.rawValue)
           .offset(x: CGFloat(selectedSegmentIndex) * segmentStepWidth)
           .shadow(color: .black.opacity(0.05), radius: 4, x: 1, y: 1)
@@ -155,7 +183,7 @@ public struct SDGSegment: View {
         HStack(spacing: Constants.Fixed.textSpacing) {
           ForEach(items.indices, id: \.self) { index in
             Text(items[index])
-              .typo(.body2_R, selectedSegmentIndex == index ? selectedTextColor : unselectedTextColor)
+			  .typo(.body2_R, selectedSegmentIndex == index ? self.color.selectedTextColor : self.color.unselectedTextColor)
               .lineLimit(textLine.numberOfLines)
               .frame(maxWidth: .infinity)
               .multilineTextAlignment(.center)
