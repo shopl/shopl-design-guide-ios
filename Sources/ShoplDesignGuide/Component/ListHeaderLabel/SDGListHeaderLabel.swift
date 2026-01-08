@@ -11,46 +11,39 @@ import SwiftUI
 /// https://www.figma.com/design/qWVshatQ9eqoIn4fdEZqWy/SDG?m=dev&node-id=22084-3889
 public struct SDGListHeaderLabel: View {
   
-  public struct Content {
+  public struct Model {
 	let title: String
 	let count: Int?
 	
-	public init(title: String, count: Int?) {
-	  self.title = title
-	  self.count = count
-	}
-  }
-  
-  public struct Property {
 	let isShowDropdownIcon: Bool
 	
-	public init(isShowDropdownIcon: Bool) {
+	public init(title: String, count: Int?, isShowDropdownIcon: Bool) {
+	  self.title = title
+	  self.count = count
 	  self.isShowDropdownIcon = isShowDropdownIcon
 	}
   }
   
-  private let content: Content
-  private let property: Property
+  private let model: Model
   
-  public init(content: Content, property: Property) {
-	self.content = content
-	self.property = property
+  public init(model: Model) {
+	self.model = model
   }
   
   public var body: some View {
 	HStack(spacing: SDGSpacing.spacing2) {
-	  Text(self.content.title)
+	  Text(self.model.title)
 		.typo(.body1_SB, .neutral700)
 		.lineLimit(1)
 	  
-	  if let count = self.content.count {
+	  if let count = self.model.count {
 		Text("(\(count))")
 		  .typo(.body1_SB, .neutral700)
 		  .lineLimit(1)
 		  .layoutPriority(1)
 	  }
 	  
-	  if self.property.isShowDropdownIcon {
+	  if self.model.isShowDropdownIcon {
 		Image(.icCommonDropdown)
 		  .resizable()
 		  .frame(width: 20, height: 20)
@@ -69,38 +62,38 @@ struct SDGListHeaderLabel_Preview: PreviewProvider {
 	VStack {
 	  // title, count, dropdownIcon 존재
 	  SDGListHeaderLabel(
-		content: .init(
+		model: .init(
 		  title: "타이틀",
-		  count: 0
-		),
-		property: .init(isShowDropdownIcon: true)
+		  count: 0,
+		  isShowDropdownIcon: true
+		)
 	  )
 	  
 	  // title, count 만 존재
 	  SDGListHeaderLabel(
-		content: .init(
+		model: .init(
 		  title: "타이틀",
-		  count: 2
-		),
-		property: .init(isShowDropdownIcon: false)
+		  count: 2,
+		  isShowDropdownIcon: false
+		)
 	  )
 	  
 	  // title, dropdownIcon 존재
 	  SDGListHeaderLabel(
-		content: .init(
+		model: .init(
 		  title: "타이틀 엄청 긴 텍스트입니다아아아아아아아",
-		  count: nil
-		),
-		property: .init(isShowDropdownIcon: true)
+		  count: nil,
+		  isShowDropdownIcon: true
+		)
 	  )
 	  
 	  // title만 존재
 	  SDGListHeaderLabel(
-		content: .init(
+		model: .init(
 		  title: "타이틀",
-		  count: nil
-		),
-		property: .init(isShowDropdownIcon: false)
+		  count: nil,
+		  isShowDropdownIcon: false
+		)
 	  )
 	  
 	}
