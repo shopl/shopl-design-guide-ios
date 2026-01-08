@@ -17,7 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     self.window = window
     window.makeKeyAndVisible()
     
-    FontLoader.registerFonts()
     DSViewConfig.configure()
     
     return true
