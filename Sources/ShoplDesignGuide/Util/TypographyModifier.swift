@@ -148,7 +148,7 @@ public enum TypoColor {
     case .sdgGreen: self = .green
     case .sdgLemon: self = .lemon
     case .sdgOrange: self = .orange
-    case .sdgPink: self = .pink
+    case .sdgSpecialPink: self = .pink
     case .sdgPurple: self = .purple
     case .sdgYellow: self = .yellow
     case .primary50: self = .primary50
