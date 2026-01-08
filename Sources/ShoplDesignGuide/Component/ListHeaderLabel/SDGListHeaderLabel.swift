@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+/// https://www.figma.com/design/qWVshatQ9eqoIn4fdEZqWy/SDG?m=dev&node-id=22084-3889
 public struct SDGListHeaderLabel: View {
   
   public struct Content {
