@@ -63,10 +63,10 @@ public struct SDGFixedTab: View {
           } label: {
             ZStack(alignment: .bottom) {
               Text(model.title)
-                .typo(.title2_SB, selectedColor)
+                .typo(.body1_SB, selectedColor)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, minHeight: 22, maxHeight: 22)
-                .padding(.bottom, SDGSpacing.spacing10)
+                .padding(.bottom, SDGSpacing.spacing12)
                 .padding(.horizontal, SDGSpacing.spacing8)
               
               underlineColor
