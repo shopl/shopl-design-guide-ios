@@ -1,0 +1,100 @@
+// swiftlint:disable all
+// swift-format-ignore-file
+// swiftformat:disable all
+// Generated using tuist — https://github.com/tuist/tuist
+
+#if os(macOS)
+  import AppKit.NSFont
+#elseif os(iOS) || os(tvOS) || os(watchOS) || os(visionOS)
+  import UIKit.UIFont
+#endif
+#if canImport(SwiftUI)
+  import SwiftUI
+#endif
+
+private class DesignSystemBundleAnchor {}
+private let dsBundle = Bundle(for: DesignSystemBundleAnchor.self)
+
+// MARK: - Fonts
+
+{% if families %}
+public enum {{ param.name }}FontFamily: Sendable {
+  {% for family in families %}
+  public enum {{ family.name|swiftIdentifier:"pretty" }}: Sendable {
+    {% for font in family.fonts %}
+    public static let {{ font.style|swiftIdentifier:"pretty"|lowerFirstWord }} = {{ param.name }}FontConvertible(name: "{{ font.name }}", family: "{{ family.name }}", path: "{{ font.path }}")
+    {% endfor %}
+    public static let all: [{{ param.name }}FontConvertible] = [{% for font in family.fonts %}{{ font.style|swiftIdentifier:"pretty"|lowerFirstWord }}{% if not forloop.last %}, {% endif %}{% endfor %}]
+  }
+  {% endfor %}
+  public static let allCustomFonts: [{{ param.name }}FontConvertible] = [{% for family in families %}{{ family.name|swiftIdentifier:"pretty" }}.all{% if not forloop.last %}, {% endif %}{% endfor %}].flatMap { $0 }
+  public static func registerAllCustomFonts() {
+    allCustomFonts.forEach { $0.register() }
+  }
+}
+
+public struct {{ param.name }}FontConvertible: Sendable {
+  public let name: String
+  public let family: String
+  public let path: String
+
+  private static var registeredFonts: Set<String> = []
+  private static let registerLock = NSLock()
+
+  #if os(macOS)
+  public typealias Font = NSFont
+  #elseif os(iOS) || os(tvOS) || os(watchOS) || os(visionOS)
+  public typealias Font = UIFont
+  #endif
+
+  public func font(size: CGFloat) -> Font {
+    Self.register(font: self) // 사용 시점 자동 등록
+    guard let font = Font(font: self, size: size) else {
+      return Font.systemFont(ofSize: size)
+    }
+    return font
+  }
+
+  #if canImport(SwiftUI)
+  public func swiftUIFont(size: CGFloat) -> SwiftUI.Font {
+    Self.register(font: self) // 사용 시점 자동 등록
+    guard let font = Font(font: self, size: size) else {
+        return SwiftUI.Font.system(size: size)
+    }
+    return SwiftUI.Font(font)
+  }
+  #endif
+
+  public func register() {
+    Self.register(font: self)
+  }
+
+  private static func register(font: {{ param.name }}FontConvertible) {
+    registerLock.lock()
+    defer { registerLock.unlock() }
+    
+    if registeredFonts.contains(font.name) { return }
+    registeredFonts.insert(font.name)
+    
+    guard let url = font.url else { return }
+    CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
+  }
+
+  fileprivate var url: URL? {
+    // Tuist가 생성해준 경로
+    if let url = dsBundle.url(forResource: path, withExtension: nil) {
+        return url
+    }
+    
+    // Dynamic Framework는 빌드 시 리소스 폴더 구조를 없애고 루트에 파일을 모두 평탄화함
+    let fileName = (path as NSString).lastPathComponent
+    return dsBundle.url(forResource: fileName, withExtension: nil)
+  }
+}
+
+public extension {{ param.name }}FontConvertible.Font {
+  convenience init?(font: {{ param.name }}FontConvertible, size: CGFloat) {
+    self.init(name: font.name, size: size)
+  }
+}
+{% endif %}

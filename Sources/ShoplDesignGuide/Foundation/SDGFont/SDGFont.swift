@@ -7,41 +7,83 @@
 //
 
 import SwiftUI
+import UIKit
+
+public typealias SDGFonts = ShoplDesignGuideFontFamily
 
 public extension Font {
   static func system(size: CGFloat, weight: Weight = .regular) -> Font {
     
     let isJapanese = UserDefaults.standard.string(forKey: "language") == "ja"
-    let fontName: String
+    
+    let targetFont: ShoplDesignGuideFontConvertible
     
     if isJapanese {
       switch weight {
-      case .black:      fontName = ShoplDesignGuideFontFamily.PretendardJP.black.name
-      case .heavy:      fontName = ShoplDesignGuideFontFamily.PretendardJP.extraBold.name
-      case .bold:       fontName = ShoplDesignGuideFontFamily.PretendardJP.bold.name
-      case .semibold:   fontName = ShoplDesignGuideFontFamily.PretendardJP.semiBold.name
-      case .medium:     fontName = ShoplDesignGuideFontFamily.PretendardJP.medium.name
-      case .regular:    fontName = ShoplDesignGuideFontFamily.PretendardJP.regular.name
-      case .light:      fontName = ShoplDesignGuideFontFamily.PretendardJP.light.name
-      case .ultraLight: fontName = ShoplDesignGuideFontFamily.PretendardJP.extraLight.name
-      case .thin:       fontName = ShoplDesignGuideFontFamily.PretendardJP.thin.name
-      default:          fontName = ShoplDesignGuideFontFamily.PretendardJP.regular.name
+      case .black:      targetFont = SDGFonts.PretendardJP.black
+      case .heavy:      targetFont = SDGFonts.PretendardJP.extraBold
+      case .bold:       targetFont = SDGFonts.PretendardJP.bold
+      case .semibold:   targetFont = SDGFonts.PretendardJP.semiBold
+      case .medium:     targetFont = SDGFonts.PretendardJP.medium
+      case .regular:    targetFont = SDGFonts.PretendardJP.regular
+      case .light:      targetFont = SDGFonts.PretendardJP.light
+      case .ultraLight: targetFont = SDGFonts.PretendardJP.extraLight
+      case .thin:       targetFont = SDGFonts.PretendardJP.thin
+      default:          targetFont = SDGFonts.PretendardJP.regular
       }
     } else {
       switch weight {
-      case .black:      fontName = ShoplDesignGuideFontFamily.Pretendard.black.name
-      case .heavy:      fontName = ShoplDesignGuideFontFamily.Pretendard.extraBold.name
-      case .bold:       fontName = ShoplDesignGuideFontFamily.Pretendard.bold.name
-      case .semibold:   fontName = ShoplDesignGuideFontFamily.Pretendard.semiBold.name
-      case .medium:     fontName = ShoplDesignGuideFontFamily.Pretendard.medium.name
-      case .regular:    fontName = ShoplDesignGuideFontFamily.Pretendard.regular.name
-      case .light:      fontName = ShoplDesignGuideFontFamily.Pretendard.light.name
-      case .ultraLight: fontName = ShoplDesignGuideFontFamily.Pretendard.extraLight.name
-      case .thin:       fontName = ShoplDesignGuideFontFamily.Pretendard.thin.name
-      default:          fontName = ShoplDesignGuideFontFamily.Pretendard.regular.name
+      case .black:      targetFont = SDGFonts.Pretendard.black
+      case .heavy:      targetFont = SDGFonts.Pretendard.extraBold
+      case .bold:       targetFont = SDGFonts.Pretendard.bold
+      case .semibold:   targetFont = SDGFonts.Pretendard.semiBold
+      case .medium:     targetFont = SDGFonts.Pretendard.medium
+      case .regular:    targetFont = SDGFonts.Pretendard.regular
+      case .light:      targetFont = SDGFonts.Pretendard.light
+      case .ultraLight: targetFont = SDGFonts.Pretendard.extraLight
+      case .thin:       targetFont = SDGFonts.Pretendard.thin
+      default:          targetFont = SDGFonts.Pretendard.regular
       }
     }
     
-    return .custom(fontName, size: size)
+    return targetFont.swiftUIFont(size: size)
+  }
+}
+
+public extension UIFont {
+  static func systemFont(ofSize size: CGFloat, weight: Weight = .regular) -> UIFont {
+    
+    let isJapanese = UserDefaults.standard.string(forKey: "language") == "ja"
+    let targetFont: ShoplDesignGuideFontConvertible
+    
+    if isJapanese {
+      switch weight {
+      case .black:      targetFont = SDGFonts.PretendardJP.black
+      case .heavy:      targetFont = SDGFonts.PretendardJP.extraBold
+      case .bold:       targetFont = SDGFonts.PretendardJP.bold
+      case .semibold:   targetFont = SDGFonts.PretendardJP.semiBold
+      case .medium:     targetFont = SDGFonts.PretendardJP.medium
+      case .regular:    targetFont = SDGFonts.PretendardJP.regular
+      case .light:      targetFont = SDGFonts.PretendardJP.light
+      case .ultraLight: targetFont = SDGFonts.PretendardJP.extraLight
+      case .thin:       targetFont = SDGFonts.PretendardJP.thin
+      default:          targetFont = SDGFonts.PretendardJP.regular
+      }
+    } else {
+      switch weight {
+      case .black:      targetFont = SDGFonts.Pretendard.black
+      case .heavy:      targetFont = SDGFonts.Pretendard.extraBold
+      case .bold:       targetFont = SDGFonts.Pretendard.bold
+      case .semibold:   targetFont = SDGFonts.Pretendard.semiBold
+      case .medium:     targetFont = SDGFonts.Pretendard.medium
+      case .regular:    targetFont = SDGFonts.Pretendard.regular
+      case .light:      targetFont = SDGFonts.Pretendard.light
+      case .ultraLight: targetFont = SDGFonts.Pretendard.extraLight
+      case .thin:       targetFont = SDGFonts.Pretendard.thin
+      default:          targetFont = SDGFonts.Pretendard.regular
+      }
+    }
+    
+    return targetFont.font(size: size)
   }
 }

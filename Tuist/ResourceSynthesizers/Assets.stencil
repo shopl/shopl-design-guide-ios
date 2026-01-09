@@ -3,80 +3,205 @@
 // swiftformat:disable all
 // Generated using tuist — https://github.com/tuist/tuist
 
+{# Colors 또는 Images 카탈로그 존재 여부 확인 #}
+{%- set isDesignSystem -%}{%- for catalog in catalogs -%}{%- if catalog.name == "Colors" or catalog.name == "Images" -%}1{%- endif -%}{%- endfor -%}{%- endset -%}
+
+{% if isDesignSystem %}
 import SwiftUI
 import UIKit
 
-{% if param.name == "ShoplDesignGuide" %}
+// 번들 위치 찾기
+private class DesignSystemBundleAnchor {}
+private let dsBundle = Bundle(for: DesignSystemBundleAnchor.self)
 
-public extension Image {
-    {% macro recursiveImageVar assets %}
-      {% for asset in assets %}
-        {% if asset.type == "image" %}
-        
-        static var {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord}}: Image {
-            Image("{{asset.value}}", bundle: Bundle.module)
-        }
-        
-        {% elif asset.items %}
-        {% call recursiveImageVar asset.items %}
-        {% endif %}
-      {% endfor %}
-    {% endmacro %}
+// MARK: - 🖍️ Recursive Macros
 
-    {% for catalog in catalogs %}
-    {% call recursiveImageVar catalog.assets %}
-    {% endfor %}
-}
-
-{% macro recursiveColor assets %}
+{#- [COLOR] SDGColorResource 정의 -#}
+{%- macro recursiveColorLet assets -%}
   {% for asset in assets %}
     {% if asset.type == "color" %}
-    static let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord}} = Color("{{asset.value}}", bundle: Bundle.module)
+    static let {{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }} = SDGColorResource(name: "{{ asset.value }}", bundle: dsBundle)
     {% elif asset.items %}
-    {% call recursiveColor asset.items %}
+    {% call recursiveColorLet asset.items %}
     {% endif %}
   {% endfor %}
-{% endmacro %}
+{%- endmacro -%}
 
-public extension Color {
-    {% for catalog in catalogs %}
-    {% call recursiveColor catalog.assets %}
-    {% endfor %}
-}
-
-{% macro recursiveShapeStyle assets %}
+{#- [COLOR] Color (SwiftUI) static 변수 -#}
+{%- macro recursiveColorStaticVarForSwiftUI assets -%}
   {% for asset in assets %}
     {% if asset.type == "color" %}
-    static var {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord}}: Color { .{{asset.name|swiftIdentifier:"pretty"|lowerFirstWord}} }
+    static let {{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }} = Color(.{{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }})
+    {% elif asset.items %}
+    {% call recursiveColorStaticVarForSwiftUI asset.items %}
+    {% endif %}
+  {% endfor %}
+{%- endmacro -%}
+
+{#- [COLOR] UIColor (UIKit) static 변수 -#}
+{%- macro recursiveColorStaticVarForUIKit assets -%}
+  {% for asset in assets %}
+    {% if asset.type == "color" %}
+    static let {{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }} = UIColor(Color.{{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }})
+    {% elif asset.items %}
+    {% call recursiveColorStaticVarForUIKit asset.items %}
+    {% endif %}
+  {% endfor %}
+{%- endmacro -%}
+
+{#- [COLOR] ShapeStyle (SwiftUI) -#}
+{%- macro recursiveShapeStyle assets -%}
+  {% for asset in assets %}
+    {% if asset.type == "color" %}
+    static var {{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }}: Color { Color(.{{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }}) }
     {% elif asset.items %}
     {% call recursiveShapeStyle asset.items %}
     {% endif %}
   {% endfor %}
-{% endmacro %}
+{%- endmacro -%}
 
-public extension ShapeStyle where Self == Color {
+{#- [IMAGE] SDGImageResource 정의 -#}
+{%- macro recursiveImageLet assets -%}
+  {% for asset in assets %}
+    {% if asset.type == "image" %}
+    static let {{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }} = SDGImageResource(name: "{{ asset.value }}", bundle: dsBundle)
+    {% elif asset.items %}
+    {% call recursiveImageLet asset.items %}
+    {% endif %}
+  {% endfor %}
+{%- endmacro -%}
+
+{#- [IMAGE] Image (SwiftUI) static 변수 -#}
+{%- macro recursiveImageStaticVarForSwiftUI assets -%}
+  {% for asset in assets %}
+    {% if asset.type == "image" %}
+    static let {{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }} = Image(.{{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }})
+    {% elif asset.items %}
+    {% call recursiveImageStaticVarForSwiftUI asset.items %}
+    {% endif %}
+  {% endfor %}
+{%- endmacro -%}
+
+{#- [IMAGE] UIImage (UIKit) static 변수 -#}
+{%- macro recursiveImageStaticVarForUIKit assets -%}
+  {% for asset in assets %}
+    {% if asset.type == "image" %}
+    static let {{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }} = UIImage(resource: .{{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }})
+    {% elif asset.items %}
+    {% call recursiveImageStaticVarForUIKit asset.items %}
+    {% endif %}
+  {% endfor %}
+{%- endmacro -%}
+
+
+// MARK: - 🖼️ Image Resources
+
+public struct SDGImageResource: Sendable {
+    public let name: String
+    public let bundle: Bundle
+    
+    public init(name: String, bundle: Bundle) {
+        self.name = name
+        self.bundle = bundle
+    }
+}
+
+public extension SDGImageResource {
     {% for catalog in catalogs %}
-    {% call recursiveShapeStyle catalog.assets %}
+    {% if catalog.name == "Images" %}
+    {% call recursiveImageLet catalog.assets %}
+    {% endif %}
     {% endfor %}
 }
 
-{% macro recursiveUIColor assets %}
-  {% for asset in assets %}
-    {% if asset.type == "color" %}
-    static let {{asset.name|swiftIdentifier:"pretty"|lowerFirstWord}} = UIColor(named: "{{asset.value}}", in: Bundle.module, compatibleWith: nil)!
-    {% elif asset.items %}
-    {% call recursiveUIColor asset.items %}
+public extension Image {
+    /// 사용법: Image(.icNaviBack)
+    init(_ resource: SDGImageResource) {
+        self.init(resource.name, bundle: resource.bundle)
+    }
+
+    /// 사용법: Image.icNaviBack
+    {% for catalog in catalogs %}
+    {% if catalog.name == "Images" %}
+    {% call recursiveImageStaticVarForSwiftUI catalog.assets %}
     {% endif %}
-  {% endfor %}
-{% endmacro %}
+    {% endfor %}
+}
+
+public extension UIImage {
+    /// 사용법: UIImage(resource: .icNaviBack)
+    convenience init?(resource: SDGImageResource) {
+        self.init(named: resource.name, in: resource.bundle, compatibleWith: nil)
+    }
+
+    /// 사용법: UIImage.icNaviBack (Return Type: UIImage?)
+    {% for catalog in catalogs %}
+    {% if catalog.name == "Images" %}
+    {% call recursiveImageStaticVarForUIKit catalog.assets %}
+    {% endif %}
+    {% endfor %}
+}
+
+
+// MARK: - 🎨 Color Resources
+
+public struct SDGColorResource: Sendable {
+    public let name: String
+    public let bundle: Bundle
+    
+    public init(name: String, bundle: Bundle) {
+        self.name = name
+        self.bundle = bundle
+    }
+}
+
+public extension SDGColorResource {
+    {% for catalog in catalogs %}
+    {% if catalog.name == "Colors" %}
+    {% call recursiveColorLet catalog.assets %}
+    {% endif %}
+    {% endfor %}
+}
+
+public extension Color {
+    /// 사용법: Color(.brandBlue)
+    init(_ resource: SDGColorResource) {
+        self.init(resource.name, bundle: resource.bundle)
+    }
+
+    /// 사용법: Color.brandBlue
+    {% for catalog in catalogs %}
+    {% if catalog.name == "Colors" %}
+    {% call recursiveColorStaticVarForSwiftUI catalog.assets %}
+    {% endif %}
+    {% endfor %}
+}
 
 public extension UIColor {
+    /// 사용법: UIColor(resource: .brandBlue)
+    convenience init?(resource: SDGColorResource) {
+        self.init(named: resource.name, in: resource.bundle, compatibleWith: nil)
+    }
+
+    /// 사용법: UIColor.brandBlue
     {% for catalog in catalogs %}
-    {% call recursiveUIColor catalog.assets %}
+    {% if catalog.name == "Colors" %}
+    {% call recursiveColorStaticVarForUIKit catalog.assets %}
+    {% endif %}
+    {% endfor %}
+}
+
+// MARK: - ShapeStyle Extensions
+
+public extension ShapeStyle where Self == Color {
+    /// 사용법: .background(.brandBlue)
+    {% for catalog in catalogs %}
+    {% if catalog.name == "Colors" %}
+    {% call recursiveShapeStyle catalog.assets %}
+    {% endif %}
     {% endfor %}
 }
 
 {% else %}
-// ⚠️ [Sample App Skipped]
-// 샘플 앱은 Tuist 자동 생성을 사용하지 않습니다.
+// ⚠️ [Skip] 'Colors' 또는 'Images' 카탈로그가 발견되지 않아 코드를 생성하지 않았습니다.
 {% endif %}
