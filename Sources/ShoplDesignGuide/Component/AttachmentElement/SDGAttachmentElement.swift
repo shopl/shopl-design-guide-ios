@@ -137,7 +137,7 @@ private extension Image {
   
   VStack {
     
-    SDGAttachmentList(
+    SDGAttachmentElement(
       model: .init(
         type: .photo(image: Image(.avatarEmpty)),
         id: UUID().uuidString,
@@ -147,7 +147,7 @@ private extension Image {
       selectedItem: { _ in }
     )
     
-    SDGAttachmentList(
+    SDGAttachmentElement(
       model: .init(
         type: .document,
         id: UUID().uuidString,
@@ -157,7 +157,7 @@ private extension Image {
       selectedItem: { _ in }
     )
     
-    SDGAttachmentList(
+    SDGAttachmentElement(
       model: .init(
         type: .video(thumbnail: Image(.profileSmall)),
         id: UUID().uuidString,
@@ -167,7 +167,7 @@ private extension Image {
       selectedItem: { _ in }
     )
     
-    SDGAttachmentList(
+    SDGAttachmentElement(
       model: .init(
         type: .photo(image: Image(.avatarEmpty)),
         id: UUID().uuidString,
@@ -178,7 +178,7 @@ private extension Image {
     )
     
     
-    SDGAttachmentList(
+    SDGAttachmentElement(
       model: .init(
         type: .document,
         id: UUID().uuidString,
@@ -188,7 +188,7 @@ private extension Image {
       selectedItem: { _ in }
     )
     
-    SDGAttachmentList(
+    SDGAttachmentElement(
       model: .init(
         type: .video(thumbnail: Image(.profileSmall)),
         id: UUID().uuidString,
