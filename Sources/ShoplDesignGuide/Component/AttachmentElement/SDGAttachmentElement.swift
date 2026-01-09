@@ -1,5 +1,5 @@
 //
-//  SDGAttachmentList.swift
+//  SDGAttachmentElement.swift
 //  ShoplDesignGuide
 //
 //  Created by jerry on 1/6/26.
@@ -9,7 +9,7 @@ import SwiftUI
 
 import Kingfisher
 
-public struct SDGAttachmentList: View {
+public struct SDGAttachmentElement: View {
   
   public struct Model: Equatable {
     public enum `Type`: Equatable {
