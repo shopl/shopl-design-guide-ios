@@ -11,13 +11,8 @@ public struct SDGCapsuleButton: View {
   
   public struct Option {
     
-    public enum Icon: Equatable {
-      case left(image: Image, color: Color)
-      case right(image: Image, color: Color)
-    }
-    
     let size: SDGCapsuleButtonSize
-    let icon: Icon?
+    let icon: SDGButtonOptionIcon?
     let title: String
     let color: SDGButtonColor
     let selectedColor: SDGButtonColor
@@ -25,7 +20,7 @@ public struct SDGCapsuleButton: View {
     
     public init(
       size: SDGCapsuleButtonSize,
-      icon: Icon? = nil,
+      icon: SDGButtonOptionIcon? = nil,
       title: String,
       color: SDGButtonColor,
       selectedColor: SDGButtonColor,
