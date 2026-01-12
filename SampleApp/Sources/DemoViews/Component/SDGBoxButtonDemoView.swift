@@ -57,7 +57,7 @@ private struct DefaultView: View {
         SDGBoxButton(
           option: .init(
             size: .medium,
-            icon: .right(image: Image.icons, color: .neutral300),
+            icon: .right(image: Image(sdg: .icons), color: .neutral300),
             title: "Label",
             color: .init(
               backgroundColor: .neutral200,
@@ -75,7 +75,7 @@ private struct DefaultView: View {
         SDGBoxButton(
           option: .init(
             size: .medium,
-            icon: .left(image: Image.icons, color: .neutral300),
+            icon: .left(image: Image(sdg: .icons), color: .neutral300),
             title: "Label",
             color: .init(
               backgroundColor: .neutral200,
@@ -115,7 +115,7 @@ private struct DefaultView: View {
         SDGBoxButton(
           option: .init(
             size: .small,
-            icon: .right(image: Image.icons, color: .neutral300),
+            icon: .right(image: Image(sdg: .icons), color: .neutral300),
             title: "Label",
             color: .init(
               backgroundColor: .neutral200,
@@ -133,7 +133,7 @@ private struct DefaultView: View {
         SDGBoxButton(
           option: .init(
             size: .small,
-            icon: .left(image: Image.icons, color: .neutral300),
+            icon: .left(image: Image(sdg: .icons), color: .neutral300),
             title: "Label",
             color: .init(
               backgroundColor: .neutral200,
@@ -173,7 +173,7 @@ private struct DefaultView: View {
         SDGBoxButton(
           option: .init(
             size: .xsmall,
-            icon: .right(image: Image.icons, color: .neutral300),
+            icon: .right(image: Image(sdg: .icons), color: .neutral300),
             title: "Label",
             color: .init(
               backgroundColor: .neutral200,
@@ -191,7 +191,7 @@ private struct DefaultView: View {
         SDGBoxButton(
           option: .init(
             size: .xsmall,
-            icon: .left(image: Image.icons, color: .neutral300),
+            icon: .left(image: Image(sdg: .icons), color: .neutral300),
             title: "Label",
             color: .init(
               backgroundColor: .neutral200,
