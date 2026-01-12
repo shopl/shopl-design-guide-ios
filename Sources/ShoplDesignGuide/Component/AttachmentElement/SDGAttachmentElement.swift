@@ -83,7 +83,7 @@ public struct SDGAttachmentElement: View {
       thumbnailImage(image: image, url: url)
       
     case .document:
-      iconView(.icClip)
+      iconView(Image(.icClip))
       
     case let .video(thumbnail, url):
       thumbnailImage(image: thumbnail, url: url)
@@ -93,7 +93,7 @@ public struct SDGAttachmentElement: View {
   @ViewBuilder
   private var playIconIfNeeded: some View {
     if case .video = model.type {
-      iconView(.icCommonPlay)
+      iconView(Image(.icCommonPlay))
     }
   }
   
@@ -112,8 +112,8 @@ public struct SDGAttachmentElement: View {
     }
   }
   
-  private func iconView(_ resource: ImageResource) -> some View {
-    Image(resource)
+  private func iconView(_ image: Image) -> some View {
+    image
       .resizable()
       .foregroundStyle(.secondary200)
       .frame(width: 14, height: 14)
