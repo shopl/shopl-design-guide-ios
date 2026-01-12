@@ -15,100 +15,129 @@ public struct SDGCheckOption: View {
   }
   
   public enum CheckType: Equatable {
-    case normal
-    case empha
+    case solid
+    case line
   }
   
-  @Binding private var _state: CheckState
+  @Binding private var state: CheckState
   
-  private var _title: String
-  private var _size: CGFloat
-  private var _type: CheckType
+  private var type: CheckType
   
-  private var _selected: (() -> ())
+  private var selected: (() -> ())
   
   public init(
     state: Binding<CheckState>,
-    title: String,
-    size: CGFloat,
     type: CheckType,
     selected: @escaping (() -> ())
   ) {
-    self.__state = state
-    self._title = title
-    self._size = size
-    self._type = type
-    self._selected = selected
+    self._state = state
+    self.type = type
+    self.selected = selected
   }
   
   public var body: some View {
     Button {
-      self._selected()
+      self.selected()
     } label: {
-      HStack(spacing: 6) {
+      switch type {
+      case .solid:
         Image(.icCommonCheckS)
-          .frame(width: 14, height: 14, alignment: .center)
-          .background(_state == .selected ? .primary300 : .neutral200)
+          .frame(width: 16, height: 16, alignment: .center)
+          .background(state == .selected ? .primary300 : .neutral200)
           .tint(.neutral0)
           .clipShape(Circle())
         
-        Text(_title)
-          .font(
-            .system(
-              size: self._size,
-              weight: self._type == .normal ? .regular : .semibold
-            )
-          )
-          .foregroundColor(.neutral700)
+      case .line:
+        ZStack {
+          Image(.icCommonCheckS)
+            .frame(width: 16, height: 16, alignment: .center)
+            .background(.clear)
+            .tint(state == .selected ? .primary300 : .neutral350)
+            .clipShape(Circle())
+        }
+        .overlay(
+          RoundedRectangle(cornerRadius: 8)
+            .stroke(state == .selected ? .primary300 : .neutral350, lineWidth: 1)
+        )
+        
       }
     }
-    .allowsHitTesting(self._state != .disabled)
+    .allowsHitTesting(self.state != .disabled)
   }
 }
 
 
 #Preview {
   ZStack {
-    HStack {
-      SDGCheckOption(
-        state: .constant(.default),
-        title: "",
-        size: 14,
-        type: .empha,
-        selected: {
-          
-        }
-      )
+    VStack {
+      HStack {
+        SDGCheckOption(
+          state: .constant(.default),
+          type: .solid,
+          selected: {
+            
+          }
+        )
+        
+        SDGCheckOption(
+          state: .constant(.default),
+          type: .solid,
+          selected: {
+            
+          }
+        )
+        
+        SDGCheckOption(
+          state: .constant(.selected),
+          type: .solid,
+          selected: {
+            
+          }
+        )
+        
+        SDGCheckOption(
+          state: .constant(.disabled),
+          type: .solid,
+          selected: {
+            
+          }
+        )
+      }
       
-      SDGCheckOption(
-        state: .constant(.default),
-        title: "기본",
-        size: 14,
-        type: .empha,
-        selected: {
-          
-        }
-      )
+      HStack {
+        SDGCheckOption(
+          state: .constant(.default),
+          type: .line,
+          selected: {
+            
+          }
+        )
+        
+        SDGCheckOption(
+          state: .constant(.default),
+          type: .line,
+          selected: {
+            
+          }
+        )
+        
+        SDGCheckOption(
+          state: .constant(.selected),
+          type: .line,
+          selected: {
+            
+          }
+        )
+        
+        SDGCheckOption(
+          state: .constant(.disabled),
+          type: .line,
+          selected: {
+            
+          }
+        )
+      }
       
-      SDGCheckOption(
-        state: .constant(.selected),
-        title: "선택",
-        size: 14,
-        type: .empha,
-        selected: {
-          
-        }
-      )
-      
-      SDGCheckOption(
-        state: .constant(.disabled),
-        title: "선택 불가",
-        size: 14,
-        type: .empha,
-        selected: {
-          
-        }
-      )
     }
   }
 }
