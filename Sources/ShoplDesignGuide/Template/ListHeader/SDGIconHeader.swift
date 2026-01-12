@@ -52,9 +52,6 @@ public struct SDGIconHeader: View {
         model: title
       )
       
-      Spacer(minLength: 0)
-      
-      
       switch type {
       case .box:
         
@@ -116,7 +113,7 @@ public struct SDGIconHeader: View {
     
     SDGIconHeader(
       type: .box,
-      title: .init(title: "Title", count: 1, isShowDropdownIcon: true),
+      title: .init(title: "TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle", count: 1, isShowDropdownIcon: true),
       icons: [.init(id: UUID().uuidString, icon: Image(.icClip), tintColor: .neutral400)],
       selectedIcon: { _ in }
     )
