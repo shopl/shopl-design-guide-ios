@@ -65,8 +65,6 @@ public struct SDGButtonHeader: View {
         model: title
       )
 
-      Spacer(minLength: 0)
-
       switch type {
       case .capsule:
         SDGCapsuleButton(
