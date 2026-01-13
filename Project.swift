@@ -81,6 +81,7 @@ extension TargetScript {
         echo "🔄 [Auto-Sync] Syncing ONLY library files..."
         
         rsync -av --delete \
+            --exclude 'TuistBundle+*.swift' \
             --include '*+ShoplDesignGuide.swift' \
             --exclude '*' \
             "$SRCROOT/Derived/Sources/" \
