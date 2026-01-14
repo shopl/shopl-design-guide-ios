@@ -20,40 +20,48 @@ public struct SDGCheckBox: View {
     }
   }
   
-  private let _isSelected: Bool
-  private let _size: Size
-  private let _isDisabled: Bool
-  private let _selectedColor: Color
-  
-  public init(
-    isSelected: Bool,
-    size: Size,
-    isDisabled: Bool = false,
-    selectedColor: Color? = nil
-  ) {
-    _isSelected = isSelected
-    _size = size
-    _isDisabled = isDisabled
+  public struct Model: Equatable {
+    public let size: Size
+    public let selectedColor: Color
     
-    if let selectedColor = selectedColor {
-      _selectedColor = selectedColor
-    } else {
-      _selectedColor = .primary300
+    public init(size: Size, selectedColor: Color = .primary300) {
+      self.size = size
+      self.selectedColor = selectedColor
     }
   }
   
+  private let model: Model
+  @Binding private var status: SDGCheckBoxStatus
+  
+  private var onSelect: (() -> ())?
+  
+  public init(
+    model: Model,
+    status: Binding<SDGCheckBoxStatus>,
+    onSelect: (() -> ())? = nil
+  ) {
+    self.model = model
+    self._status = status
+    self.onSelect = onSelect
+  }
+  
   public var body: some View {
-    HStack {
-      Image(.icCommonCheckS)
-        .resizable()
-        .frame(width: _size.value, height: _size.value)
-        .foregroundColor(.neutral0)
+    Button {
+      onSelect?()
+    } label: {
+      HStack {
+        Image(.icCommonCheckS)
+          .resizable()
+          .frame(width: model.size.value, height: model.size.value)
+          .foregroundColor(.neutral0)
+      }
+      .background(status == .selected ? model.selectedColor : .neutral200)
+      .applyIf(status == .disabled) {
+        $0.background(.neutral200)
+      }
+      .cornerRadius(4)
     }
-    .background(_isSelected ? _selectedColor : .neutral200)
-    .applyIf(_isDisabled) {
-      $0.background(.neutral200)
-    }
-    .cornerRadius(4)
+    .buttonStyle(NoTapAnimationButtonStyle())
   }
 }
 
@@ -61,19 +69,47 @@ struct CheckBox_Multi_Preview: PreviewProvider {
   static var previews: some View {
     VStack {
       HStack {
-        SDGCheckBox(isSelected: false, size: .large)
+        SDGCheckBox(
+          model: .init(size: .large),
+          status: .constant(.default)
+        )
         
-        SDGCheckBox(isSelected: true, size: .large)
+        SDGCheckBox(
+          model: .init(size: .large),
+          status: .constant(.selected)
+        )
         
-        SDGCheckBox(isSelected: true, size: .large, selectedColor: .neutral700)
+        SDGCheckBox(
+          model: .init(size: .large, selectedColor: .neutral700),
+          status: .constant(.selected)
+        )
+        
+        SDGCheckBox(
+          model: .init(size: .large),
+          status: .constant(.disabled)
+        )
       }
       
       HStack {
-        SDGCheckBox(isSelected: false, size: .medim)
+        SDGCheckBox(
+          model: .init(size: .medim),
+          status: .constant(.default)
+        )
         
-        SDGCheckBox(isSelected: true, size: .medim)
+        SDGCheckBox(
+          model: .init(size: .medim),
+          status: .constant(.selected)
+        )
         
-        SDGCheckBox(isSelected: true, size: .medim, selectedColor: .neutral700)
+        SDGCheckBox(
+          model: .init(size: .medim, selectedColor: .neutral700),
+          status: .constant(.selected)
+        )
+        
+        SDGCheckBox(
+          model: .init(size: .medim),
+          status: .constant(.disabled)
+        )
       }
     }
     

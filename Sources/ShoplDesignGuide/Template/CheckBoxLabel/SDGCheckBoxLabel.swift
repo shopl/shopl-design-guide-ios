@@ -46,10 +46,10 @@ public struct SDGCheckBoxLabel: View {
       _action(_model.id)
     } label: {
       HStack(spacing: 8) {
-        SDGCheckBox(
-          isSelected: _model.isSelected,
-          size: .medim
-        )
+//        SDGCheckBox(
+//          isSelected: _model.isSelected,
+//          size: .medim
+//        )
 
         Text(_model.title)
           .typo(
