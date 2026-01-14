@@ -9,122 +9,139 @@ import SwiftUI
 
 public struct SDGCheckBoxLabel: View {
 
-  @Binding private var _model: CheckBoxLabelModel
-
-  private var _action: (String) -> Void
-
-  private enum Status {
-    case `default`
-    case selected
-    case disabled
+  public struct Model: Equatable {
+    public let id: String
+    public let box: SDGCheckBox.Model
+    public let title: String
+    public let isEmphasis: Bool = false
+    public let lineLimit: Int?
+    public let selectedTitleColor: TypoColor
+    
+    public init(
+      id: String,
+      box: SDGCheckBox.Model,
+      isEmphasis: Bool = false,
+      title: String,
+      lineLimit: Int? = nil,
+      selectedTitleColor: TypoColor = .primary300
+    ) {
+      self.id = id
+      self.box = box
+      self.title = title
+      self.lineLimit = lineLimit
+      self.selectedTitleColor = selectedTitleColor
+    }
   }
 
-  private var _labelColor: TypoColor {
-    if _model.isDisabled {
-      return .neutral300
-    }
-
-    switch _model.labelColorOption {
-    case .neutral:
-      return .neutral700
-
-    case .primary:
-      return _model.isSelected ? .primary300 : .neutral400
-    }
-  }
-
+  private var model: Model
+  
+  @Binding private var status: SDGCheckBoxStatus
+  
+  private var onSelect: (String) -> Void
+  
   public init(
-    model: Binding<CheckBoxLabelModel>,
-    action: @escaping (String) -> Void
+    model: Model,
+    status: Binding<SDGCheckBoxStatus>,
+    onSelect: @escaping (String) -> Void
   ) {
-    self.__model = model
-    self._action = action
+    self.model = model
+    self._status = status
+    self.onSelect = onSelect
   }
 
   public var body: some View {
     Button {
-      _action(_model.id)
+      onSelect(model.id)
     } label: {
       HStack(spacing: 8) {
-//        SDGCheckBox(
-//          isSelected: _model.isSelected,
-//          size: .medim
-//        )
+        SDGCheckBox(
+          model: model.box,
+          status: $status
+        )
 
-        Text(_model.title)
+        Text(model.title)
           .typo(
-            _model.type == .normal ? .body1_R : .body1_SB,
-            _labelColor
+            model.isEmphasis ? .body1_SB : .body1_R,
+            status == .selected ? model.selectedTitleColor :
+            status == .disabled ? .neutral300 : .neutral700
           )
-          .lineLimit(_model.lineLimit)
+          .lineLimit(model.lineLimit)
           .multilineTextAlignment(.leading)
           .fixedSize(horizontal: false, vertical: true)
           .frame(maxWidth: .infinity, alignment: .leading)
       }
     }
     .buttonStyle(NoTapAnimationButtonStyle())
-    .disabled(_model.isDisabled)
+    .disabled(status == .disabled)
   }
 }
 
 struct SDGCheckBoxLabel_Wrapper: View {
-  @State var items: [CheckBoxLabelModel] = [
-    CheckBoxLabelModel(
-      id: "simple1",
-      labelColorOption: .neutral,
-      type: .normal,
-      title: "Simple Item 1",
-      isSelected: false,
-      isDisabled: false
-    ),
-    CheckBoxLabelModel(
-      id: "simple2",
-      labelColorOption: .neutral,
-      type: .normal,
-      title: "Simple Item 2",
-      isSelected: true,
-      isDisabled: false
-    ),
-    CheckBoxLabelModel(
-      id: "simple3",
-      labelColorOption: .neutral,
-      type: .normal,
-      title: "Simple Item 3",
-      isSelected: false,
-      isDisabled: true
-    ),
-
-    CheckBoxLabelModel(
-      id: "simple4",
-      labelColorOption: .primary,
-      type: .empha,
-      title: "Simple Item 4",
-      isSelected: false,
-      isDisabled: false
-    ),
-    CheckBoxLabelModel(
-      id: "simple5",
-      labelColorOption: .primary,
-      type: .empha,
-      title: "Simple Item 5",
-      isSelected: true,
-      isDisabled: false
-    ),
-    CheckBoxLabelModel(
-      id: "simple6",
-      labelColorOption: .primary,
-      type: .empha,
-      title: "Simple Item 6",
-      isSelected: false,
-      isDisabled: true
-    )
-  ]
 
   var body: some View {
-    List {
-      ForEach(items.indices, id: \.self) { index in
-        SDGCheckBoxLabel(model: $items[index], action: { _ in })
-      }
+    VStack {
+      SDGCheckBoxLabel(
+        model: SDGCheckBoxLabel.Model(
+          id: UUID().uuidString,
+          box: SDGCheckBox.Model(size: .medim),
+          title: "옵션"
+        ),
+        status: .constant(.default),
+        onSelect: { _ in }
+      )
+      
+      SDGCheckBoxLabel(
+        model: SDGCheckBoxLabel.Model(
+          id: UUID().uuidString,
+          box: SDGCheckBox.Model(size: .medim),
+          title: "옵션"
+        ),
+        status: .constant(.selected),
+        onSelect: { _ in }
+      )
+      
+      SDGCheckBoxLabel(
+        model: SDGCheckBoxLabel.Model(
+          id: UUID().uuidString,
+          box: SDGCheckBox.Model(size: .medim),
+          title: "옵션"
+        ),
+        status: .constant(.disabled),
+        onSelect: { _ in }
+      )
+      
+      SDGCheckBoxLabel(
+        model: SDGCheckBoxLabel.Model(
+          id: UUID().uuidString,
+          box: SDGCheckBox.Model(size: .medim),
+          isEmphasis: true,
+          title: "옵션"
+        ),
+        status: .constant(.default),
+        onSelect: { _ in }
+      )
+      
+      SDGCheckBoxLabel(
+        model: SDGCheckBoxLabel.Model(
+          id: UUID().uuidString,
+          box: SDGCheckBox.Model(size: .medim),
+          isEmphasis: true,
+          title: "옵션"
+        ),
+        status: .constant(.selected),
+        onSelect: { _ in }
+      )
+      
+      SDGCheckBoxLabel(
+        model: SDGCheckBoxLabel.Model(
+          id: UUID().uuidString,
+          box: SDGCheckBox.Model(size: .medim),
+          isEmphasis: true,
+          title: "옵션"
+        ),
+        status: .constant(.disabled),
+        onSelect: { _ in }
+      )
     }
   }
 }
