@@ -8,25 +8,19 @@
 import SwiftUI
 
 public struct SDGCheckOption: View {
-  public enum CheckState: Equatable {
-    case `default`
-    case selected
-    case disabled
-  }
-  
   public enum CheckType: Equatable {
     case solid
     case line
   }
   
-  @Binding private var state: CheckState
+  @Binding private var state: SDGCheckOptionStatus
   
   private var type: CheckType
   
   private var selected: (() -> ())
   
   public init(
-    state: Binding<CheckState>,
+    state: Binding<SDGCheckOptionStatus>,
     type: CheckType,
     selected: @escaping (() -> ())
   ) {
@@ -42,14 +36,18 @@ public struct SDGCheckOption: View {
       switch type {
       case .solid:
         Image(.icCommonCheckS)
+          .resizable()
+          .renderingMode(.template)
           .frame(width: 16, height: 16, alignment: .center)
           .background(state == .selected ? .primary300 : .neutral200)
-          .tint(.neutral0)
+          .foregroundStyle(.neutral0)
           .clipShape(Circle())
         
       case .line:
         ZStack {
           Image(.icCommonCheckS)
+            .resizable()
+            .renderingMode(.template)
             .frame(width: 16, height: 16, alignment: .center)
             .background(.clear)
             .tint(state == .selected ? .primary300 : .neutral350)
