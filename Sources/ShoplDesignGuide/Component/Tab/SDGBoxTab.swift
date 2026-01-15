@@ -85,8 +85,8 @@ public struct SDGBoxTab: View {
   
   @ViewBuilder
   private func tabContent(model: Model, isSelected: Bool) -> some View {
-    let titleColor: TypoColor = isSelected ? .neutral700 : .neutral300
-    let subtitleColor: TypoColor = isSelected ? .neutral500 : .neutral300
+    let titleColor: SDG.Color = isSelected ? .neutral700 : .neutral300
+    let subtitleColor: SDG.Color = isSelected ? .neutral500 : .neutral300
     
     VStack(spacing: 2) {
       Text(model.title)
@@ -101,7 +101,7 @@ public struct SDGBoxTab: View {
   }
   
   @ViewBuilder
-  private func subtitleRow(item: String, count: Int, color: TypoColor) -> some View {
+  private func subtitleRow(item: String, count: Int, color: SDG.Color) -> some View {
     HStack(spacing: 0) {
       Text(item)
         .typo(.body3_R, color)

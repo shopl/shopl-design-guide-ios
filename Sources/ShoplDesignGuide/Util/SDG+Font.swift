@@ -1,5 +1,5 @@
 //
-//  SDGFont.swift
+//  SDG+Font.swift
 //  ShoplDesignGuide
 //
 //  Created by Dino on 11/27/25.
@@ -7,12 +7,11 @@
 //
 
 import SwiftUI
-import UIKit
 
-public typealias SDGFonts = ShoplDesignGuideFontFamily
+typealias SDGFonts = ShoplDesignGuideFontFamily
 
-public extension Font {
-  static func system(size: CGFloat, weight: Weight = .regular) -> Font {
+extension SDG.Font {
+  static func asset(weight: SwiftUI.Font.Weight) -> ShoplDesignGuideFontConvertible {
     
     let isJapanese = UserDefaults.standard.string(forKey: "language") == "ja"
     
@@ -46,6 +45,12 @@ public extension Font {
       }
     }
     
-    return targetFont.swiftUIFont(size: size)
+    return targetFont
+  }
+}
+
+public extension Font {
+  static func system(size: CGFloat, weight: Weight = .regular) -> Font {
+    return SDG.Font.asset(weight: weight).swiftUIFont(size: size)
   }
 }

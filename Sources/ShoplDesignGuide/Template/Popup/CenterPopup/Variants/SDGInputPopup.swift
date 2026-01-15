@@ -77,7 +77,7 @@ public struct SDGInputPopup: View {
               type: .solid,
               text: input,
               placeHolder: placeholder,
-              backgroundColor: TypoColor.neutral50.color,
+              backgroundColor: SDG.Color.neutral50.color,
               maxCharacterCount: maxLength,
               isFocused: .constant(false),
               inputViewHeight: 104,

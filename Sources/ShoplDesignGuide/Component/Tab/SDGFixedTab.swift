@@ -48,7 +48,7 @@ public struct SDGFixedTab: View {
           id: \.1.id
         ) { index, model in
           
-          var selectedColor: TypoColor {
+          var selectedColor: SDG.Color {
             return index == _selectedIndex ? .neutral700 : .neutral350
           }
           

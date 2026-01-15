@@ -15,7 +15,7 @@ public struct SDGCheckBoxLabel: View {
     public let title: String
     public let isEmphasis: Bool = false
     public let lineLimit: Int?
-    public let selectedTitleColor: TypoColor
+    public let selectedTitleColor: SDG.Color
     
     public init(
       id: String,
@@ -23,7 +23,7 @@ public struct SDGCheckBoxLabel: View {
       isEmphasis: Bool = false,
       title: String,
       lineLimit: Int? = nil,
-      selectedTitleColor: TypoColor = .primary300
+      selectedTitleColor: SDG.Color = .primary300
     ) {
       self.id = id
       self.box = box

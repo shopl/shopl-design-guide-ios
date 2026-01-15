@@ -11,7 +11,7 @@ import SwiftUI
 public struct SDGPopupBodyText: View {
   
   let bodyText: String
-  let color: TypoColor
+  let color: SDG.Color
   let alignment: Alignment
   let labelWeight: LabelWeight
   
@@ -19,7 +19,7 @@ public struct SDGPopupBodyText: View {
     case R
     case SB
     
-    var typo: Typography {
+    var typo: SDG.Typography {
       switch self {
       case .R:
         return .body1_R
@@ -29,7 +29,7 @@ public struct SDGPopupBodyText: View {
     }
   }
   
-  public init(bodyText: String, labelWeight: LabelWeight, color: TypoColor, alignment: Alignment) {
+  public init(bodyText: String, labelWeight: LabelWeight, color: SDG.Color, alignment: Alignment) {
     self.bodyText = bodyText
     self.labelWeight = labelWeight
     self.color = color
