@@ -35,17 +35,13 @@ public struct SDGCheckBoxLabel: View {
 
   private var model: Model
   
-  @Binding private var status: SDGCheckBoxStatus
-  
   private var onSelect: (String) -> Void
   
   public init(
     model: Model,
-    status: Binding<SDGCheckBoxStatus>,
     onSelect: @escaping (String) -> Void
   ) {
     self.model = model
-    self._status = status
     self.onSelect = onSelect
   }
 
@@ -56,14 +52,13 @@ public struct SDGCheckBoxLabel: View {
       HStack(spacing: 8) {
         SDGCheckBox(
           model: model.box,
-          status: $status
         )
 
         Text(model.title)
           .typo(
             model.isEmphasis ? .body1_SB : .body1_R,
-            status == .selected ? model.selectedTitleColor :
-            status == .disabled ? .neutral300 : .neutral700
+            model.box.status == .selected ? model.selectedTitleColor :
+              model.box.status == .disabled ? .neutral300 : .neutral700
           )
           .lineLimit(model.lineLimit)
           .multilineTextAlignment(.leading)
@@ -72,7 +67,7 @@ public struct SDGCheckBoxLabel: View {
       }
     }
     .buttonStyle(NoTapAnimationButtonStyle())
-    .disabled(status == .disabled)
+    .disabled(model.box.status == .disabled)
   }
 }
 
@@ -83,63 +78,75 @@ struct SDGCheckBoxLabel_Wrapper: View {
       SDGCheckBoxLabel(
         model: SDGCheckBoxLabel.Model(
           id: UUID().uuidString,
-          box: SDGCheckBox.Model(size: .medim),
+          box: SDGCheckBox.Model(
+            size: .medim,
+            status: .default
+          ),
           title: "옵션"
         ),
-        status: .constant(.default),
         onSelect: { _ in }
       )
       
       SDGCheckBoxLabel(
         model: SDGCheckBoxLabel.Model(
           id: UUID().uuidString,
-          box: SDGCheckBox.Model(size: .medim),
+          box: SDGCheckBox.Model(
+            size: .medim,
+            status: .selected
+          ),
           title: "옵션"
         ),
-        status: .constant(.selected),
         onSelect: { _ in }
       )
       
       SDGCheckBoxLabel(
         model: SDGCheckBoxLabel.Model(
           id: UUID().uuidString,
-          box: SDGCheckBox.Model(size: .medim),
+          box: SDGCheckBox.Model(
+            size: .medim,
+            status: .disabled
+          ),
           title: "옵션"
         ),
-        status: .constant(.disabled),
         onSelect: { _ in }
       )
       
       SDGCheckBoxLabel(
         model: SDGCheckBoxLabel.Model(
           id: UUID().uuidString,
-          box: SDGCheckBox.Model(size: .medim),
+          box: SDGCheckBox.Model(
+            size: .medim,
+            status: .default
+          ),
           isEmphasis: true,
           title: "옵션"
         ),
-        status: .constant(.default),
         onSelect: { _ in }
       )
       
       SDGCheckBoxLabel(
         model: SDGCheckBoxLabel.Model(
           id: UUID().uuidString,
-          box: SDGCheckBox.Model(size: .medim),
+          box: SDGCheckBox.Model(
+            size: .medim,
+            status: .selected
+          ),
           isEmphasis: true,
           title: "옵션"
         ),
-        status: .constant(.selected),
         onSelect: { _ in }
       )
       
       SDGCheckBoxLabel(
         model: SDGCheckBoxLabel.Model(
           id: UUID().uuidString,
-          box: SDGCheckBox.Model(size: .medim),
+          box: SDGCheckBox.Model(
+            size: .medim,
+            status: .disabled
+          ),
           isEmphasis: true,
           title: "옵션"
         ),
-        status: .constant(.disabled),
         onSelect: { _ in }
       )
     }

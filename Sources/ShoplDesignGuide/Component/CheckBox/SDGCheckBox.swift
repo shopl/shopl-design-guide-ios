@@ -23,25 +23,26 @@ public struct SDGCheckBox: View {
   public struct Model: Equatable {
     public let size: Size
     public let selectedColor: Color
+    public let status: SDGCheckBoxStatus
     
-    public init(size: Size, selectedColor: Color = .primary300) {
+    public init(
+      size: Size, selectedColor: Color = .primary300, status: SDGCheckBoxStatus
+    ) {
       self.size = size
       self.selectedColor = selectedColor
+      self.status = status
     }
   }
   
   private let model: Model
-  @Binding private var status: SDGCheckBoxStatus
   
   private var onSelect: (() -> ())?
   
   public init(
     model: Model,
-    status: Binding<SDGCheckBoxStatus>,
     onSelect: (() -> ())? = nil
   ) {
     self.model = model
-    self._status = status
     self.onSelect = onSelect
   }
   
@@ -55,8 +56,8 @@ public struct SDGCheckBox: View {
           .frame(width: model.size.value, height: model.size.value)
           .foregroundColor(.neutral0)
       }
-      .background(status == .selected ? model.selectedColor : .neutral200)
-      .applyIf(status == .disabled) {
+      .background(model.status == .selected ? model.selectedColor : .neutral200)
+      .applyIf(model.status == .disabled) {
         $0.background(.neutral200)
       }
       .cornerRadius(4)
@@ -70,45 +71,37 @@ struct CheckBox_Multi_Preview: PreviewProvider {
     VStack {
       HStack {
         SDGCheckBox(
-          model: .init(size: .large),
-          status: .constant(.default)
+          model: .init(size: .large, status: .default)
         )
         
         SDGCheckBox(
-          model: .init(size: .large),
-          status: .constant(.selected)
+          model: .init(size: .large, status: .selected)
         )
         
         SDGCheckBox(
-          model: .init(size: .large, selectedColor: .neutral700),
-          status: .constant(.selected)
+          model: .init(size: .large, status: .selected)
         )
         
         SDGCheckBox(
-          model: .init(size: .large),
-          status: .constant(.disabled)
+          model: .init(size: .large, status: .disabled),
         )
       }
       
       HStack {
         SDGCheckBox(
-          model: .init(size: .medim),
-          status: .constant(.default)
+          model: .init(size: .medim, status: .default)
         )
         
         SDGCheckBox(
-          model: .init(size: .medim),
-          status: .constant(.selected)
+          model: .init(size: .medim, status: .selected)
         )
         
         SDGCheckBox(
-          model: .init(size: .medim, selectedColor: .neutral700),
-          status: .constant(.selected)
+          model: .init(size: .medim, selectedColor: .neutral700, status: .selected)
         )
         
         SDGCheckBox(
-          model: .init(size: .medim),
-          status: .constant(.disabled)
+          model: .init(size: .medim, status: .disabled)
         )
       }
     }
