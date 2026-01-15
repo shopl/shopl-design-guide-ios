@@ -44,7 +44,7 @@ public struct SDGListHeaderLabel: View {
 	  }
 	  
 	  if self.model.isShowDropdownIcon {
-		Image(.icCommonDropdown)
+		Image(sdg: .icCommonDropdown)
 		  .resizable()
 		  .frame(width: 20, height: 20)
 		  .foregroundColor(.neutral700)

@@ -118,7 +118,7 @@ public struct SDGSimpleTextForm: View {
           } label: {
             ZStack {
               
-              Image(.icCommonRefresh)
+              Image(sdg: .icCommonRefresh)
                 .resizable()
                 .foregroundStyle(.neutral400)
                 .frame(width: 24, height: 24)
@@ -197,7 +197,7 @@ struct SDGSimpleTextForm_Wrapper: View {
       
       SDGSimpleTextForm(
         title: "긴 타이틀 긴 타이틀긴 타이틀긴 타이틀 긴 타이틀긴 타이틀긴 타이틀긴 타이틀 긴 타이틀",
-        icon: FormIconModel(image: Image(.icClip), tintColor: .neutral500),
+        icon: FormIconModel(image: Image(sdg: .icClip), tintColor: .neutral500),
         type: .empha,
         searchText: $searchTextFour,
         state: .constant(.error("긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지")),

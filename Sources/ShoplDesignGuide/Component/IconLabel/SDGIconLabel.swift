@@ -14,7 +14,7 @@ public struct SDGIconLabel: View {
     case medium(isBold: Bool)
     case small(isBold: Bool)
     
-    var typoSize: Typography {
+    var typoSize: SDG.Typography {
       switch self {
       case let .large(isBold): return isBold ? .body1_SB : .body1_R
       case let .medium(isBold): return isBold ? .body2_SB : .body2_R
@@ -46,7 +46,7 @@ public struct SDGIconLabel: View {
   private let rightImage: Image?
   private let title: String
   private let imageForegroundColor: Color
-  private let titleColor: TypoColor
+  private let titleColor: SDG.Color
   private let lineLimit: Int?
   private let fullSize: Bool
   
@@ -57,7 +57,7 @@ public struct SDGIconLabel: View {
     rightImage: Image? = nil,
     title: String,
     imageForegroundColor: Color,
-    titleColor: TypoColor,
+    titleColor: SDG.Color,
     lineLimit: Int? = nil,
     fullSize: Bool = false
   ) {
@@ -106,7 +106,7 @@ public struct SDGIconLabel: View {
   VStack {
     SDGIconLabel(
       size: .medium(isBold: false),
-      leftImage: Image(.icCommonWarning),
+      leftImage: Image(sdg: .icCommonWarning),
       title: "이 직원에 대한 출퇴근 현황 조회 권한이 없습니다.",
       imageForegroundColor: .neutral400,
       titleColor: .neutral400,
@@ -116,7 +116,7 @@ public struct SDGIconLabel: View {
     
     SDGIconLabel(
       size: .medium(isBold: false),
-      leftImage: Image(.icCommonWarning),
+      leftImage: Image(sdg: .icCommonWarning),
       title: "선택한 항목 중, 스케줄 배정 규칙에 어긋난 스케줄 변경 신청 건이 있습니다.",
       imageForegroundColor: .red300,
       titleColor: .red300,
@@ -125,7 +125,7 @@ public struct SDGIconLabel: View {
     
     SDGIconLabel(
       size: .medium(isBold: false),
-      rightImage: Image(.icView),
+      rightImage: Image(sdg: .icView),
       title: "고정",
       imageForegroundColor: .neutral400,
       titleColor: .neutral400,
@@ -136,7 +136,7 @@ public struct SDGIconLabel: View {
     SDGIconLabel(
       size: .large(isBold: false),
       spacing: .four,
-      leftImage: Image(.icCommonWarning),
+      leftImage: Image(sdg: .icCommonWarning),
       title: "텍스트가 길어질 경우 전체 노출이 필요한 경우는 줄바꿈이 될텐데 그랬을 때는 아이콘의 위치는 상단에 고정시킵니다.",
       imageForegroundColor: .red300,
       titleColor: .red300,

@@ -83,7 +83,7 @@ public struct SDGAttachmentElement: View {
       thumbnailImage(image: image, url: url)
       
     case .document:
-      iconView(Image(.icClip))
+      iconView(Image(sdg: .icClip))
       
     case let .video(thumbnail, url):
       thumbnailImage(image: thumbnail, url: url)
@@ -93,7 +93,7 @@ public struct SDGAttachmentElement: View {
   @ViewBuilder
   private var playIconIfNeeded: some View {
     if case .video = model.type {
-      iconView(Image(.icCommonPlay))
+      iconView(Image(sdg: .icCommonPlay))
     }
   }
   
@@ -139,7 +139,7 @@ private extension Image {
     
     SDGAttachmentElement(
       model: .init(
-        type: .photo(image: Image(.avatarEmpty)),
+        type: .photo(image: Image(sdg: .avatarEmpty)),
         id: UUID().uuidString,
         name: "이미지파일.jpg",
         size: "4MB"
@@ -159,7 +159,7 @@ private extension Image {
     
     SDGAttachmentElement(
       model: .init(
-        type: .video(thumbnail: Image(.profileSmall)),
+        type: .video(thumbnail: Image(sdg: .profileSmall)),
         id: UUID().uuidString,
         name: "비디오파일.jpg",
         size: "4MB"
@@ -169,7 +169,7 @@ private extension Image {
     
     SDGAttachmentElement(
       model: .init(
-        type: .photo(image: Image(.avatarEmpty)),
+        type: .photo(image: Image(sdg: .avatarEmpty)),
         id: UUID().uuidString,
         name: "이미지파일 제목이 길어지면 아아아아아아아아아아아아아아아아아아아아아아어ㅏ어어엉아아ㅏ줄임말로.jpg",
         size: "4MB"
@@ -190,7 +190,7 @@ private extension Image {
     
     SDGAttachmentElement(
       model: .init(
-        type: .video(thumbnail: Image(.profileSmall)),
+        type: .video(thumbnail: Image(sdg: .profileSmall)),
         id: UUID().uuidString,
         name: "비디오파일 제목이 길어지면 아아아아아아아아아아아아아아아아아아아아아아어ㅏ어어엉아아ㅏ줄임말로.mov",
         size: "4MB"

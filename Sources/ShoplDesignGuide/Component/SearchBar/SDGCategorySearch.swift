@@ -58,7 +58,7 @@ public struct SDGCategorySearch: View {
           iconModel.icon
             .foregroundStyle(.neutral700)
           
-          Image(.icCommonDropdown)
+          Image(sdg: .icCommonDropdown)
             .foregroundStyle(.neutral700)
         }
       }
@@ -79,7 +79,7 @@ public struct SDGCategorySearch: View {
           _clearAllButtonTapped()
           
         } label: {
-          Image(.icInputDelete)
+          Image(sdg: .icInputDelete)
             .resizable()
             .frame(width: 18, height: 18)
         }
@@ -101,7 +101,7 @@ public struct SDGCategorySearch: View {
         searchText: .constant(""),
         placeholder: .constant("placeholder"),
         isFocused: .constant(false),
-        iconModel: .constant(.init(id: "", label: "", icon: Image(.icCommonDistributor))),
+        iconModel: .constant(.init(id: "", label: "", icon: Image(sdg: .icCommonDistributor))),
         _searchTapped: { },
         _showSearchCategoryPopup: { },
         _clearAllButtonTapped: { }

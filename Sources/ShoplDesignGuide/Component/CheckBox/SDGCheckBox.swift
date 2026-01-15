@@ -51,7 +51,7 @@ public struct SDGCheckBox: View {
       onSelect?()
     } label: {
       HStack {
-        Image(.icCommonCheckS)
+        Image(sdg: .icCommonCheckS)
           .resizable()
           .frame(width: model.size.value, height: model.size.value)
           .foregroundColor(.neutral0)

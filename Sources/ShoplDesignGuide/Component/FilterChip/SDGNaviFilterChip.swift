@@ -82,7 +82,7 @@ public struct SDGNaviFilterChip: View {
       refresh()
     } label: {
       ZStack {
-        Image(.icCommonRefresh)
+        Image(sdg: .icCommonRefresh)
           .resizable()
           .renderingMode(.template)
           .foregroundStyle(.neutral400)
@@ -111,7 +111,7 @@ public struct SDGNaviFilterChip: View {
             
           } label: {
             ZStack {
-              Image(.icCommonX)
+              Image(sdg: .icCommonX)
                 .resizable()
                 .renderingMode(.template)
                 .foregroundStyle(.neutral300)

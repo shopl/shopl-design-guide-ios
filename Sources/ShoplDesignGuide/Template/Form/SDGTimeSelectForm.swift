@@ -106,7 +106,7 @@ public struct SDGTimeSelectForm: View {
           } label: {
             ZStack {
               
-              Image(.icCommonRefresh)
+              Image(sdg: .icCommonRefresh)
                 .resizable()
                 .foregroundStyle(.neutral400)
                 .frame(width: 24, height: 24)
@@ -140,7 +140,7 @@ public struct SDGTimeSelectForm: View {
   VStack {
     SDGTimeSelectForm(
       title: "타이틀",
-      icon: .init(image: Image(.avatarEmpty), tintColor: .neutral500),
+      icon: .init(image: Image(sdg: .avatarEmpty), tintColor: .neutral500),
       type: .empha,
       status: .constant(.default),
       startTime: nil,
@@ -153,7 +153,7 @@ public struct SDGTimeSelectForm: View {
     
     SDGTimeSelectForm(
       title: "타이틀",
-      icon: .init(image: Image(.avatarEmpty), tintColor: .neutral500),
+      icon: .init(image: Image(sdg: .avatarEmpty), tintColor: .neutral500),
       type: .empha,
       status: .constant(.default),
       startTime: "1:11",
@@ -166,7 +166,7 @@ public struct SDGTimeSelectForm: View {
     
     SDGTimeSelectForm(
       title: "타이틀",
-      icon: .init(image: Image(.avatarEmpty), tintColor: .neutral500),
+      icon: .init(image: Image(sdg: .avatarEmpty), tintColor: .neutral500),
       type: .empha,
       status: .constant(.error(" 시간입력 오류  시간입력 오류 시간입력 오류 시간입력 오류 시간입력 오류 시간입력 오류 ")),
       startTime: "1:11",

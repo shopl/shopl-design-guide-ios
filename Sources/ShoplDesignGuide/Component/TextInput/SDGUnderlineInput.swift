@@ -121,7 +121,7 @@ public struct SDGUnderlineInput: View {
         Button {
           _text = ""
         } label: {
-          Image(.icInputDelete)
+          Image(sdg: .icInputDelete)
             .resizable()
             .frame(width: 18, height: 18)
         }
@@ -134,11 +134,11 @@ public struct SDGUnderlineInput: View {
           } label: {
             
             if _showText {
-              Image(.icView)
+              Image(sdg: .icView)
                 .resizable()
                 .frame(width: 20, height: 20)
             } else {
-              Image(.icHide)
+              Image(sdg: .icHide)
                 .resizable()
                 .frame(width: 20, height: 20)
             }
@@ -163,7 +163,7 @@ public struct SDGUnderlineInput: View {
           switch validateMessage.status {
             case .solved:
               HStack(spacing: 4) {
-                Image(.icCommonCheckS)
+                Image(sdg: .icCommonCheckS)
                   .resizable()
                   .frame(width: 14, height: 14)
                   .foregroundColor(.primary300)
@@ -178,7 +178,7 @@ public struct SDGUnderlineInput: View {
               }
             case .notSolved:
               HStack(spacing: 4) {
-                Image(.icCommonX)
+                Image(sdg: .icCommonX)
                   .resizable()
                   .frame(width: 14, height: 14)
                   .foregroundColor(.red300)

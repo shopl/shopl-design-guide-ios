@@ -114,7 +114,7 @@ public struct SDGIconHeader: View {
     SDGIconHeader(
       type: .box,
       title: .init(title: "TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle", count: 1, isShowDropdownIcon: true),
-      icons: [.init(id: UUID().uuidString, icon: Image(.icClip), tintColor: .neutral400)],
+      icons: [.init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400)],
       selectedIcon: { _ in }
     )
     
@@ -122,8 +122,8 @@ public struct SDGIconHeader: View {
       type: .box,
       title: .init(title: "Title", count: 1, isShowDropdownIcon: true),
       icons: [
-        .init(id: UUID().uuidString, icon: Image(.icClip), tintColor: .neutral400),
-        .init(id: UUID().uuidString, icon: Image(.icClip), tintColor: .neutral400)
+        .init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400),
+        .init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400)
       ],
       selectedIcon: { _ in }
     )
@@ -132,9 +132,9 @@ public struct SDGIconHeader: View {
       type: .box,
       title: .init(title: "Title", count: 1, isShowDropdownIcon: true),
       icons: [
-        .init(id: UUID().uuidString, icon: Image(.icClip), tintColor: .neutral400),
-        .init(id: UUID().uuidString, icon: Image(.icClip), tintColor: .neutral400),
-        .init(id: UUID().uuidString, icon: Image(.icClip), tintColor: .neutral400)
+        .init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400),
+        .init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400),
+        .init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400)
       ],
       selectedIcon: { _ in }
     )
@@ -142,7 +142,7 @@ public struct SDGIconHeader: View {
     SDGIconHeader(
       type: .normal,
       title: .init(title: "Title", count: 1, isShowDropdownIcon: true),
-      icons: [.init(id: UUID().uuidString, icon: Image(.icClip), tintColor: .neutral400)],
+      icons: [.init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400)],
       selectedIcon: { _ in }
     )
     
@@ -150,8 +150,8 @@ public struct SDGIconHeader: View {
       type: .normal,
       title: .init(title: "Title", count: 1, isShowDropdownIcon: true),
       icons: [
-        .init(id: UUID().uuidString, icon: Image(.icClip), tintColor: .neutral400),
-        .init(id: UUID().uuidString, icon: Image(.icClip), tintColor: .neutral400)
+        .init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400),
+        .init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400)
       ],
       selectedIcon: { _ in }
     )
@@ -160,9 +160,9 @@ public struct SDGIconHeader: View {
       type: .normal,
       title: .init(title: "Title", count: 1, isShowDropdownIcon: true),
       icons: [
-        .init(id: UUID().uuidString, icon: Image(.icClip), tintColor: .neutral400),
-        .init(id: UUID().uuidString, icon: Image(.icClip), tintColor: .neutral400),
-        .init(id: UUID().uuidString, icon: Image(.icClip), tintColor: .neutral400)
+        .init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400),
+        .init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400),
+        .init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400)
       ],
       selectedIcon: { _ in }
     )

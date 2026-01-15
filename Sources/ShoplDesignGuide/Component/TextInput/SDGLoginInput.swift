@@ -124,7 +124,7 @@ public struct SDGLoginInput: View {
               isFieldFocused = false
               
             } label: {
-              Image(.icInputDelete)
+              Image(sdg: .icInputDelete)
                 .resizable()
                 .frame(width: 18, height: 18)
             }
@@ -136,7 +136,7 @@ public struct SDGLoginInput: View {
               isPasswordVisiable.toggle()
               
             } label: {
-              Image(isPasswordVisiable ? .icView : .icHide)
+              Image(sdg: isPasswordVisiable ? .icView : .icHide)
                 .renderingMode(.template)
                 .resizable()
                 .foregroundStyle(.neutral400)
@@ -178,7 +178,7 @@ struct SDGLoginInput_Preview: PreviewProvider {
         isFieldFocused: $isFieldFocused,
         placeholder: "입력",
         icon: .init(
-          iamge: Image(.icClip),
+          iamge: Image(sdg: .icClip),
           tintColor: .neutral500
         )
       )
@@ -189,7 +189,7 @@ struct SDGLoginInput_Preview: PreviewProvider {
         placeholder: "입력",
         errorMessage: .constant("에러ㅔㅇㅇ러ㅔ렁렝렁레얼엘"),
         icon: .init(
-          iamge: Image(.icClip),
+          iamge: Image(sdg: .icClip),
           tintColor: .neutral500
         )
       )
@@ -199,7 +199,7 @@ struct SDGLoginInput_Preview: PreviewProvider {
         isFieldFocused: $isFieldFocused,
         placeholder: "입력",
         icon: .init(
-          iamge: Image(.icClip),
+          iamge: Image(sdg: .icClip),
           tintColor: .neutral500
         )
       )
@@ -209,7 +209,7 @@ struct SDGLoginInput_Preview: PreviewProvider {
         isFieldFocused: $isFieldFocused,
         placeholder: "입력",
         icon: .init(
-          iamge: Image(.icClip),
+          iamge: Image(sdg: .icClip),
           tintColor: .neutral500
         ),
         isPasswordVisiable: .constant(true),
@@ -221,7 +221,7 @@ struct SDGLoginInput_Preview: PreviewProvider {
         isFieldFocused: $isFieldFocused,
         placeholder: "입력",
         icon: .init(
-          iamge: Image(.icClip),
+          iamge: Image(sdg: .icClip),
           tintColor: .neutral500
         ),
         isPasswordVisiable: .constant(false),

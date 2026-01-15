@@ -37,7 +37,7 @@ public struct SDGCategoryNavi: View {
         Button {
           onDismiss()
         } label: {
-          Image(.icNaviBack)
+          Image(sdg: .icNaviBack)
             .frame(width: 40, height: 40)
             .foregroundStyle(tintColor ?? .neutral700)
         }
@@ -56,7 +56,7 @@ public struct SDGCategoryNavi: View {
               .lineLimit(1)
               .truncationMode(.tail)
             
-            Image(.icCommonDropdown)
+            Image(sdg: .icCommonDropdown)
               .resizable()
               .foregroundStyle(.neutral700)
               .frame(width: 20, height: 20)
@@ -102,7 +102,7 @@ public struct SDGCategoryNavi: View {
         Button {
           onDismiss()
         } label: {
-          Image(.icNaviClose)
+          Image(sdg: .icNaviClose)
             .frame(width: 40, height: 40)
             .foregroundColor(tintColor ?? .neutral700)
         }
@@ -131,7 +131,7 @@ public struct SDGCategoryNavi: View {
         backgroundColor: .neutral50,
         buttons: [
           .init(
-            image: Image(.icNaviFilter),
+            image: Image(sdg: .icNaviFilter),
             tintColor: .neutral700
           )
         ],
@@ -148,7 +148,7 @@ public struct SDGCategoryNavi: View {
         backgroundColor: .neutral50,
         buttons: [
           .init(
-            image: Image(.icNaviFilter),
+            image: Image(sdg: .icNaviFilter),
             tintColor: .neutral700
           )
         ],

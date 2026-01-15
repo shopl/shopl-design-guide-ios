@@ -56,7 +56,7 @@ public struct SDGDropdown: View {
       .frame(maxWidth: .infinity, alignment: .leading)
       .lineLimit(1)
 
-      Image(.icCommonDropdown)
+      Image(sdg: .icCommonDropdown)
         .resizable()
         .frame(width: 20, height: 20)
         .foregroundColor(_iconColor)

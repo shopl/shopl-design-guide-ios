@@ -17,7 +17,7 @@ private let dsBundle = Bundle(for: DesignSystemBundleAnchor.self)
 public enum SDG {
     
     // MARK: - Image Resource Struct
-    public struct Image: Sendable {
+    public struct Image: Equatable {
         public let name: String
         public let bundle: Bundle
         
@@ -28,7 +28,7 @@ public enum SDG {
     }
 
     // MARK: - Color Resource Struct
-    public struct Color: Sendable {
+    public struct Color: Equatable {
         public let name: String
         public let bundle: Bundle
         
@@ -36,6 +36,32 @@ public enum SDG {
             self.name = name
             self.bundle = bundle
         }
+    }
+    
+    public struct Font: Equatable {
+        private init() { }
+    }
+}
+
+// MARK: - Conversion Helpers
+
+public extension SDG.Image {
+    var image: SwiftUI.Image {
+        SwiftUI.Image(sdg: self)
+    }
+    
+    var uiImage: UIKit.UIImage {
+        UIKit.UIImage(sdg: self)
+    }
+}
+
+public extension SDG.Color {
+    var color: SwiftUI.Color {
+        SwiftUI.Color(self)
+    }
+    
+    var uiColor: UIKit.UIColor {
+        UIKit.UIColor(sdg: self)
     }
 }
 
@@ -84,15 +110,15 @@ public extension SDG.Image {
 }
 
 public extension SwiftUI.Image {
-    /// 사용법: Image(sdg: .iconName))
+    /// 사용법: Image(sdg: .iconName)
     init(sdg resource: SDG.Image) {
         self.init(resource.name, bundle: resource.bundle)
     }
 }
 
 public extension UIImage {
-    /// 사용법: UIImage(resource: SDG.Image.iconName)
-    convenience init(resource: SDG.Image) {
+    /// 사용법: UIImage(sdg: .iconName)
+    convenience init(sdg resource: SDG.Image) {
         self.init(named: resource.name, in: resource.bundle, compatibleWith: nil)!
     }
 }
@@ -135,8 +161,8 @@ public extension SDG.Color {
 }
 
 public extension SwiftUI.Color {
-    /// 사용법: Color(SDG.Color.neutral100)
-    init(_ resource: SDG.Color) {
+    /// 내부 전용 생성자
+    internal init(_ resource: SDG.Color) {
         self.init(resource.name, bundle: resource.bundle)
     }
 
@@ -175,43 +201,43 @@ public extension SwiftUI.Color {
 }
 
 public extension UIColor {
-    /// 사용법: UIColor(resource: SDG.Color.neutral100)
-    convenience init(resource: SDG.Color) {
+    /// 내부 전용 생성자
+    internal convenience init(sdg resource: SDG.Color) {
         self.init(named: resource.name, in: resource.bundle, compatibleWith: nil)!
     }
 
     /// 사용법: UIColor.neutral100
-    static let primary200 = UIColor(resource: SDG.Color.primary200)
-    static let primary300 = UIColor(resource: SDG.Color.primary300)
-    static let primary400 = UIColor(resource: SDG.Color.primary400)
-    static let primary50 = UIColor(resource: SDG.Color.primary50)
-    static let secondary200 = UIColor(resource: SDG.Color.secondary200)
-    static let secondary300 = UIColor(resource: SDG.Color.secondary300)
-    static let secondary400 = UIColor(resource: SDG.Color.secondary400)
-    static let secondary50 = UIColor(resource: SDG.Color.secondary50)
-    static let neutral0 = UIColor(resource: SDG.Color.neutral0)
-    static let neutral100 = UIColor(resource: SDG.Color.neutral100)
-    static let neutral150 = UIColor(resource: SDG.Color.neutral150)
-    static let neutral200 = UIColor(resource: SDG.Color.neutral200)
-    static let neutral250 = UIColor(resource: SDG.Color.neutral250)
-    static let neutral300 = UIColor(resource: SDG.Color.neutral300)
-    static let neutral350 = UIColor(resource: SDG.Color.neutral350)
-    static let neutral400 = UIColor(resource: SDG.Color.neutral400)
-    static let neutral50 = UIColor(resource: SDG.Color.neutral50)
-    static let neutral500 = UIColor(resource: SDG.Color.neutral500)
-    static let neutral600 = UIColor(resource: SDG.Color.neutral600)
-    static let neutral700 = UIColor(resource: SDG.Color.neutral700)
-    static let neutral900 = UIColor(resource: SDG.Color.neutral900)
-    static let red300 = UIColor(resource: SDG.Color.red300)
-    static let red350 = UIColor(resource: SDG.Color.red350)
-    static let red400 = UIColor(resource: SDG.Color.red400)
-    static let red50 = UIColor(resource: SDG.Color.red50)
-    static let sdgGreen = UIColor(resource: SDG.Color.sdgGreen)
-    static let sdgPurple = UIColor(resource: SDG.Color.sdgPurple)
-    static let sdgYellow = UIColor(resource: SDG.Color.sdgYellow)
-    static let sdgLemon = UIColor(resource: SDG.Color.sdgLemon)
-    static let sdgOrange = UIColor(resource: SDG.Color.sdgOrange)
-    static let sdgSpecialPink = UIColor(resource: SDG.Color.sdgSpecialPink)
+    static let primary200 = UIColor(sdg: SDG.Color.primary200)
+    static let primary300 = UIColor(sdg: SDG.Color.primary300)
+    static let primary400 = UIColor(sdg: SDG.Color.primary400)
+    static let primary50 = UIColor(sdg: SDG.Color.primary50)
+    static let secondary200 = UIColor(sdg: SDG.Color.secondary200)
+    static let secondary300 = UIColor(sdg: SDG.Color.secondary300)
+    static let secondary400 = UIColor(sdg: SDG.Color.secondary400)
+    static let secondary50 = UIColor(sdg: SDG.Color.secondary50)
+    static let neutral0 = UIColor(sdg: SDG.Color.neutral0)
+    static let neutral100 = UIColor(sdg: SDG.Color.neutral100)
+    static let neutral150 = UIColor(sdg: SDG.Color.neutral150)
+    static let neutral200 = UIColor(sdg: SDG.Color.neutral200)
+    static let neutral250 = UIColor(sdg: SDG.Color.neutral250)
+    static let neutral300 = UIColor(sdg: SDG.Color.neutral300)
+    static let neutral350 = UIColor(sdg: SDG.Color.neutral350)
+    static let neutral400 = UIColor(sdg: SDG.Color.neutral400)
+    static let neutral50 = UIColor(sdg: SDG.Color.neutral50)
+    static let neutral500 = UIColor(sdg: SDG.Color.neutral500)
+    static let neutral600 = UIColor(sdg: SDG.Color.neutral600)
+    static let neutral700 = UIColor(sdg: SDG.Color.neutral700)
+    static let neutral900 = UIColor(sdg: SDG.Color.neutral900)
+    static let red300 = UIColor(sdg: SDG.Color.red300)
+    static let red350 = UIColor(sdg: SDG.Color.red350)
+    static let red400 = UIColor(sdg: SDG.Color.red400)
+    static let red50 = UIColor(sdg: SDG.Color.red50)
+    static let sdgGreen = UIColor(sdg: SDG.Color.sdgGreen)
+    static let sdgPurple = UIColor(sdg: SDG.Color.sdgPurple)
+    static let sdgYellow = UIColor(sdg: SDG.Color.sdgYellow)
+    static let sdgLemon = UIColor(sdg: SDG.Color.sdgLemon)
+    static let sdgOrange = UIColor(sdg: SDG.Color.sdgOrange)
+    static let sdgSpecialPink = UIColor(sdg: SDG.Color.sdgSpecialPink)
 }
 
 // MARK: - ShapeStyle Extensions

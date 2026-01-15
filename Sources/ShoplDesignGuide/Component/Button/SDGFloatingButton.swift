@@ -64,7 +64,7 @@ public struct SDGFloatingButton: View {
 #Preview {
   VStack {
     SDGFloatingButton(
-      icon: Image(.icCommonCheckS),
+      icon: Image(sdg: .icCommonCheckS),
       iconTintColor: .neutral0,
       isDisabled: false,
       action: {
@@ -73,7 +73,7 @@ public struct SDGFloatingButton: View {
     )
     
     SDGFloatingButton(
-      icon: Image(.icCommonCheckS),
+      icon: Image(sdg: .icCommonCheckS),
       iconTintColor: .neutral0,
       isDisabled: true,
       action: {
