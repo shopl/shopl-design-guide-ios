@@ -13,18 +13,17 @@ public struct SDGCheckOption: View {
     case line
   }
   
-  @Binding private var state: SDGCheckOptionStatus
-  
+  private var state: SDGCheckOptionStatus
   private var type: CheckType
   
   private var selected: (() -> ())
   
   public init(
-    state: Binding<SDGCheckOptionStatus>,
+    state: SDGCheckOptionStatus,
     type: CheckType,
     selected: @escaping (() -> ())
   ) {
-    self._state = state
+    self.state = state
     self.type = type
     self.selected = selected
   }
@@ -70,7 +69,7 @@ public struct SDGCheckOption: View {
     VStack {
       HStack {
         SDGCheckOption(
-          state: .constant(.default),
+          state: .default,
           type: .solid,
           selected: {
             
@@ -78,7 +77,7 @@ public struct SDGCheckOption: View {
         )
         
         SDGCheckOption(
-          state: .constant(.default),
+          state: .default,
           type: .solid,
           selected: {
             
@@ -86,7 +85,7 @@ public struct SDGCheckOption: View {
         )
         
         SDGCheckOption(
-          state: .constant(.selected),
+          state: .selected,
           type: .solid,
           selected: {
             
@@ -94,7 +93,7 @@ public struct SDGCheckOption: View {
         )
         
         SDGCheckOption(
-          state: .constant(.disabled),
+          state: .disabled,
           type: .solid,
           selected: {
             
@@ -104,7 +103,7 @@ public struct SDGCheckOption: View {
       
       HStack {
         SDGCheckOption(
-          state: .constant(.default),
+          state: .default,
           type: .line,
           selected: {
             
@@ -112,7 +111,7 @@ public struct SDGCheckOption: View {
         )
         
         SDGCheckOption(
-          state: .constant(.default),
+          state: .default,
           type: .line,
           selected: {
             
@@ -120,7 +119,7 @@ public struct SDGCheckOption: View {
         )
         
         SDGCheckOption(
-          state: .constant(.selected),
+          state: .selected,
           type: .line,
           selected: {
             
@@ -128,7 +127,7 @@ public struct SDGCheckOption: View {
         )
         
         SDGCheckOption(
-          state: .constant(.disabled),
+          state: .disabled,
           type: .line,
           selected: {
             

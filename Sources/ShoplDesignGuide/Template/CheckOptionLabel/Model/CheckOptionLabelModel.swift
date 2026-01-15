@@ -20,8 +20,7 @@ public struct CheckOptionLabelModel: Equatable, Identifiable {
   public var isSelectedTitleColorPrimary: Bool
   public var isSelectedImageColorPrimary: Bool
   public var lineLimit: Int?
-  public var isSelected: Bool
-  public var isDisabled: Bool
+  public let status: SDGCheckOptionStatus
   
   public init(
     id: String,
@@ -30,8 +29,7 @@ public struct CheckOptionLabelModel: Equatable, Identifiable {
     isSelectedTitleColorPrimary: Bool = true,
     isSelectedImageColorPrimary: Bool = true,
     lineLimit: Int? = nil,
-    isSelected: Bool,
-    isDisabled: Bool = false
+    status: SDGCheckOptionStatus
   ) {
     self.id = id
     self.size = size
@@ -39,7 +37,6 @@ public struct CheckOptionLabelModel: Equatable, Identifiable {
     self.isSelectedTitleColorPrimary = isSelectedTitleColorPrimary
     self.isSelectedImageColorPrimary = isSelectedImageColorPrimary
     self.lineLimit = lineLimit
-    self.isSelected = isSelected
-    self.isDisabled = isDisabled
+    self.status = status
   }
 }
