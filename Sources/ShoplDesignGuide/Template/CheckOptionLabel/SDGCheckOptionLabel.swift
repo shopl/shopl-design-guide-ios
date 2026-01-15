@@ -13,7 +13,7 @@ public struct CheckOptionLabel: View {
   private var action: (String) -> Void
   
   private var _selectedImageColor: Color {
-    if model.status == .selected {
+    if model.option.status == .selected {
       return model.isSelectedImageColorPrimary ? .primary300 : .neutral700
     }
     
@@ -21,11 +21,11 @@ public struct CheckOptionLabel: View {
   }
   
   private var _labelColor: TypoColor {
-    if model.status == .disabled {
+    if model.option.status == .disabled {
       return .neutral300
     }
     
-    if model.status == .selected {
+    if model.option.status == .selected {
       return model.isSelectedTitleColorPrimary ? .primary300 : .neutral700
     }
     
@@ -46,8 +46,7 @@ public struct CheckOptionLabel: View {
     } label: {
       ZStack(alignment: .topLeading) {
         SDGCheckOption(
-          state: model.status,
-          type: .solid,
+          model: model.option,
           selected: { }
         )
         .padding(.vertical, 1.5)
@@ -65,7 +64,7 @@ public struct CheckOptionLabel: View {
       }
     }
     .buttonStyle(NoTapAnimationButtonStyle())
-    .disabled(model.status == .disabled)
+    .disabled(model.option.status == .disabled)
   }
 }
 
@@ -77,7 +76,7 @@ struct SDGCheckOptionLabel_Wrapper: View {
       title: "Simple Item 1",
       isSelectedTitleColorPrimary: true,
       isSelectedImageColorPrimary: true,
-      status: .default
+      option: .init(status: .default, type: .solid, spec: .medim)
     ),
     CheckOptionLabelModel(
       id: "simple2",
@@ -85,7 +84,7 @@ struct SDGCheckOptionLabel_Wrapper: View {
       title: "Simple Item 2",
       isSelectedTitleColorPrimary: true,
       isSelectedImageColorPrimary: true,
-      status: .selected
+      option: .init(status: .selected, type: .solid, spec: .medim)
     ),
     CheckOptionLabelModel(
       id: "simple3",
@@ -93,7 +92,7 @@ struct SDGCheckOptionLabel_Wrapper: View {
       title: "Simple Item 3",
       isSelectedTitleColorPrimary: true,
       isSelectedImageColorPrimary: true,
-      status: .disabled
+      option: .init(status: .disabled, type: .solid, spec: .medim)
     ),
     
     CheckOptionLabelModel(
@@ -102,7 +101,7 @@ struct SDGCheckOptionLabel_Wrapper: View {
       title: "Simple Item 4",
       isSelectedTitleColorPrimary: true,
       isSelectedImageColorPrimary: true,
-      status: .default
+      option: .init(status: .default, type: .solid, spec: .medim)
     ),
     CheckOptionLabelModel(
       id: "simple5",
@@ -110,7 +109,7 @@ struct SDGCheckOptionLabel_Wrapper: View {
       title: "Simple Item 5",
       isSelectedTitleColorPrimary: true,
       isSelectedImageColorPrimary: true,
-      status: .selected
+      option: .init(status: .selected, type: .solid, spec: .medim)
     ),
     CheckOptionLabelModel(
       id: "simple6",
@@ -118,7 +117,7 @@ struct SDGCheckOptionLabel_Wrapper: View {
       title: "Simple Item 6",
       isSelectedTitleColorPrimary: true,
       isSelectedImageColorPrimary: true,
-      status: .disabled
+      option: .init(status: .disabled, type: .solid, spec: .medim)
     ),
     CheckOptionLabelModel(
       id: "simple6",
@@ -126,7 +125,7 @@ struct SDGCheckOptionLabel_Wrapper: View {
       title: "Simple Item 6",
       isSelectedTitleColorPrimary: false,
       isSelectedImageColorPrimary: true,
-      status: .default
+      option: .init(status: .default, type: .solid, spec: .medim)
     ),
     CheckOptionLabelModel(
       id: "simple6",
@@ -134,7 +133,7 @@ struct SDGCheckOptionLabel_Wrapper: View {
       title: "Simple Item 6",
       isSelectedTitleColorPrimary: false,
       isSelectedImageColorPrimary: true,
-      status: .selected
+      option: .init(status: .selected, type: .solid, spec: .medim)
     ),
     CheckOptionLabelModel(
       id: "simple6",
@@ -142,7 +141,7 @@ struct SDGCheckOptionLabel_Wrapper: View {
       title: "Simple Item 6",
       isSelectedTitleColorPrimary: false,
       isSelectedImageColorPrimary: true,
-      status: .disabled
+      option: .init(status: .disabled, type: .solid, spec: .medim)
     ),
     CheckOptionLabelModel(
       id: "simple6",
@@ -150,7 +149,7 @@ struct SDGCheckOptionLabel_Wrapper: View {
       title: "Simple Item 6",
       isSelectedTitleColorPrimary: false,
       isSelectedImageColorPrimary: false,
-      status: .default
+      option: .init(status: .default, type: .solid, spec: .medim)
     ),
     CheckOptionLabelModel(
       id: "simple6",
@@ -158,7 +157,7 @@ struct SDGCheckOptionLabel_Wrapper: View {
       title: "Simple Item 6",
       isSelectedTitleColorPrimary: false,
       isSelectedImageColorPrimary: false,
-      status: .selected
+      option: .init(status: .selected, type: .solid, spec: .medim)
     ),
     CheckOptionLabelModel(
       id: "simple6",
@@ -166,7 +165,7 @@ struct SDGCheckOptionLabel_Wrapper: View {
       title: "Simple Item 6",
       isSelectedTitleColorPrimary: false,
       isSelectedImageColorPrimary: false,
-      status: .disabled
+      option: .init(status: .disabled, type: .solid, spec: .medim)
     ),
     CheckOptionLabelModel(
       id: "simple6",
@@ -175,7 +174,7 @@ struct SDGCheckOptionLabel_Wrapper: View {
       isSelectedTitleColorPrimary: false,
       isSelectedImageColorPrimary: false,
       lineLimit: nil,
-      status: .selected
+      option: .init(status: .selected, type: .solid, spec: .medim)
     ),
   ]
     
