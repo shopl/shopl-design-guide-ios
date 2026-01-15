@@ -8,107 +8,223 @@
 import SwiftUI
 
 public struct SDGCheckOption: View {
-  public enum CheckState: Equatable {
-    case `default`
-    case selected
-    case disabled
-  }
-  
   public enum CheckType: Equatable {
-    case normal
-    case empha
+    case solid
+    case line
   }
   
-  @Binding private var _state: CheckState
+  public enum Spec: Equatable {
+    case large
+    case medim
+    
+    fileprivate var size: CGFloat {
+      switch self {
+      case .large: return 18
+      case .medim: return 16
+      }
+    }
+  }
   
-  private var _title: String
-  private var _size: CGFloat
-  private var _type: CheckType
+  public struct Model: Equatable {
+    public var status: SDGCheckOptionStatus
+    public var type: CheckType
+    public let spec: Spec
+    
+    public init(status: SDGCheckOptionStatus, type: CheckType, spec: Spec) {
+      self.status = status
+      self.type = type
+      self.spec = spec
+    }
+  }
   
-  private var _selected: (() -> ())
+  private var model: Model
+  private var selected: (() -> ())
   
   public init(
-    state: Binding<CheckState>,
-    title: String,
-    size: CGFloat,
-    type: CheckType,
+    model: Model,
     selected: @escaping (() -> ())
   ) {
-    self.__state = state
-    self._title = title
-    self._size = size
-    self._type = type
-    self._selected = selected
+    self.model = model
+    self.selected = selected
   }
   
   public var body: some View {
     Button {
-      self._selected()
+      self.selected()
     } label: {
-      HStack(spacing: 6) {
+      switch model.type {
+      case .solid:
         Image(.icCommonCheckS)
-          .frame(width: 14, height: 14, alignment: .center)
-          .background(_state == .selected ? .primary300 : .neutral200)
-          .tint(.neutral0)
+          .resizable()
+          .renderingMode(.template)
+          .frame(width: model.spec.size, height: model.spec.size, alignment: .center)
+          .background(model.status == .selected ? .primary300 : .neutral200)
+          .foregroundStyle(.neutral0)
           .clipShape(Circle())
         
-        Text(_title)
-          .font(
-            .system(
-              size: self._size,
-              weight: self._type == .normal ? .regular : .semibold
-            )
-          )
-          .foregroundColor(.neutral700)
+      case .line:
+        ZStack {
+          Image(.icCommonCheckS)
+            .resizable()
+            .renderingMode(.template)
+            .frame(width: model.spec.size, height: model.spec.size, alignment: .center)
+            .background(.clear)
+            .tint(model.status == .selected ? .primary300 : .neutral350)
+            .clipShape(Circle())
+        }
+        .overlay(
+          RoundedRectangle(cornerRadius: 8)
+            .stroke(model.status == .selected ? .primary300 : .neutral350, lineWidth: 1)
+        )
+        
       }
     }
-    .allowsHitTesting(self._state != .disabled)
+    .allowsHitTesting(model.status != .disabled)
   }
 }
 
 
 #Preview {
   ZStack {
-    HStack {
-      SDGCheckOption(
-        state: .constant(.default),
-        title: "",
-        size: 14,
-        type: .empha,
-        selected: {
-          
-        }
-      )
+    VStack {
+      HStack {
+        SDGCheckOption(
+          model: .init(
+            status: .default,
+            type: .solid,
+            spec: .medim
+          ),
+          selected: {
+            
+          }
+        )
+        SDGCheckOption(
+          model: .init(
+            status: .selected,
+            type: .solid,
+            spec: .medim
+          ),
+          selected: {
+            
+          }
+        )
+        
+        SDGCheckOption(
+          model: .init(
+            status: .disabled,
+            type: .solid,
+            spec: .medim
+          ),
+          selected: {
+            
+          }
+        )
+      }
       
-      SDGCheckOption(
-        state: .constant(.default),
-        title: "기본",
-        size: 14,
-        type: .empha,
-        selected: {
-          
-        }
-      )
+      HStack {
+        
+        SDGCheckOption(
+          model: .init(
+            status: .default,
+            type: .line,
+            spec: .medim
+          ),
+          selected: {
+            
+          }
+        )
+        SDGCheckOption(
+          model: .init(
+            status: .selected,
+            type: .line,
+            spec: .medim
+          ),
+          selected: {
+            
+          }
+        )
+        
+        SDGCheckOption(
+          model: .init(
+            status: .disabled,
+            type: .line,
+            spec: .medim
+          ),
+          selected: {
+            
+          }
+        )
+      }
       
-      SDGCheckOption(
-        state: .constant(.selected),
-        title: "선택",
-        size: 14,
-        type: .empha,
-        selected: {
-          
-        }
-      )
+      HStack {
+        SDGCheckOption(
+          model: .init(
+            status: .default,
+            type: .solid,
+            spec: .large
+          ),
+          selected: {
+            
+          }
+        )
+        SDGCheckOption(
+          model: .init(
+            status: .selected,
+            type: .solid,
+            spec: .large
+          ),
+          selected: {
+            
+          }
+        )
+        
+        SDGCheckOption(
+          model: .init(
+            status: .disabled,
+            type: .solid,
+            spec: .large
+          ),
+          selected: {
+            
+          }
+        )
+      }
       
-      SDGCheckOption(
-        state: .constant(.disabled),
-        title: "선택 불가",
-        size: 14,
-        type: .empha,
-        selected: {
-          
-        }
-      )
+      HStack {
+        
+        SDGCheckOption(
+          model: .init(
+            status: .default,
+            type: .line,
+            spec: .large
+          ),
+          selected: {
+            
+          }
+        )
+        SDGCheckOption(
+          model: .init(
+            status: .selected,
+            type: .line,
+            spec: .large
+          ),
+          selected: {
+            
+          }
+        )
+        
+        SDGCheckOption(
+          model: .init(
+            status: .disabled,
+            type: .line,
+            spec: .large
+          ),
+          selected: {
+            
+          }
+        )
+      }
+      
     }
   }
 }
