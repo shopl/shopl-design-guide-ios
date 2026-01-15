@@ -8,29 +8,22 @@
 import SwiftUI
 
 public struct SDGCheckOption: View {
-  public enum CheckState: Equatable {
-    case `default`
-    case selected
-    case disabled
-  }
-  
   public enum CheckType: Equatable {
     case solid
     case line
   }
   
-  @Binding private var state: CheckState
-  
+  private var state: SDGCheckOptionStatus
   private var type: CheckType
   
   private var selected: (() -> ())
   
   public init(
-    state: Binding<CheckState>,
+    state: SDGCheckOptionStatus,
     type: CheckType,
     selected: @escaping (() -> ())
   ) {
-    self._state = state
+    self.state = state
     self.type = type
     self.selected = selected
   }
@@ -42,14 +35,18 @@ public struct SDGCheckOption: View {
       switch type {
       case .solid:
         Image(.icCommonCheckS)
+          .resizable()
+          .renderingMode(.template)
           .frame(width: 16, height: 16, alignment: .center)
           .background(state == .selected ? .primary300 : .neutral200)
-          .tint(.neutral0)
+          .foregroundStyle(.neutral0)
           .clipShape(Circle())
         
       case .line:
         ZStack {
           Image(.icCommonCheckS)
+            .resizable()
+            .renderingMode(.template)
             .frame(width: 16, height: 16, alignment: .center)
             .background(.clear)
             .tint(state == .selected ? .primary300 : .neutral350)
@@ -72,7 +69,7 @@ public struct SDGCheckOption: View {
     VStack {
       HStack {
         SDGCheckOption(
-          state: .constant(.default),
+          state: .default,
           type: .solid,
           selected: {
             
@@ -80,7 +77,7 @@ public struct SDGCheckOption: View {
         )
         
         SDGCheckOption(
-          state: .constant(.default),
+          state: .default,
           type: .solid,
           selected: {
             
@@ -88,7 +85,7 @@ public struct SDGCheckOption: View {
         )
         
         SDGCheckOption(
-          state: .constant(.selected),
+          state: .selected,
           type: .solid,
           selected: {
             
@@ -96,7 +93,7 @@ public struct SDGCheckOption: View {
         )
         
         SDGCheckOption(
-          state: .constant(.disabled),
+          state: .disabled,
           type: .solid,
           selected: {
             
@@ -106,7 +103,7 @@ public struct SDGCheckOption: View {
       
       HStack {
         SDGCheckOption(
-          state: .constant(.default),
+          state: .default,
           type: .line,
           selected: {
             
@@ -114,7 +111,7 @@ public struct SDGCheckOption: View {
         )
         
         SDGCheckOption(
-          state: .constant(.default),
+          state: .default,
           type: .line,
           selected: {
             
@@ -122,7 +119,7 @@ public struct SDGCheckOption: View {
         )
         
         SDGCheckOption(
-          state: .constant(.selected),
+          state: .selected,
           type: .line,
           selected: {
             
@@ -130,7 +127,7 @@ public struct SDGCheckOption: View {
         )
         
         SDGCheckOption(
-          state: .constant(.disabled),
+          state: .disabled,
           type: .line,
           selected: {
             
