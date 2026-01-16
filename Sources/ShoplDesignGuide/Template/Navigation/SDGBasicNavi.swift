@@ -33,7 +33,7 @@ public struct SDGBasicNavi: View {
         Button {
           onDismiss()
         } label: {
-          Image(.icNaviBack)
+          Image(sdg: .icNaviBack)
             .frame(width: 40, height: 40)
             .foregroundStyle(tintColor ?? .neutral700)
         }
@@ -86,7 +86,7 @@ public struct SDGBasicNavi: View {
         Button {
           onDismiss()
         } label: {
-          Image(.icNaviClose)
+          Image(sdg: .icNaviClose)
             .frame(width: 40, height: 40)
             .foregroundColor(tintColor ?? .neutral700)
         }
@@ -136,7 +136,7 @@ struct TopBasicNavi_Preview: PreviewProvider {
         backgroundColor: .neutral0,
         buttons: [
           .init(
-            image: Image(.icNaviSearch),
+            image: Image(sdg: .icNaviSearch),
             tintColor: .neutral700,
             touchUpInside: {
               
@@ -156,7 +156,7 @@ struct TopBasicNavi_Preview: PreviewProvider {
         ,
         buttons: [
           .init(
-            image: Image(.icNaviSearch),
+            image: Image(sdg: .icNaviSearch),
             tintColor: .neutral700,
             touchUpInside: {
               
@@ -172,7 +172,7 @@ struct TopBasicNavi_Preview: PreviewProvider {
         backgroundColor: .neutral0,
         buttons: [
           .init(
-            image: Image(.icNaviChat),
+            image: Image(sdg: .icNaviChat),
             tintColor: .neutral700,
             touchUpInside: {
               

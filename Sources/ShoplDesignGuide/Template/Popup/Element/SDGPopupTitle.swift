@@ -11,10 +11,10 @@ import SwiftUI
 public struct SDGPopupTitle: View {
   
   let title: String
-  let color: TypoColor
+  let color: SDG.Color
   let alignment: Alignment
   
-  public init(title: String, color: TypoColor, alignment: Alignment) {
+  public init(title: String, color: SDG.Color, alignment: Alignment) {
     self.title = title
     self.color = color
     self.alignment = alignment

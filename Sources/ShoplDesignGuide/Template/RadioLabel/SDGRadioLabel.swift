@@ -11,7 +11,7 @@ public struct SDGRadioLabel: View {
   
   public var model: RadioLabelModel
   
-  private var textColor: TypoColor {
+  private var textColor: SDG.Color {
     if model.isDisabled { return .neutral200 }
     if model.isLabelColorPrimary { return .primary300 }
     return .neutral700

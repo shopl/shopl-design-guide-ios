@@ -11,7 +11,7 @@ import SwiftUI
 public struct SDGGhostButton: View {
   
   private let title: String
-  private let titleColor: TypoColor
+  private let titleColor: SDG.Color
   private let size: Size
   private let labelWeight: LabelWeight
   private let status: Status
@@ -107,7 +107,7 @@ public struct SDGGhostButton: View {
     }
   }
   
-  private var typography: Typography {
+  private var typography: SDG.Typography {
     switch size {
     case .large:
       return if labelWeight == .R { .body1_R } else if labelWeight == .SB { .body1_SB } else { .body1_R }
@@ -122,7 +122,7 @@ public struct SDGGhostButton: View {
     size.iconSize - (iconOption?.downSized ?? false ? 2 : 0)
   }
   
-  public init(title: String, titleColor: TypoColor, size: Size, labelWeight: LabelWeight, status: Status, iconOption: IconOption?, fullSize: Bool = false, action: @escaping () -> Void) {
+  public init(title: String, titleColor: SDG.Color, size: Size, labelWeight: LabelWeight, status: Status, iconOption: IconOption?, fullSize: Bool = false, action: @escaping () -> Void) {
     self.title = title
     self.titleColor = titleColor
     self.size = size

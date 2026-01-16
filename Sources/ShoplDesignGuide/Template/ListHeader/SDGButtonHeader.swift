@@ -109,7 +109,7 @@ public struct SDGButtonHeader: View {
       type: .box,
       title: .init(title: "title", count: 9999, isShowDropdownIcon: true),
       buttonModel: SDGButtonHeader.ButtonModel(
-        icon: .right(image: Image(.icClip), color: .neutral0),
+        icon: .right(image: Image(sdg: .icClip), color: .neutral0),
         title: "Button",
         color: SDGButtonColor(backgroundColor: .neutral400, textColor: .neutral0),
         selectedColor: SDGButtonColor(backgroundColor: .neutral400, textColor: .neutral0),
@@ -123,7 +123,7 @@ public struct SDGButtonHeader: View {
       type: .capsule,
       title: .init(title: "title", count: 9999, isShowDropdownIcon: true),
       buttonModel: SDGButtonHeader.ButtonModel(
-        icon: .right(image: Image(.icClip), color: .neutral0),
+        icon: .right(image: Image(sdg: .icClip), color: .neutral0),
         title: "Button",
         color: SDGButtonColor(backgroundColor: .neutral400, textColor: .neutral0),
         selectedColor: SDGButtonColor(backgroundColor: .neutral400, textColor: .neutral0),

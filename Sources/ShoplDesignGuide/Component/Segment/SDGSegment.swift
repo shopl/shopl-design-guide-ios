@@ -29,16 +29,16 @@ public struct SDGSegment: View {
   }
   
   public struct ColorType {
-	let trackColor: TypoColor
-	let thumbColor: TypoColor
-	let selectedTextColor: TypoColor
-	let unselectedTextColor: TypoColor
+	let trackColor: SDG.Color
+	let thumbColor: SDG.Color
+	let selectedTextColor: SDG.Color
+	let unselectedTextColor: SDG.Color
 	
 	public init(
-	  trackColor: TypoColor,
-	  thumbColor: TypoColor,
-	  selectedTextColor: TypoColor,
-	  unselectedTextColor: TypoColor
+	  trackColor: SDG.Color,
+	  thumbColor: SDG.Color,
+	  selectedTextColor: SDG.Color,
+	  unselectedTextColor: SDG.Color
 	) {
 	  self.trackColor = trackColor
 	  self.thumbColor = thumbColor

@@ -88,7 +88,7 @@ public struct SDGIconTab: View {
   
   @ViewBuilder
   private func tabContent(model: Model, isSelected: Bool) -> some View {
-    let textColor: TypoColor = isSelected ? .neutral0 : .neutral500
+    let textColor: SDG.Color = isSelected ? .neutral0 : .neutral500
     
     VStack(spacing: 8) {
       if isSelected {
@@ -130,30 +130,30 @@ public struct SDGIconTab: View {
 
           SDGIconTab(
             list: [
-              .init(id: "0", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5),
-              .init(id: "1", icon: Image(.icClip), tintColor: .neutral500, title: "Label이 길어지면 최대 두줄까지 표시하고 줄임말로 처리", count: 5),
-              .init(id: "2", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5)
+              .init(id: "0", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5),
+              .init(id: "1", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "Label이 길어지면 최대 두줄까지 표시하고 줄임말로 처리", count: 5),
+              .init(id: "2", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5)
             ],
             selectedIndex: $firstSelectedIndex
           )
           
           SDGIconTab(
             list: [
-              .init(id: "0", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5),
-              .init(id: "1", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5),
-              .init(id: "2", icon: Image(.icClip), tintColor: .neutral500, title: "Label이 길어지면 최대 두줄까지 표시하고 줄임말로 처리", count: 5),
-              .init(id: "3", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5)
+              .init(id: "0", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5),
+              .init(id: "1", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5),
+              .init(id: "2", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "Label이 길어지면 최대 두줄까지 표시하고 줄임말로 처리", count: 5),
+              .init(id: "3", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5)
             ],
             selectedIndex: $secondSelectedIndex
           )
           
           SDGIconTab(
             list: [
-              .init(id: "0", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5),
-              .init(id: "1", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5),
-              .init(id: "2", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5),
-              .init(id: "3", icon: Image(.icClip), tintColor: .neutral500, title: "Label이 길어지면 최대 두줄까지 표시하고 줄임말로 처리", count: 5),
-              .init(id: "4", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5)
+              .init(id: "0", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5),
+              .init(id: "1", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5),
+              .init(id: "2", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5),
+              .init(id: "3", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "Label이 길어지면 최대 두줄까지 표시하고 줄임말로 처리", count: 5),
+              .init(id: "4", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5)
             ],
             selectedIndex: $thirdSelectedIndex
           )
@@ -161,9 +161,9 @@ public struct SDGIconTab: View {
           SDGIconTab(
             type: .simple,
             list: [
-              .init(id: "0", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5),
-              .init(id: "1", icon: Image(.icClip), tintColor: .neutral500, title: "Label이 길어지면 최대 두줄까지 표시하고 줄임말로 처리", count: 5),
-              .init(id: "2", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5)
+              .init(id: "0", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5),
+              .init(id: "1", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "Label이 길어지면 최대 두줄까지 표시하고 줄임말로 처리", count: 5),
+              .init(id: "2", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5)
             ],
             selectedIndex: $firstSelectedIndex
           )
@@ -171,10 +171,10 @@ public struct SDGIconTab: View {
           SDGIconTab(
             type: .simple,
             list: [
-              .init(id: "0", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5),
-              .init(id: "1", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5),
-              .init(id: "2", icon: Image(.icClip), tintColor: .neutral500, title: "Label이 길어지면 최대 두줄까지 표시하고 줄임말로 처리", count: 5),
-              .init(id: "3", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5)
+              .init(id: "0", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5),
+              .init(id: "1", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5),
+              .init(id: "2", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "Label이 길어지면 최대 두줄까지 표시하고 줄임말로 처리", count: 5),
+              .init(id: "3", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5)
             ],
             selectedIndex: $secondSelectedIndex
           )
@@ -182,11 +182,11 @@ public struct SDGIconTab: View {
           SDGIconTab(
             type: .simple,
             list: [
-              .init(id: "0", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5),
-              .init(id: "1", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5),
-              .init(id: "2", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5),
-              .init(id: "3", icon: Image(.icClip), tintColor: .neutral500, title: "Label이 길어지면 최대 두줄까지 표시하고 줄임말로 처리", count: 5),
-              .init(id: "4", icon: Image(.icClip), tintColor: .neutral500, title: "label", count: 5)
+              .init(id: "0", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5),
+              .init(id: "1", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5),
+              .init(id: "2", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5),
+              .init(id: "3", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "Label이 길어지면 최대 두줄까지 표시하고 줄임말로 처리", count: 5),
+              .init(id: "4", icon: Image(sdg: .icClip), tintColor: .neutral500, title: "label", count: 5)
             ],
             selectedIndex: $thirdSelectedIndex
           )

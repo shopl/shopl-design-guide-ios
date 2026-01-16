@@ -106,7 +106,7 @@ public struct SDGFixedTextForm: View {
           } label: {
             ZStack {
               
-              Image(.icCommonRefresh)
+              Image(sdg: .icCommonRefresh)
                 .resizable()
                 .foregroundStyle(.neutral400)
                 .frame(width: 24, height: 24)
@@ -138,7 +138,7 @@ public struct SDGFixedTextForm: View {
   VStack {
     SDGFixedTextForm(
       title: "타이틀",
-      icon: .init(image: Image(.icClip), tintColor: .neutral500),
+      icon: .init(image: Image(sdg: .icClip), tintColor: .neutral500),
       type: .normal,
       text: .constant("awdawdad"),
       placeHolder: "입력",
@@ -153,7 +153,7 @@ public struct SDGFixedTextForm: View {
     
     SDGFixedTextForm(
       title: "타이틀",
-      icon: .init(image: Image(.icClip), tintColor: .neutral500),
+      icon: .init(image: Image(sdg: .icClip), tintColor: .neutral500),
       type: .normal,
       text: .constant("입력입력입력"),
       placeHolder: "입력",
@@ -168,7 +168,7 @@ public struct SDGFixedTextForm: View {
     
     SDGFixedTextForm(
       title: "타이틀",
-      icon: .init(image: Image(.icClip), tintColor: .neutral500),
+      icon: .init(image: Image(sdg: .icClip), tintColor: .neutral500),
       type: .normal,
       text: .constant(""),
       placeHolder: "입력",

@@ -176,7 +176,7 @@ public struct SDGTextNavi: View {
             back()
             
           } label: {
-            Image(.icNaviBack)
+            Image(sdg: .icNaviBack)
               .frame(width: 40, height: 40)
               .foregroundColor(.neutral700)
           }
@@ -262,7 +262,7 @@ public struct SDGTextNavi: View {
           back()
           
         } label: {
-          Image(.icNaviBack)
+          Image(sdg: .icNaviBack)
             .frame(width: 40, height: 40)
             .foregroundColor(.neutral700)
         }
@@ -284,12 +284,12 @@ public struct SDGTextNavi: View {
   VStack {
     SDGTextNavi(
       naviType: .full(
-        left: .init(image: Image(.icCommonCompany), action: { }),
+        left: .init(image: Image(sdg: .icCommonCompany), action: { }),
         title: .init(
           text: "Title이 꽤 기다란 Title인데 이게 두줄 이상은 또 안보여야 돼",
           color: .neutral700
         ),
-        right: .init(image: Image(.icCommonCompany), text: "Text더 길어지는", action: { })
+        right: .init(image: Image(sdg: .icCommonCompany), text: "Text더 길어지는", action: { })
       ),
       backgroundColor: .neutral100
     )
@@ -301,7 +301,7 @@ public struct SDGTextNavi: View {
           text: "Title이 꽤 기다란 Title인데 이게 두줄 이상은 또 안보여야 돼",
           color: .neutral700
         ),
-        right: .init(image: Image(.icCommonCompany), text: "Text더 길어지는", action: { })
+        right: .init(image: Image(sdg: .icCommonCompany), text: "Text더 길어지는", action: { })
       ),
       backgroundColor: .neutral100
     )
@@ -312,7 +312,7 @@ public struct SDGTextNavi: View {
           text: "Title이 꽤 기다란 Title인데 이게 두줄 이상은 또 안보여야 돼",
           color: .neutral700
         ),
-        right: .init(image: Image(.icCommonCompany), text: "Text더 길어지는", action: { })
+        right: .init(image: Image(sdg: .icCommonCompany), text: "Text더 길어지는", action: { })
       ),
       backgroundColor: .neutral100
     )

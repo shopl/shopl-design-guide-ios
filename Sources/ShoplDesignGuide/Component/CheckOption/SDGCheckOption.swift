@@ -54,7 +54,7 @@ public struct SDGCheckOption: View {
     } label: {
       switch model.type {
       case .solid:
-        Image(.icCommonCheckS)
+        Image(sdg: .icCommonCheckS)
           .resizable()
           .renderingMode(.template)
           .frame(width: model.spec.size, height: model.spec.size, alignment: .center)
@@ -64,7 +64,7 @@ public struct SDGCheckOption: View {
         
       case .line:
         ZStack {
-          Image(.icCommonCheckS)
+          Image(sdg: .icCommonCheckS)
             .resizable()
             .renderingMode(.template)
             .frame(width: model.spec.size, height: model.spec.size, alignment: .center)

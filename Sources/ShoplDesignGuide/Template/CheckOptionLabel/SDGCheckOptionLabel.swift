@@ -20,7 +20,7 @@ public struct CheckOptionLabel: View {
     return .neutral200
   }
   
-  private var _labelColor: TypoColor {
+  private var _labelColor: SDG.Color {
     if model.option.status == .disabled {
       return .neutral300
     }

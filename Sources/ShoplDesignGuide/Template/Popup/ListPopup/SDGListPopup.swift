@@ -40,7 +40,7 @@ public struct ListPopupModel: Equatable {
     case delete
     case selected
     
-    var typoColor: TypoColor {
+    var typoColor: SDG.Color {
       switch self {
       case .default:
           .neutral700

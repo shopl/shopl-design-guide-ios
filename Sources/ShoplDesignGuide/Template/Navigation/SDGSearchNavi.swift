@@ -61,7 +61,7 @@ public struct SDGSearchNavi: View {
         Button {
           onDismiss()
         } label: {
-          Image(.icNaviBack)
+          Image(sdg: .icNaviBack)
             .frame(width: 40, height: 40)
             .foregroundStyle(tintColor ?? .neutral700)
         }
@@ -114,7 +114,7 @@ public struct SDGSearchNavi: View {
       } else {
         HStack {
           HStack(spacing: 4) {
-            Image(.icCommonSearch)
+            Image(sdg: .icCommonSearch)
               .frame(width: 14, height: 14)
               .foregroundStyle(.neutral300)
               .padding(.leading, 12)
@@ -141,7 +141,7 @@ public struct SDGSearchNavi: View {
                   _searchText = ""
                 } label: {
                   ZStack {
-                    Image(.icInputDelete)
+                    Image(sdg: .icInputDelete)
                       .resizable()
                       .foregroundStyle(.neutral400)
                       .frame(width: 18, height: 18)
@@ -188,7 +188,7 @@ public struct SDGSearchNavi: View {
         Button {
           onDismiss()
         } label: {
-          Image(.icNaviClose)
+          Image(sdg: .icNaviClose)
             .frame(width: 40, height: 40)
             .foregroundColor(tintColor ?? .neutral700)
         }
@@ -217,7 +217,7 @@ public struct SDGSearchNavi: View {
         title: .init(string: "타이틀"),
         backgroundColor: .neutral50,
         searchButton: .init(
-          searchImage: Image(.icCommonSearch),
+          searchImage: Image(sdg: .icCommonSearch),
           tintColor: .neutral700,
           placeholder: "검색",
           search: { _ in
@@ -226,7 +226,7 @@ public struct SDGSearchNavi: View {
         ),
         buttons: [
           .init(
-            image: Image(.icNaviFilter),
+            image: Image(sdg: .icNaviFilter),
             tintColor: .neutral700
           )
         ]
@@ -239,7 +239,7 @@ public struct SDGSearchNavi: View {
         title: .init(string: "타이틀"),
         backgroundColor: .neutral50,
         searchButton: .init(
-          searchImage: Image(.icCommonSearch),
+          searchImage: Image(sdg: .icCommonSearch),
           tintColor: .neutral700,
           placeholder: "검색",
           search: { _ in
@@ -248,7 +248,7 @@ public struct SDGSearchNavi: View {
         ),
         buttons: [
           .init(
-            image: Image(.icNaviFilter),
+            image: Image(sdg: .icNaviFilter),
             tintColor: .neutral700
           )
         ]

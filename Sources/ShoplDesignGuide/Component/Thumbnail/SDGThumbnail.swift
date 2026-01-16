@@ -103,7 +103,7 @@ extension View {
         Button {
           onDelete?(index)
         } label: {
-          Image(.icRemoveM)
+          Image(sdg: .icRemoveM)
             .resizable()
             .frame(width: 20, height: 20)
             .padding(2)

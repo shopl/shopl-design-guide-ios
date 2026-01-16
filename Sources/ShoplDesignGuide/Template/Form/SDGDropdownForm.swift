@@ -109,7 +109,7 @@ public struct SDGDropdownForm: View {
           } label: {
             ZStack {
               
-              Image(.icCommonRefresh)
+              Image(sdg: .icCommonRefresh)
                 .resizable()
                 .foregroundStyle(.neutral400)
                 .frame(width: 24, height: 24)
@@ -152,7 +152,7 @@ public struct SDGDropdownForm: View {
     
     SDGDropdownForm(
       title: "타이틀",
-      icon: FormIconModel(image: Image(.icCommonEdit), tintColor: .neutral600),
+      icon: FormIconModel(image: Image(sdg: .icCommonEdit), tintColor: .neutral600),
       type: .empha,
       selectedText: nil,
       placeHolder: "입력",
@@ -164,7 +164,7 @@ public struct SDGDropdownForm: View {
     
     SDGDropdownForm(
       title: "타이틀",
-      icon: FormIconModel(image: Image(.icCommonEdit), tintColor: .neutral600),
+      icon: FormIconModel(image: Image(sdg: .icCommonEdit), tintColor: .neutral600),
       type: .empha,
       selectedText: "누구누구",
       countText: "(3)",
@@ -187,7 +187,7 @@ public struct SDGDropdownForm: View {
     
     SDGDropdownForm(
       title: "타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 ",
-      icon: FormIconModel(image: Image(.icCommonEdit), tintColor: .neutral600),
+      icon: FormIconModel(image: Image(sdg: .icCommonEdit), tintColor: .neutral600),
       type: .empha,
       selectedText: "입력했음",
       placeHolder: "입력",

@@ -208,7 +208,7 @@ public struct SDGIconButton: View {
         type: .solid(shape: .circle(color: .primary300)),
         size: .small,
         isDisabled: false,
-        icon: Image(.icClip),
+        icon: Image(sdg: .icClip),
         iconTintColor: .neutral0,
         action: { }
       )
@@ -217,7 +217,7 @@ public struct SDGIconButton: View {
         type: .line(shape: .circle(color: .neutral0), lineColor: .primary300),
         size: .small,
         isDisabled: false,
-        icon: Image(.icClip),
+        icon: Image(sdg: .icClip),
         iconTintColor: .neutral700,
         action: { }
       )
@@ -228,7 +228,7 @@ public struct SDGIconButton: View {
         type: .solid(shape: .box(color: .primary300)),
         size: .small,
         isDisabled: false,
-        icon: Image(.icClip),
+        icon: Image(sdg: .icClip),
         iconTintColor: .neutral0,
         action: { }
       )
@@ -237,7 +237,7 @@ public struct SDGIconButton: View {
         type: .line(shape: .box(color: .neutral0), lineColor: .primary300),
         size: .small,
         isDisabled: false,
-        icon: Image(.icClip),
+        icon: Image(sdg: .icClip),
         iconTintColor: .neutral700,
         action: { }
       )
@@ -248,7 +248,7 @@ public struct SDGIconButton: View {
         type: .solid(shape: .circle(color: .primary300)),
         size: .xsmall,
         isDisabled: false,
-        icon: Image(.icClip),
+        icon: Image(sdg: .icClip),
         iconTintColor: .neutral0,
         action: { }
       )
@@ -257,7 +257,7 @@ public struct SDGIconButton: View {
         type: .line(shape: .circle(color: .neutral0), lineColor: .primary300),
         size: .xsmall,
         isDisabled: false,
-        icon: Image(.icClip),
+        icon: Image(sdg: .icClip),
         iconTintColor: .neutral700,
         action: { }
       )
@@ -268,7 +268,7 @@ public struct SDGIconButton: View {
         type: .solid(shape: .box(color: .primary300)),
         size: .xsmall,
         isDisabled: false,
-        icon: Image(.icClip),
+        icon: Image(sdg: .icClip),
         iconTintColor: .neutral0,
         action: { }
       )
@@ -277,7 +277,7 @@ public struct SDGIconButton: View {
         type: .line(shape: .box(color: .neutral0), lineColor: .primary300),
         size: .xsmall,
         isDisabled: false,
-        icon: Image(.icClip),
+        icon: Image(sdg: .icClip),
         iconTintColor: .neutral700,
         action: { }
       )
@@ -288,7 +288,7 @@ public struct SDGIconButton: View {
         type: .solid(shape: .circle(color: .primary300)),
         size: .medium,
         isDisabled: false,
-        icon: Image(.icClip),
+        icon: Image(sdg: .icClip),
         iconTintColor: .neutral0,
         action: { }
       )
@@ -297,7 +297,7 @@ public struct SDGIconButton: View {
         type: .line(shape: .circle(color: .neutral0), lineColor: .primary300),
         size: .medium,
         isDisabled: false,
-        icon: Image(.icClip),
+        icon: Image(sdg: .icClip),
         iconTintColor: .neutral700,
         action: { }
       )
@@ -308,7 +308,7 @@ public struct SDGIconButton: View {
         type: .solid(shape: .box(color: .primary300)),
         size: .medium,
         isDisabled: false,
-        icon: Image(.icClip),
+        icon: Image(sdg: .icClip),
         iconTintColor: .neutral0,
         action: { }
       )
@@ -317,7 +317,7 @@ public struct SDGIconButton: View {
         type: .line(shape: .box(color: .neutral0), lineColor: .primary300),
         size: .medium,
         isDisabled: false,
-        icon: Image(.icClip),
+        icon: Image(sdg: .icClip),
         iconTintColor: .neutral700,
         action: { }
       )
@@ -330,7 +330,7 @@ public struct SDGIconButton: View {
         size: .medium,
         isDisabled: true,
         disabledColor: .neutral250,
-        icon: Image(.icClip),
+        icon: Image(sdg: .icClip),
         iconTintColor: .neutral0,
         action: { }
       )
@@ -340,7 +340,7 @@ public struct SDGIconButton: View {
         size: .medium,
         isDisabled: true,
         disabledColor: .neutral250,
-        icon: Image(.icClip),
+        icon: Image(sdg: .icClip),
         iconTintColor: .neutral700,
         action: { }
       )
@@ -352,7 +352,7 @@ public struct SDGIconButton: View {
         size: .medium,
         isDisabled: true,
         disabledColor: .neutral300,
-        icon: Image(.icClip),
+        icon: Image(sdg: .icClip),
         iconTintColor: .neutral0,
         action: { }
       )
@@ -362,7 +362,7 @@ public struct SDGIconButton: View {
         size: .medium,
         isDisabled: true,
         disabledColor: .neutral300,
-        icon: Image(.icClip),
+        icon: Image(sdg: .icClip),
         iconTintColor: .neutral700,
         action: { }
       )

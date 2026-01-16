@@ -52,7 +52,7 @@ public struct SDGBoxSearch: View {
   public var body: some View {
     ZStack {
       HStack(alignment: .center, spacing: 0) {
-        Image(.icCommonSearch)
+        Image(sdg: .icCommonSearch)
           .resizable()
           .foregroundStyle(.neutral300)
           .frame(width: 14, height: 14)
@@ -79,7 +79,7 @@ public struct SDGBoxSearch: View {
         Spacer()
           .frame(width: 12)
         
-        Image(.icInputDelete)
+        Image(sdg: .icInputDelete)
           .onTapGesture {
             searchText.removeAll()
           }

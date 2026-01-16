@@ -107,7 +107,7 @@ public struct SDGAvatar: View {
       
         KFImage(_model.imageURL)
           .placeholder {
-            Image(.avatarEmptyDot)
+            Image(sdg: .avatarEmptyDot)
               .resizable()
               .frame(width: _size.rawValue, height: _size.rawValue)
               .foregroundColor(.neutral250)
@@ -129,12 +129,12 @@ public struct SDGAvatar: View {
             EmptyView()
             
           case .leader:
-            Image(.leaderBadge)
+            Image(sdg: .leaderBadge)
               .resizable()
               .frame(width: _badgeSize, height: _badgeSize)
             
           case .opLeader:
-            Image(.adminBadge)
+            Image(sdg: .adminBadge)
               .resizable()
               .frame(width: _badgeSize, height: _badgeSize)
             

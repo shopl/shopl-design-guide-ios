@@ -110,7 +110,7 @@ public struct SDGSelectForm: View {
           } label: {
             ZStack {
               
-              Image(.icCommonRefresh)
+              Image(sdg: .icCommonRefresh)
                 .renderingMode(.template)
                 .resizable()
                 .foregroundStyle(.neutral400)
@@ -138,7 +138,7 @@ public struct SDGSelectForm: View {
               .typo(.body1_R, isSelected ? .neutral700 : .neutral300)
               .frame(maxWidth: .infinity, alignment: .leading)
             
-            Image(.icCommonNext)
+            Image(sdg: .icCommonNext)
               .resizable()
               .foregroundStyle(.neutral700)
               .frame(width: 20, height: 20)
@@ -170,7 +170,7 @@ public struct SDGSelectForm: View {
     
     SDGSelectForm(
       title: "타이틀",
-      iconList: [FormIconModel(image: Image(.icCommonEdit), tintColor: .neutral400)],
+      iconList: [FormIconModel(image: Image(sdg: .icCommonEdit), tintColor: .neutral400)],
       type: .empha,
       selectedText: nil,
       placeHolder: "입력",
@@ -181,7 +181,7 @@ public struct SDGSelectForm: View {
     
     SDGSelectForm(
       title: "타이틀",
-      iconList: [FormIconModel(image: Image(.icCommonEdit), tintColor: .neutral600)],
+      iconList: [FormIconModel(image: Image(sdg: .icCommonEdit), tintColor: .neutral600)],
       type: .empha,
       selectedText: "입력했음",
       placeHolder: "입력",
@@ -203,8 +203,8 @@ public struct SDGSelectForm: View {
     SDGSelectForm(
       title: "타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 타이틀 ",
       iconList: [
-        FormIconModel(image: Image(.icCommonEdit), tintColor: .neutral600),
-        FormIconModel(image: Image(.icClip), tintColor: .neutral600)
+        FormIconModel(image: Image(sdg: .icCommonEdit), tintColor: .neutral600),
+        FormIconModel(image: Image(sdg: .icClip), tintColor: .neutral600)
       ],
       type: .empha,
       selectedText: "입력했음",

@@ -196,7 +196,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .medium,
-              icon: .left(image: Image(.icClip), color: .neutral600),
+              icon: .left(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 backgroundColor: .neutral200,
@@ -217,7 +217,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .medium,
-              icon: .left(image: Image(.icClip), color: .neutral600),
+              icon: .left(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 backgroundColor: .neutral200,
@@ -240,7 +240,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .medium,
-              icon: .right(image: Image(.icClip), color: .neutral600),
+              icon: .right(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 backgroundColor: .neutral200,
@@ -261,7 +261,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .medium,
-              icon: .right(image: Image(.icClip), color: .neutral600),
+              icon: .right(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 backgroundColor: .neutral200,
@@ -333,7 +333,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .medium,
-              icon: .left(image: Image(.icClip), color: .neutral600),
+              icon: .left(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 lineColor: .neutral250,
@@ -356,7 +356,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .medium,
-              icon: .left(image: Image(.icClip), color: .neutral600),
+              icon: .left(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 lineColor: .neutral250,
@@ -380,7 +380,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .medium,
-              icon: .right(image: Image(.icClip), color: .neutral600),
+              icon: .right(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 lineColor: .neutral250,
@@ -403,7 +403,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .medium,
-              icon: .right(image: Image(.icClip), color: .neutral600),
+              icon: .right(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 lineColor: .neutral250,
@@ -431,7 +431,7 @@ public struct SDGCapsuleButton: View {
       SDGCapsuleButton(
         option: .init(
           size: .medium,
-          icon: .left(image: Image(.icClip), color: .neutral600),
+          icon: .left(image: Image(sdg: .icClip), color: .neutral600),
           title: "테스트",
           color: .init(
             lineColor: .neutral250,
@@ -457,7 +457,7 @@ public struct SDGCapsuleButton: View {
       SDGCapsuleButton(
         option: .init(
           size: .medium,
-          icon: .right(image: Image(.icClip), color: .neutral600),
+          icon: .right(image: Image(sdg: .icClip), color: .neutral600),
           title: "테스트",
           color: .init(
             lineColor: .neutral250,
@@ -535,7 +535,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .small,
-              icon: .left(image: Image(.icClip), color: .neutral600),
+              icon: .left(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 backgroundColor: .neutral200,
@@ -556,7 +556,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .small,
-              icon: .left(image: Image(.icClip), color: .neutral600),
+              icon: .left(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 backgroundColor: .neutral200,
@@ -578,7 +578,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .small,
-              icon: .right(image: Image(.icClip), color: .neutral600),
+              icon: .right(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 backgroundColor: .neutral200,
@@ -599,7 +599,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .small,
-              icon: .right(image: Image(.icClip), color: .neutral600),
+              icon: .right(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 backgroundColor: .neutral200,
@@ -671,7 +671,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .small,
-              icon: .left(image: Image(.icClip), color: .neutral600),
+              icon: .left(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 lineColor: .neutral250,
@@ -694,7 +694,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .small,
-              icon: .left(image: Image(.icClip), color: .neutral600),
+              icon: .left(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 lineColor: .neutral250,
@@ -718,7 +718,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .small,
-              icon: .right(image: Image(.icClip), color: .neutral600),
+              icon: .right(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 lineColor: .neutral250,
@@ -741,7 +741,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .medium,
-              icon: .right(image: Image(.icClip), color: .neutral600),
+              icon: .right(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 lineColor: .neutral250,
@@ -769,7 +769,7 @@ public struct SDGCapsuleButton: View {
       SDGCapsuleButton(
         option: .init(
           size: .small,
-          icon: .left(image: Image(.icClip), color: .neutral600),
+          icon: .left(image: Image(sdg: .icClip), color: .neutral600),
           title: "테스트",
           color: .init(
             backgroundColor: .neutral200,
@@ -793,7 +793,7 @@ public struct SDGCapsuleButton: View {
       SDGCapsuleButton(
         option: .init(
           size: .small,
-          icon: .right(image: Image(.icClip), color: .neutral600),
+          icon: .right(image: Image(sdg: .icClip), color: .neutral600),
           title: "테스트",
           color: .init(
             backgroundColor: .neutral200,
@@ -869,7 +869,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .xsmall,
-              icon: .left(image: Image(.icClip), color: .neutral600),
+              icon: .left(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 backgroundColor: .neutral200,
@@ -890,7 +890,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .xsmall,
-              icon: .left(image: Image(.icClip), color: .neutral600),
+              icon: .left(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 backgroundColor: .neutral200,
@@ -912,7 +912,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .xsmall,
-              icon: .right(image: Image(.icClip), color: .neutral600),
+              icon: .right(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 backgroundColor: .neutral200,
@@ -933,7 +933,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .xsmall,
-              icon: .right(image: Image(.icClip), color: .neutral600),
+              icon: .right(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 backgroundColor: .neutral200,
@@ -1005,7 +1005,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .xsmall,
-              icon: .left(image: Image(.icClip), color: .neutral600),
+              icon: .left(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 lineColor: .neutral250,
@@ -1028,7 +1028,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .xsmall,
-              icon: .left(image: Image(.icClip), color: .neutral600),
+              icon: .left(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 lineColor: .neutral250,
@@ -1052,7 +1052,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .xsmall,
-              icon: .right(image: Image(.icClip), color: .neutral600),
+              icon: .right(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 lineColor: .neutral250,
@@ -1075,7 +1075,7 @@ public struct SDGCapsuleButton: View {
           SDGCapsuleButton(
             option: .init(
               size: .xsmall,
-              icon: .right(image: Image(.icClip), color: .neutral600),
+              icon: .right(image: Image(sdg: .icClip), color: .neutral600),
               title: "테스트",
               color: .init(
                 lineColor: .neutral250,
@@ -1103,7 +1103,7 @@ public struct SDGCapsuleButton: View {
       SDGCapsuleButton(
         option: .init(
           size: .xsmall,
-          icon: .left(image: Image(.icClip), color: .neutral600),
+          icon: .left(image: Image(sdg: .icClip), color: .neutral600),
           title: "테스트",
           color: .init(
             backgroundColor: .neutral200,
@@ -1127,7 +1127,7 @@ public struct SDGCapsuleButton: View {
       SDGCapsuleButton(
         option: .init(
           size: .xsmall,
-          icon: .right(image: Image(.icClip), color: .neutral600),
+          icon: .right(image: Image(sdg: .icClip), color: .neutral600),
           title: "테스트",
           color: .init(
             backgroundColor: .neutral200,
