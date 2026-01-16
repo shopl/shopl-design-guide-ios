@@ -32,11 +32,6 @@ struct TypographyModifier: ViewModifier {
     content
       .font(fontAsset.swiftUIFont(size: type.size))
       .lineSpacing(type.lineHeight - type.uiFontLineHeight)
-    
-    if let color = color {
-      content.foregroundStyle(color)
-    } else {
-      content
-    }
+	  .ifLet(self.color, transform: { $0.foregroundStyle($1) })
   }
 }
