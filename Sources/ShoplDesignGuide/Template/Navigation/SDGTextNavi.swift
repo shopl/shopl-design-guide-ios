@@ -273,8 +273,8 @@ public struct SDGTextNavi: View {
       }
       
     }
-    .background(_backgroundColor)
     .frame(height: 48)
+	.background(_backgroundColor)
   }
   
 }
