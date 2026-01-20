@@ -51,8 +51,8 @@ public struct SDGBoxBadge: View {
       height: 20,
       cornerRadius: 6,
       typo: .body3_R,
-      horizontalPadding: 4,
-      gap: 4
+      horizontalPadding: 6,
+      gap: 2
     )
   }
   
