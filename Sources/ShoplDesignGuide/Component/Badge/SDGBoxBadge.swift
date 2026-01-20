@@ -57,12 +57,12 @@ public struct SDGBoxBadge: View {
   }
   
   public struct SolidColor: Equatable {
-    let backgroundColor: SDG.Color?
-    let textColor: SDG.Color
+    let backgroundColor: Color?
+    let textColor: Color
     
     public init(
-      backgroundColor: SDG.Color? = nil,
-      textColor: SDG.Color
+      backgroundColor: Color? = nil,
+      textColor: Color
     ) {
       self.backgroundColor = backgroundColor
       self.textColor = textColor
@@ -70,14 +70,14 @@ public struct SDGBoxBadge: View {
   }
   
   public struct LineColor: Equatable {
-    let backgroundColor: SDG.Color?
-    let textColor: SDG.Color
-    let borderColor: SDG.Color
+    let backgroundColor: Color?
+    let textColor: Color
+    let borderColor: Color
     
     public init(
-      backgroundColor: SDG.Color? = nil,
-      textColor: SDG.Color,
-      borderColor: SDG.Color
+      backgroundColor: Color? = nil,
+      textColor: Color,
+      borderColor: Color
     ) {
       self.backgroundColor = backgroundColor
       self.textColor = textColor
@@ -112,7 +112,7 @@ public struct SDGBoxBadge: View {
       .fixedSize(horizontal: true, vertical: true)
   }
 
-  private var textColor: SDG.Color {
+  private var textColor: Color {
     switch type {
     case .solid(let solid): return solid.textColor
     case .line(let line): return line.textColor
@@ -131,7 +131,7 @@ private extension SDGBoxBadge {
       
       Text(text)
         .typo(spec.typo)
-        .foregroundStyle(textColor.color)
+        .foregroundStyle(textColor)
         .lineLimit(1)
       
       if let imageDirection, !imageDirection.isLeft {
@@ -154,7 +154,7 @@ private extension SDGBoxBadge {
       .resizable()
       .scaledToFit()
       .frame(width: 14, height: 14)
-      .foregroundStyle(textColor.color)
+      .foregroundStyle(textColor)
   }
   
   @ViewBuilder
@@ -162,9 +162,9 @@ private extension SDGBoxBadge {
     Group {
       switch type {
       case .solid(let solid):
-        (solid.backgroundColor?.color ?? .clear)
+        (solid.backgroundColor ?? .clear)
       case .line(let line):
-        (line.backgroundColor?.color ?? .clear)
+        (line.backgroundColor ?? .clear)
       }
     }
   }
@@ -176,7 +176,7 @@ private extension SDGBoxBadge {
       EmptyView()
     case .line(let line):
       RoundedRectangle(cornerRadius: spec.cornerRadius, style: .continuous)
-        .stroke(line.borderColor.color, lineWidth: 1)
+        .stroke(line.borderColor, lineWidth: 1)
     }
   }
 }
