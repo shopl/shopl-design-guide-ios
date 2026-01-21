@@ -109,7 +109,6 @@ public struct SDGBoxBadge: View {
       .background(backgroundView)
       .overlay(borderView)
       .clipShape(RoundedRectangle(cornerRadius: spec.cornerRadius, style: .continuous))
-      .fixedSize(horizontal: true, vertical: true)
   }
 
   private var textColor: Color {
