@@ -92,6 +92,8 @@ public extension SDG.Image {
     static let icCommonTime = SDG.Image(name: "ic_common_time", bundle: dsBundle)
     static let icCommonWarning = SDG.Image(name: "ic_common_warning", bundle: dsBundle)
     static let icCommonX = SDG.Image(name: "ic_common_x", bundle: dsBundle)
+    static let icCrownSolid = SDG.Image(name: "ic_crown_solid", bundle: dsBundle)
+    static let icFire = SDG.Image(name: "ic_fire", bundle: dsBundle)
     static let icHide = SDG.Image(name: "ic_hide", bundle: dsBundle)
     static let icInputDelete = SDG.Image(name: "ic_input_delete", bundle: dsBundle)
     static let icMenuAttendance = SDG.Image(name: "ic_menu_attendance", bundle: dsBundle)
