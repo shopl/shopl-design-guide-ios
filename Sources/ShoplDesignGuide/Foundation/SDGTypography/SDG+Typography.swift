@@ -10,25 +10,41 @@ import SwiftUI
 
 extension SDG {
   public enum Typography {
+    /// size 19 / weight 400
     case naviTitle
-    
+    /// size 44 / weight 600
     case special1_SB
-    
+    /// size 28 / weight 600
     case point1_SB
+    /// size 28 / weight 400
     case point1_R
+    /// size 24 / weight 600
     case point2_SB
+    /// size 24 / weight 400
     case point2_R
+    /// size 20 / weight 600
     case title1_SB
+    /// size 20 / weight 400
     case title1_R
+    /// size 18 / weight 600
     case title2_SB
+    /// size 18 / weight 400
     case title2_R
+    /// size 16 / weight 600
     case body1_SB
+    /// size 16 / weight 400
     case body1_R
+    /// size 14 / weight 600
     case body2_SB
+    /// size 14 / weight 400
     case body2_R
+    /// size 12 / weight 600
     case body3_SB
+    /// size 12 / weight 400
     case body3_R
+    /// size 10 / weight 600
     case body4_SB
+    /// size 10 / weight 400
     case body4_R
     
     public var size: CGFloat {
