@@ -17,7 +17,7 @@ private let dsBundle = Bundle(for: DesignSystemBundleAnchor.self)
 public enum SDG {
     
     // MARK: - Image Resource Struct
-    public struct Image: Equatable {
+    public struct Image: Equatable, Sendable {
         public let name: String
         public let bundle: Bundle
         
@@ -28,7 +28,7 @@ public enum SDG {
     }
 
     // MARK: - Color Resource Struct
-    public struct Color: Equatable {
+    public struct Color: Equatable, Sendable {
         public let name: String
         public let bundle: Bundle
         
