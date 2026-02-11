@@ -20,7 +20,7 @@ private let dsBundle = Bundle(for: DesignSystemBundleAnchor.self)
 {%- macro recursiveColorLet assets -%}
   {% for asset in assets %}
     {% if asset.type == "color" %}
-    static let {{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }} = SDG.Color(name: "{{ asset.value }}", bundle: dsBundle)
+    static let {{ asset.name|swiftIdentifier|lowerFirstWord }} = SDG.Color(name: "{{ asset.value }}", bundle: dsBundle)
     {% elif asset.items %}
     {% call recursiveColorLet asset.items %}
     {% endif %}
@@ -31,7 +31,7 @@ private let dsBundle = Bundle(for: DesignSystemBundleAnchor.self)
 {%- macro recursiveColorStaticVarForSwiftUI assets -%}
   {% for asset in assets %}
     {% if asset.type == "color" %}
-    static let {{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }} = SwiftUI.Color(SDG.Color.{{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }})
+    static let {{ asset.name|swiftIdentifier|lowerFirstWord }} = SwiftUI.Color(SDG.Color.{{ asset.name|swiftIdentifier|lowerFirstWord }})
     {% elif asset.items %}
     {% call recursiveColorStaticVarForSwiftUI asset.items %}
     {% endif %}
@@ -42,7 +42,7 @@ private let dsBundle = Bundle(for: DesignSystemBundleAnchor.self)
 {%- macro recursiveColorStaticVarForUIKit assets -%}
   {% for asset in assets %}
     {% if asset.type == "color" %}
-    static let {{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }} = UIColor(sdg: SDG.Color.{{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }})
+    static let {{ asset.name|swiftIdentifier|lowerFirstWord }} = UIColor(sdg: SDG.Color.{{ asset.name|swiftIdentifier|lowerFirstWord }})
     {% elif asset.items %}
     {% call recursiveColorStaticVarForUIKit asset.items %}
     {% endif %}
@@ -53,7 +53,7 @@ private let dsBundle = Bundle(for: DesignSystemBundleAnchor.self)
 {%- macro recursiveShapeStyle assets -%}
   {% for asset in assets %}
     {% if asset.type == "color" %}
-    static var {{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }}: SwiftUI.Color { SwiftUI.Color(SDG.Color.{{ asset.name|swiftIdentifier:"pretty"|lowerFirstWord }}) }
+    static var {{ asset.name|swiftIdentifier|lowerFirstWord }}: SwiftUI.Color { SwiftUI.Color(SDG.Color.{{ asset.name|swiftIdentifier|lowerFirstWord }}) }
     {% elif asset.items %}
     {% call recursiveShapeStyle asset.items %}
     {% endif %}
