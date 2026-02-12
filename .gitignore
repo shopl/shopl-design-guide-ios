@@ -127,6 +127,8 @@ Derived/
 *.xcworkspace/
 *.xcodeproj/
 
+.claude/
+
 !Fixtures/**/*.xcodeproj/
 
 node_modules

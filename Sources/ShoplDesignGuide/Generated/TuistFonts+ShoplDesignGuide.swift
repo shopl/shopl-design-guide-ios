@@ -53,7 +53,7 @@ public struct ShoplDesignGuideFontConvertible: Sendable {
   public let family: String
   public let path: String
 
-  nonisolated(unsafe) private static var registeredFonts: Set<String> = []
+  private static var registeredFonts: Set<String> = []
   private static let registerLock = NSLock()
 
   #if os(macOS)
