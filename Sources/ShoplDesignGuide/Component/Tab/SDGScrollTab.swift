@@ -4,7 +4,6 @@
 //
 //  Created by jerry on 1/7/26.
 //
-
 import SwiftUI
 
 public struct SDGScrollTab: View {
@@ -15,7 +14,6 @@ public struct SDGScrollTab: View {
   }
   
   public struct Model: Equatable, Hashable {
-    
     public let id: String
     public let title: String
     
@@ -23,7 +21,6 @@ public struct SDGScrollTab: View {
       self.id = id
       self.title = title
     }
-    
   }
   
   private let type: `Type`
@@ -45,9 +42,7 @@ public struct SDGScrollTab: View {
   }
   
   public var body: some View {
-    
     ScrollViewReader { proxy in
-      
       ScrollView(.horizontal) {
         
         switch type {
