@@ -109,6 +109,7 @@ public struct SDGNaviFilterChip: View {
         
         self.makeDeleteButton(filterId: filter.id)
       }
+      .frame(height: 24)
       .padding(.leading, SDGSpacing.spacing8)
       .padding(.trailing, SDGSpacing.spacing4)
       .background(filterBackgroundColor)
