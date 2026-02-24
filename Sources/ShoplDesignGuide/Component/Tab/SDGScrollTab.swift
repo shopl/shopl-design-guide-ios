@@ -29,10 +29,13 @@ public struct SDGScrollTab: View {
   
   @Binding private var selectedIndex: Int
   
+  private let horizontalPadding: CGFloat = 0
+  
   public init(
     type: `Type` = .underline,
     list: [Model],
     selectedIndex: Binding<Int>,
+    horizontalPadding: CGFloat = 0,
     maxWidth: CGFloat? = nil
   ) {
     self.type = type
@@ -48,8 +51,11 @@ public struct SDGScrollTab: View {
         switch type {
         case .text:
           textBody
+            .padding(.horizontal, horizontalPadding)
+          
         case .underline:
           underlineBody
+            .padding(.horizontal, horizontalPadding)
         }
         
       }

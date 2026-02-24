@@ -16,11 +16,14 @@ public struct SDGNaviFilterChip: View {
     public let count: Int
     
     fileprivate var text: String {
-      if count < 2 {
-        return title
-      }
+      let truncatedTitle =
+        title.count > 16
+        ? String(title.prefix(16)) + "..."
+        : title
       
-      return "\(title)+\(count)"
+      return count < 2
+        ? truncatedTitle
+        : "\(truncatedTitle)+\(count)"
     }
     
     public init(id: String, title: String, count: Int) {
@@ -99,35 +102,35 @@ public struct SDGNaviFilterChip: View {
   private func filterList() -> some View {
     ForEach(filters, id: \.id) { filter in
       
-      ZStack {
-        HStack(spacing: 4) {
-          
-          Text(filter.text)
-            .typo(.body2_R, .neutral500)
-          
-          Button {
-            
-            remove(filter.id)
-            
-          } label: {
-            ZStack {
-              Image(sdg: .icCommonX)
-                .resizable()
-                .renderingMode(.template)
-                .foregroundStyle(.neutral300)
-                .frame(width: 14, height: 14)
-                .padding(4)
-            }
-          }
-          
-        }
+      HStack(spacing: SDGSpacing.spacing4) {
+        Text(filter.text)
+          .lineLimit(1)
+          .typo(.body2_R, .neutral500)
+        
+        self.makeDeleteButton(filterId: filter.id)
       }
+      .frame(height: 24)
+      .padding(.leading, SDGSpacing.spacing8)
+      .padding(.trailing, SDGSpacing.spacing4)
       .background(filterBackgroundColor)
       .cornerRadius(8)
       .applyIf(filter.id == filters.last?.id) {
         $0.padding(.trailing, 16)
       }
-      
+    }
+  }
+  
+  @ViewBuilder
+  private func makeDeleteButton(filterId: String) -> some View {
+    Button {
+      remove(filterId)
+    } label: {
+      SDG.Image.icCommonX.image
+        .resizable()
+        .renderingMode(.template)
+        .foregroundStyle(.neutral300)
+        .frame(width: 14, height: 14)
+        .padding(.all, 4)
     }
   }
 }
@@ -150,7 +153,7 @@ public struct SDGNaviFilterChip: View {
       
       SDGNaviFilterChip(
         filters: [
-          .init(id: UUID().uuidString, title: "필터명이 길어져도 모두 노출", count: 3),
+          .init(id: UUID().uuidString, title: "필터명이 길어져도 모두 노출gkgkgkgkgk", count: 3),
           .init(id: UUID().uuidString, title: "필터명", count: 1),
           .init(id: UUID().uuidString, title: "필터명", count: 1),
           .init(id: UUID().uuidString, title: "필터명", count: 9999)
