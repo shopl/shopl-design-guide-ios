@@ -29,7 +29,7 @@ public struct SDGScrollTab: View {
   
   @Binding private var selectedIndex: Int
   
-  private let horizontalPadding: CGFont = 0
+  private let horizontalPadding: CGFloat = 0
   
   public init(
     type: `Type` = .underline,
