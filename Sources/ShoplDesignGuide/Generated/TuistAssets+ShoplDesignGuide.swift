@@ -85,7 +85,7 @@ public extension SDG.Image {
     static let icCommonEdit = SDG.Image(name: "ic_common_edit", bundle: dsBundle)
     static let icCommonList = SDG.Image(name: "ic_common_list", bundle: dsBundle)
     static let icCommonMail = SDG.Image(name: "ic_common_mail", bundle: dsBundle)
-    static let icCommonMemo = SDG.Image(name: "ic_common_memo", bundle: dsBundle)
+    static let icCommonMemo = SDG.I: "ic_common_memo", bundle: dsBundle)
     static let icCommonNext = SDG.Image(name: "ic_common_next", bundle: dsBundle)
     static let icCommonNextS = SDG.Image(name: "ic_common_next_s", bundle: dsBundle)
     static let icCommonPhoto = SDG.Image(name: "ic_common_photo", bundle: dsBundle)
