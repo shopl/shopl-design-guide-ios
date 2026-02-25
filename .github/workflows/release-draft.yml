@@ -57,10 +57,17 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Delete all existing draft releases
-          gh release list --limit 100 | grep Draft | awk '{print $3}' | while read tag; do
-            gh release delete "$tag" --yes 2>/dev/null || true
-          done
+          # JSON 출력으로 draft 릴리즈 태그를 정확히 파싱
+          DRAFT_TAGS=$(gh release list --json tagName,isDraft --jq '.[] | select(.isDraft) | .tagName')
+
+          if [ -z "$DRAFT_TAGS" ]; then
+            echo "No existing draft releases found."
+          else
+            echo "$DRAFT_TAGS" | while read -r tag; do
+              echo "Deleting draft release: $tag"
+              gh release delete "$tag" --yes --cleanup-tag 2>/dev/null || true
+            done
+          fi
 
       - name: Create new draft release
         env:
