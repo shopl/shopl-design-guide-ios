@@ -67,9 +67,9 @@ struct PopupOverlayModifier<PopupContent: View>: ViewModifier {
     }
     
     showOverlay = true
-    
-    DispatchQueue.main.asyncAfter(deadline: .now() + animation.presentDuration) {
-      withAnimation(.easeInOut(duration: 0.1)) {
+
+    DispatchQueue.main.asyncAfter(deadline: .now() + animation.presentDelay + animation.deadlockAvoidanceDelay) {
+      withAnimation(.easeInOut(duration: animation.presentDuration)) {
         opacity = 1.0
       }
     }
