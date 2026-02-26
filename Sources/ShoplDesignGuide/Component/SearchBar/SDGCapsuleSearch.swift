@@ -88,6 +88,7 @@ public struct SDGCapsuleSearch: View {
       .padding(.vertical, 11)
       .padding(.horizontal, 12)
     }
+    .frame(height: 40)
     .background(self.backgroundColor)
     .cornerRadius(20)
     .overlay(
