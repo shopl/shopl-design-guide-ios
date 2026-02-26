@@ -9,198 +9,117 @@ import SwiftUI
 
 public struct SDGSearchNavi: View {
   
-  public struct SearchButtonOption {
-    
-    public let searchImage: Image
-    public let tintColor: Color
-    public let placeholder: String
-    public let search: (String) -> ()
-    
-    public init(
-      searchImage: Image,
-      tintColor: Color,
-      placeholder: String,
-      search: @escaping (String) -> ()
-    ) {
-      self.searchImage = searchImage
-      self.tintColor = tintColor
-      self.placeholder = placeholder
-      self.search = search
-    }
+  public enum TextFieldType {
+    case capsule
+    case category(icon: SDGCategorySearch.IconModel, showSearchCategoryPopup: () -> Void)
   }
   
-  private let _naviType: TopNaviType
-  private let _title: TopNaviTextOption?
-  private let _backgroundColor: Color
-  private let _searchButton: SearchButtonOption?
-  private let _buttons: [TopNaviButtonOption]
+  private let textFieldType: TextFieldType
+  private let leadingButton: TopNaviButtonOption?
+  private let trailingButton: TopNaviButtonOption?
   
-  @State private var _searchState: Bool = false
+  private let backgroundColor: Color
+  public let placeHolder: String
+  public let search: (String) -> Void
+  
   @State private var _searchText: String = ""
   
   @FocusState private var isTextFieldFocused: Bool
   
   public init(
-    naviType: TopNaviType,
-    title: TopNaviTextOption?,
+    leadingButton: TopNaviButtonOption?,
+    textFieldType: TextFieldType,
+    trailingButton: TopNaviButtonOption?,
     backgroundColor: Color,
-    searchButton: SearchButtonOption,
-    buttons: [TopNaviButtonOption] = []
+    placeHolder: String,
+    search: @escaping (String) -> Void
   ) {
-    _naviType = naviType
-    _title = title
-    _backgroundColor = backgroundColor
-    _searchButton = searchButton
-    _buttons = buttons
+    self.leadingButton = leadingButton
+    self.textFieldType = textFieldType
+    self.trailingButton = trailingButton
+    
+    self.backgroundColor = backgroundColor
+    self.placeHolder = placeHolder
+    self.search = search
   }
   
   public var body: some View {
-    HStack(alignment: .center, spacing: 0) {
-      
-      if case let .pop(tintColor, onDismiss) = _naviType {
-        Button {
-          onDismiss()
-        } label: {
-          Image(sdg: .icNaviBack)
-            .frame(width: 40, height: 40)
-            .foregroundStyle(tintColor ?? .neutral700)
-        }
-        .padding(.leading, -6)
-        .padding(.trailing, 2)
-      }
-      
-      if !self._searchState {
+    HStack(alignment: .center, spacing: .zero) {
+      HStack(spacing: SDGSpacing.spacing2) {
+        self.leadingIcon
         
-        if let title = _title {
-          Text(title.string)
-            .font(.system(size: 19, weight: .regular))
-            .foregroundStyle(title.tintColor)
-            .lineLimit(1)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .truncationMode(.tail)
-        } else {
-          Spacer()
-        }
+        self.textField
         
-        if !_buttons.isEmpty {
-          HStack(spacing: 0) {
-            ForEach(_buttons, id: \.id) { button in
-              
-              Button {
-                button.touchUpInside?()
-              } label: {
-                switch button.isBullet {
-                  case true:
-                    ZStack {
-                      button.image
-                        .foregroundStyle(button.tintColor)
-                      
-                      Color.red350
-                        .frame(width: 8, height: 8)
-                        .cornerRadius(4)
-                        .padding([.bottom, .leading], 16)
-                      
-                    }
-                  case false:
-                    button.image
-                      .foregroundStyle(button.tintColor)
-                }
-              }
-              .frame(width: 40, height: 40)
-        .disabled(!button.isEnable)
-            }
-          }
-        }
-      } else {
-        HStack {
-          HStack(spacing: 4) {
-            Image(sdg: .icCommonSearch)
-              .frame(width: 14, height: 14)
-              .foregroundStyle(.neutral300)
-              .padding(.leading, 12)
-            
-            HStack(spacing: 12) {
-              TextField("", text: $_searchText)
-                .placeholder(when: _searchText.isEmpty) {
-                  Text("\(_searchButton?.placeholder ?? "")")
-                    .foregroundStyle(.neutral300)
-                }
-                .foregroundStyle(.neutral700)
-                .onChange(of: _searchText) {
-                  self._searchButton?.search($0)
-                }
-                .padding(.trailing, 20)
-                .padding(.vertical, 11)
-                .focused($isTextFieldFocused)
-                .onAppear {
-                  isTextFieldFocused = true
-                }
-              
-              if !_searchText.isEmpty {
-                Button {
-                  _searchText = ""
-                } label: {
-                  ZStack {
-                    Image(sdg: .icInputDelete)
-                      .resizable()
-                      .foregroundStyle(.neutral400)
-                      .frame(width: 18, height: 18)
-                  }
-                  .background(.neutral150)
-                  .cornerRadius(9)
-                  .padding(.trailing, 12)
-                }
-              }
-            }
-          }
-          
-        }
-        .background(.neutral0)
-        .frame(maxWidth: .infinity, maxHeight: 40)
-        .cornerRadius(20)
-        .padding(.leading, -6)
-        .padding(.trailing, 2)
-      }
-      
-      if let searchButton = _searchButton {
-        Button {
-          _searchState.toggle()
-          
-          if !_searchState {
-            _searchText = ""
-            self._searchButton?.search("")
-          }
-          
-        } label: {
-          switch _searchState {
-            case true:
-              EmptyView()
-            
-            case false:
-              searchButton.searchImage
-                .foregroundStyle(searchButton.tintColor)
-                .frame(width: 40, height: 40)
-          }
-        }
-      }
-      
-      if case let .dismiss(tintColor, onDismiss) = _naviType {
-        Button {
-          onDismiss()
-        } label: {
-          Image(sdg: .icNaviClose)
-            .frame(width: 40, height: 40)
-            .foregroundColor(tintColor ?? .neutral700)
-        }
+        self.trailingIcon
       }
     }
-    .padding(.leading, 16)
+    .padding(.leading, 10)
     .padding(.trailing, 10)
     .frame(height: 48)
-    .background(_backgroundColor)
+    .background(backgroundColor)
+  }
+  
+  @ViewBuilder
+  private var leadingIcon: some View {
+    if let leading = self.leadingButton {
+      Button {
+        leading.touchUpInside?()
+      } label: {
+        leading.image
+          .foregroundStyle(leading.tintColor)
+         
+      }
+      .frame(width: 40, height: 40)
+    }
+  }
+  
+  @ViewBuilder
+  private var textField: some View {
+    switch textFieldType {
+    case .capsule:
+      SDGCapsuleSearch(
+        placeHolder: placeHolder,
+        searchText: $_searchText,
+        type: .soild,
+        backgroundColor: SDG.Color.neutral0.color,
+        clear: {
+          _searchText = ""
+        },
+        searchButtonTapped: { text in
+          search(text)
+        }
+      )
+    
+    case .category(let iconModel, let showPopup):
+      SDGCategorySearch(
+        searchText: $_searchText,
+        placeholder: .constant(placeHolder),
+        isFocused: .constant(true),
+        iconModel: .constant(iconModel),
+        _searchTapped: {
+          search(_searchText)
+        },
+        _showSearchCategoryPopup: showPopup,
+        _clearAllButtonTapped: {
+          _searchText = ""
+        }
+      )
+    }
+  }
+  
+  @ViewBuilder
+  private var trailingIcon: some View {
+    if let trailing = self.trailingButton {
+      Button {
+        trailing.touchUpInside?()
+      } label: {
+        trailing.image
+          .foregroundStyle(trailing.tintColor)
+      }
+      .frame(width: 40, height: 40)
+    }
   }
 }
-
 
 #Preview {
   
@@ -210,48 +129,56 @@ public struct SDGSearchNavi: View {
   
   ZStack(alignment: .top) {
     VStack {
+      Spacer().frame(height: 100)
       SDGSearchNavi(
-        naviType: .pop(tintColor: nil, onDismiss: {
-          
-        }),
-        title: .init(string: "타이틀"),
-        backgroundColor: .neutral50,
-        searchButton: .init(
-          searchImage: Image(sdg: .icCommonSearch),
-          tintColor: .neutral700,
-          placeholder: "검색",
-          search: { _ in
-            
-          }
+        leadingButton:  .init(
+          image: SDG.Image.icNaviBack.image,
+          tintColor: .black,
+          touchUpInside: {}
         ),
-        buttons: [
-          .init(
-            image: Image(sdg: .icNaviFilter),
-            tintColor: .neutral700
-          )
-        ]
+        textFieldType: .capsule,
+        trailingButton: .init(
+          image: SDG.Image.icNaviClose.image,
+          tintColor: .black,
+          touchUpInside: {}
+        ),
+        backgroundColor: .neutral50,
+        placeHolder: "이름/사번/휴대폰번호",
+        search: { text in
+          print("search: \(text)")
+        }
       )
       
       SDGSearchNavi(
-        naviType: .dismiss(tintColor: nil, onDismiss: {
-          
+        leadingButton: nil,
+        textFieldType: .category(icon: .init(id: "d", label: "tt", icon: SDG.Image.icAlignup.image), showSearchCategoryPopup: {
+          print("7870 tap")
         }),
-        title: .init(string: "타이틀"),
-        backgroundColor: .neutral50,
-        searchButton: .init(
-          searchImage: Image(sdg: .icCommonSearch),
-          tintColor: .neutral700,
-          placeholder: "검색",
-          search: { _ in
-            
-          }
+        trailingButton: .init(
+          image: SDG.Image.icNaviClose.image,
+          tintColor: .black,
+          touchUpInside: {}
         ),
-        buttons: [
-          .init(
-            image: Image(sdg: .icNaviFilter),
-            tintColor: .neutral700
-          )
-        ]
+        backgroundColor: .neutral50,
+        placeHolder: "이름/사번/휴대폰번호",
+        search: { text in
+          print("search: \(text)")
+        }
+      )
+      
+      SDGSearchNavi(
+        leadingButton:  .init(
+          image: SDG.Image.icNaviBack.image,
+          tintColor: .black,
+          touchUpInside: {}
+        ),
+        textFieldType: .capsule,
+        trailingButton: nil,
+        backgroundColor: .neutral50,
+        placeHolder: "이름/사번/휴대폰번호",
+        search: { text in
+          print("search: \(text)")
+        }
       )
       
       Spacer()
