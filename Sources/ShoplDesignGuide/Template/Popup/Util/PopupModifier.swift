@@ -33,7 +33,11 @@ public struct PopupModifier<PopupContent: View>: ViewModifier {
   
   public func body(content: Content) -> some View {
     content
-      .fullScreenCover(isPresented: $showCover) {
+      .fullScreenCover(isPresented: $showCover, onDismiss: {
+        if animation == .fadeInOut {
+          UIView.setAnimationsEnabled(true)
+        }
+      }) {
         PopupPresenter(
           opacity: opacity,
           animation: animation,
@@ -61,26 +65,36 @@ public struct PopupModifier<PopupContent: View>: ViewModifier {
   private func present() {
     if animation == .fadeInOut {
       UIView.setAnimationsEnabled(false)
+      var transaction = Transaction()
+      transaction.disablesAnimations = true
+      withTransaction(transaction) {
+        showCover = true
+      }
+    } else {
+      showCover = true
     }
-    
-    showCover = true
-    
-    DispatchQueue.main.asyncAfter(deadline: .now() + animation.presentDuration) {
-      withAnimation(.easeInOut(duration: 0.1)) {
+
+    DispatchQueue.main.asyncAfter(deadline: .now() + animation.presentDelay + animation.deadlockAvoidanceDelay) {
+      withAnimation(.easeInOut(duration: animation.presentDuration)) {
         opacity = 1.0
       }
     }
   }
-  
+
   private func dismiss() {
     withAnimation(.easeInOut(duration: animation.dismissDuration)) {
       opacity = 0.0
     }
     
     DispatchQueue.main.asyncAfter(deadline: .now() + animation.dismissDuration) {
-      showCover = false
       if animation == .fadeInOut {
-        UIView.setAnimationsEnabled(true)
+        var transaction = Transaction()
+        transaction.disablesAnimations = true
+        withTransaction(transaction) {
+          showCover = false
+        }
+      } else {
+        showCover = false
       }
     }
   }
