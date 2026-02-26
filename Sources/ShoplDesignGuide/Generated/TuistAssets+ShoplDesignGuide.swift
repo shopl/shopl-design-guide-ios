@@ -107,6 +107,7 @@ public extension SDG.Image {
     static let icInputDelete = SDG.Image(name: "ic_input_delete", bundle: dsBundle)
     static let icMenuAttendance = SDG.Image(name: "ic_menu_attendance", bundle: dsBundle)
     static let icMenuDisplay = SDG.Image(name: "ic_menu_display", bundle: dsBundle)
+    static let icMenuIncentive = SDG.Image(name: "ic_menu_incentive", bundle: dsBundle)
     static let icMenuInventory = SDG.Image(name: "ic_menu_inventory", bundle: dsBundle)
     static let icMenuPrice = SDG.Image(name: "ic_menu_price", bundle: dsBundle)
     static let icMenuSales = SDG.Image(name: "ic_menu_sales", bundle: dsBundle)
