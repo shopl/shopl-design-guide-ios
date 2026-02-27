@@ -18,4 +18,15 @@ extension Image {
       .frame(width: size, height: size)
       .foregroundStyle(color)
   }
+  
+  public func templateIcon(
+    size: CGFloat,
+    color: SDG.Color
+  ) -> some View {
+    self
+      .resizable()
+      .renderingMode(.template)
+      .frame(width: size, height: size)
+      .foregroundStyle(color.color)
+  }
 }
