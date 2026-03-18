@@ -141,7 +141,6 @@ public struct SDGSimpleTextForm: View {
         backgroundColor: backgroundColor,
         maxCount: maxCount
       )
-      .frame(height: 40)
       .onChange(of: searchText) { newValue in
         onSearchTextChange(newValue)
       }
