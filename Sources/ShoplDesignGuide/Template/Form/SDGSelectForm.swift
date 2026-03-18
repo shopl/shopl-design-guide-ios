@@ -124,35 +124,18 @@ public struct SDGSelectForm: View {
         }
       }
       
-      Button {
-        
+      SDGSelectInput(
+        model: .init(
+          item: .init(
+            text: selectedText,
+            placeholder: placeHolder
+          ),
+          backgroundColor: .neutral50,
+          status: isSelected ? .completed : .default
+        )
+      ) { item in
         onSelect()
-        
-      } label: {
-       
-        ZStack {
-          
-          HStack(spacing: 10) {
-            
-            Text(text)
-              .typo(.body1_R, isSelected ? .neutral700 : .neutral300)
-              .frame(maxWidth: .infinity, alignment: .leading)
-            
-            Image(sdg: .icCommonNext)
-              .resizable()
-              .foregroundStyle(.neutral700)
-              .frame(width: 20, height: 20)
-              
-          }
-          .padding(.vertical, 10)
-          .padding(.horizontal, 12)
-          
-        }
-        .background(.neutral50)
-        .cornerRadius(12)
-        
       }
-      .buttonStyle(NoTapAnimationButtonStyle())
     }
   }
 }
