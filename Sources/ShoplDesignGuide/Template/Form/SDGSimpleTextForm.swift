@@ -21,7 +21,7 @@ public struct SDGSimpleTextForm: View {
   private let maxCount: Int
   private let backgroundColor: Color
   
-  private let onRefresh: () -> Void
+  private let onRefresh: (() -> Void)?
   private let onSearchButtonTap: (String) -> Void
   private let onSearchTextChange: (String) -> Void
   
@@ -41,7 +41,7 @@ public struct SDGSimpleTextForm: View {
     isRequiered: Bool = false,
     maxCount: Int = 10000,
     backgroundColor: Color? = nil,
-    onRefresh: @escaping () -> Void,
+    onRefresh: (() -> Void)?,
     onSearchButtonTap: @escaping (String) -> Void,
     onSearchTextChange: @escaping (String) -> Void
   ) {
@@ -109,7 +109,8 @@ public struct SDGSimpleTextForm: View {
         
         Spacer(minLength: 8)
         
-        if isSelected && !isRequiered {
+        if let onRefresh = onRefresh,
+           isSelected && !isRequiered {
           
           Button {
             
