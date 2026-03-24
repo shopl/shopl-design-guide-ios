@@ -11,28 +11,35 @@ public struct SDGCustomForm<Body: View>: View {
   
   private let title: String
   private let type: FormType
-  private let isRequiered: Bool
+  private let isRequired: Bool
   private let icon: FormIconModel?
-  private let onRefresh: () -> Void
+  private let onRefresh: (() -> Void)?
   private let bodyArea: Body
-  @Binding private var state: SDGSimpleInput.InputState
+  private var status: Status
+  
+  public enum Status {
+    case `default`
+    case completed
+    case disabled
+    case error
+  }
   
   public init(
     title: String,
     type: FormType,
     isRequiered: Bool,
     icon: FormIconModel? = nil,
-    onRefresh: @escaping () -> Void,
+    onRefresh: (() -> Void)?,
     @ViewBuilder bodyArea: @escaping () -> Body,
-    state: Binding<SDGSimpleInput.InputState>
+    status: Status
   ) {
     self.title = title
     self.type = type
-    self.isRequiered = isRequiered
+    self.isRequired = isRequiered
     self.icon = icon
     self.onRefresh = onRefresh
     self.bodyArea = bodyArea()
-    self._state = state
+    self.status = status
   }
   
   public var body: some View {
@@ -46,9 +53,7 @@ public struct SDGCustomForm<Body: View>: View {
         
         Spacer(minLength: 8)
         
-        if !isRequiered {
-          refreshIcon
-        }
+        refreshIcon
       }
       
       bodyArea
@@ -60,7 +65,7 @@ extension SDGCustomForm {
   var titleLabel: some View {
     Text("")
       .attributeText(
-        fullText: isRequiered ? "\(title)*" : title,
+        fullText: isRequired ? "\(title)*" : title,
         defaultFont: self.type == .empha ? .system(size: 16, weight: .semibold) : .system(size: 16),
         defaultColor: .neutral700,
         highlights: [
@@ -95,54 +100,63 @@ extension SDGCustomForm {
     .buttonStyle(NoTapAnimationButtonStyle())
   }
   
+  @ViewBuilder
   var refreshIcon: some View {
-    Button {
-      onRefresh()
-    } label: {
-      ZStack {
-        Image(sdg: .icCommonRefresh)
-          .resizable()
-          .foregroundStyle(.neutral400)
-          .frame(width: 24, height: 24)
-          .padding(2)
+    if let onRefresh,
+       !isRequired,
+       self.status == .completed {
+      Button {
+        onRefresh()
+      } label: {
+        ZStack {
+          Image(sdg: .icCommonRefresh)
+            .resizable()
+            .foregroundStyle(.neutral400)
+            .frame(width: 24, height: 24)
+            .padding(2)
+        }
+        .background(.neutral50)
+        .cornerRadius(14)
       }
-      .background(.neutral50)
-      .cornerRadius(14)
     }
   }
 }
 
 struct SDGCustomForm_Wrapper: View {
-  
+  @State var simpleInputText: String = ""
   @State var inputState: SDGSimpleInput.InputState = .default
-  
+
   var body: some View {
     VStack {
       SDGCustomForm(
-        title: "커스텀 폼 타이틀",
+        title: "커스텀 폼 타이틀 1",
         type: .normal,
         isRequiered: false,
         icon: .init(image: SDG.Image.icAligndown.image,
                     tintColor: .neutral700),
         onRefresh: {
+          simpleInputText = ""
           inputState = .default
         },
         bodyArea: {
-          ZStack {
-            Text("body area")
+          SDGSimpleInput(
+            type: .solid,
+            state: $inputState,
+            text: $simpleInputText,
+            hint: "입력"
+          )
+          .onChange(of: simpleInputText) { newValue in
+            inputState = newValue.isEmpty ? .default : .completed
           }
-          .frame(maxWidth: .infinity, maxHeight: 150)
-          .background(.neutral150)
         },
-        state: $inputState
+        status: inputState == .default ? .default : .completed
       )
-      
+
       SDGCustomForm(
-        title: "커스텀 폼 타이틀",
+        title: "커스텀 폼 타이틀 2",
         type: .empha,
         isRequiered: false,
         onRefresh: {
-          inputState = .default
         },
         bodyArea: {
           ZStack {
@@ -151,15 +165,14 @@ struct SDGCustomForm_Wrapper: View {
           .frame(maxWidth: .infinity, maxHeight: 150)
           .background(.neutral150)
         },
-        state: $inputState
+        status: .default
       )
       
       SDGCustomForm(
-        title: "커스텀 폼 타이틀",
+        title: "커스텀 폼 타이틀 3",
         type: .empha,
         isRequiered: true,
         onRefresh: {
-          inputState = .default
         },
         bodyArea: {
           ZStack {
@@ -168,7 +181,7 @@ struct SDGCustomForm_Wrapper: View {
           .frame(maxWidth: .infinity, maxHeight: 150)
           .background(.neutral150)
         },
-        state: $inputState
+        status: .default
       )
       
       SDGCustomForm(
@@ -178,7 +191,6 @@ struct SDGCustomForm_Wrapper: View {
         icon: .init(image: SDG.Image.icAligndown.image,
                     tintColor: .neutral700),
         onRefresh: {
-          inputState = .default
         },
         bodyArea: {
           ZStack {
@@ -187,7 +199,7 @@ struct SDGCustomForm_Wrapper: View {
           .frame(maxWidth: .infinity, maxHeight: 150)
           .background(.neutral150)
         },
-        state: $inputState
+        status: .default
       )
     }
     .padding(20)
