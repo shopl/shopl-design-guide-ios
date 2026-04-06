@@ -23,26 +23,29 @@ public struct SDGFixedTab: View {
   }
 
   private var _list: [Model]
+  private let _unSelectedUnderlineColor: Color
   @Binding private var _selectedIndex: Int
 
   public init(
     list: [Model],
-    selectedIndex: Binding<Int>
+    selectedIndex: Binding<Int>,
+    unSelectedUnderlineColor: Color = .neutral200
   ) {
     self.__selectedIndex = selectedIndex
 
     self._list = list
+    self._unSelectedUnderlineColor = unSelectedUnderlineColor
   }
 
   public var body: some View {
     
     ZStack(alignment: .bottom) {
-      
+
       Color.neutral200
         .frame(maxWidth: .infinity, minHeight: 1, maxHeight: 1)
       
       HStack(spacing: 0) {
-        
+
         ForEach(
           Array(zip(self._list.indices, self._list)),
           id: \.1.id
@@ -51,9 +54,9 @@ public struct SDGFixedTab: View {
           var selectedColor: SDG.Color {
             return index == _selectedIndex ? .neutral700 : .neutral350
           }
-          
+
           var underlineColor: Color {
-            return index == _selectedIndex ? .neutral700 : .neutral200
+            return index == _selectedIndex ? .neutral700 : self._unSelectedUnderlineColor
           }
           
           Button {
