@@ -25,6 +25,7 @@ public struct SDGFixedTab: View {
   private var _list: [Model]
   private let _unSelectedUnderlineColor: Color
   @Binding private var _selectedIndex: Int
+  @Namespace private var underlineNamespace
 
   public init(
     list: [Model],
@@ -60,9 +61,9 @@ public struct SDGFixedTab: View {
           }
           
           Button {
-            
-            _selectedIndex = index
-            
+            withAnimation(.easeInOut(duration: 0.3)) {
+              _selectedIndex = index
+            }
           } label: {
             ZStack(alignment: .bottom) {
               Text(model.title)
@@ -72,12 +73,17 @@ public struct SDGFixedTab: View {
                 .padding(.bottom, SDGSpacing.spacing12)
                 .padding(.horizontal, SDGSpacing.spacing8)
               
-              underlineColor
-                .frame(height: index == self._selectedIndex ? 2 : 0)
+              if index == self._selectedIndex {
+                underlineColor
+                  .frame(height: 2)
+                  .matchedGeometryEffect(id: "underline", in: underlineNamespace)
+              } else {
+                Color.clear
+                  .frame(height: 0)
+              }
             }
           }
           .buttonStyle(NoTapAnimationButtonStyle())
-          .animation(.easeInOut, value: _selectedIndex)
           
         }
         
