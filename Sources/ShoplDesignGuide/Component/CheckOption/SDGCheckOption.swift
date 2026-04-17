@@ -67,16 +67,18 @@ public struct SDGCheckOption: View {
           Image(sdg: .icCommonCheckS)
             .resizable()
             .renderingMode(.template)
-            .frame(width: model.spec.size, height: model.spec.size, alignment: .center)
+            .frame(width: model.spec.size, height: model.spec.size)
             .background(.clear)
             .tint(model.status == .selected ? .primary300 : .neutral350)
             .clipShape(Circle())
         }
         .overlay(
-          RoundedRectangle(cornerRadius: 8)
-            .stroke(model.status == .selected ? .primary300 : .neutral350, lineWidth: 1)
+          Circle()
+            .strokeBorder(
+              model.status == .selected ? .primary300 : .neutral350,
+              lineWidth: 1
+            )
         )
-        
       }
     }
     .allowsHitTesting(model.status != .disabled)
