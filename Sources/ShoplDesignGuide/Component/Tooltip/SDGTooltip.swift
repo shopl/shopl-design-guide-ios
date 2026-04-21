@@ -89,14 +89,27 @@ struct TooltipModifier: ViewModifier {
   }
   
   private var arrowOffset: CGFloat {
+    let horizontalAdjustment = tooltipOffset.width - calculateBaseOffset().width
+
     switch direction {
     case .topLeading, .bottomLeading:
-      return -tooltipSize.width/2 + 10
+      return clampedArrowOffset(
+        -tooltipSize.width / 2 + 10 - horizontalAdjustment
+      )
     case .topTrailing, .bottomTrailing:
-      return tooltipSize.width/2 - 10
+      return clampedArrowOffset(
+        tooltipSize.width / 2 - 10 - horizontalAdjustment
+      )
+    case .top, .bottom:
+      return clampedArrowOffset(-horizontalAdjustment)
     default:
       return 0
     }
+  }
+  
+  private func clampedArrowOffset(_ value: CGFloat) -> CGFloat {
+    let limit = max(0, tooltipSize.width / 2 - 10)
+    return min(max(value, -limit), limit)
   }
   
   private var tooltipSize: CGSize {
