@@ -136,12 +136,12 @@ public struct SDGToggle: View {
         .fill(Color.neutral0)
         .frame(width: size.toggleSize, height: size.toggleSize)
         .offset(x: isOn ? size.thumbOffset : -size.thumbOffset)
-        .animation(.easeInOut(duration: Constants.animationDuration), value: isOn)
     }
     .frame(width: size.width, height: size.height)
     .background(trackColor)
     .cornerRadius(size.height / 2)
     .contentShape(Rectangle())
+    .animation(.easeInOut(duration: Constants.animationDuration), value: isOn)
     .onTapGesture {
       guard isEnabled else { return }
       isOn.toggle()
@@ -242,6 +242,7 @@ public final class Toggle_UIKit: UISwitch {
   private func commonInit() {
     thumbTintColor = .neutral0
     transform = CGAffineTransform(scaleX: size.scale, y: size.scale)
+    layer.masksToBounds = true
     updateAppearance()
   }
 
@@ -258,6 +259,5 @@ public final class Toggle_UIKit: UISwitch {
     tintColor = currentTrackColor
     onTintColor = currentTrackColor
     backgroundColor = currentTrackColor
-    layer.masksToBounds = true
   }
 }
