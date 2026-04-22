@@ -16,14 +16,7 @@ public struct SDGCheckOption: View {
   public enum Spec: Equatable {
     case large
     case medim
-    
-    fileprivate var circleSize: CGFloat {
-      switch self {
-      case .large: return 18
-      case .medim: return 16
-      }
-    }
-
+  
     fileprivate var iconSize: CGFloat {
       switch self {
       case .large: return 16
@@ -65,7 +58,7 @@ public struct SDGCheckOption: View {
           .resizable()
           .renderingMode(.template)
           .frame(width: model.spec.iconSize, height: model.spec.iconSize, alignment: .center)
-          .frame(width: model.spec.circleSize, height: model.spec.circleSize, alignment: .center)
+          .padding(.all, 1)
           .background(model.status == .selected ? .primary300 : .neutral200)
           .foregroundStyle(.neutral0)
           .clipShape(Circle())
@@ -76,12 +69,11 @@ public struct SDGCheckOption: View {
             .resizable()
             .renderingMode(.template)
             .frame(width: model.spec.iconSize, height: model.spec.iconSize)
-            .frame(width: model.spec.circleSize, height: model.spec.circleSize)
             .background(.clear)
             .tint(model.status == .selected ? .primary300 : .neutral350)
             .clipShape(Circle())
         }
-        .frame(width: model.spec.circleSize, height: model.spec.circleSize)
+        .padding(.all, 1)
         .overlay(
           Circle()
             .strokeBorder(
