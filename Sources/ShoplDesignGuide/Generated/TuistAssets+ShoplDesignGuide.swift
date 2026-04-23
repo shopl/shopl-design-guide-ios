@@ -73,6 +73,7 @@ public extension SDG.Image {
     static let avatarEmpty = SDG.Image(name: "avatar_empty", bundle: dsBundle)
     static let avatarEmptyDot = SDG.Image(name: "avatar_empty_dot", bundle: dsBundle)
     static let emptyMember = SDG.Image(name: "empty_member", bundle: dsBundle)
+    static let icAddPlus = SDG.Image(name: "ic_add_plus", bundle: dsBundle)
     static let icAligndown = SDG.Image(name: "ic_aligndown", bundle: dsBundle)
     static let icAlignup = SDG.Image(name: "ic_alignup", bundle: dsBundle)
     static let icBarcode = SDG.Image(name: "ic_barcode", bundle: dsBundle)
