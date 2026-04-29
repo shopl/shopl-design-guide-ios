@@ -75,17 +75,16 @@ public struct SDGSelectInput<ImageArea: View>: View {
             item.imageArea
             
             if let text = item.text,
-               model.status != .default,
-               model.status != .error {
+               model.status != .default {
               Text(text)
                 .typo(.body1_R, model.status != .disabled ? .neutral700 : .neutral300)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .truncationMode(.middle)
+                .lineLimit(1)
             } else {
               Text(item.placeholder)
                 .typo(.body1_R, .neutral300)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .truncationMode(.middle)
+                .lineLimit(1)
             }
           }
           .frame(height: 40)
