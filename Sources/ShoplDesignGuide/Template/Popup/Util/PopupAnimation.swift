@@ -14,7 +14,7 @@ public enum PopupAnimation {
     case .fadeInOut:
       return 0
     case .slideBottomTop:
-      return 0.4
+      return 0
     }
   }
   var deadlockAvoidanceDelay: Double {
