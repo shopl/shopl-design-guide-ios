@@ -122,6 +122,7 @@ public extension SDG.Image {
     static let icNaviChat = SDG.Image(name: "ic_navi_chat", bundle: dsBundle)
     static let icNaviClose = SDG.Image(name: "ic_navi_close", bundle: dsBundle)
     static let icNaviFilter = SDG.Image(name: "ic_navi_filter", bundle: dsBundle)
+    static let icNaviHelp = SDG.Image(name: "ic_navi_help", bundle: dsBundle)
     static let icNaviMode = SDG.Image(name: "ic_navi_mode", bundle: dsBundle)
     static let icNaviSearch = SDG.Image(name: "ic_navi_search", bundle: dsBundle)
     static let icNaviTemporary = SDG.Image(name: "ic_navi_temporary", bundle: dsBundle)
