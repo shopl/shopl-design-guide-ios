@@ -82,6 +82,7 @@ public struct SDGCapsuleSearch: View {
         Image(sdg: .icInputDelete)
           .onTapGesture {
             searchText.removeAll()
+            clearAllButtonTapped()
           }
           .isHidden(searchText.isEmpty)
       }
