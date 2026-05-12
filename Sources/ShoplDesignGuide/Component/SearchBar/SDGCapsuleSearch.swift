@@ -20,7 +20,7 @@ public struct SDGCapsuleSearch: View {
   private let type: `Type`
   private let backgroundColor: Color
   
-  private var clear: () -> Void
+  private var clearAllButtonTapped: () -> Void
   private let searchButtonTapped: ((String) -> Void)?
   private let searchTextChanged: ((String) -> Void)?
   
@@ -36,7 +36,7 @@ public struct SDGCapsuleSearch: View {
     searchText: Binding<String>,
     type: `Type`,
     backgroundColor: Color,
-    clear: @escaping () -> Void,
+    clearAllButtonTapped: @escaping () -> Void,
     searchButtonTapped: ((String) -> Void)? = nil,
     searchTextChanged: ((String) -> Void)? = nil
   ) {
@@ -44,7 +44,7 @@ public struct SDGCapsuleSearch: View {
     self._searchText = searchText
     self.type = type
     self.backgroundColor = backgroundColor
-    self.clear = clear
+    self.clearAllButtonTapped = clearAllButtonTapped
     self.searchButtonTapped = searchButtonTapped
     self.searchTextChanged = searchTextChanged
   }
@@ -109,7 +109,7 @@ public struct SDGCapsuleSearch: View {
       searchText: .constant(""),
       type: .soild,
       backgroundColor: .neutral0,
-      clear: {
+      clearAllButtonTapped: {
         
       }
     )
@@ -119,7 +119,7 @@ public struct SDGCapsuleSearch: View {
       searchText: .constant(""),
       type: .line(.neutral100),
       backgroundColor: .neutral0,
-      clear: {
+      clearAllButtonTapped: {
         
       }
     )
@@ -129,7 +129,7 @@ public struct SDGCapsuleSearch: View {
       searchText: .constant(""),
       type: .soild,
       backgroundColor: .neutral100,
-      clear: {
+      clearAllButtonTapped: {
         
       }
     )
@@ -139,7 +139,7 @@ public struct SDGCapsuleSearch: View {
       searchText: .constant(""),
       type: .line(.neutral0),
       backgroundColor: .neutral100,
-      clear: {
+      clearAllButtonTapped: {
         
       }
     )

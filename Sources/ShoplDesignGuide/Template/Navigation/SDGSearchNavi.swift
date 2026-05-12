@@ -86,7 +86,7 @@ public struct SDGSearchNavi: View {
         searchText: text,
         type: .soild,
         backgroundColor: SDG.Color.neutral0.color,
-        clear: {
+        clearAllButtonTapped: {
           text.wrappedValue = ""
           onClear?()
         },
