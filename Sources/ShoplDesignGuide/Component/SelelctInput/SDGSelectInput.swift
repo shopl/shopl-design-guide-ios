@@ -7,40 +7,44 @@
 
 import SwiftUI
 
-public struct SDGSelectInput<ImageArea: View>: View {
-  
+public struct SDGSelectInput: View {
+
   private let model: SelectInputModel
   private let onTapped: (SelectInputModel.SelectInputItem) -> Void
-  
+
   public struct SelectInputModel {
     let items: [SelectInputItem]
     let backgroundColor: BackgroundColor
     let status: Status
-    
+
     public struct SelectInputItem: Hashable {
       public static func == (lhs: SelectInputItem, rhs: SelectInputItem) -> Bool {
         lhs.text == rhs.text
       }
-      
+
       public func hash(into hasher: inout Hasher) {
         hasher.combine(text)
       }
-      
-      let imageArea: ImageArea?
+
+      let imageArea: AnyView?
       let text: String?
       let placeholder: String
-      
-      public init(text: String?, placeholder: String, @ViewBuilder imageArea: () -> ImageArea) {
-        self.imageArea = imageArea()
+
+      public init<Content: View>(
+        text: String?,
+        placeholder: String,
+        @ViewBuilder imageArea: () -> Content
+      ) {
+        self.imageArea = AnyView(imageArea())
         self.text = text
         self.placeholder = placeholder
       }
     }
-    
+
     public enum BackgroundColor {
       case neutral50
       case neutral0
-      
+
       var sdgColor: SDG.Color {
         switch self {
         case .neutral50:
@@ -50,7 +54,7 @@ public struct SDGSelectInput<ImageArea: View>: View {
         }
       }
     }
-    
+
     public enum Status {
       case `default`
       case completed
@@ -58,7 +62,7 @@ public struct SDGSelectInput<ImageArea: View>: View {
       case error
     }
   }
-  
+
   public init(
     model: SelectInputModel,
     onTapped: @escaping (SelectInputModel.SelectInputItem) -> Void
@@ -66,14 +70,16 @@ public struct SDGSelectInput<ImageArea: View>: View {
     self.model = model
     self.onTapped = onTapped
   }
-  
+
   public var body: some View {
     HStack(alignment: .center, spacing: 10) {
       VStack(spacing: 0) {
         ForEach(model.items, id: \.self) { item in
           HStack(alignment: .center, spacing: 10) {
-            item.imageArea
-            
+            if let imageArea = item.imageArea {
+              imageArea
+            }
+
             if let text = item.text,
                model.status != .default {
               Text(text)
@@ -94,7 +100,7 @@ public struct SDGSelectInput<ImageArea: View>: View {
           }
         }
       }
-      
+
       SDG.Image.icCommonNext.image
         .templateIcon(size: 24, color: model.status != .disabled ? SDG.Color.neutral700.color : SDG.Color.neutral300.color)
     }
@@ -106,9 +112,15 @@ public struct SDGSelectInput<ImageArea: View>: View {
   }
 }
 
-extension SDGSelectInput.SelectInputModel.SelectInputItem where ImageArea == EmptyView {
+extension SDGSelectInput.SelectInputModel.SelectInputItem {
   public init(text: String?, placeholder: String) {
     self.imageArea = nil
+    self.text = text
+    self.placeholder = placeholder
+  }
+
+  init(text: String?, placeholder: String, imageArea: AnyView?) {
+    self.imageArea = imageArea
     self.text = text
     self.placeholder = placeholder
   }
@@ -117,16 +129,6 @@ extension SDGSelectInput.SelectInputModel.SelectInputItem where ImageArea == Emp
 extension SDGSelectInput.SelectInputModel {
   public init(item: SelectInputItem, backgroundColor: BackgroundColor, status: Status) {
     self.init(items: [item], backgroundColor: backgroundColor, status: status)
-  }
-}
-
-extension SDGSelectInput where ImageArea == EmptyView {
-  public init(
-    model: SelectInputModel,
-    onTapped: @escaping (SelectInputModel.SelectInputItem) -> Void
-  ) {
-    self.model = model
-    self.onTapped = onTapped
   }
 }
 
@@ -141,7 +143,7 @@ extension SDGSelectInput where ImageArea == EmptyView {
     ) { item in
       print(item.text)
     }
-    
+
     SDGSelectInput(
       model: .init(
         item: .init(text: "Completed Input", placeholder: "placeholder"),
@@ -151,7 +153,7 @@ extension SDGSelectInput where ImageArea == EmptyView {
     ) { item in
       print(item.text)
     }
-    
+
     SDGSelectInput(
       model: .init(
         item: .init(text: "Disabled Input", placeholder: "placeholder"),
@@ -161,7 +163,7 @@ extension SDGSelectInput where ImageArea == EmptyView {
     ) { item in
       print(item.text)
     }
-    
+
     SDGSelectInput(
       model: .init(
         item: .init(text: "Error Input", placeholder: "placeholder"),
@@ -171,7 +173,7 @@ extension SDGSelectInput where ImageArea == EmptyView {
     ) { item in
       print(item.text)
     }
-    
+
     SDGSelectInput(
       model: .init(
         item: .init(text: "Input with Image", placeholder: "placeholder") {
@@ -184,7 +186,7 @@ extension SDGSelectInput where ImageArea == EmptyView {
     ) { item in
       print(item.text)
     }
-    
+
     SDGSelectInput(
       model: .init(
         items: [
