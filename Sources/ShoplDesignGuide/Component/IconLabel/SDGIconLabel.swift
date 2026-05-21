@@ -73,15 +73,45 @@ public struct SDGIconLabel: View {
   }
 
   public var body: some View {
+    if usesCompactRightImageLayout {
+      SDGIconLabelCompactLayout(spacing: self.spacing.rawValue) {
+        if let image = leftImage {
+          iconImage(image)
+            .layoutValue(key: SDGIconLabelLayoutRoleKey.self, value: .leftImage)
+        }
+
+        titleText
+          .layoutValue(key: SDGIconLabelLayoutRoleKey.self, value: .title)
+
+        if let image = rightImage {
+          iconImage(image)
+            .layoutValue(key: SDGIconLabelLayoutRoleKey.self, value: .rightImage)
+        }
+      }
+    } else {
+      defaultLayout
+    }
+  }
+
+  private var usesCompactRightImageLayout: Bool {
+    self.rightImage != nil && self.lineLimit == nil && !self.fullSize
+  }
+
+  private var defaultLayout: some View {
     HStack(alignment: .top, spacing: self.spacing.rawValue) {
       if let image = leftImage {
-        image
-          .resizable()
-          .frame(width: 14, height: 14)
-          .foregroundStyle(self.imageForegroundColor)
-          .padding(.top, 1)
+        iconImage(image)
       }
 
+      titleText
+
+      if let image = rightImage {
+        iconImage(image)
+      }
+    }
+  }
+
+  private var titleText: some View {
     Text(title)
       .typo(size.typoSize, titleColor)
       .applyIf(self.fullSize) {
@@ -90,8 +120,10 @@ public struct SDGIconLabel: View {
       .multilineTextAlignment(.leading)
       .lineLimit(self.lineLimit)
       .fixedSize(horizontal: false, vertical: true)
+      .truncationMode(.tail)
+  }
 
-      if let image = rightImage {
+  private func iconImage(_ image: Image) -> some View {
     image
       .resizable()
       .frame(width: 14, height: 14)
@@ -99,6 +131,147 @@ public struct SDGIconLabel: View {
       .padding(.top, 1)
   }
 }
+
+private enum SDGIconLabelLayoutRole {
+  case leftImage
+  case title
+  case rightImage
+}
+
+private struct SDGIconLabelLayoutRoleKey: LayoutValueKey {
+  static let defaultValue: SDGIconLabelLayoutRole = .title
+}
+
+private struct SDGIconLabelCompactLayout: Layout {
+
+  private struct Metrics {
+    let left: LayoutSubview?
+    let title: LayoutSubview
+    let right: LayoutSubview?
+    let leftSize: CGSize
+    let titleSize: CGSize
+    let rightSize: CGSize
+    let totalSpacing: CGFloat
+
+    var width: CGFloat {
+      leftSize.width + titleSize.width + rightSize.width + totalSpacing
+    }
+
+    var height: CGFloat {
+      max(leftSize.height, titleSize.height, rightSize.height)
+    }
+  }
+
+  let spacing: CGFloat
+
+  func sizeThatFits(
+    proposal: ProposedViewSize,
+    subviews: Subviews,
+    cache: inout ()
+  ) -> CGSize {
+    guard let metrics = makeMetrics(subviews: subviews, availableWidth: proposal.width) else {
+      return .zero
+    }
+
+    return CGSize(width: metrics.width, height: metrics.height)
+  }
+
+  func placeSubviews(
+    in bounds: CGRect,
+    proposal: ProposedViewSize,
+    subviews: Subviews,
+    cache: inout ()
+  ) {
+    guard let metrics = makeMetrics(
+      subviews: subviews,
+      availableWidth: proposal.width ?? bounds.width
+    ) else {
+      return
+    }
+
+    var x = bounds.minX
+
+    if let left = metrics.left {
+      left.place(
+        at: CGPoint(x: x, y: bounds.minY),
+        anchor: .topLeading,
+        proposal: ProposedViewSize(width: metrics.leftSize.width, height: metrics.leftSize.height)
+      )
+      x += metrics.leftSize.width + spacing
+    }
+
+    metrics.title.place(
+      at: CGPoint(x: x, y: bounds.minY),
+      anchor: .topLeading,
+      proposal: ProposedViewSize(width: metrics.titleSize.width, height: metrics.titleSize.height)
+    )
+    x += metrics.titleSize.width
+
+    if let right = metrics.right {
+      x += spacing
+      right.place(
+        at: CGPoint(x: x, y: bounds.minY),
+        anchor: .topLeading,
+        proposal: ProposedViewSize(width: metrics.rightSize.width, height: metrics.rightSize.height)
+      )
+    }
+  }
+
+  private func makeMetrics(subviews: Subviews, availableWidth: CGFloat?) -> Metrics? {
+    guard let title = subviews.first(where: { $0[SDGIconLabelLayoutRoleKey.self] == .title }) else {
+      return nil
+    }
+
+    let left = subviews.first(where: { $0[SDGIconLabelLayoutRoleKey.self] == .leftImage })
+    let right = subviews.first(where: { $0[SDGIconLabelLayoutRoleKey.self] == .rightImage })
+    let leftSize = left?.sizeThatFits(.unspecified) ?? .zero
+    let rightSize = right?.sizeThatFits(.unspecified) ?? .zero
+    let spacingCount = CGFloat(max(subviews.count - 1, 0))
+    let occupiedWidth = leftSize.width + rightSize.width + spacing * spacingCount
+    let titleMaxWidth = availableWidth.map { max($0 - occupiedWidth, 0) }
+    let titleSize = compactTitleSize(for: title, maxWidth: titleMaxWidth)
+
+    return Metrics(
+      left: left,
+      title: title,
+      right: right,
+      leftSize: leftSize,
+      titleSize: titleSize,
+      rightSize: rightSize,
+      totalSpacing: spacing * spacingCount
+    )
+  }
+
+  private func compactTitleSize(for title: LayoutSubview, maxWidth: CGFloat?) -> CGSize {
+    let idealSize = title.sizeThatFits(.unspecified)
+
+    guard let maxWidth, maxWidth.isFinite else {
+      return idealSize
+    }
+
+    guard idealSize.width > maxWidth else {
+      return idealSize
+    }
+
+    let maxSize = title.sizeThatFits(ProposedViewSize(width: maxWidth, height: nil))
+    var lowerBound: CGFloat = 1
+    var upperBound: CGFloat = max(maxWidth, 1)
+
+    for _ in 0..<18 {
+      let mid = (lowerBound + upperBound) / 2
+      let candidateSize = title.sizeThatFits(ProposedViewSize(width: mid, height: nil))
+
+      if candidateSize.height <= maxSize.height + 0.5 {
+        upperBound = mid
+      } else {
+        lowerBound = mid
+      }
+    }
+
+    let compactSize = title.sizeThatFits(ProposedViewSize(width: upperBound, height: nil))
+    let compactWidth = min(maxWidth, max(compactSize.width, upperBound))
+
+    return CGSize(width: ceil(compactWidth), height: compactSize.height)
   }
 }
 
