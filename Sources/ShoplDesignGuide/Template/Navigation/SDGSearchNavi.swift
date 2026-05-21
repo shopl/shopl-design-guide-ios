@@ -19,10 +19,10 @@ public struct SDGSearchNavi: View {
   private let trailingButton: TopNaviButtonOption?
   
   private let backgroundColor: Color
+  private let text: Binding<String>
+  private let onClear: (() -> Void)?
   public let placeHolder: String
   public let search: (String) -> Void
-  
-  @State private var _searchText: String = ""
   
   @FocusState private var isTextFieldFocused: Bool
   
@@ -32,6 +32,8 @@ public struct SDGSearchNavi: View {
     trailingButton: TopNaviButtonOption?,
     backgroundColor: Color,
     placeHolder: String,
+    text: Binding<String>,
+    onClear: (() -> Void)? = nil,
     search: @escaping (String) -> Void
   ) {
     self.leadingButton = leadingButton
@@ -40,6 +42,8 @@ public struct SDGSearchNavi: View {
     
     self.backgroundColor = backgroundColor
     self.placeHolder = placeHolder
+    self.text = text
+    self.onClear = onClear
     self.search = search
   }
   
@@ -79,11 +83,12 @@ public struct SDGSearchNavi: View {
     case .capsule:
       SDGCapsuleSearch(
         placeHolder: placeHolder,
-        searchText: $_searchText,
+        searchText: text,
         type: .soild,
         backgroundColor: SDG.Color.neutral0.color,
-        clear: {
-          _searchText = ""
+        clearAllButtonTapped: {
+          text.wrappedValue = ""
+          onClear?()
         },
         searchButtonTapped: { text in
           search(text)
@@ -92,16 +97,17 @@ public struct SDGSearchNavi: View {
     
     case .category(let iconModel, let showPopup):
       SDGCategorySearch(
-        searchText: $_searchText,
+        searchText: text,
         placeholder: .constant(placeHolder),
         isFocused: .constant(true),
         iconModel: .constant(iconModel),
         _searchTapped: {
-          search(_searchText)
+          search(text.wrappedValue)
         },
         _showSearchCategoryPopup: showPopup,
         _clearAllButtonTapped: {
-          _searchText = ""
+          text.wrappedValue = ""
+          onClear?()
         }
       )
     }
@@ -144,6 +150,7 @@ public struct SDGSearchNavi: View {
         ),
         backgroundColor: .neutral50,
         placeHolder: "이름/사번/휴대폰번호",
+        text: .constant(""),
         search: { text in
           print("search: \(text)")
         }
@@ -161,6 +168,7 @@ public struct SDGSearchNavi: View {
         ),
         backgroundColor: .neutral50,
         placeHolder: "이름/사번/휴대폰번호",
+        text: .constant(""),
         search: { text in
           print("search: \(text)")
         }
@@ -176,6 +184,7 @@ public struct SDGSearchNavi: View {
         trailingButton: nil,
         backgroundColor: .neutral50,
         placeHolder: "이름/사번/휴대폰번호",
+        text: .constant(""),
         search: { text in
           print("search: \(text)")
         }
