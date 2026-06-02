@@ -33,15 +33,26 @@ public struct SDGToggle: View {
       return self == .m ? 9 : 6.75
     }
   }
-  
+
+  public enum Style {
+    case primary
+    case neutral
+  }
+
   private var toggleState: ToggleState
   private var size: Size
+  private var style: Style
   @Binding private var isOn: Bool
   
   private var backgroundColor: Color {
     switch toggleState {
       case .normal:
+      switch style {
+        case .primary:
         return isOn ? .primary300 : .neutral300
+      case .neutral:
+        return isOn ? .neutral700 : .neutral300
+      }
       case .disabled:
         return isOn ? .primary50 : .neutral200
     }
@@ -50,10 +61,12 @@ public struct SDGToggle: View {
   public init(
     size: Size,
     toggleState: ToggleState,
+    style: Style,
     isOn: Binding<Bool>
   ) {
     self.size = size
     self.toggleState = toggleState
+    self.style = style
     self._isOn = isOn
   }
   
@@ -78,15 +91,15 @@ public struct SDGToggle: View {
 
 #Preview {
   VStack {
-    SDGToggle(size: .m, toggleState: .normal, isOn: .constant(true))
-    SDGToggle(size: .m, toggleState: .disabled, isOn: .constant(true))
-    SDGToggle(size: .s, toggleState: .normal, isOn: .constant(true))
-    SDGToggle(size: .s, toggleState: .disabled, isOn: .constant(true))
-    
-    SDGToggle(size: .m, toggleState: .normal, isOn: .constant(false))
-    SDGToggle(size: .m, toggleState: .disabled, isOn: .constant(false))
-    SDGToggle(size: .s, toggleState: .normal, isOn: .constant(false))
-    SDGToggle(size: .s, toggleState: .disabled, isOn: .constant(false))
+    SDGToggle(size: .m, toggleState: .normal, style: .primary, isOn: .constant(true))
+    SDGToggle(size: .m, toggleState: .disabled, style: .primary,isOn: .constant(true))
+    SDGToggle(size: .s, toggleState: .normal, style: .primary,isOn: .constant(true))
+    SDGToggle(size: .s, toggleState: .disabled, style: .primary,isOn: .constant(true))
+
+    SDGToggle(size: .m, toggleState: .normal, style: .neutral,isOn: .constant(false))
+    SDGToggle(size: .m, toggleState: .disabled, style: .neutral,isOn: .constant(false))
+    SDGToggle(size: .s, toggleState: .normal, style: .neutral,isOn: .constant(false))
+    SDGToggle(size: .s, toggleState: .disabled, style: .neutral,isOn: .constant(false))
   }
 }
 
