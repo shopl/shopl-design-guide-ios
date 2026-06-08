@@ -80,6 +80,7 @@ public extension SDG.Image {
     static let icCirclewarning = SDG.Image(name: "ic_circlewarning", bundle: dsBundle)
     static let icClip = SDG.Image(name: "ic_clip", bundle: dsBundle)
     static let icCommon = SDG.Image(name: "ic_common_+", bundle: dsBundle)
+    static let icCommonS = SDG.Image(name: "ic_common_+_s", bundle: dsBundle)
     static let icCommonCheckS = SDG.Image(name: "ic_common_check_s", bundle: dsBundle)
     static let icCommonCompany = SDG.Image(name: "ic_common_company", bundle: dsBundle)
     static let icCommonDistributor = SDG.Image(name: "ic_common_distributor", bundle: dsBundle)
