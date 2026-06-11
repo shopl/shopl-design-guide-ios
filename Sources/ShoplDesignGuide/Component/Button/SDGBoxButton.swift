@@ -91,7 +91,9 @@ public struct SDGBoxButton: View {
         Text(_option.title)
           .font(.system(size: _option.size.fontSize, weight: .regular))
           .foregroundColor(_option.color.textColor)
-        
+          .lineLimit(1)
+          .truncationMode(.tail)
+
         switch _option.icon {
           case .right(let image, let color):
             
