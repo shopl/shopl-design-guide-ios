@@ -120,7 +120,6 @@ public struct SDGToggle: View {
   public init(
     size: Size,
     toggleState: ToggleState,
-    style: Style,
     isOn: Binding<Bool>
   ) {
     self.init(
