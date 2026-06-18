@@ -21,7 +21,7 @@ public struct SDGPopupTitle: View {
   }
   
   public var body: some View {
-    Text(title)
+    Text(sdg: title)
       .typo(.title2_SB, color)
       .frame(maxWidth: .infinity, alignment: alignment)
   }
