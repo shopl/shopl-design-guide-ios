@@ -72,7 +72,7 @@ public struct SDGBoxButton: View {
       _action()
     } label: {
       
-      HStack(spacing: 4) {
+      HStack(spacing: _option.size.iconSpacing) {
         
         if _baseWidth == .infinity { Spacer() }
         
@@ -89,8 +89,8 @@ public struct SDGBoxButton: View {
         }
         
         Text(_option.title)
-          .font(.system(size: _option.size.fontSize, weight: .regular))
-          .foregroundColor(_option.color.textColor)
+          .typo(_option.size.font)
+          .foregroundStyle(_option.color.textColor)
         
         switch _option.icon {
           case .right(let image, let color):
