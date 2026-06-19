@@ -45,7 +45,7 @@ public struct SDGBottomPopup<BodyContent: View>: View {
   private let topPadding: CGFloat = 24
   private let contentSpacing: CGFloat = 12
   private var popupHeightLimitSpacing: CGFloat {
-    screenHeight * 0.3
+    screenHeight * 0.2
   }
   private var totalContentSpacing: CGFloat {
     let result: CGFloat
