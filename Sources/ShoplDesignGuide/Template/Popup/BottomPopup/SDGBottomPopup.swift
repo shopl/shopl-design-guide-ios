@@ -165,7 +165,10 @@ public struct SDGBottomPopup<BodyContent: View>: View {
               }
             )
           )
-        )
+        ),
+        tapOutsideAction: {
+          showPopup.toggle()
+        }
       )
       .bottomPopup(
         isPresented: showScrollablePopup,
