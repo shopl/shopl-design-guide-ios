@@ -90,22 +90,25 @@ public struct ListPopupView: View {
             ScrollView(showsIndicators: false) {
               VStack(spacing: 0) {
                 ForEach(self.list.indices, id: \.self) { index in
-                  Button {
-                    selectAction(self.list[index].id)
-                  } label: {
-                    VStack(spacing: 0) {
-                      if index != 0 {
-                        Color.neutral200
-                          .frame(height: 1)
-                      }
-                      
-                      Text(self.list[index].title)
-                        .typo(.body1_R, list[index].status.typoColor)
-                        .padding(.vertical, 16)
-                        .padding(.horizontal, 8)
-                        .lineLimit(nil)
+                  VStack(spacing: 0) {
+                    if index != 0 {
+                      Divider(
+                        color: SDG.Color.neutral200.color,
+                        option: .init(direction: .horizental, thickness: 1)
+                      )
                     }
-                    .padding(.horizontal, 12)
+
+                    Text(self.list[index].title)
+                      .typo(.body1_R, list[index].status.typoColor)
+                      .frame(maxWidth: .infinity, alignment: .center)
+                      .padding(.vertical, 16)
+                      .padding(.horizontal, 8)
+                      .lineLimit(nil)
+                  }
+                  .padding(.horizontal, 12)
+                  .contentShape(Rectangle())
+                  .onTapGesture {
+                    selectAction(self.list[index].id)
                   }
                 }
                 
