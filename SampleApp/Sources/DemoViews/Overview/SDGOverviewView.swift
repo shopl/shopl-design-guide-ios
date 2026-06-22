@@ -66,11 +66,7 @@ private struct SDGOverviewHeader: View {
       )
       
       VStack(spacing: 6) {
-        Text("sdg")
-          .font(.system(size: 76, weight: .bold))
-          .foregroundStyle(Color.primary300)
-          .lineLimit(1)
-          .minimumScaleFactor(0.8)
+        SDGOverviewLogo()
         
         Text("Shopl Design Guide")
           .typo(.title2_SB, .neutral0)
@@ -80,6 +76,28 @@ private struct SDGOverviewHeader: View {
     }
     .frame(height: topInset + 244)
     .background(Color.black)
+  }
+}
+
+private struct SDGOverviewLogo: View {
+  var body: some View {
+    Text("sdg")
+      .font(.system(size: 76, weight: .bold))
+      .foregroundStyle(logoGradient)
+      .lineLimit(1)
+      .minimumScaleFactor(0.8)
+  }
+  
+  private var logoGradient: LinearGradient {
+    LinearGradient(
+      colors: [
+        Color(red: 122 / 255, green: 190 / 255, blue: 253 / 255),
+        Color(red: 29 / 255, green: 139 / 255, blue: 248 / 255),
+        Color(red: 7 / 255, green: 125 / 255, blue: 242 / 255)
+      ],
+      startPoint: .topLeading,
+      endPoint: .bottomTrailing
+    )
   }
 }
 
