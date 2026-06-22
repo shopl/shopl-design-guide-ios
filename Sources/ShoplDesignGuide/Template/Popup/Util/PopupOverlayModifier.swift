@@ -133,15 +133,10 @@ struct PopupOverlayModifier<PopupContent: View>: ViewModifier {
   }
 
   private var hiddenContentOffset: CGFloat {
-    containerHeight > 0 ? containerHeight : UIScreen.main.bounds.height
+    containerHeight > 0 ? containerHeight : 2000
   }
 
   private var dismissCompletionDelay: Double {
-    switch animation {
-    case .fadeInOut:
-      return animation.dismissDuration * 2
-    case .slideBottomTop:
-      return animation.dismissDuration
-    }
+    animation.dismissDuration
   }
 }

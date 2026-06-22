@@ -144,12 +144,7 @@ private class PopupDismissalAnimator<PopupView: View>: NSObject, UIViewControlle
   }
 
   func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-    switch animation {
-    case .fadeInOut:
-      return animation.dismissDuration * 2
-    case .slideBottomTop:
-      return animation.dismissDuration
-    }
+    animation.dismissDuration
   }
 
   func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
