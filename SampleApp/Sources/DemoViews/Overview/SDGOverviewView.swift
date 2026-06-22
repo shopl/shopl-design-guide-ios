@@ -13,32 +13,66 @@ struct SDGOverviewView: View {
   
   var body: some View {
     GeometryReader { geometry in
-      VStack(spacing: 0) {
-        SDGOverviewHeader(
-          topInset: geometry.safeAreaInsets.top,
-          onMenuTap: viewModel.didTapMenuButton
-        )
-        
-        ScrollView(showsIndicators: false) {
-          VStack(spacing: 16) {
-            ForEach(viewModel.sections) { section in
-              SDGOverviewSectionCard(section: section)
+      ZStack(alignment: .trailing) {
+        VStack(spacing: 0) {
+          SDGOverviewHeader(
+            topInset: geometry.safeAreaInsets.top,
+            onMenuTap: presentMenu
+          )
+          
+          ScrollView(showsIndicators: false) {
+            VStack(spacing: 16) {
+              ForEach(viewModel.sections) { section in
+                SDGOverviewSectionCard(section: section)
+              }
+              
+              Text(sdg: viewModel.footerText)
+                .multilineTextAlignment(.center)
+                .typo(.body4_R, .neutral200)
+                .padding(.top, 44)
+                .padding(.bottom, 40)
             }
-            
-            Text(sdg: viewModel.footerText)
-              .multilineTextAlignment(.center)
-              .typo(.body4_R, .neutral200)
-              .padding(.top, 44)
-              .padding(.bottom, 40)
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
           }
-          .padding(.horizontal, 16)
-          .padding(.top, 16)
+          .background(Color.neutral0)
         }
         .background(Color.neutral0)
+        
+        if viewModel.isMenuPresented {
+          SDGMenuView(
+            viewModel: SDGMenuViewModel(selectedItemID: SDGMenuViewModel.overviewItemID),
+            topInset: geometry.safeAreaInsets.top,
+            onClose: dismissMenu,
+            onRoute: { route in
+              switch route {
+              case .overview:
+                dismissMenu()
+              case .demo:
+                break
+              }
+            }
+          )
+          .transition(.move(edge: .trailing))
+          .zIndex(1)
+        }
       }
+      .animation(.easeInOut(duration: 0.25), value: viewModel.isMenuPresented)
       .background(Color.neutral0)
       .ignoresSafeArea(edges: .top)
       .toolbar(.hidden, for: .navigationBar)
+    }
+  }
+  
+  private func presentMenu() {
+    withAnimation(.easeInOut(duration: 0.25)) {
+      viewModel.didTapMenuButton()
+    }
+  }
+  
+  private func dismissMenu() {
+    withAnimation(.easeInOut(duration: 0.25)) {
+      viewModel.dismissMenu()
     }
   }
 }
