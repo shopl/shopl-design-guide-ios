@@ -2,27 +2,23 @@ import SwiftUI
 import ShoplDesignGuide
 
 struct AppView: View {
+  @StateObject private var overviewViewModel = SDGOverviewViewModel()
+  
   var body: some View {
     NavigationStack {
-      DSListView(
-        title: "SDG",
-        description: "Shopl Design Guide",
-        subDescription: nil,
-        items: DSData.menu,
-        isRoot: true
-      )
+      SDGOverviewView(viewModel: overviewViewModel)
     }
   }
 }
 
-struct DSListView: View {
+struct SDGListView: View {
   let title: String
   let description: String?
   let subDescription: String?
-  let items: [DSItem]
+  let items: [SDGItem]
   let isRoot: Bool
   
-  init(title: String, description: String?, subDescription: String?, items: [DSItem], isRoot: Bool = false) {
+  init(title: String, description: String?, subDescription: String?, items: [SDGItem], isRoot: Bool = false) {
     self.title = title
     self.description = description
     self.subDescription = subDescription
@@ -55,7 +51,7 @@ struct DSListView: View {
                   ForEach(children) { childItem in
                     if childItem.children != nil {
                       NavigationLink {
-                        DSListView(
+                        SDGListView(
                           title: sectionItem.title,
                           description: childItem.description,
                           subDescription: childItem.subDescription,
@@ -67,7 +63,7 @@ struct DSListView: View {
                       }
                     } else {
                       NavigationLink {
-                        DSDetailView(item: childItem)
+                        SDGDetailView(item: childItem)
                       } label: {
                         RowView(item: childItem)
                       }
@@ -89,7 +85,7 @@ struct DSListView: View {
 // MARK: - Subviews
 
 struct RowView: View {
-  let item: DSItem
+  let item: SDGItem
   
   var body: some View {
     VStack {
@@ -102,7 +98,7 @@ struct RowView: View {
 }
 
 struct SectionHeaderView: View {
-  let item: DSItem
+  let item: SDGItem
   
   var body: some View {
     Text(item.title)
@@ -111,8 +107,8 @@ struct SectionHeaderView: View {
   }
 }
 
-struct DSDetailView: View {
-  let item: DSItem
+struct SDGDetailView: View {
+  let item: SDGItem
   
   var body: some View {
     VStack(spacing: 0) {
@@ -130,7 +126,7 @@ struct DSDetailView: View {
           .padding(.horizontal, 20)
         
         if let viewID = item.viewID {
-          DSViewRegistry.shared.build(id: viewID)
+          SDGViewRegistry.shared.build(id: viewID)
         } else {
           Text("View ID가 없습니다.")
         }

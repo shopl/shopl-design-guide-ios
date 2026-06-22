@@ -1,13 +1,13 @@
 //
-//  DSData.swift
+//  SDGData.swift
 //  ShoplDesignGuide
 //
 //  Created by Dino on 11/27/25.
 //  Copyright © 2025 Shopl. All rights reserved.
 //
 
-class DSData {
-  static let menu: [DSItem] = [
+class SDGData {
+  static let menu: [SDGItem] = [
     
     // MARK: - Foundation
     .category(

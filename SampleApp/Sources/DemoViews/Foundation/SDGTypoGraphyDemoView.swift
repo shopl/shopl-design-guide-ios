@@ -12,7 +12,7 @@ import ShoplDesignGuide
 
 struct SDGTypographyDemoView: View {
   
-  private let typographyItems: [(style: Typography, name: String, weight: String)] = [
+  private let typographyItems: [(style: ShoplDesignGuide.SDG.Typography, name: String, weight: String)] = [
     (.naviTitle, "Navi Title", "Regular 400"),
     (.title1_SB, "Title 1 - SB", "Semi Bold 600"),
     (.title1_R, "Title 1 - R", "Regular 400"),
@@ -62,7 +62,7 @@ struct SDGTypographyDemoView: View {
 }
 
 private struct TypographyRow: View {
-  let style: Typography
+  let style: ShoplDesignGuide.SDG.Typography
   let name: String
   let size: String
   let weight: String
