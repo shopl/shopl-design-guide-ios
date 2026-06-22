@@ -2,7 +2,7 @@
 //  SDGOverviewView.swift
 //  ShoplDesignGuide
 //
-//  Created by Codex on 6/22/26.
+//  Created by Jerry on 6/22/26.
 //
 
 import SwiftUI
@@ -25,7 +25,7 @@ struct SDGOverviewView: View {
               SDGOverviewSectionCard(section: section)
             }
             
-            Text(viewModel.footerText)
+            Text(sdg: viewModel.footerText)
               .multilineTextAlignment(.center)
               .typo(.body4_R, .neutral200)
               .padding(.top, 44)
@@ -58,7 +58,7 @@ private struct SDGOverviewHeader: View {
         backgroundColor: .black,
         buttons: [
           TopNaviButtonOption(
-            image: Image(sdg: .icCommonList),
+            image: Image(sdg: .icNaviDrawer),
             tintColor: .neutral0,
             touchUpInside: onMenuTap
           )
@@ -68,7 +68,7 @@ private struct SDGOverviewHeader: View {
       VStack(spacing: 6) {
         SDGOverviewLogo()
         
-        Text("Shopl Design Guide")
+        Text(sdg: "Shopl Design Guide")
           .typo(.title2_SB, .neutral0)
       }
       .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -81,7 +81,7 @@ private struct SDGOverviewHeader: View {
 
 private struct SDGOverviewLogo: View {
   var body: some View {
-    Text("sdg")
+    Text(sdg: "sdg")
       .font(.system(size: 76, weight: .bold))
       .foregroundStyle(logoGradient)
       .lineLimit(1)
@@ -91,12 +91,11 @@ private struct SDGOverviewLogo: View {
   private var logoGradient: LinearGradient {
     LinearGradient(
       colors: [
-        Color(red: 122 / 255, green: 190 / 255, blue: 253 / 255),
-        Color(red: 29 / 255, green: 139 / 255, blue: 248 / 255),
-        Color(red: 7 / 255, green: 125 / 255, blue: 242 / 255)
+        Color(red: 50 / 255, green: 153 / 255, blue: 254 / 255),
+        Color(red: 8 / 255, green: 126 / 255, blue: 244 / 255)
       ],
-      startPoint: .topLeading,
-      endPoint: .bottomTrailing
+      startPoint: UnitPoint(x: -0.052740007638931274, y: 0.6612302660942078),
+      endPoint: UnitPoint(x: 0.5310259759426117, y: 0.2179669737815857)
     )
   }
 }
@@ -107,11 +106,11 @@ private struct SDGOverviewSectionCard: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 20) {
       VStack(alignment: .leading, spacing: 8) {
-        Text(section.title)
+        Text(sdg: section.title)
           .typo(.point2_SB, .neutral700)
           .frame(maxWidth: .infinity, alignment: .leading)
         
-        Text(section.description)
+        Text(sdg: section.description)
           .typo(.body1_R, .neutral600)
           .fixedSize(horizontal: false, vertical: true)
           .frame(maxWidth: .infinity, alignment: .leading)

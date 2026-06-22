@@ -25,7 +25,7 @@ final class SDGViewRegistry {
   func build(id: String) -> AnyView {
     guard let builder = builders[id] else {
       return AnyView(
-        Text("연결된 뷰 없음: \(id)")
+        Text(sdg: "연결된 뷰 없음: \(id)")
           .foregroundStyle(.red)
           .padding()
       )

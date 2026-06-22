@@ -29,17 +29,17 @@ struct SDGTypographyDemoView: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 0) {
-        Text("Pretendard")
+        Text(sdg: "Pretendard")
           .typo(.body1_SB, .neutral700)
           .frame(maxWidth: .infinity, alignment: .leading)
           .padding(.vertical, 32)
         
         HStack(spacing: 10) {
-          Text("Style")
+          Text(sdg: "Style")
             .frame(maxWidth: .infinity, alignment: .leading)
-          Text("Size")
+          Text(sdg: "Size")
             .frame(maxWidth: .infinity, alignment: .leading)
-          Text("Weight")
+          Text(sdg: "Weight")
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .typo(.body3_SB, .neutral400)
@@ -69,11 +69,11 @@ private struct TypographyRow: View {
   
   var body: some View {
     HStack(spacing: 10) {
-      Text(name)
+      Text(sdg: name)
         .frame(maxWidth: .infinity, alignment: .leading)
-      Text(size)
+      Text(sdg: size)
         .frame(maxWidth: .infinity, alignment: .leading)
-      Text(weight)
+      Text(sdg: weight)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
     .typo(style, .neutral700)

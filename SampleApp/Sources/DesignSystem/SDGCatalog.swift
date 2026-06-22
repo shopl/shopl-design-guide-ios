@@ -2,7 +2,7 @@
 //  SDGCatalog.swift
 //  ShoplDesignGuide
 //
-//  Created by Codex on 6/22/26.
+//  Created by Jerry on 6/22/26.
 //
 
 import Foundation
@@ -52,130 +52,389 @@ protocol SDGCatalogRepository {
 
 struct DefaultSDGCatalogRepository: SDGCatalogRepository {
   func overviewSections() -> [SDGCatalogSection] {
-    [
-      foundationSection,
-      componentSection,
-      templateSection
-    ]
+    SDGCatalogSectionKind.allCases.map(\.catalogSection)
   }
 }
 
-private extension DefaultSDGCatalogRepository {
-  var foundationSection: SDGCatalogSection {
-    SDGCatalogSection(
-      id: "foundation",
-      title: "Foundation",
-      description: "일관된 레이아웃과 그에 따른 사용자 경험을 만드는 데 필수적인 시각적 요소입니다.",
-      items: [
-        .init(
-          id: "foundation_color",
-          title: "Color",
-          description: "SDG의 컬러 팔레트",
-          subDescription: "일관된 브랜드 경험을 만들 수 있도록 표준 색상 차트와 사용자 가이드를 제공합니다.",
-          viewID: "foundation_color",
-          implementationNames: ["SDG.Color", "Color"]
-        ),
-        .init(
-          id: "foundation_corner_radius",
-          title: "Corner Radius",
-          implementationNames: ["SDGCornerRadius"]
-        ),
-        .init(
-          id: "foundation_iconography",
-          title: "Iconography",
-          implementationNames: ["SDG.Image", "Image"]
-        ),
-        .init(
-          id: "foundation_spacing",
-          title: "Spacing",
-          implementationNames: ["SDGSpacing"]
-        ),
-        .init(
-          id: "foundation_typography",
-          title: "Typography",
-          description: "SDG의 폰트 스타일",
-          subDescription: "정의된 유형, 규모, 색상을 고려하여 적용된 타이포그래피는 콘텐츠의 중요도를 분류합니다.",
-          viewID: "foundation_typo",
-          implementationNames: ["SDG.Typography", "Typography"]
-        )
-      ]
+protocol SDGCatalogItemRepresentable: CaseIterable {
+  var id: String { get }
+  var title: String { get }
+  var catalogDescription: String? { get }
+  var catalogSubDescription: String? { get }
+  var viewID: String? { get }
+  var implementationNames: [String] { get }
+  var children: [SDGCatalogItem] { get }
+}
+
+extension SDGCatalogItemRepresentable {
+  var catalogDescription: String? { nil }
+  var catalogSubDescription: String? { nil }
+  var viewID: String? { nil }
+  var children: [SDGCatalogItem] { [] }
+  
+  var catalogItem: SDGCatalogItem {
+    SDGCatalogItem(
+      id: id,
+      title: title,
+      description: catalogDescription,
+      subDescription: catalogSubDescription,
+      viewID: viewID,
+      implementationNames: implementationNames,
+      children: children
     )
   }
+}
+
+extension SDGCatalogItemRepresentable where AllCases: Collection, AllCases.Element == Self {
+  static var catalogItems: [SDGCatalogItem] {
+    allCases.map(\.catalogItem)
+  }
+}
+
+enum SDGCatalogSectionKind: String, CaseIterable {
+  case foundation
+  case component
+  case template
   
-  var componentSection: SDGCatalogSection {
-    SDGCatalogSection(
-      id: "component",
-      title: "Component",
-      description: "각각의 기능을 구성하는 요소들의 조합입니다.",
-      items: [
-        .init(id: "component_avatar", title: "Avatar", implementationNames: ["SDGAvatar"]),
-        .init(id: "component_attachment_list", title: "Attachment List", implementationNames: ["SDGAttachmentElement"]),
-        .init(id: "component_badge", title: "Badge", implementationNames: ["SDGBoxBadge", "SDGCapsuleBadge"]),
-        .init(
-          id: "component_button",
-          title: "Button",
-          implementationNames: [
-            "SDGBottomButton",
-            "SDGBoxButton",
-            "SDGCapsuleButton",
-            "SDGFloatingButton",
-            "SDGGhostButton"
-          ],
-          children: [
-            .init(id: "component_bottom_button", title: "Bottom Button", viewID: "component_bottom_button", implementationNames: ["SDGBottomButton"]),
-            .init(id: "component_box_button", title: "Box Button", viewID: "component_box_button", implementationNames: ["SDGBoxButton"]),
-            .init(id: "component_capsule_button", title: "Capsule Button", viewID: "component_capsule_button", implementationNames: ["SDGCapsuleButton"]),
-            .init(id: "component_floating_button", title: "Floating Button", viewID: "component_floating_button", implementationNames: ["SDGFloatingButton"]),
-            .init(id: "component_ghost_button", title: "Ghost Button", viewID: "component_ghost_button", implementationNames: ["SDGGhostButton"])
-          ]
-        ),
-        .init(id: "component_calendar", title: "Calendar", implementationNames: ["SDGCalendar"]),
-        .init(id: "component_checkbox", title: "Checkbox", implementationNames: ["SDGCheckBox"]),
-        .init(id: "component_check_option", title: "Check Option", implementationNames: ["SDGCheckOption"]),
-        .init(id: "component_dropdown", title: "Dropdown", implementationNames: ["SDGDropdown"]),
-        .init(id: "component_empty_icon", title: "Empty Icon", implementationNames: ["SDGEmptyIcon"]),
-        .init(id: "component_filter_chip", title: "Filter Chip", implementationNames: ["SDGNaviFilterChip"]),
-        .init(id: "component_indicator", title: "Indicator", implementationNames: ["SDGTextIndicator", "SDGDotIndicator", "SDGNumberIndicator"]),
-        .init(id: "component_icon_label", title: "Icon Label", implementationNames: ["SDGIconLabel"]),
-        .init(id: "component_list_header_label", title: "List Header label", implementationNames: ["SDGListHeaderLabel"]),
-        .init(id: "component_navigation", title: "Navigation", implementationNames: ["SDGBasicNavi", "SDGTextNavi", "SDGSearchNavi", "SDGCategoryNavi"]),
-        .init(id: "component_number_picker", title: "Number Picker", implementationNames: ["SDGNumberPicker"]),
-        .init(id: "component_progress", title: "Progress", implementationNames: ["SDGCircularProgress", "SDGDotProgress", "SDGLinearProgress", "SDGSystemProgress", "View.systemProgress"]),
-        .init(id: "component_radio", title: "Radio", implementationNames: ["SDGRadio"]),
-        .init(id: "component_search_bar", title: "Search Bar", implementationNames: ["SDGBoxSearch", "SDGCapsuleSearch", "SDGCategorySearch"]),
-        .init(id: "component_segment", title: "Segment", implementationNames: ["SDGSegment"]),
-        .init(id: "component_select_input", title: "Select Input", implementationNames: ["SDGSelectInput"]),
-        .init(id: "component_tab", title: "Tab", implementationNames: ["SDGBoxTab", "SDGFixedTab", "SDGIconTab", "SDGScrollTab"]),
-        .init(id: "component_text_input", title: "Text Input", implementationNames: ["SDGFixedTextInput", "SDGLoginInput", "SDGSimpleInput", "SDGUnderlineInput"]),
-        .init(id: "component_thumbnails", title: "Thumbnails", implementationNames: ["SDGThumbnails"]),
-        .init(id: "component_time_picker", title: "Time Picker", implementationNames: ["SDGTimePicker"]),
-        .init(id: "component_time_select_input", title: "Time Select Input", implementationNames: ["SDGTimeSelectInput"]),
-        .init(id: "component_toggle", title: "Toggle", implementationNames: ["SDGToggle"]),
-        .init(id: "component_tooltip", title: "Tooltip", implementationNames: ["SDGTooltipSpec", "SDGTooltipDirection", "View.tooltip"])
-      ]
-    )
+  var catalogSection: SDGCatalogSection {
+    switch self {
+    case .foundation:
+      return SDGCatalogSection(
+        id: rawValue,
+        title: "Foundation",
+        description: "일관된 레이아웃과 그에 따른 사용자 경험을 만드는 데 필수적인 시각적 요소입니다.",
+        items: SDGFoundationCatalog.catalogItems
+      )
+    case .component:
+      return SDGCatalogSection(
+        id: rawValue,
+        title: "Component",
+        description: "각각의 기능을 구성하는 요소들의 조합입니다.",
+        items: SDGComponentCatalog.catalogItems
+      )
+    case .template:
+      return SDGCatalogSection(
+        id: rawValue,
+        title: "Template",
+        description: "컴포넌트를 포함한 요소들의 조합입니다.",
+        items: SDGTemplateCatalog.catalogItems
+      )
+    }
+  }
+}
+
+enum SDGFoundationCatalog: CaseIterable, SDGCatalogItemRepresentable {
+  case color
+  case cornerRadius
+  case iconography
+  case spacing
+  case typography
+  
+  var id: String {
+    switch self {
+    case .color: return "foundation_color"
+    case .cornerRadius: return "foundation_corner_radius"
+    case .iconography: return "foundation_iconography"
+    case .spacing: return "foundation_spacing"
+    case .typography: return "foundation_typography"
+    }
   }
   
-  var templateSection: SDGCatalogSection {
-    SDGCatalogSection(
-      id: "template",
-      title: "Template",
-      description: "컴포넌트를 포함한 요소들의 조합입니다.",
-      items: [
-        .init(id: "template_calendar_time", title: "Calendar & Time", implementationNames: ["SDGCalendarAndTime"]),
-        .init(id: "template_checkbox_label", title: "Checkbox Label", implementationNames: ["SDGCheckBoxLabel"]),
-        .init(id: "template_check_option_label", title: "Check Option Label", implementationNames: ["CheckOptionLabel"]),
-        .init(id: "template_empty_img", title: "Empty Img", implementationNames: ["SDGEmptyImg"]),
-        .init(id: "template_form", title: "Form", implementationNames: ["SDGFixedTextForm", "SDGDropdownForm", "SDGSelectForm", "SDGSimpleTextForm", "SDGTimeSelectForm"]),
-        .init(id: "template_foundation_list", title: "Foundation List", implementationNames: ["SDGFoundationList"]),
-        .init(id: "template_history", title: "History", implementationNames: ["SDGHistoryHeader"]),
-        .init(id: "template_list_header", title: "List Header", implementationNames: ["SDGButtonHeader", "SDGIconHeader"]),
-        .init(id: "template_multi_calendar", title: "MultiCalendar", implementationNames: ["SDGMultiCalendar"]),
-        .init(id: "template_multi_time_picker", title: "Multi Time Picker", implementationNames: ["SDGMultiTimePicker"]),
-        .init(id: "template_popup", title: "Popup", implementationNames: ["SDGBottomPopup", "SDGCenterPopup", "SDGIconPopup", "SDGConfirmPopup", "SDGDeletePopup", "SDGInfoPopup", "SDGInputPopup"]),
-        .init(id: "template_profile", title: "Profile", implementationNames: ["SDGMiniProfile", "SDGSecondProfile"]),
-        .init(id: "template_radio_label", title: "Radio Label", implementationNames: ["SDGRadioLabel"])
-      ]
-    )
+  var title: String {
+    switch self {
+    case .color: return "Color"
+    case .cornerRadius: return "Corner Radius"
+    case .iconography: return "Iconography"
+    case .spacing: return "Spacing"
+    case .typography: return "Typography"
+    }
+  }
+  
+  var catalogDescription: String? {
+    switch self {
+    case .color:
+      return "SDG의 컬러 팔레트"
+    case .typography:
+      return "SDG의 폰트 스타일"
+    case .cornerRadius, .iconography, .spacing:
+      return nil
+    }
+  }
+  
+  var catalogSubDescription: String? {
+    switch self {
+    case .color:
+      return "일관된 브랜드 경험을 만들 수 있도록 표준 색상 차트와 사용자 가이드를 제공합니다."
+    case .typography:
+      return "정의된 유형, 규모, 색상을 고려하여 적용된 타이포그래피는 콘텐츠의 중요도를 분류합니다."
+    case .cornerRadius, .iconography, .spacing:
+      return nil
+    }
+  }
+  
+  var viewID: String? {
+    switch self {
+    case .color: return "foundation_color"
+    case .typography: return "foundation_typo"
+    case .cornerRadius, .iconography, .spacing:
+      return nil
+    }
+  }
+  
+  var implementationNames: [String] {
+    switch self {
+    case .color: return ["SDG.Color", "Color"]
+    case .cornerRadius: return ["SDGCornerRadius"]
+    case .iconography: return ["SDG.Image", "Image"]
+    case .spacing: return ["SDGSpacing"]
+    case .typography: return ["SDG.Typography", "Typography"]
+    }
+  }
+}
+
+enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
+  case avatar
+  case attachmentList
+  case badge
+  case button
+  case calendar
+  case checkbox
+  case checkOption
+  case dropdown
+  case emptyIcon
+  case filterChip
+  case indicator
+  case iconLabel
+  case listHeaderLabel
+  case navigation
+  case numberPicker
+  case progress
+  case radio
+  case searchBar
+  case segment
+  case selectInput
+  case tab
+  case textInput
+  case thumbnails
+  case timePicker
+  case timeSelectInput
+  case toggle
+  case tooltip
+  
+  var id: String {
+    switch self {
+    case .avatar: return "component_avatar"
+    case .attachmentList: return "component_attachment_list"
+    case .badge: return "component_badge"
+    case .button: return "component_button"
+    case .calendar: return "component_calendar"
+    case .checkbox: return "component_checkbox"
+    case .checkOption: return "component_check_option"
+    case .dropdown: return "component_dropdown"
+    case .emptyIcon: return "component_empty_icon"
+    case .filterChip: return "component_filter_chip"
+    case .indicator: return "component_indicator"
+    case .iconLabel: return "component_icon_label"
+    case .listHeaderLabel: return "component_list_header_label"
+    case .navigation: return "component_navigation"
+    case .numberPicker: return "component_number_picker"
+    case .progress: return "component_progress"
+    case .radio: return "component_radio"
+    case .searchBar: return "component_search_bar"
+    case .segment: return "component_segment"
+    case .selectInput: return "component_select_input"
+    case .tab: return "component_tab"
+    case .textInput: return "component_text_input"
+    case .thumbnails: return "component_thumbnails"
+    case .timePicker: return "component_time_picker"
+    case .timeSelectInput: return "component_time_select_input"
+    case .toggle: return "component_toggle"
+    case .tooltip: return "component_tooltip"
+    }
+  }
+  
+  var title: String {
+    switch self {
+    case .avatar: return "Avatar"
+    case .attachmentList: return "Attachment List"
+    case .badge: return "Badge"
+    case .button: return "Button"
+    case .calendar: return "Calendar"
+    case .checkbox: return "Checkbox"
+    case .checkOption: return "Check Option"
+    case .dropdown: return "Dropdown"
+    case .emptyIcon: return "Empty Icon"
+    case .filterChip: return "Filter Chip"
+    case .indicator: return "Indicator"
+    case .iconLabel: return "Icon Label"
+    case .listHeaderLabel: return "List Header label"
+    case .navigation: return "Navigation"
+    case .numberPicker: return "Number Picker"
+    case .progress: return "Progress"
+    case .radio: return "Radio"
+    case .searchBar: return "Search Bar"
+    case .segment: return "Segment"
+    case .selectInput: return "Select Input"
+    case .tab: return "Tab"
+    case .textInput: return "Text Input"
+    case .thumbnails: return "Thumbnails"
+    case .timePicker: return "Time Picker"
+    case .timeSelectInput: return "Time Select Input"
+    case .toggle: return "Toggle"
+    case .tooltip: return "Tooltip"
+    }
+  }
+  
+  var implementationNames: [String] {
+    switch self {
+    case .avatar: return ["SDGAvatar"]
+    case .attachmentList: return ["SDGAttachmentElement"]
+    case .badge: return ["SDGBoxBadge", "SDGCapsuleBadge"]
+    case .button: return SDGButtonCatalog.allCases.flatMap(\.implementationNames)
+    case .calendar: return ["SDGCalendar"]
+    case .checkbox: return ["SDGCheckBox"]
+    case .checkOption: return ["SDGCheckOption"]
+    case .dropdown: return ["SDGDropdown"]
+    case .emptyIcon: return ["SDGEmptyIcon"]
+    case .filterChip: return ["SDGNaviFilterChip"]
+    case .indicator: return ["SDGTextIndicator", "SDGDotIndicator", "SDGNumberIndicator"]
+    case .iconLabel: return ["SDGIconLabel"]
+    case .listHeaderLabel: return ["SDGListHeaderLabel"]
+    case .navigation: return ["SDGBasicNavi", "SDGTextNavi", "SDGSearchNavi", "SDGCategoryNavi"]
+    case .numberPicker: return ["SDGNumberPicker"]
+    case .progress: return ["SDGCircularProgress", "SDGDotProgress", "SDGLinearProgress", "SDGSystemProgress", "View.systemProgress"]
+    case .radio: return ["SDGRadio"]
+    case .searchBar: return ["SDGBoxSearch", "SDGCapsuleSearch", "SDGCategorySearch"]
+    case .segment: return ["SDGSegment"]
+    case .selectInput: return ["SDGSelectInput"]
+    case .tab: return ["SDGBoxTab", "SDGFixedTab", "SDGIconTab", "SDGScrollTab"]
+    case .textInput: return ["SDGFixedTextInput", "SDGLoginInput", "SDGSimpleInput", "SDGUnderlineInput"]
+    case .thumbnails: return ["SDGThumbnails"]
+    case .timePicker: return ["SDGTimePicker"]
+    case .timeSelectInput: return ["SDGTimeSelectInput"]
+    case .toggle: return ["SDGToggle"]
+    case .tooltip: return ["SDGTooltipSpec", "SDGTooltipDirection", "View.tooltip"]
+    }
+  }
+  
+  var children: [SDGCatalogItem] {
+    switch self {
+    case .button:
+      return SDGButtonCatalog.catalogItems
+    default:
+      return []
+    }
+  }
+}
+
+enum SDGButtonCatalog: CaseIterable, SDGCatalogItemRepresentable {
+  case bottom
+  case box
+  case capsule
+  case floating
+  case ghost
+  
+  var id: String {
+    switch self {
+    case .bottom: return "component_bottom_button"
+    case .box: return "component_box_button"
+    case .capsule: return "component_capsule_button"
+    case .floating: return "component_floating_button"
+    case .ghost: return "component_ghost_button"
+    }
+  }
+  
+  var title: String {
+    switch self {
+    case .bottom: return "Bottom Button"
+    case .box: return "Box Button"
+    case .capsule: return "Capsule Button"
+    case .floating: return "Floating Button"
+    case .ghost: return "Ghost Button"
+    }
+  }
+  
+  var viewID: String? {
+    id
+  }
+  
+  var implementationNames: [String] {
+    switch self {
+    case .bottom: return ["SDGBottomButton"]
+    case .box: return ["SDGBoxButton"]
+    case .capsule: return ["SDGCapsuleButton"]
+    case .floating: return ["SDGFloatingButton"]
+    case .ghost: return ["SDGGhostButton"]
+    }
+  }
+}
+
+enum SDGTemplateCatalog: CaseIterable, SDGCatalogItemRepresentable {
+  case calendarAndTime
+  case checkboxLabel
+  case checkOptionLabel
+  case emptyImg
+  case form
+  case foundationList
+  case history
+  case listHeader
+  case multiCalendar
+  case multiTimePicker
+  case popup
+  case profile
+  case radioLabel
+  
+  var id: String {
+    switch self {
+    case .calendarAndTime: return "template_calendar_time"
+    case .checkboxLabel: return "template_checkbox_label"
+    case .checkOptionLabel: return "template_check_option_label"
+    case .emptyImg: return "template_empty_img"
+    case .form: return "template_form"
+    case .foundationList: return "template_foundation_list"
+    case .history: return "template_history"
+    case .listHeader: return "template_list_header"
+    case .multiCalendar: return "template_multi_calendar"
+    case .multiTimePicker: return "template_multi_time_picker"
+    case .popup: return "template_popup"
+    case .profile: return "template_profile"
+    case .radioLabel: return "template_radio_label"
+    }
+  }
+  
+  var title: String {
+    switch self {
+    case .calendarAndTime: return "Calendar & Time"
+    case .checkboxLabel: return "Checkbox Label"
+    case .checkOptionLabel: return "Check Option Label"
+    case .emptyImg: return "Empty Img"
+    case .form: return "Form"
+    case .foundationList: return "Foundation List"
+    case .history: return "History"
+    case .listHeader: return "List Header"
+    case .multiCalendar: return "MultiCalendar"
+    case .multiTimePicker: return "Multi Time Picker"
+    case .popup: return "Popup"
+    case .profile: return "Profile"
+    case .radioLabel: return "Radio Label"
+    }
+  }
+  
+  var implementationNames: [String] {
+    switch self {
+    case .calendarAndTime: return ["SDGCalendarAndTime"]
+    case .checkboxLabel: return ["SDGCheckBoxLabel"]
+    case .checkOptionLabel: return ["CheckOptionLabel"]
+    case .emptyImg: return ["SDGEmptyImg"]
+    case .form: return ["SDGFixedTextForm", "SDGDropdownForm", "SDGSelectForm", "SDGSimpleTextForm", "SDGTimeSelectForm"]
+    case .foundationList: return ["SDGFoundationList"]
+    case .history: return ["SDGHistoryHeader"]
+    case .listHeader: return ["SDGButtonHeader", "SDGIconHeader"]
+    case .multiCalendar: return ["SDGMultiCalendar"]
+    case .multiTimePicker: return ["SDGMultiTimePicker"]
+    case .popup: return ["SDGBottomPopup", "SDGCenterPopup", "SDGIconPopup", "SDGConfirmPopup", "SDGDeletePopup", "SDGInfoPopup", "SDGInputPopup"]
+    case .profile: return ["SDGMiniProfile", "SDGSecondProfile"]
+    case .radioLabel: return ["SDGRadioLabel"]
+    }
   }
 }

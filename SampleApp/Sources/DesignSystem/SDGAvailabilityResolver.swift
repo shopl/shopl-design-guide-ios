@@ -2,7 +2,7 @@
 //  SDGAvailabilityResolver.swift
 //  ShoplDesignGuide
 //
-//  Created by Codex on 6/22/26.
+//  Created by Jerry on 6/22/26.
 //
 
 import Foundation

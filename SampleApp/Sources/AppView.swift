@@ -89,7 +89,7 @@ struct RowView: View {
   
   var body: some View {
     VStack {
-      Text(item.title)
+      Text(sdg: item.title)
         .typo(.title2_SB, .neutral700)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -101,7 +101,7 @@ struct SectionHeaderView: View {
   let item: SDGItem
   
   var body: some View {
-    Text(item.title)
+    Text(sdg: item.title)
       .typo(.body2_SB, .neutral350)
       .frame(maxWidth: .infinity, alignment: .leading)
   }
@@ -128,7 +128,7 @@ struct SDGDetailView: View {
         if let viewID = item.viewID {
           SDGViewRegistry.shared.build(id: viewID)
         } else {
-          Text("View ID가 없습니다.")
+          Text(sdg: "View ID가 없습니다.")
         }
       }
     }
@@ -160,19 +160,19 @@ struct ComponentTitleView: View {
   
   var body: some View {
     VStack(alignment: .leading, spacing: 4) {
-      Text(title)
+      Text(sdg: title)
         .frame(maxWidth: .infinity, alignment: .leading)
         .font(.system(size: 24, weight: .bold))
         .foregroundStyle(.neutral700)
       
       if let description {
-        Text(description)
+        Text(sdg: description)
           .frame(maxWidth: .infinity, alignment: .leading)
           .typo(.body3_SB, .neutral700)
       }
       
       if let subDescription {
-        Text(subDescription)
+        Text(sdg: subDescription)
           .frame(maxWidth: .infinity, alignment: .leading)
           .typo(.body3_R, .neutral400)
       }
