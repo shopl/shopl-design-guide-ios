@@ -28,8 +28,11 @@ public struct SDGScrollTab: View {
   private let maxWidth: CGFloat?
   
   @Binding private var selectedIndex: Int
+  @Namespace private var underlineNamespace
   
-  private let horizontalPadding: CGFloat = 0
+  private let underlineAnimationDuration: CGFloat = 0.3
+  
+  private let horizontalPadding: CGFloat
   
   public init(
     type: `Type` = .underline,
@@ -41,6 +44,7 @@ public struct SDGScrollTab: View {
     self.type = type
     self.list = list
     self._selectedIndex = selectedIndex
+    self.horizontalPadding = horizontalPadding
     self.maxWidth = maxWidth
   }
   
@@ -117,7 +121,9 @@ public struct SDGScrollTab: View {
     let textColor: SDG.Color = isSelected ? .neutral700 : .neutral350
     
     Button {
-      selectedIndex = index
+      withAnimation(.easeInOut(duration: underlineAnimationDuration)) {
+        selectedIndex = index
+      }
     } label: {
       
       switch type {
@@ -136,14 +142,19 @@ public struct SDGScrollTab: View {
             .frame(height: 22)
             .padding(.bottom, SDGSpacing.spacing6)
           
-          Color.neutral700
-            .frame(height: isSelected ? 2 : 0)
+          if isSelected {
+            Color.neutral700
+              .frame(height: 2)
+              .matchedGeometryEffect(id: "underline", in: underlineNamespace)
+          } else {
+            Color.clear
+              .frame(height: 0)
+          }
         }
       }
       
     }
     .buttonStyle(NoTapAnimationButtonStyle())
-    .animation(.easeInOut, value: selectedIndex)
     .id(index)
   }
 }

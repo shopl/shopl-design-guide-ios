@@ -16,11 +16,11 @@ public struct SDGCheckOption: View {
   public enum Spec: Equatable {
     case large
     case medim
-    
-    fileprivate var size: CGFloat {
+  
+    fileprivate var iconSize: CGFloat {
       switch self {
-      case .large: return 18
-      case .medim: return 16
+      case .large: return 16
+      case .medim: return 14
       }
     }
   }
@@ -57,7 +57,8 @@ public struct SDGCheckOption: View {
         Image(sdg: .icCommonCheckS)
           .resizable()
           .renderingMode(.template)
-          .frame(width: model.spec.size, height: model.spec.size, alignment: .center)
+          .frame(width: model.spec.iconSize, height: model.spec.iconSize, alignment: .center)
+          .padding(.all, 1)
           .background(model.status == .selected ? .primary300 : .neutral200)
           .foregroundStyle(.neutral0)
           .clipShape(Circle())
@@ -67,16 +68,19 @@ public struct SDGCheckOption: View {
           Image(sdg: .icCommonCheckS)
             .resizable()
             .renderingMode(.template)
-            .frame(width: model.spec.size, height: model.spec.size, alignment: .center)
+            .frame(width: model.spec.iconSize, height: model.spec.iconSize)
             .background(.clear)
             .tint(model.status == .selected ? .primary300 : .neutral350)
             .clipShape(Circle())
         }
+        .padding(.all, 1)
         .overlay(
-          RoundedRectangle(cornerRadius: 8)
-            .stroke(model.status == .selected ? .primary300 : .neutral350, lineWidth: 1)
+          Circle()
+            .strokeBorder(
+              model.status == .selected ? .primary300 : .neutral350,
+              lineWidth: 1
+            )
         )
-        
       }
     }
     .allowsHitTesting(model.status != .disabled)
