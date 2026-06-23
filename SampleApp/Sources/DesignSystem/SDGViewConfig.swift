@@ -13,6 +13,7 @@ struct SDGViewConfig {
     let registry = SDGViewRegistry.shared
     
     registry.register(id: "foundation_color") { SDGColorDemoView() }
+    registry.register(id: "foundation_iconography") { SDGIconographyDemoView() }
     registry.register(id: "foundation_typo") { SDGTypographyDemoView() }
 
   }
