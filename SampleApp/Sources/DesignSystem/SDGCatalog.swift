@@ -290,7 +290,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
     case .avatar: return ["SDGAvatar"]
     case .attachmentList: return ["SDGAttachmentElement"]
     case .badge: return ["SDGBoxBadge", "SDGCapsuleBadge"]
-    case .button: return SDGButtonCatalog.allCases.flatMap(\.implementationNames)
+    case .button: return []
     case .calendar: return ["SDGCalendar"]
     case .checkbox: return ["SDGCheckBox"]
     case .checkOption: return ["SDGCheckOption"]
