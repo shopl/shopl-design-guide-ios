@@ -187,7 +187,13 @@ private struct SDGOverviewBadge: View {
   }
   
   private var accessibilityLabel: String {
-    badge.isImplemented ? badge.title : "\(badge.title), 준비 중"
+    guard !badge.isImplemented else { return badge.title }
+
+    let preparingStatus = NSLocalizedString(
+      "준비 중",
+      comment: "Accessibility status for a design guide item that is not implemented yet."
+    )
+    return "\(badge.title), \(preparingStatus)"
   }
 }
 
@@ -209,7 +215,7 @@ private struct SDGFlowLayout: Layout {
     let height = measuredRows.reduce(CGFloat.zero) { partialHeight, row in
       partialHeight + row.height
     } + verticalSpacing * CGFloat(max(measuredRows.count - 1, 0))
-    let width = proposal.width ?? measuredRows.map(\.width).max() ?? 0
+    let width = measuredRows.map(\.width).max() ?? 0
     
     return CGSize(width: width, height: height)
   }
