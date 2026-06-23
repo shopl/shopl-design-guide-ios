@@ -61,7 +61,7 @@ struct SDGGuideDetailView: View {
   
   private var version: String? {
     switch itemID {
-    case "foundation_color", "foundation_iconography", "foundation_spacing":
+    case "foundation_color", "foundation_iconography", "foundation_spacing", "foundation_typography":
       return "2.0.0"
     default:
       return nil

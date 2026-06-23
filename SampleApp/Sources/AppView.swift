@@ -24,6 +24,7 @@ struct AppView: View {
             }
           }
         }
+        .enableInteractivePopGesture(isEnabled: !appViewModel.isMenuPresented)
         .toolbar(.hidden, for: .navigationBar)
         
         if appViewModel.isMenuPresented {

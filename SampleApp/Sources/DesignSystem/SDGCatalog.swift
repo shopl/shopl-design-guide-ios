@@ -205,7 +205,7 @@ enum SDGFoundationCatalog: CaseIterable, SDGCatalogItemRepresentable {
     case .iconography:
       return "기호로 만든 시각 언어로 한정된 공간에서 정보를 효율적으로 전달하는 요소"
     case .typography:
-      return "정의된 유형, 규모, 색상을 고려하여 적용된 타이포그래피는 콘텐츠의 중요도를 분류합니다."
+      return "정의된 서체, 크기, 색상을 통해 콘텐츠 중요도 및 전체 텍스트의 균형을 조정하여 서비스와 사용자의 커뮤니케이션을 돕는 주요 요소"
     case .spacing:
       return "컴포넌트 및 템플릿, 그리고 모든 화면과 구성 요소 사이의 여백"
     case .cornerRadius:
