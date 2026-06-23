@@ -83,7 +83,7 @@ private struct SDGIconographySizePreview: View {
   
   var body: some View {
     Rectangle()
-      .fill(Color.iconographyGuide.opacity(0.2))
+      .fill(Color.info.opacity(0.2))
       .frame(width: size, height: size)
       .padding(.horizontal, .spacing16)
       .padding(.vertical, .spacing32)
@@ -107,10 +107,6 @@ private struct SDGIconographyUsageGuide: View {
     .padding(.vertical, .spacing16)
     .frame(maxWidth: .infinity, alignment: .leading)
   }
-}
-
-private extension Color {
-  static let iconographyGuide = Color(red: 151.0 / 255.0, green: 71.0 / 255.0, blue: 255.0 / 255.0)
 }
 
 #Preview {

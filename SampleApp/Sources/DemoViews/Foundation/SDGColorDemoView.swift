@@ -61,6 +61,7 @@ private enum SDGColorPaletteTab: String, CaseIterable, Identifiable {
   case brand
   case point
   case special
+  case etc
   
   var id: String {
     rawValue
@@ -72,6 +73,7 @@ private enum SDGColorPaletteTab: String, CaseIterable, Identifiable {
     case .brand: return "Brand"
     case .point: return "Point"
     case .special: return "Special"
+    case .etc: return "ETC"
     }
   }
   
@@ -79,7 +81,7 @@ private enum SDGColorPaletteTab: String, CaseIterable, Identifiable {
     switch self {
     case .special:
       return 40
-    case .neutral, .brand, .point:
+    case .neutral, .brand, .point, .etc:
       return 52
     }
   }
@@ -88,7 +90,7 @@ private enum SDGColorPaletteTab: String, CaseIterable, Identifiable {
     switch self {
     case .special:
       return 24
-    case .neutral, .brand, .point:
+    case .neutral, .brand, .point, .etc:
       return 9
     }
   }
@@ -220,6 +222,17 @@ private enum SDGColorPaletteTab: String, CaseIterable, Identifiable {
             .init(name: "BK-40", color: .sdgBlack_40),
             .init(name: "WH-40", color: .sdgWhite_40, needsBorder: true),
             .init(name: "WH-80", color: .sdgWhite_80, needsBorder: true)
+          ]
+        )
+      ]
+      
+    case .etc:
+      return [
+        SDGColorPaletteSection(
+          id: "etc_info",
+          title: "Info",
+          items: [
+            .init(name: "i", color: .info)
           ]
         )
       ]
