@@ -10,69 +10,44 @@ import ShoplDesignGuide
 
 struct SDGOverviewView: View {
   @ObservedObject var viewModel: SDGOverviewViewModel
+  let onMenuTap: () -> Void
+  
+  init(
+    viewModel: SDGOverviewViewModel,
+    onMenuTap: @escaping () -> Void = { }
+  ) {
+    self.viewModel = viewModel
+    self.onMenuTap = onMenuTap
+  }
   
   var body: some View {
     GeometryReader { geometry in
-      ZStack(alignment: .trailing) {
-        VStack(spacing: 0) {
-          SDGOverviewHeader(
-            topInset: geometry.safeAreaInsets.top,
-            onMenuTap: presentMenu
-          )
-          
-          ScrollView(showsIndicators: false) {
-            VStack(spacing: 16) {
-              ForEach(viewModel.sections) { section in
-                SDGOverviewSectionCard(section: section)
-              }
-              
-              Text(sdg: viewModel.footerText)
-                .multilineTextAlignment(.center)
-                .typo(.body4_R, .neutral200)
-                .padding(.top, 44)
-                .padding(.bottom, 40)
+      VStack(spacing: 0) {
+        SDGOverviewHeader(
+          topInset: geometry.safeAreaInsets.top,
+          onMenuTap: onMenuTap
+        )
+        
+        ScrollView(showsIndicators: false) {
+          VStack(spacing: 16) {
+            ForEach(viewModel.sections) { section in
+              SDGOverviewSectionCard(section: section)
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 16)
+            
+            Text(sdg: viewModel.footerText)
+              .multilineTextAlignment(.center)
+              .typo(.body4_R, .neutral200)
+              .padding(.top, 44)
+              .padding(.bottom, 40)
           }
-          .background(Color.neutral0)
+          .padding(.horizontal, 16)
+          .padding(.top, 16)
         }
         .background(Color.neutral0)
-        
-        if viewModel.isMenuPresented {
-          SDGMenuView(
-            viewModel: SDGMenuViewModel(selectedItemID: SDGMenuViewModel.overviewItemID),
-            topInset: geometry.safeAreaInsets.top,
-            onClose: dismissMenu,
-            onRoute: { route in
-              switch route {
-              case .overview:
-                dismissMenu()
-              case .demo:
-                break
-              }
-            }
-          )
-          .transition(.move(edge: .trailing))
-          .zIndex(1)
-        }
       }
-      .animation(.easeInOut(duration: 0.25), value: viewModel.isMenuPresented)
       .background(Color.neutral0)
       .ignoresSafeArea(edges: .top)
       .toolbar(.hidden, for: .navigationBar)
-    }
-  }
-  
-  private func presentMenu() {
-    withAnimation(.easeInOut(duration: 0.25)) {
-      viewModel.didTapMenuButton()
-    }
-  }
-  
-  private func dismissMenu() {
-    withAnimation(.easeInOut(duration: 0.25)) {
-      viewModel.dismissMenu()
     }
   }
 }

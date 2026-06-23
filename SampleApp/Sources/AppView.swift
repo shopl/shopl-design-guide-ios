@@ -2,11 +2,103 @@ import SwiftUI
 import ShoplDesignGuide
 
 struct AppView: View {
+  @StateObject private var appViewModel = SDGAppViewModel()
   @StateObject private var overviewViewModel = SDGOverviewViewModel()
   
   var body: some View {
-    NavigationStack {
-      SDGOverviewView(viewModel: overviewViewModel)
+    GeometryReader { geometry in
+      ZStack(alignment: .trailing) {
+        NavigationStack(path: $appViewModel.navigationPath) {
+          SDGOverviewView(
+            viewModel: overviewViewModel,
+            onMenuTap: presentMenu
+          )
+          .navigationDestination(for: SDGAppRoute.self) { route in
+            switch route {
+            case let .demo(itemID, viewID):
+              SDGGuideDetailView(
+                itemID: itemID,
+                viewID: viewID,
+                onMenuTap: presentMenu
+              )
+            }
+          }
+        }
+        .toolbar(.hidden, for: .navigationBar)
+        
+        if appViewModel.isMenuPresented {
+          SDGMenuView(
+            viewModel: SDGMenuViewModel(selectedItemID: appViewModel.selectedMenuItemID),
+            topInset: geometry.safeAreaInsets.top,
+            onClose: dismissMenu,
+            onRoute: handleMenuRoute
+          )
+          .transition(.move(edge: .trailing))
+          .zIndex(1)
+        }
+      }
+      .animation(.easeInOut(duration: 0.25), value: appViewModel.isMenuPresented)
+      .background(Color.neutral0)
+    }
+  }
+  
+  private func presentMenu() {
+    withAnimation(.easeInOut(duration: 0.25)) {
+      appViewModel.presentMenu()
+    }
+  }
+  
+  private func dismissMenu() {
+    withAnimation(.easeInOut(duration: 0.25)) {
+      appViewModel.dismissMenu()
+    }
+  }
+  
+  private func handleMenuRoute(_ route: SDGMenuRoute) {
+    var transaction = Transaction(animation: nil)
+    transaction.disablesAnimations = true
+    
+    withTransaction(transaction) {
+      appViewModel.navigate(to: route)
+    }
+    
+    dismissMenu()
+  }
+}
+
+private enum SDGAppRoute: Hashable {
+  case demo(itemID: String, viewID: String)
+  
+  var itemID: String {
+    switch self {
+    case .demo(let itemID, _):
+      return itemID
+    }
+  }
+}
+
+private final class SDGAppViewModel: ObservableObject {
+  @Published var navigationPath: [SDGAppRoute] = []
+  @Published var isMenuPresented = false
+  
+  var selectedMenuItemID: String {
+    navigationPath.last?.itemID ?? SDGMenuViewModel.overviewItemID
+  }
+  
+  func presentMenu() {
+    isMenuPresented = true
+  }
+  
+  func dismissMenu() {
+    isMenuPresented = false
+  }
+  
+  func navigate(to route: SDGMenuRoute) {
+    switch route {
+    case .overview:
+      navigationPath = []
+    case .demo(let itemID, let viewID):
+      navigationPath = [.demo(itemID: itemID, viewID: viewID)]
     }
   }
 }

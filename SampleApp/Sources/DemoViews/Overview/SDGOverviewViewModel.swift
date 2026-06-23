@@ -31,7 +31,6 @@ extension SDGViewRegistry: SDGDemoRegistryResolving {}
 
 final class SDGOverviewViewModel: ObservableObject {
   @Published private(set) var sections: [SDGOverviewSectionViewState] = []
-  @Published var isMenuPresented = false
   
   let footerText = "Shopl App Design System 2.0.0\n(2026.01)"
   
@@ -49,14 +48,6 @@ final class SDGOverviewViewModel: ObservableObject {
     self.demoRegistry = demoRegistry
     
     load()
-  }
-  
-  func didTapMenuButton() {
-    isMenuPresented = true
-  }
-  
-  func dismissMenu() {
-    isMenuPresented = false
   }
 }
 
