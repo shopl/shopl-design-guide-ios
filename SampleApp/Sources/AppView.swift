@@ -28,7 +28,7 @@ struct AppView: View {
         
         if appViewModel.isMenuPresented {
           SDGMenuView(
-            viewModel: SDGMenuViewModel(selectedItemID: appViewModel.selectedMenuItemID),
+            viewModel: appViewModel.menuViewModel,
             topInset: geometry.safeAreaInsets.top,
             onClose: dismissMenu,
             onRoute: handleMenuRoute
@@ -80,12 +80,15 @@ private enum SDGAppRoute: Hashable {
 private final class SDGAppViewModel: ObservableObject {
   @Published var navigationPath: [SDGAppRoute] = []
   @Published var isMenuPresented = false
-  
+
+  let menuViewModel = SDGMenuViewModel()
+
   var selectedMenuItemID: String {
     navigationPath.last?.itemID ?? SDGMenuViewModel.overviewItemID
   }
   
   func presentMenu() {
+    menuViewModel.selectItem(id: selectedMenuItemID)
     isMenuPresented = true
   }
   
@@ -97,8 +100,10 @@ private final class SDGAppViewModel: ObservableObject {
     switch route {
     case .overview:
       navigationPath = []
+      menuViewModel.selectItem(id: SDGMenuViewModel.overviewItemID)
     case .demo(let itemID, let viewID):
       navigationPath = [.demo(itemID: itemID, viewID: viewID)]
+      menuViewModel.selectItem(id: itemID)
     }
   }
 }

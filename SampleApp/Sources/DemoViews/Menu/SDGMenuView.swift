@@ -218,6 +218,8 @@ private struct SDGMenuRowView: View {
       .contentShape(Rectangle())
     }
     .buttonStyle(.plain)
+    .disabled(!isRowEnabled)
+    .opacity(isRowEnabled ? 1 : 0.55)
     .accessibilityLabel(accessibilityLabel)
   }
   
@@ -226,12 +228,24 @@ private struct SDGMenuRowView: View {
       return .primary300
     }
     
+    if !isRowEnabled {
+      return .neutral250
+    }
+
     return row.depth == 0 ? .neutral700 : .neutral600
   }
-  
+
+  private var isRowEnabled: Bool {
+    row.isExpandable || (row.isImplemented && row.isDemoAvailable)
+  }
+
   private var accessibilityLabel: String {
     if row.isExpandable {
       return row.isExpanded ? "\(row.title), 펼쳐짐" : "\(row.title), 접힘"
+    }
+
+    if !isRowEnabled {
+      return "\(row.title), 준비 중"
     }
     
     return row.title
