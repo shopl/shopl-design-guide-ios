@@ -177,7 +177,7 @@ enum SDGFoundationCatalog: CaseIterable, SDGCatalogItemRepresentable {
     switch self {
     case .color: return "Color"
     case .cornerRadius: return "Corner Radius"
-    case .iconography: return "Icongraphy"
+    case .iconography: return "Iconography"
     case .spacing: return "Spacing"
     case .typography: return "Typography"
     }

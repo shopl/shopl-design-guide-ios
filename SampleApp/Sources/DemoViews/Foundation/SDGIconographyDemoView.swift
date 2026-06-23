@@ -19,14 +19,14 @@ struct SDGIconographyDemoView: View {
   ]
   
   var body: some View {
-    VStack(alignment: .leading, spacing: 12) {
+    VStack(alignment: .leading, spacing: .spacing12) {
       SDGIconographySizeCard(items: sizeItems)
       
       SDGIconographyUsageGuide()
     }
-    .padding(.horizontal, 16)
-    .padding(.top, 16)
-    .padding(.bottom, 40)
+    .padding(.horizontal, .spacing16)
+    .padding(.top, .spacing16)
+    .padding(.bottom, .spacing40)
     .frame(maxWidth: .infinity, alignment: .leading)
   }
 }
@@ -47,12 +47,12 @@ private struct SDGIconographySizeCard: View {
   let items: [SDGIconographySizeItem]
   
   var body: some View {
-    VStack(spacing: 40) {
+    VStack(spacing: .spacing40) {
       ForEach(items) { item in
         SDGIconographySizeSection(item: item)
       }
     }
-    .padding(16)
+    .padding(.spacing16)
     .frame(maxWidth: .infinity)
     .background(Color.neutral0)
     .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
@@ -67,7 +67,7 @@ private struct SDGIconographySizeSection: View {
   let item: SDGIconographySizeItem
   
   var body: some View {
-    VStack(alignment: .leading, spacing: 12) {
+    VStack(alignment: .leading, spacing: .spacing12) {
       Text(sdg: item.title)
         .typo(.body2_R, .neutral700)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -82,22 +82,20 @@ private struct SDGIconographySizePreview: View {
   let size: CGFloat
   
   var body: some View {
-    VStack(spacing: 0) {
-      Rectangle()
-        .fill(Color.iconographyGuide.opacity(0.2))
-        .frame(width: size, height: size)
-    }
-    .padding(.horizontal, 16)
-    .padding(.vertical, 32)
-    .frame(maxWidth: .infinity)
-    .background(Color.neutral50)
-    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+    Rectangle()
+      .fill(Color.iconographyGuide.opacity(0.2))
+      .frame(width: size, height: size)
+      .padding(.horizontal, .spacing16)
+      .padding(.vertical, .spacing32)
+      .frame(maxWidth: .infinity)
+      .background(Color.neutral50)
+      .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
   }
 }
 
 private struct SDGIconographyUsageGuide: View {
   var body: some View {
-    VStack(alignment: .leading, spacing: 8) {
+    VStack(alignment: .leading, spacing: .spacing8) {
       Text(sdg: "Usage Guidelines")
         .typo(.body3_SB, .neutral350)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -106,7 +104,7 @@ private struct SDGIconographyUsageGuide: View {
         .typo(.body2_SB, .neutral500)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    .padding(.vertical, 16)
+    .padding(.vertical, .spacing16)
     .frame(maxWidth: .infinity, alignment: .leading)
   }
 }
