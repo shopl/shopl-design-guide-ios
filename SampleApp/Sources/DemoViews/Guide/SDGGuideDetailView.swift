@@ -22,50 +22,41 @@ struct SDGGuideDetailView: View {
   }
   
   var body: some View {
-    GeometryReader { geometry in
-      VStack(spacing: 0) {
-        Color.clear
-          .frame(height: geometry.safeAreaInsets.top)
-        
-        SDGBasicNavi(
-          naviType: .pop(
-            tintColor: .neutral700,
-            onDismiss: {
-              dismiss()
-            }
-          ),
-          title: nil,
-          backgroundColor: .neutral0,
-          buttons: [
-            TopNaviButtonOption(
-              image: Image(sdg: .icNaviDrawer),
-              tintColor: .neutral700,
-              touchUpInside: onMenuTap
-            )
-          ]
-        )
-        
-        ScrollView(showsIndicators: false) {
-          VStack(spacing: 0) {
-            SDGGuideHeaderView(
-              title: item?.title ?? viewID,
-              version: version,
-              description: item?.subDescription
-            )
-            
-            Rectangle()
-              .fill(Color.neutral700)
-              .frame(height: 1)
-            
-            SDGViewRegistry.shared.build(id: viewID)
+    VStack(spacing: 0) {
+      SDGBasicNavi(
+        naviType: .pop(
+          tintColor: .neutral700,
+          onDismiss: {
+            dismiss()
           }
+        ),
+        title: nil,
+        backgroundColor: .neutral0,
+        buttons: [
+          TopNaviButtonOption(
+            image: Image(sdg: .icNaviDrawer),
+            tintColor: .neutral700,
+            touchUpInside: onMenuTap
+          )
+        ]
+      )
+
+      ScrollView(showsIndicators: false) {
+        VStack(spacing: 0) {
+          SDGGuideHeaderView(
+            title: item?.title ?? viewID,
+            version: version,
+            description: item?.subDescription
+          )
+
+          Divider(color: .neutral700, option: .init(direction: .horizental, thickness: 1))
+
+          SDGViewRegistry.shared.build(id: viewID)
         }
-        .background(Color.neutral0)
       }
-      .background(Color.neutral0)
-      .ignoresSafeArea(edges: .top)
-      .toolbar(.hidden, for: .navigationBar)
     }
+    .background(Color.neutral0)
+    .toolbar(.hidden, for: .navigationBar)
   }
   
   private var version: String? {

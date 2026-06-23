@@ -158,7 +158,7 @@ private enum SDGColorPaletteTab: String, CaseIterable, Identifiable {
             .init(name: "300", color: .secondary300),
             .init(name: "200", color: .secondary200),
             .init(name: "50", color: .secondary50),
-            .init(name: "400-10", color: .sencondary400_10),
+            .init(name: "400-10", color: .secondary400_10),
             .init(name: "300-10", color: .secondary300_10)
           ]
         )
@@ -325,13 +325,15 @@ private struct SDGColorPaletteFlowLayout: Layout {
       return .zero
     }
     
-    let maxWidth = proposal.width ?? idealWidth(subviews: subviews)
+    let proposedWidth = proposal.width ?? idealWidth(subviews: subviews)
+    let maxWidth = proposedWidth == .infinity ? idealWidth(subviews: subviews) : proposedWidth
     let rows = rows(maxWidth: maxWidth, subviews: subviews)
     let height = rows.reduce(CGFloat.zero) { partialHeight, row in
       partialHeight + row.height
     } + verticalSpacing * CGFloat(max(rows.count - 1, 0))
     
-    return CGSize(width: maxWidth, height: height)
+    let width = rows.map(\.width).max() ?? 0
+    return CGSize(width: width, height: height)
   }
   
   func placeSubviews(
