@@ -8,7 +8,7 @@
 import Combine
 import Foundation
 
-enum SDGMenuRoute: Equatable {
+enum SDGMenuRoute: Hashable {
   case overview
   case demo(itemID: String, viewID: String)
 }
@@ -116,7 +116,7 @@ private extension SDGMenuViewModel {
   func makeRows(item: SDGCatalogItem, depth: Int) -> [SDGMenuRowViewState] {
     let availability = availabilityResolver.availability(for: item)
     let isExpanded = expandedItemIDs.contains(item.id)
-    let isDemoAvailable = item.viewID.map { demoRegistry.contains(id: $0) } ?? false
+    let isDemoAvailable = item.viewID.map(demoRegistry.contains) ?? false
     
     let row = SDGMenuRowViewState(
       id: item.id,

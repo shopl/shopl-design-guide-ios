@@ -10,6 +10,15 @@ import ShoplDesignGuide
 
 struct SDGOverviewView: View {
   @ObservedObject var viewModel: SDGOverviewViewModel
+  let onRoute: (SDGMenuRoute) -> Void
+
+  init(
+    viewModel: SDGOverviewViewModel,
+    onRoute: @escaping (SDGMenuRoute) -> Void = { _ in }
+  ) {
+    self.viewModel = viewModel
+    self.onRoute = onRoute
+  }
   
   var body: some View {
     GeometryReader { geometry in
@@ -41,17 +50,10 @@ struct SDGOverviewView: View {
         
         if viewModel.isMenuPresented {
           SDGMenuView(
-            viewModel: SDGMenuViewModel(selectedItemID: SDGMenuViewModel.overviewItemID),
+            viewModel: viewModel.menuViewModel,
             topInset: geometry.safeAreaInsets.top,
             onClose: dismissMenu,
-            onRoute: { route in
-              switch route {
-              case .overview:
-                dismissMenu()
-              case .demo:
-                break
-              }
-            }
+            onRoute: handleMenuRoute
           )
           .transition(.move(edge: .trailing))
           .zIndex(1)
@@ -74,6 +76,11 @@ struct SDGOverviewView: View {
     withAnimation(.easeInOut(duration: 0.25)) {
       viewModel.dismissMenu()
     }
+  }
+
+  private func handleMenuRoute(_ route: SDGMenuRoute) {
+    dismissMenu()
+    onRoute(route)
   }
 }
 
