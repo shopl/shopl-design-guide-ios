@@ -190,7 +190,7 @@ private struct ColorSectionView: View {
   var body: some View {
     VStack(spacing: 20) {
       if let title = title {
-        Text(title)
+        Text(sdg: title)
           .typo(.body3_SB, .neutral500)
       }
       
@@ -225,7 +225,7 @@ private struct ColorCell: View {
             Circle().stroke(Color.neutral100, lineWidth: 1)
           }
         }
-      Text(name)
+      Text(sdg: name)
         .typo(.body3_R, .neutral500)
     }
     .frame(width: 52)

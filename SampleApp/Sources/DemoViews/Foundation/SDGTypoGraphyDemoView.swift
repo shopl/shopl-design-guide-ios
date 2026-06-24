@@ -12,7 +12,7 @@ import ShoplDesignGuide
 
 struct SDGTypographyDemoView: View {
   
-  private let typographyItems: [(style: Typography, name: String, weight: String)] = [
+  private let typographyItems: [(style: ShoplDesignGuide.SDG.Typography, name: String, weight: String)] = [
     (.naviTitle, "Navi Title", "Regular 400"),
     (.title1_SB, "Title 1 - SB", "Semi Bold 600"),
     (.title1_R, "Title 1 - R", "Regular 400"),
@@ -29,17 +29,17 @@ struct SDGTypographyDemoView: View {
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 0) {
-        Text("Pretendard")
+        Text(sdg: "Pretendard")
           .typo(.body1_SB, .neutral700)
           .frame(maxWidth: .infinity, alignment: .leading)
           .padding(.vertical, 32)
         
         HStack(spacing: 10) {
-          Text("Style")
+          Text(sdg: "Style")
             .frame(maxWidth: .infinity, alignment: .leading)
-          Text("Size")
+          Text(sdg: "Size")
             .frame(maxWidth: .infinity, alignment: .leading)
-          Text("Weight")
+          Text(sdg: "Weight")
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .typo(.body3_SB, .neutral400)
@@ -62,18 +62,18 @@ struct SDGTypographyDemoView: View {
 }
 
 private struct TypographyRow: View {
-  let style: Typography
+  let style: ShoplDesignGuide.SDG.Typography
   let name: String
   let size: String
   let weight: String
   
   var body: some View {
     HStack(spacing: 10) {
-      Text(name)
+      Text(sdg: name)
         .frame(maxWidth: .infinity, alignment: .leading)
-      Text(size)
+      Text(sdg: size)
         .frame(maxWidth: .infinity, alignment: .leading)
-      Text(weight)
+      Text(sdg: weight)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
     .typo(style, .neutral700)

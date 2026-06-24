@@ -34,7 +34,7 @@ private struct DefaultView: View {
   var body: some View {
     VStack(spacing: 40) {
       VStack(spacing: 20) {
-        Text("Medium")
+        Text(sdg: "Medium")
           .typo(.body3_SB, .neutral500)
         
         SDGBoxButton(
@@ -92,7 +92,7 @@ private struct DefaultView: View {
       }
       
       VStack(spacing: 20) {
-        Text("Small")
+        Text(sdg: "Small")
           .typo(.body3_SB, .neutral500)
         
         SDGBoxButton(
@@ -150,7 +150,7 @@ private struct DefaultView: View {
       }
       
       VStack(spacing: 20) {
-        Text("Small")
+        Text(sdg: "Small")
           .typo(.body3_SB, .neutral500)
         
         SDGBoxButton(

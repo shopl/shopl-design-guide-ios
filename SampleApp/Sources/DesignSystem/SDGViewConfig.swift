@@ -1,5 +1,5 @@
 //
-//  DSViewConfig.swift
+//  SDGViewConfig.swift
 //  ShoplDesignGuide
 //
 //  Created by Dino on 11/28/25.
@@ -8,9 +8,9 @@
 
 import SwiftUI
 
-struct DSViewConfig {
+struct SDGViewConfig {
   static func configure() {
-    let registry = DSViewRegistry.shared
+    let registry = SDGViewRegistry.shared
     
     registry.register(id: "foundation_color") { SDGColorDemoView() }
     registry.register(id: "foundation_typo") { SDGTypographyDemoView() }
