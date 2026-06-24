@@ -90,6 +90,8 @@ struct SDGGuideDetailView: View {
       return "2.0.0"
     case "component_avatar":
       return SDGAvatar.version
+    case "component_attachment_list":
+      return SDGAttachmentElement.version
     default:
       return nil
     }

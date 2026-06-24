@@ -299,7 +299,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
   var title: String {
     switch self {
     case .avatar: return "Avatar"
-    case .attachmentList: return "Attachment List"
+    case .attachmentList: return "Attachment Element"
     case .badge: return "Badge"
     case .button: return "Button"
     case .calendar: return "Calendar"
@@ -332,6 +332,8 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
     switch self {
     case .avatar:
       return "직원의 얼굴 사진 또는 설정된 이미지를 보여주는 컴포넌트"
+    case .attachmentList:
+      return "사진, 문서, 동영상을 표시하는 컴포넌트"
     default:
       return nil
     }
@@ -339,7 +341,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
 
   var viewID: String? {
     switch self {
-    case .avatar:
+    case .avatar, .attachmentList:
       return id
     default:
       return nil

@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "Attachment_Sample.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
