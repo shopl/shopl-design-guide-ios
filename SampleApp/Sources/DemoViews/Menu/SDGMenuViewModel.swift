@@ -63,6 +63,12 @@ final class SDGMenuViewModel: ObservableObject {
     load()
   }
   
+  func selectItem(id: String) {
+    selectedItemID = id
+    expandedItemIDs.formUnion(Self.expandedAncestorIDs(for: id, in: catalogSections))
+    load()
+  }
+
   func didTapOverview() -> SDGMenuRoute {
     selectedItemID = Self.overviewItemID
     load()

@@ -2,48 +2,109 @@ import SwiftUI
 import ShoplDesignGuide
 
 struct AppView: View {
+  @StateObject private var appViewModel = SDGAppViewModel()
   @StateObject private var overviewViewModel = SDGOverviewViewModel()
-  @State private var navigationPath: [SDGMenuRoute] = []
   
   var body: some View {
-    NavigationStack(path: $navigationPath) {
-      SDGOverviewView(
-        viewModel: overviewViewModel,
-        onRoute: handleMenuRoute
-      )
-      .navigationDestination(for: SDGMenuRoute.self) { route in
-        switch route {
-        case .overview:
-          EmptyView()
-        case let .demo(_, viewID):
-          SDGMenuDemoDestinationView(viewID: viewID)
+    GeometryReader { geometry in
+      ZStack(alignment: .trailing) {
+        NavigationStack(path: $appViewModel.navigationPath) {
+          SDGOverviewView(
+            viewModel: overviewViewModel,
+            onMenuTap: presentMenu
+          )
+          .navigationDestination(for: SDGAppRoute.self) { route in
+            switch route {
+            case let .demo(itemID, viewID):
+              SDGGuideDetailView(
+                itemID: itemID,
+                viewID: viewID,
+                onMenuTap: presentMenu
+              )
+            }
+          }
+        }
+        .toolbar(.hidden, for: .navigationBar)
+        
+        if appViewModel.isMenuPresented {
+          SDGMenuView(
+            viewModel: appViewModel.menuViewModel,
+            topInset: geometry.safeAreaInsets.top,
+            onClose: dismissMenu,
+            onRoute: handleMenuRoute
+          )
+          .transition(.move(edge: .trailing))
+          .zIndex(1)
         }
       }
+      .animation(.easeInOut(duration: 0.25), value: appViewModel.isMenuPresented)
+      .background(Color.neutral0)
     }
   }
-
+  
+  private func presentMenu() {
+    withAnimation(.easeInOut(duration: 0.25)) {
+      appViewModel.presentMenu()
+    }
+  }
+  
+  private func dismissMenu() {
+    withAnimation(.easeInOut(duration: 0.25)) {
+      appViewModel.dismissMenu()
+    }
+  }
+  
   private func handleMenuRoute(_ route: SDGMenuRoute) {
-    switch route {
-    case .overview:
-      navigationPath.removeAll()
-    case .demo:
-      navigationPath.append(route)
+    var transaction = Transaction(animation: nil)
+    transaction.disablesAnimations = true
+    
+    withTransaction(transaction) {
+      appViewModel.navigate(to: route)
+    }
+    
+    dismissMenu()
+  }
+}
+
+private enum SDGAppRoute: Hashable {
+  case demo(itemID: String, viewID: String)
+  
+  var itemID: String {
+    switch self {
+    case .demo(let itemID, _):
+      return itemID
     }
   }
 }
 
-private struct SDGMenuDemoDestinationView: View {
-  let viewID: String
+private final class SDGAppViewModel: ObservableObject {
+  @Published var navigationPath: [SDGAppRoute] = []
+  @Published var isMenuPresented = false
 
-  var body: some View {
-    VStack(spacing: 0) {
-      NavigationBar()
+  let menuViewModel = SDGMenuViewModel()
 
-      ScrollView {
-        SDGViewRegistry.shared.build(id: viewID)
-      }
+  var selectedMenuItemID: String {
+    navigationPath.last?.itemID ?? SDGMenuViewModel.overviewItemID
+  }
+  
+  func presentMenu() {
+    menuViewModel.selectItem(id: selectedMenuItemID)
+    isMenuPresented = true
+  }
+  
+  func dismissMenu() {
+    isMenuPresented = false
+  }
+  
+  func navigate(to route: SDGMenuRoute) {
+    switch route {
+    case .overview:
+      navigationPath = []
+      menuViewModel.selectItem(id: SDGMenuViewModel.overviewItemID)
+    case .demo(let itemID, let viewID):
+      navigationPath = [.demo(itemID: itemID, viewID: viewID)]
+      menuViewModel.selectItem(id: itemID)
     }
-    .toolbar(.hidden, for: .navigationBar)
   }
 }
 

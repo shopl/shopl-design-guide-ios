@@ -51,6 +51,34 @@ protocol SDGCatalogRepository {
   func overviewSections() -> [SDGCatalogSection]
 }
 
+extension SDGCatalogRepository {
+  func catalogItem(id: String) -> SDGCatalogItem? {
+    for section in catalogSections() {
+      if let item = section.items.catalogItem(id: id) {
+        return item
+      }
+    }
+    
+    return nil
+  }
+}
+
+private extension Array where Element == SDGCatalogItem {
+  func catalogItem(id: String) -> SDGCatalogItem? {
+    for item in self {
+      if item.id == id {
+        return item
+      }
+      
+      if let childItem = item.children.catalogItem(id: id) {
+        return childItem
+      }
+    }
+    
+    return nil
+  }
+}
+
 struct DefaultSDGCatalogRepository: SDGCatalogRepository {
   func catalogSections() -> [SDGCatalogSection] {
     SDGCatalogSectionKind.allCases.map(\.catalogSection)
@@ -169,7 +197,7 @@ enum SDGFoundationCatalog: CaseIterable, SDGCatalogItemRepresentable {
   var catalogSubDescription: String? {
     switch self {
     case .color:
-      return "일관된 브랜드 경험을 만들 수 있도록 표준 색상 차트와 사용자 가이드를 제공합니다."
+      return "샤플 앱의 모든 요소에 적용되며, 일관된/뚜렷한/계층적인 컬러 사용으로 서비스의 아이덴티티 및 브랜드 경험을 만들어 줄 수 있는 주요 요소"
     case .typography:
       return "정의된 유형, 규모, 색상을 고려하여 적용된 타이포그래피는 콘텐츠의 중요도를 분류합니다."
     case .cornerRadius, .iconography, .spacing:
