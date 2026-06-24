@@ -3,11 +3,47 @@ import ShoplDesignGuide
 
 struct AppView: View {
   @StateObject private var overviewViewModel = SDGOverviewViewModel()
+  @State private var navigationPath: [SDGMenuRoute] = []
   
   var body: some View {
-    NavigationStack {
-      SDGOverviewView(viewModel: overviewViewModel)
+    NavigationStack(path: $navigationPath) {
+      SDGOverviewView(
+        viewModel: overviewViewModel,
+        onRoute: handleMenuRoute
+      )
+      .navigationDestination(for: SDGMenuRoute.self) { route in
+        switch route {
+        case .overview:
+          EmptyView()
+        case let .demo(_, viewID):
+          SDGMenuDemoDestinationView(viewID: viewID)
+        }
+      }
     }
+  }
+
+  private func handleMenuRoute(_ route: SDGMenuRoute) {
+    switch route {
+    case .overview:
+      navigationPath.removeAll()
+    case .demo:
+      navigationPath.append(route)
+    }
+  }
+}
+
+private struct SDGMenuDemoDestinationView: View {
+  let viewID: String
+
+  var body: some View {
+    VStack(spacing: 0) {
+      NavigationBar()
+
+      ScrollView {
+        SDGViewRegistry.shared.build(id: viewID)
+      }
+    }
+    .toolbar(.hidden, for: .navigationBar)
   }
 }
 
