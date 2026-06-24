@@ -21,38 +21,111 @@ private struct InteractivePopGestureEnabler: UIViewControllerRepresentable {
     Coordinator()
   }
 
-  func makeUIViewController(context: Context) -> UIViewController {
-    UIViewController()
+  func makeUIViewController(context: Context) -> NavigationControllerObserverViewController {
+    NavigationControllerObserverViewController(coordinator: context.coordinator)
   }
 
-  func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+  func updateUIViewController(_ uiViewController: NavigationControllerObserverViewController, context: Context) {
     context.coordinator.isEnabled = isEnabled
+    uiViewController.coordinator = context.coordinator
+    uiViewController.updateGestureRecognizer()
+  }
 
-    let coordinator = context.coordinator
-    DispatchQueue.main.async { [weak uiViewController] in
-      guard let navigationController = uiViewController?.findNavigationController() else { return }
+  static func dismantleUIViewController(
+    _ uiViewController: NavigationControllerObserverViewController,
+    coordinator: Coordinator
+  ) {
+    uiViewController.restoreGestureRecognizer()
+  }
+}
 
-      coordinator.navigationController = navigationController
-      navigationController.interactivePopGestureRecognizer?.isEnabled = isEnabled
-      navigationController.interactivePopGestureRecognizer?.delegate = coordinator
+private final class NavigationControllerObserverViewController: UIViewController {
+  var coordinator: Coordinator
+
+  init(coordinator: Coordinator) {
+    self.coordinator = coordinator
+    super.init(nibName: nil, bundle: nil)
+  }
+
+  @available(*, unavailable)
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  override func didMove(toParent parent: UIViewController?) {
+    super.didMove(toParent: parent)
+
+    if parent == nil {
+      restoreGestureRecognizer()
+    } else {
+      updateGestureRecognizer()
     }
   }
 
-  static func dismantleUIViewController(_ uiViewController: UIViewController, coordinator: Coordinator) {
-    guard
-      let gesture = coordinator.navigationController?.interactivePopGestureRecognizer,
-      gesture.delegate === coordinator
-    else {
-      return
-    }
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    updateGestureRecognizer()
+  }
 
-    gesture.delegate = nil
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    updateGestureRecognizer()
+  }
+
+  func updateGestureRecognizer() {
+    guard let navigationController = findNavigationController() else { return }
+    coordinator.configure(with: navigationController)
+  }
+
+  func restoreGestureRecognizer() {
+    coordinator.restoreGestureRecognizer()
   }
 }
 
 private final class Coordinator: NSObject, UIGestureRecognizerDelegate {
   weak var navigationController: UINavigationController?
+  weak var originalDelegate: UIGestureRecognizerDelegate?
+  private var originalIsEnabled: Bool?
+  private var hasStoredOriginalState = false
   var isEnabled = true
+
+  func configure(with navigationController: UINavigationController) {
+    if self.navigationController !== navigationController {
+      restoreGestureRecognizer()
+      self.navigationController = navigationController
+    }
+
+    guard let gesture = navigationController.interactivePopGestureRecognizer else { return }
+
+    storeOriginalStateIfNeeded(for: gesture)
+    gesture.isEnabled = isEnabled
+
+    if gesture.delegate !== self {
+      gesture.delegate = self
+    }
+  }
+
+  func restoreGestureRecognizer() {
+    defer {
+      navigationController = nil
+      originalDelegate = nil
+      originalIsEnabled = nil
+      hasStoredOriginalState = false
+    }
+
+    guard
+      let gesture = navigationController?.interactivePopGestureRecognizer,
+      gesture.delegate === self
+    else {
+      return
+    }
+
+    gesture.delegate = originalDelegate
+
+    if let originalIsEnabled {
+      gesture.isEnabled = originalIsEnabled
+    }
+  }
 
   func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
     guard isEnabled else { return false }
@@ -61,6 +134,14 @@ private final class Coordinator: NSObject, UIGestureRecognizerDelegate {
     guard navigationController.transitionCoordinator == nil else { return false }
 
     return true
+  }
+
+  private func storeOriginalStateIfNeeded(for gesture: UIGestureRecognizer) {
+    guard !hasStoredOriginalState else { return }
+
+    originalDelegate = gesture.delegate
+    originalIsEnabled = gesture.isEnabled
+    hasStoredOriginalState = true
   }
 }
 
