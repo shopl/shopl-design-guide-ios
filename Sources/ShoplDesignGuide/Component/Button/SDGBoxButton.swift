@@ -8,6 +8,7 @@
 import SwiftUI
 
 public struct SDGBoxButton: View {
+  public static let version = "2.0.0"
   
   public struct Option {
     

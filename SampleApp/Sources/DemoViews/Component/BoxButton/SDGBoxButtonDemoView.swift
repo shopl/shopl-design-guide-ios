@@ -7,251 +7,140 @@
 //
 
 import SwiftUI
-
 import ShoplDesignGuide
 
 struct SDGBoxButtonDemoView: View {
-  
-  private let tabs = ["Default", "Pressed", "Disabled"]
-  @ObservedObject private var controlState = SDGBoxButtonDemoControlState.shared
+  @ObservedObject private var state = SDGBoxButtonDemoControlState.shared
   
   var body: some View {
-    DemoViewTabContainer(tabs: tabs) { selectedTab in
-      VStack(spacing: 40) {
-        if controlState.isPreviewEnabled {
-          SDGBoxButtonConfiguredPreview(controlState: controlState)
-        }
+    VStack(alignment: .leading, spacing: 16) {
+      typeSection
+      specSection
+    }
+    .padding(.top, 16)
+    .padding(.bottom, 40)
+    .frame(maxWidth: .infinity, alignment: .leading)
+  }
+  
+  private var typeSection: some View {
+    VStack(alignment: .leading, spacing: 12) {
+      VStack(alignment: .leading, spacing: 8) {
+        sectionTitle("Type")
+          .padding(.horizontal, 16)
         
-        switch selectedTab {
-        case "Default":
-          DefaultView()
-        case "Pressed":
-          PressedView()
-        case "Disabled":
-          DisabledView()
-        default:
-          UnimplementedTabPlaceholder(tabName: selectedTab)
-        }
+        SDGScrollTab(
+          type: .text,
+          list: typeTabModels,
+          selectedIndex: $state.selectedTypeIndex,
+          horizontalPadding: 16
+        )
       }
+      
+      Rectangle()
+        .fill(Color.neutral200)
+        .frame(height: 1)
+        .frame(maxWidth: .infinity)
+    }
+    .frame(maxWidth: .infinity, alignment: .leading)
+  }
+  
+  private var specSection: some View {
+    VStack(alignment: .leading, spacing: 12) {
+      VStack(alignment: .leading, spacing: 8) {
+        sectionTitle("Spec")
+        
+        SDGScrollTab(
+          type: .text,
+          list: specTabModels,
+          selectedIndex: $state.selectedSpecIndex
+        )
+      }
+      
+      previewCard
+    }
+    .padding(.horizontal, 16)
+    .frame(maxWidth: .infinity, alignment: .leading)
+  }
+  
+  private var previewCard: some View {
+    VStack(spacing: 0) {
+      stateSelector
+      buttonPreview
+    }
+    .frame(maxWidth: .infinity)
+    .background(Color.neutral0)
+    .clipShape(RoundedRectangle(cornerRadius: SDGCornerRadius.radius8.rawValue, style: .continuous))
+    .overlay {
+      RoundedRectangle(cornerRadius: SDGCornerRadius.radius8.rawValue, style: .continuous)
+        .stroke(Color.neutral200, lineWidth: 1)
     }
   }
-}
-
-private struct SDGBoxButtonConfiguredPreview: View {
-  @ObservedObject var controlState: SDGBoxButtonDemoControlState
   
-  var body: some View {
-    VStack(spacing: 20) {
-      Text(sdg: "Preview")
-        .typo(.body3_SB, .neutral500)
+  private var stateSelector: some View {
+    VStack(spacing: 16) {
+      HStack(spacing: 8) {
+        ForEach(state.states.indices, id: \.self) { index in
+          radioLabel(for: state.states[index], index: index)
+            .frame(width: 144)
+        }
+      }
+      .padding(.horizontal, 16)
       
+      Rectangle()
+        .fill(Color.neutral200)
+        .frame(height: 1)
+        .frame(maxWidth: .infinity)
+    }
+    .padding(.top, 16)
+    .frame(maxWidth: .infinity, alignment: .leading)
+  }
+  
+  private var buttonPreview: some View {
+    VStack(spacing: 0) {
       SDGBoxButton(
-        option: controlState.previewOption,
-        isSelected: .constant(controlState.isPreviewSelected),
-        isDisable: controlState.isPreviewDisabled,
+        option: state.previewOption,
+        isSelected: $state.isPreviewSelected,
+        isDisable: state.isPreviewDisabled,
         isLoading: .constant(false)
-      ) { }
-    }
-  }
-}
-
-private struct DefaultView: View {  
-  var body: some View {
-    VStack(spacing: 40) {
-      VStack(spacing: 20) {
-        Text(sdg: "Medium")
-          .typo(.body3_SB, .neutral500)
-        
-        SDGBoxButton(
-          option: .init(
-            size: .medium,
-            title: "Label",
-            color: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            ),
-            selectedColor: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            )
-          ),
-          isSelected: .constant(false),
-          isLoading: .constant(false)
-        ) { }
-        
-        SDGBoxButton(
-          option: .init(
-            size: .medium,
-            icon: .right(image: Image(sdg: .icons), color: .neutral300),
-            title: "Label",
-            color: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            ),
-            selectedColor: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            )
-          ),
-          isSelected: .constant(false),
-          isLoading: .constant(false)
-        ) { }
-        
-        SDGBoxButton(
-          option: .init(
-            size: .medium,
-            icon: .left(image: Image(sdg: .icons), color: .neutral300),
-            title: "Label",
-            color: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            ),
-            selectedColor: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            )
-          ),
-          isSelected: .constant(false),
-          isLoading: .constant(false)
-        ) { }
-      }
-      
-      VStack(spacing: 20) {
-        Text(sdg: "Small")
-          .typo(.body3_SB, .neutral500)
-        
-        SDGBoxButton(
-          option: .init(
-            size: .small,
-            title: "Label",
-            color: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            ),
-            selectedColor: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            )
-          ),
-          isSelected: .constant(false),
-          isLoading: .constant(false)
-        ) { }
-        
-        SDGBoxButton(
-          option: .init(
-            size: .small,
-            icon: .right(image: Image(sdg: .icons), color: .neutral300),
-            title: "Label",
-            color: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            ),
-            selectedColor: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            )
-          ),
-          isSelected: .constant(false),
-          isLoading: .constant(false)
-        ) { }
-              
-        SDGBoxButton(
-          option: .init(
-            size: .small,
-            icon: .left(image: Image(sdg: .icons), color: .neutral300),
-            title: "Label",
-            color: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            ),
-            selectedColor: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            )
-          ),
-          isSelected: .constant(false),
-          isLoading: .constant(false)
-        ) { }
-      }
-      
-      VStack(spacing: 20) {
-        Text(sdg: "Small")
-          .typo(.body3_SB, .neutral500)
-        
-        SDGBoxButton(
-          option: .init(
-            size: .xsmall,
-            title: "Label",
-            color: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            ),
-            selectedColor: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            )
-          ),
-          isSelected: .constant(false),
-          isLoading: .constant(false)
-        ) { }
-        
-        SDGBoxButton(
-          option: .init(
-            size: .xsmall,
-            icon: .right(image: Image(sdg: .icons), color: .neutral300),
-            title: "Label",
-            color: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            ),
-            selectedColor: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            )
-          ),
-          isSelected: .constant(false),
-          isLoading: .constant(false)
-        ) { }
-              
-        SDGBoxButton(
-          option: .init(
-            size: .xsmall,
-            icon: .left(image: Image(sdg: .icons), color: .neutral300),
-            title: "Label",
-            color: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            ),
-            selectedColor: .init(
-              backgroundColor: .neutral200,
-              textColor: .neutral600
-            )
-          ),
-          isSelected: .constant(false),
-          isLoading: .constant(false)
-        ) { }
+      ) {
+        state.togglePreviewSelected()
       }
     }
+    .padding(.horizontal, 16)
+    .padding(.vertical, 40)
+    .frame(maxWidth: .infinity)
   }
-}
-
-
-// 이 클래스는 오직 번들을 찾기 위해 존재합니다.
-private class SampleBundleFinder {}
-
-extension Foundation.Bundle {
-    /// 샘플 앱의 리소스 번들을 가리키는 정적 변수
-    static let sampleApp: Bundle = Bundle(for: SampleBundleFinder.self)
-}
-
-private struct PressedView: View {
-  var body: some View {
+  
+  private var typeTabModels: [SDGScrollTab.Model] {
+    state.types.map {
+      SDGScrollTab.Model(id: $0.id, title: $0.title)
+    }
   }
-}
-
-
-private struct DisabledView: View {
-  var body: some View {
+  
+  private var specTabModels: [SDGScrollTab.Model] {
+    state.specs.map {
+      SDGScrollTab.Model(id: $0.id, title: $0.title)
+    }
+  }
+  
+  private func radioLabel(for demoState: SDGBoxButtonDemoState, index: Int) -> some View {
+    SDGRadioLabel(
+      model: RadioLabelModel(
+        id: demoState.id,
+        isSelected: state.selectedStateIndex == index,
+        isSelectedColorNeturel: true,
+        title: demoState.title
+      ),
+      onTap: { _ in
+        state.selectedStateIndex = index
+      }
+    )
+  }
+  
+  private func sectionTitle(_ title: String) -> some View {
+    Text(sdg: title)
+      .typo(.body3_SB, .neutral350)
+      .frame(maxWidth: .infinity, alignment: .leading)
   }
 }
 
