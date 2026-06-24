@@ -13,19 +13,44 @@ import ShoplDesignGuide
 struct SDGBoxButtonDemoView: View {
   
   private let tabs = ["Default", "Pressed", "Disabled"]
+  @ObservedObject private var controlState = SDGBoxButtonDemoControlState.shared
   
   var body: some View {
     DemoViewTabContainer(tabs: tabs) { selectedTab in
-      switch selectedTab {
-      case "Default":
-        DefaultView()
-      case "Pressed":
-        PressedView()
-      case "Disabled":
-        DisabledView()
-      default:
-        UnimplementedTabPlaceholder(tabName: selectedTab)
+      VStack(spacing: 40) {
+        if controlState.isPreviewEnabled {
+          SDGBoxButtonConfiguredPreview(controlState: controlState)
+        }
+        
+        switch selectedTab {
+        case "Default":
+          DefaultView()
+        case "Pressed":
+          PressedView()
+        case "Disabled":
+          DisabledView()
+        default:
+          UnimplementedTabPlaceholder(tabName: selectedTab)
+        }
       }
+    }
+  }
+}
+
+private struct SDGBoxButtonConfiguredPreview: View {
+  @ObservedObject var controlState: SDGBoxButtonDemoControlState
+  
+  var body: some View {
+    VStack(spacing: 20) {
+      Text(sdg: "Preview")
+        .typo(.body3_SB, .neutral500)
+      
+      SDGBoxButton(
+        option: controlState.previewOption,
+        isSelected: .constant(controlState.isPreviewSelected),
+        isDisable: controlState.isPreviewDisabled,
+        isLoading: .constant(false)
+      ) { }
     }
   }
 }
