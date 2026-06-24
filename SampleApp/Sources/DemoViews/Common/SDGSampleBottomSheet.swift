@@ -2,7 +2,7 @@
 //  SDGSampleBottomSheet.swift
 //  ShoplDesignGuide
 //
-//  Created by Codex on 6/24/26.
+//  Created by Jerry on 6/24/26.
 //
 
 import SwiftUI

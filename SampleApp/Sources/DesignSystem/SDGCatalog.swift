@@ -327,6 +327,24 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
     case .tooltip: return "Tooltip"
     }
   }
+
+  var catalogSubDescription: String? {
+    switch self {
+    case .avatar:
+      return "직원의 얼굴 사진 또는 설정된 이미지를 보여주는 컴포넌트"
+    default:
+      return nil
+    }
+  }
+
+  var viewID: String? {
+    switch self {
+    case .avatar:
+      return id
+    default:
+      return nil
+    }
+  }
   
   var implementationNames: [String] {
     switch self {

@@ -88,6 +88,8 @@ struct SDGGuideDetailView: View {
     switch itemID {
     case "foundation_color", "foundation_iconography", "foundation_spacing", "foundation_typography":
       return "2.0.0"
+    case "component_avatar":
+      return SDGAvatar.version
     default:
       return nil
     }
