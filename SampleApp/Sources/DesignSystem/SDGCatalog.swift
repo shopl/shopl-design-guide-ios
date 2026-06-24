@@ -191,7 +191,9 @@ enum SDGFoundationCatalog: CaseIterable, SDGCatalogItemRepresentable {
       return "SDG의 폰트 스타일"
     case .iconography:
       return "SDG의 아이콘 스타일"
-    case .cornerRadius, .spacing:
+    case .spacing:
+      return "SDG의 여백 스타일"
+    case .cornerRadius:
       return nil
     }
   }
@@ -204,7 +206,9 @@ enum SDGFoundationCatalog: CaseIterable, SDGCatalogItemRepresentable {
       return "기호로 만든 시각 언어로 한정된 공간에서 정보를 효율적으로 전달하는 요소"
     case .typography:
       return "정의된 유형, 규모, 색상을 고려하여 적용된 타이포그래피는 콘텐츠의 중요도를 분류합니다."
-    case .cornerRadius, .spacing:
+    case .spacing:
+      return "컴포넌트 및 템플릿, 그리고 모든 화면과 구성 요소 사이의 여백"
+    case .cornerRadius:
       return nil
     }
   }
@@ -213,8 +217,9 @@ enum SDGFoundationCatalog: CaseIterable, SDGCatalogItemRepresentable {
     switch self {
     case .color: return "foundation_color"
     case .iconography: return "foundation_iconography"
+    case .spacing: return "foundation_spacing"
     case .typography: return "foundation_typo"
-    case .cornerRadius, .spacing:
+    case .cornerRadius:
       return nil
     }
   }

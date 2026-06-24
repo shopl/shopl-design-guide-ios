@@ -14,6 +14,7 @@ struct SDGViewConfig {
     
     registry.register(id: "foundation_color") { SDGColorDemoView() }
     registry.register(id: "foundation_iconography") { SDGIconographyDemoView() }
+    registry.register(id: "foundation_spacing") { SDGSpacingDemoView() }
     registry.register(id: "foundation_typo") { SDGTypographyDemoView() }
 
   }
