@@ -101,7 +101,7 @@ struct SDGGuideDetailView: View {
     case "component_floating_button":
       return SDGFloatingButton.version
     case "component_ghost_button":
-      return "2.0.0"
+      return SDGGhostButton.version
     default:
       return nil
     }
