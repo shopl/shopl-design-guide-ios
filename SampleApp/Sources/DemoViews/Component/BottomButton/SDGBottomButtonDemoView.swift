@@ -1,17 +1,16 @@
 //
-//  SDGBoxButtonDemoView.swift
+//  SDGBottomButtonDemoView.swift
 //  ShoplDesignGuide
 //
-//  Created by Dino on 12/1/25.
-//  Copyright © 2025 Shopl. All rights reserved.
+//  Created by Jerry on 6/24/26.
 //
 
 import SwiftUI
 import ShoplDesignGuide
 
-struct SDGBoxButtonDemoView: View {
-  @ObservedObject private var state = SDGBoxButtonDemoControlState.shared
-  
+struct SDGBottomButtonDemoView: View {
+  @ObservedObject private var state = SDGBottomButtonDemoState.shared
+
   var body: some View {
     VStack(alignment: .leading, spacing: 16) {
       typeSection
@@ -21,13 +20,13 @@ struct SDGBoxButtonDemoView: View {
     .padding(.bottom, 40)
     .frame(maxWidth: .infinity, alignment: .leading)
   }
-  
+
   private var typeSection: some View {
     VStack(alignment: .leading, spacing: 12) {
       VStack(alignment: .leading, spacing: 8) {
         sectionTitle("Type")
           .padding(.horizontal, 16)
-        
+
         SDGScrollTab(
           type: .text,
           list: typeTabModels,
@@ -35,7 +34,7 @@ struct SDGBoxButtonDemoView: View {
           horizontalPadding: 16
         )
       }
-      
+
       Rectangle()
         .fill(Color.neutral200)
         .frame(height: 1)
@@ -43,25 +42,25 @@ struct SDGBoxButtonDemoView: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
   }
-  
+
   private var specSection: some View {
     VStack(alignment: .leading, spacing: 12) {
       VStack(alignment: .leading, spacing: 8) {
         sectionTitle("Spec")
-        
+
         SDGScrollTab(
           type: .text,
           list: specTabModels,
           selectedIndex: $state.selectedSpecIndex
         )
       }
-      
+
       previewCard
     }
     .padding(.horizontal, 16)
     .frame(maxWidth: .infinity, alignment: .leading)
   }
-  
+
   private var previewCard: some View {
     VStack(spacing: 0) {
       stateSelector
@@ -75,7 +74,7 @@ struct SDGBoxButtonDemoView: View {
         .stroke(Color.neutral200, lineWidth: 1)
     }
   }
-  
+
   private var stateSelector: some View {
     VStack(spacing: 16) {
       HStack(spacing: 8) {
@@ -85,7 +84,7 @@ struct SDGBoxButtonDemoView: View {
         }
       }
       .padding(.horizontal, 16)
-      
+
       Rectangle()
         .fill(Color.neutral200)
         .frame(height: 1)
@@ -94,36 +93,33 @@ struct SDGBoxButtonDemoView: View {
     .padding(.top, 16)
     .frame(maxWidth: .infinity, alignment: .leading)
   }
-  
+
   private var buttonPreview: some View {
     VStack(spacing: 0) {
-      SDGBoxButton(
+      SDGBottomButton(
         option: state.previewOption,
-        isSelected: $state.isPreviewSelected,
         isDisable: state.isPreviewDisabled,
-        isLoading: .constant(false)
-      ) {
-        state.togglePreviewSelected()
-      }
+        action: { }
+      )
     }
     .padding(.horizontal, 16)
     .padding(.vertical, 40)
     .frame(maxWidth: .infinity)
   }
-  
+
   private var typeTabModels: [SDGScrollTab.Model] {
     state.types.map {
       SDGScrollTab.Model(id: $0.id, title: $0.title)
     }
   }
-  
+
   private var specTabModels: [SDGScrollTab.Model] {
     state.specs.map {
       SDGScrollTab.Model(id: $0.id, title: $0.title)
     }
   }
-  
-  private func radioLabel(for demoState: SDGBoxButtonDemoState, index: Int) -> some View {
+
+  private func radioLabel(for demoState: SDGBottomButtonDemoButtonState, index: Int) -> some View {
     SDGRadioLabel(
       model: RadioLabelModel(
         id: demoState.id,
@@ -136,7 +132,7 @@ struct SDGBoxButtonDemoView: View {
       }
     )
   }
-  
+
   private func sectionTitle(_ title: String) -> some View {
     Text(sdg: title)
       .typo(.body3_SB, .neutral350)
@@ -145,5 +141,5 @@ struct SDGBoxButtonDemoView: View {
 }
 
 #Preview {
-  SDGBoxButtonDemoView()
+  SDGBottomButtonDemoView()
 }
