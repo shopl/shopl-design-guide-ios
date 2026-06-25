@@ -303,7 +303,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
     case .badge: return "Badge"
     case .button: return "Button"
     case .calendar: return "Calendar"
-    case .checkbox: return "Checkbox"
+    case .checkbox: return "Check Box"
     case .checkOption: return "Check Option"
     case .dropdown: return "Dropdown"
     case .emptyIcon: return "Empty Icon"
@@ -334,6 +334,8 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
       return "직원의 얼굴 사진 또는 설정된 이미지를 보여주는 컴포넌트"
     case .attachmentElement:
       return "사진, 문서, 동영상을 표시하는 컴포넌트"
+    case .checkbox:
+      return "여러개의 옵션 중 다중 선택을 위한 컴포넌트"
     default:
       return nil
     }
@@ -341,7 +343,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
 
   var viewID: String? {
     switch self {
-    case .avatar, .attachmentElement:
+    case .avatar, .attachmentElement, .checkbox:
       return id
     default:
       return nil
