@@ -42,7 +42,7 @@ final class SDGGhostButtonDemoControlState: ObservableObject {
 
 enum SDGGhostButtonDemoSpec: String, CaseIterable, Identifiable {
   case large = "Large"
-  case medium = "Meduim"
+  case medium = "Medium"
   case small = "Small"
   
   var id: String {

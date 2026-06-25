@@ -115,113 +115,26 @@ struct SDGGhostButtonDemoView: View {
     }
   }
   
-  @ViewBuilder
   private func ghostButton(
     labelWeight: SDGGhostButton.LabelWeight,
     iconPosition: SDGGhostButton.IconOption.position?
   ) -> some View {
-    if let iconPosition {
-      ghostButtonPreview(labelWeight: labelWeight, iconPosition: iconPosition)
-    } else {
-      SDGGhostButton(
-        title: state.title,
-        titleColor: .neutral600,
-        size: state.selectedSpec.buttonSize,
-        labelWeight: labelWeight,
-        status: state.status,
-        iconOption: nil,
-        action: { }
-      )
-    }
-  }
-  
-  private func ghostButtonPreview(
-    labelWeight: SDGGhostButton.LabelWeight,
-    iconPosition: SDGGhostButton.IconOption.position
-  ) -> some View {
-    HStack(spacing: ghostButtonGap) {
-      if iconPosition == .left {
-        iconPreview
-      }
-      
-      Text(sdg: state.title)
-        .typo(typography(for: labelWeight), .neutral600)
-        .lineLimit(1)
-      
-      if iconPosition == .right {
-        iconPreview
-      }
-    }
-    .padding(.horizontal, ghostButtonHorizontalPadding)
-    .frame(height: ghostButtonHeight)
-    .opacity(state.selectedState == .disabled ? 0.3 : 1)
-  }
-  
-  private var iconPreview: some View {
-    Image(sdg: .icons)
-      .resizable()
-      .renderingMode(.original)
-      .frame(width: ghostButtonIconSize, height: ghostButtonIconSize)
-      .background(Color.red300_10)
-  }
-  
-  private var ghostButtonHeight: CGFloat {
-    switch state.selectedSpec {
-    case .large:
-      return 42
-    case .medium:
-      return 36
-    case .small:
-      return 28
-    }
-  }
-  
-  private var ghostButtonHorizontalPadding: CGFloat {
-    switch state.selectedSpec {
-    case .large:
-      return 16
-    case .medium:
-      return 10
-    case .small:
-      return 8
-    }
-  }
-  
-  private var ghostButtonGap: CGFloat {
-    switch state.selectedSpec {
-    case .large:
-      return 6
-    case .medium:
-      return 4
-    case .small:
-      return 2
-    }
-  }
-  
-  private var ghostButtonIconSize: CGFloat {
-    switch state.selectedSpec {
-    case .large:
-      return 16
-    case .medium, .small:
-      return 14
-    }
-  }
-  
-  private func typography(for labelWeight: SDGGhostButton.LabelWeight) -> SDG.Typography {
-    switch (state.selectedSpec, labelWeight) {
-    case (.large, .R):
-      return .body1_R
-    case (.large, .SB):
-      return .body1_SB
-    case (.medium, .R):
-      return .body2_R
-    case (.medium, .SB):
-      return .body2_SB
-    case (.small, .R):
-      return .body3_R
-    case (.small, .SB):
-      return .body3_SB
-    }
+    SDGGhostButton(
+      title: state.title,
+      titleColor: .neutral600,
+      size: state.selectedSpec.buttonSize,
+      labelWeight: labelWeight,
+      status: state.status,
+      iconOption: iconPosition.map {
+        .init(
+          image: Image(sdg: .icons),
+          color: .neutral600,
+          position: $0,
+          downSized: false
+        )
+      },
+      action: { }
+    )
   }
   
   private func radioLabel(for demoState: SDGGhostButtonDemoState, index: Int) -> some View {
