@@ -7,18 +7,19 @@
 //
 
 import SwiftUI
+import UIKit
 
 public struct PopupModifier<PopupContent: View>: ViewModifier {
-  
+
   let isPresented: Bool
   let animation: PopupAnimation
   let tapOutsideAction: (() -> Void)?
-  
+
   @ViewBuilder let popupContent: () -> PopupContent
-  
+
   @State private var showCover = false
   @State private var opacity: Double = 0.0
-  
+
   init(
     isPresented: Bool,
     animation: PopupAnimation,
@@ -30,30 +31,41 @@ public struct PopupModifier<PopupContent: View>: ViewModifier {
     self.tapOutsideAction = tapOutsideAction
     self.popupContent = popupContent
   }
-  
-  public func body(content: Content) -> some View {
-    content
-      .fullScreenCover(isPresented: $showCover, onDismiss: {
-        if animation == .fadeInOut {
-          UIView.setAnimationsEnabled(true)
-        }
-      }) {
-        PopupPresenter(
-          opacity: opacity,
-          animation: animation,
-          content: popupContent,
-          tapOutsideAction: tapOutsideAction
+
+  @ViewBuilder public func body(content: Content) -> some View {
+    switch animation {
+    case .slideBottomTop:
+      content
+        .background(
+          PopupViewControllerPresenter(
+            isPresented: isPresented,
+            animation: animation,
+            tapOutsideAction: tapOutsideAction,
+            popupContent: popupContent
+          )
         )
-        .background(FullScreenCoverBackgroundRemovalView())
-      }
-      .onChange(of: isPresented, perform: onPresentationChange)
-      .onAppear {
-        if isPresented {
-          onPresentationChange(presented: isPresented)
+    case .fadeInOut:
+      content
+        .fullScreenCover(isPresented: $showCover, onDismiss: {
+          UIView.setAnimationsEnabled(true)
+        }) {
+          PopupPresenter(
+            opacity: opacity,
+            animation: animation,
+            content: popupContent,
+            tapOutsideAction: tapOutsideAction
+          )
+          .background(FullScreenCoverBackgroundRemovalView())
         }
-      }
+        .onChange(of: isPresented, perform: onPresentationChange)
+        .onAppear {
+          if isPresented {
+            onPresentationChange(presented: isPresented)
+          }
+        }
+    }
   }
-  
+
   private func onPresentationChange(presented: Bool) {
     if presented {
       present()
@@ -61,16 +73,12 @@ public struct PopupModifier<PopupContent: View>: ViewModifier {
       dismiss()
     }
   }
-  
+
   private func present() {
-    if animation == .fadeInOut {
-      UIView.setAnimationsEnabled(false)
-      var transaction = Transaction()
-      transaction.disablesAnimations = true
-      withTransaction(transaction) {
-        showCover = true
-      }
-    } else {
+    UIView.setAnimationsEnabled(false)
+    var transaction = Transaction()
+    transaction.disablesAnimations = true
+    withTransaction(transaction) {
       showCover = true
     }
 
@@ -85,15 +93,11 @@ public struct PopupModifier<PopupContent: View>: ViewModifier {
     withAnimation(.easeInOut(duration: animation.dismissDuration)) {
       opacity = 0.0
     }
-    
+
     DispatchQueue.main.asyncAfter(deadline: .now() + animation.dismissDuration) {
-      if animation == .fadeInOut {
-        var transaction = Transaction()
-        transaction.disablesAnimations = true
-        withTransaction(transaction) {
-          showCover = false
-        }
-      } else {
+      var transaction = Transaction()
+      transaction.disablesAnimations = true
+      withTransaction(transaction) {
         showCover = false
       }
     }
@@ -101,17 +105,17 @@ public struct PopupModifier<PopupContent: View>: ViewModifier {
 }
 
 private struct FullScreenCoverBackgroundRemovalView: UIViewRepresentable {
-  
+
   private class BackgroundRemovalView: UIView {
     override func didMoveToWindow() {
       super.didMoveToWindow()
       superview?.superview?.backgroundColor = .clear
     }
   }
-  
+
   func makeUIView(context: Context) -> UIView {
     return BackgroundRemovalView()
   }
-  
+
   func updateUIView(_ uiView: UIView, context: Context) {}
 }
