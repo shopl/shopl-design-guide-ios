@@ -6,27 +6,17 @@
 //
 
 import SwiftUI
-import ShoplDesignGuide
 
 final class SDGFloatingButtonDemoState: ObservableObject {
-  static let shared = SDGFloatingButtonDemoState()
-  
   let specs = SDGFloatingButtonDemoSpec.allCases
-  let states = SDGFloatingButtonDemoButtonState.allCases
   
   @Published var selectedSpecIndex = 0
-  @Published var selectedStateIndex = 0
-  
-  private init() { }
+  @Published var selectedState: SDGFloatingButtonDemoButtonState = .default
   
   var selectedSpec: SDGFloatingButtonDemoSpec {
     specs[safe: selectedSpecIndex] ?? .oneSize
   }
-  
-  var selectedState: SDGFloatingButtonDemoButtonState {
-    states[safe: selectedStateIndex] ?? .default
-  }
-  
+
   var isPreviewDisabled: Bool {
     selectedState == .disabled
   }

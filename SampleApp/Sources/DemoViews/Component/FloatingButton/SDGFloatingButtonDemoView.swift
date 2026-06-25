@@ -9,7 +9,7 @@ import SwiftUI
 import ShoplDesignGuide
 
 struct SDGFloatingButtonDemoView: View {
-  @ObservedObject private var state = SDGFloatingButtonDemoState.shared
+  @StateObject private var state = SDGFloatingButtonDemoState()
   
   var body: some View {
     VStack(alignment: .leading, spacing: 16) {
@@ -55,8 +55,8 @@ struct SDGFloatingButtonDemoView: View {
   private var stateSelector: some View {
     VStack(spacing: 16) {
       HStack(spacing: 8) {
-        ForEach(state.states.indices, id: \.self) { index in
-          radioLabel(for: state.states[index], index: index)
+        ForEach(SDGFloatingButtonDemoButtonState.allCases) { demoState in
+          radioLabel(for: demoState)
             .frame(width: 144)
         }
       }
@@ -91,16 +91,16 @@ struct SDGFloatingButtonDemoView: View {
     }
   }
   
-  private func radioLabel(for demoState: SDGFloatingButtonDemoButtonState, index: Int) -> some View {
+  private func radioLabel(for demoState: SDGFloatingButtonDemoButtonState) -> some View {
     SDGRadioLabel(
       model: RadioLabelModel(
         id: demoState.id,
-        isSelected: state.selectedStateIndex == index,
+        isSelected: state.selectedState == demoState,
         isSelectedColorNeturel: true,
         title: demoState.title
       ),
       onTap: { _ in
-        state.selectedStateIndex = index
+        state.selectedState = demoState
       }
     )
   }
