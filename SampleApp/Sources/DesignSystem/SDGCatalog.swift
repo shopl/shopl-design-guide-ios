@@ -336,6 +336,8 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
       return "사진, 문서, 동영상을 표시하는 컴포넌트"
     case .checkbox:
       return "여러개의 옵션 중 다중 선택을 위한 컴포넌트"
+    case .checkOption:
+      return "하나의 옵션을 선택 또는 확인하는 컴포넌트"
     default:
       return nil
     }
@@ -343,7 +345,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
 
   var viewID: String? {
     switch self {
-    case .avatar, .attachmentElement, .checkbox:
+    case .avatar, .attachmentElement, .checkbox, .checkOption:
       return id
     default:
       return nil
