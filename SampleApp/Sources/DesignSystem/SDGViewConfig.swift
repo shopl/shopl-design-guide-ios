@@ -18,6 +18,7 @@ struct SDGViewConfig {
     registry.register(id: "foundation_typo") { SDGTypographyDemoView() }
     registry.register(id: "component_attachment_list") { SDGAttachmentElementDemoView() }
     registry.register(id: "component_avatar") { SDGAvatarDemoView() }
+    registry.register(id: "component_bottom_button") { SDGBottomButtonDemoView() }
     registry.register(id: "component_box_button") { SDGBoxButtonDemoView() }
     
     let bottomSheetControlRegistry = SDGBottomSheetControlRegistry.shared
@@ -26,6 +27,9 @@ struct SDGViewConfig {
     }
     bottomSheetControlRegistry.register(id: "component_attachment_list") {
       SDGAttachmentElementBottomSheetControls()
+    }
+    bottomSheetControlRegistry.register(id: "component_bottom_button") {
+      SDGBottomButtonBottomSheetControls()
     }
     bottomSheetControlRegistry.register(id: "component_box_button") {
       SDGBoxButtonBottomSheetControls()
