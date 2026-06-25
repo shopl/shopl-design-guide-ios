@@ -8,6 +8,7 @@
 import SwiftUI
 
 public struct SDGCapsuleButton: View {
+  public static let version = "2.1.28"
   
   public struct Option {
     
@@ -72,7 +73,7 @@ public struct SDGCapsuleButton: View {
       _action()
     } label: {
       
-      HStack(spacing: 4) {
+      HStack(spacing: _option.size.iconSpacing) {
         
         if _baseWidth == .infinity { Spacer() }
         
@@ -81,8 +82,11 @@ public struct SDGCapsuleButton: View {
             
             image
               .resizable()
-              .frame(width: 14, height: 14)
-              .foregroundColor(color)
+              .frame(
+                width: _option.size.iconSize,
+                height: _option.size.iconSize
+              )
+              .foregroundColor(iconColor(default: color))
             
           default:
             EmptyView()
@@ -90,15 +94,18 @@ public struct SDGCapsuleButton: View {
         
         Text(_option.title)
           .font(.system(size: _option.size.fontSize, weight: .regular))
-          .foregroundColor(_option.color.textColor)
+          .foregroundColor(resolvedColor.textColor)
         
         switch _option.icon {
           case .right(let image, let color):
             
             image
               .resizable()
-              .frame(width: 14, height: 14)
-              .foregroundColor(color)
+              .frame(
+                width: _option.size.iconSize,
+                height: _option.size.iconSize
+              )
+              .foregroundColor(iconColor(default: color))
             
           default:
             EmptyView()
@@ -112,17 +119,17 @@ public struct SDGCapsuleButton: View {
       }
       .padding(.vertical, _option.size.verticalPadding)
       .padding(.horizontal, _option.size.horizontalPadding)
-      .background(_option.color.backgroundColor)
+      .background(resolvedColor.backgroundColor)
       .overlay {
         RoundedRectangle(cornerRadius: _option.size.cornerRadius)
-          .strokeBorder(_option.color.lineColor, lineWidth: 1)
+          .strokeBorder(resolvedColor.lineColor, lineWidth: 1)
       }
       .frameGetter($_progressFrame)
       .applyIf(_isLoading) {
         $0.overlay(
           SDGProgressView(showMessage: false)
             .frame(width: _progressFrame.width - 2)
-            .background(_option.color.backgroundColor)
+            .background(resolvedColor.backgroundColor)
         )
       }
     }
@@ -134,10 +141,22 @@ public struct SDGCapsuleButton: View {
         cornerRadius: self._option.size.cornerRadius,
         defaultTextColor: self._option.color.textColor,
         selectedColor: self._option.selectedColor,
-        isDisable: self._isDisable
+        isDisable: self._isDisable,
+        pressedOverlayOpacity: 0.1,
+        appliesSelectedStyle: false
       )
     )
     
+  }
+  
+  private var resolvedColor: SDGButtonColor {
+    guard _isSelected && !_isDisable else { return _option.color }
+    return _option.selectedColor
+  }
+  
+  private func iconColor(default color: Color) -> Color {
+    guard _isSelected && !_isDisable else { return color }
+    return _option.selectedColor.textColor
   }
   
 }
@@ -1153,4 +1172,3 @@ public struct SDGCapsuleButton: View {
     }
   }
 }
-
