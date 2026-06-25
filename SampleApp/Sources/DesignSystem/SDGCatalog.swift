@@ -467,6 +467,8 @@ enum SDGButtonCatalog: CaseIterable, SDGCatalogItemRepresentable {
   
   var catalogSubDescription: String? {
     switch self {
+    case .bottom:
+      return "화면 하단에 고정으로 위치한 버튼 컴포넌트"
     case .box:
       return "화면 내에 배치하여 사용하는 일반적인 사각 형태의 버튼 컴포넌트"
     default:

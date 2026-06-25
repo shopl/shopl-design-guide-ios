@@ -92,6 +92,8 @@ struct SDGGuideDetailView: View {
       return SDGAvatar.version
     case "component_attachment_list":
       return SDGAttachmentElement.version
+    case "component_bottom_button":
+      return SDGBottomButton.version
     case "component_box_button":
       return SDGBoxButton.version
     default:
