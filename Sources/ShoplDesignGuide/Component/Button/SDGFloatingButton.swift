@@ -8,6 +8,7 @@
 import SwiftUI
 
 public struct SDGFloatingButton: View {
+  public static let version = "2.0.0"
   
   private let icon: Image
   private let iconTintColor: Color

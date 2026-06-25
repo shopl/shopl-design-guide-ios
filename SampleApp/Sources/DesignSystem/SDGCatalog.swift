@@ -471,6 +471,8 @@ enum SDGButtonCatalog: CaseIterable, SDGCatalogItemRepresentable {
       return "화면 하단에 고정으로 위치한 버튼 컴포넌트"
     case .box:
       return "화면 내에 배치하여 사용하는 일반적인 사각 형태의 버튼 컴포넌트"
+    case .floating:
+      return "화면 우측 하단에 고정으로 위치하며, 생성&추가 등의 동작을 위한 버튼 컴포넌트"
     default:
       return nil
     }
