@@ -123,8 +123,10 @@ struct SDGSampleBottomSheet<Content: View>: View {
           }
           .frame(height: max(maxBodyHeight - SDGSampleBottomSheetConstants.touchBoxHeight, 0))
 
-          Color.neutral0
-            .frame(height: bottomSafeAreaInset)
+          if bottomSafeAreaInset > 0 {
+            Color.neutral0
+              .frame(height: bottomSafeAreaInset)
+          }
         }
         .frame(maxWidth: .infinity)
         .frame(height: renderedHeight)

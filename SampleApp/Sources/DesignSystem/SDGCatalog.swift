@@ -237,7 +237,7 @@ enum SDGFoundationCatalog: CaseIterable, SDGCatalogItemRepresentable {
 
 enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
   case avatar
-  case attachmentList
+  case attachmentElement
   case badge
   case button
   case calendar
@@ -267,7 +267,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
   var id: String {
     switch self {
     case .avatar: return "component_avatar"
-    case .attachmentList: return "component_attachment_list"
+    case .attachmentElement: return "component_attachment_element"
     case .badge: return "component_badge"
     case .button: return "component_button"
     case .calendar: return "component_calendar"
@@ -299,7 +299,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
   var title: String {
     switch self {
     case .avatar: return "Avatar"
-    case .attachmentList: return "Attachment Element"
+    case .attachmentElement: return "Attachment Element"
     case .badge: return "Badge"
     case .button: return "Button"
     case .calendar: return "Calendar"
@@ -332,7 +332,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
     switch self {
     case .avatar:
       return "직원의 얼굴 사진 또는 설정된 이미지를 보여주는 컴포넌트"
-    case .attachmentList:
+    case .attachmentElement:
       return "사진, 문서, 동영상을 표시하는 컴포넌트"
     default:
       return nil
@@ -341,7 +341,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
 
   var viewID: String? {
     switch self {
-    case .avatar, .attachmentList:
+    case .avatar, .attachmentElement:
       return id
     default:
       return nil
@@ -351,7 +351,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
   var implementationNames: [String] {
     switch self {
     case .avatar: return ["SDGAvatar"]
-    case .attachmentList: return ["SDGAttachmentElement"]
+    case .attachmentElement: return ["SDGAttachmentElement"]
     case .badge: return SDGBadgeCatalog.allCases.flatMap(\.implementationNames)
     case .button: return SDGButtonCatalog.allCases.flatMap(\.implementationNames)
     case .calendar: return ["SDGCalendar"]
