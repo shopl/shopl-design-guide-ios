@@ -10,6 +10,7 @@ import SwiftUI
 import Kingfisher
 
 public struct SDGAttachmentElement: View {
+  public static let version = "2.0.0"
   
   public struct Model: Equatable {
     public enum `Type`: Equatable {
