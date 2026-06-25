@@ -25,53 +25,52 @@ struct SDGGuideDetailView: View {
   }
   
   var body: some View {
-    GeometryReader { _ in
-      ZStack(alignment: .bottom) {
-        VStack(spacing: 0) {
-          SDGBasicNavi(
-            naviType: .pop(
-              tintColor: .neutral700,
-              onDismiss: {
-                dismiss()
-              }
-            ),
-            title: nil,
-            backgroundColor: .neutral0,
-            buttons: [
-              TopNaviButtonOption(
-                image: Image(sdg: .icNaviDrawer),
-                tintColor: .neutral700,
-                touchUpInside: onMenuTap
-              )
-            ]
-          )
-          
-          ScrollView(showsIndicators: false) {
-            VStack(spacing: 0) {
-              SDGGuideHeaderView(
-                title: item?.title ?? viewID,
-                version: version,
-                description: item?.subDescription
-              )
-              
-              Divider(color: .neutral700, option: .init(direction: .horizental, thickness: 1))
-              
-              SDGViewRegistry.shared.build(id: viewID)
+    ZStack(alignment: .bottom) {
+      VStack(spacing: 0) {
+        SDGBasicNavi(
+          naviType: .pop(
+            tintColor: .neutral700,
+            onDismiss: {
+              dismiss()
             }
-            .padding(.bottom, hasBottomSheetContent ? bottomSheetHeight : 0)
-          }
-        }
+          ),
+          title: nil,
+          backgroundColor: .neutral0,
+          buttons: [
+            TopNaviButtonOption(
+              image: Image(sdg: .icNaviDrawer),
+              tintColor: .neutral700,
+              touchUpInside: onMenuTap
+            )
+          ]
+        )
         
-        if let bottomSheetContent {
-          SDGSampleBottomSheet(
-            selectedDetent: $selectedBottomSheetDetent,
-            onHeightChange: { bottomSheetHeight = $0 }
-          ) {
-            bottomSheetContent
+        ScrollView(showsIndicators: false) {
+          VStack(spacing: 0) {
+            SDGGuideHeaderView(
+              title: item?.title ?? viewID,
+              version: version,
+              description: item?.subDescription
+            )
+
+            Divider(color: .neutral700, option: .init(direction: .horizental, thickness: 1))
+
+            SDGViewRegistry.shared.build(id: viewID)
           }
+          .padding(.bottom, hasBottomSheetContent ? bottomSheetHeight : 0)
+        }
+      }
+
+      if let bottomSheetContent {
+        SDGSampleBottomSheet(
+          selectedDetent: $selectedBottomSheetDetent,
+          onHeightChange: { bottomSheetHeight = $0 }
+        ) {
+          bottomSheetContent
         }
       }
     }
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(Color.neutral0)
     .toolbar(.hidden, for: .navigationBar)
   }
@@ -90,7 +89,7 @@ struct SDGGuideDetailView: View {
       return "2.0.0"
     case "component_avatar":
       return SDGAvatar.version
-    case "component_attachment_list":
+    case "component_attachment_element":
       return SDGAttachmentElement.version
     case "component_bottom_button":
       return SDGBottomButton.version
