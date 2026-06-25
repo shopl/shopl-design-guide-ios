@@ -47,6 +47,7 @@ public struct AvatarModel: Equatable, Hashable {
 }
 
 public struct SDGAvatar: View {
+  public static let version = "2.0.0"
   
   public enum AvatarType {
     case round
@@ -84,7 +85,7 @@ public struct SDGAvatar: View {
       case .s: return 12
       case .m: return 14
       case .l: return 16
-      case .xl: return 28
+      case .xl: return 24
     }
   }
   
@@ -120,7 +121,7 @@ public struct SDGAvatar: View {
             view
               .overlay(
                 RoundedRectangle(cornerRadius: 100, style: .circular)
-                  .strokeBorder(.pink, lineWidth: _maternityStorkeWidth)
+                  .strokeBorder(Color.sdgSpecialPink, lineWidth: _maternityStorkeWidth)
               )
           }
         

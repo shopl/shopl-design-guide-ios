@@ -88,6 +88,14 @@ struct SDGGuideDetailView: View {
     switch itemID {
     case "foundation_color", "foundation_iconography", "foundation_spacing", "foundation_typography":
       return "2.0.0"
+    case "component_avatar":
+      return SDGAvatar.version
+    case "component_attachment_element":
+      return SDGAttachmentElement.version
+    case "component_bottom_button":
+      return SDGBottomButton.version
+    case "component_box_button":
+      return SDGBoxButton.version
     default:
       return nil
     }

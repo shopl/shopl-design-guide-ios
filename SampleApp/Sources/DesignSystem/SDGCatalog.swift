@@ -237,7 +237,7 @@ enum SDGFoundationCatalog: CaseIterable, SDGCatalogItemRepresentable {
 
 enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
   case avatar
-  case attachmentList
+  case attachmentElement
   case badge
   case button
   case calendar
@@ -267,7 +267,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
   var id: String {
     switch self {
     case .avatar: return "component_avatar"
-    case .attachmentList: return "component_attachment_list"
+    case .attachmentElement: return "component_attachment_element"
     case .badge: return "component_badge"
     case .button: return "component_button"
     case .calendar: return "component_calendar"
@@ -299,7 +299,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
   var title: String {
     switch self {
     case .avatar: return "Avatar"
-    case .attachmentList: return "Attachment List"
+    case .attachmentElement: return "Attachment Element"
     case .badge: return "Badge"
     case .button: return "Button"
     case .calendar: return "Calendar"
@@ -327,11 +327,31 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
     case .tooltip: return "Tooltip"
     }
   }
+
+  var catalogSubDescription: String? {
+    switch self {
+    case .avatar:
+      return "직원의 얼굴 사진 또는 설정된 이미지를 보여주는 컴포넌트"
+    case .attachmentElement:
+      return "사진, 문서, 동영상을 표시하는 컴포넌트"
+    default:
+      return nil
+    }
+  }
+
+  var viewID: String? {
+    switch self {
+    case .avatar, .attachmentElement:
+      return id
+    default:
+      return nil
+    }
+  }
   
   var implementationNames: [String] {
     switch self {
     case .avatar: return ["SDGAvatar"]
-    case .attachmentList: return ["SDGAttachmentElement"]
+    case .attachmentElement: return ["SDGAttachmentElement"]
     case .badge: return SDGBadgeCatalog.allCases.flatMap(\.implementationNames)
     case .button: return SDGButtonCatalog.allCases.flatMap(\.implementationNames)
     case .calendar: return ["SDGCalendar"]
@@ -442,6 +462,17 @@ enum SDGButtonCatalog: CaseIterable, SDGCatalogItemRepresentable {
     case .capsule: return "Capsule Button"
     case .floating: return "Floating Button"
     case .ghost: return "Ghost Button"
+    }
+  }
+  
+  var catalogSubDescription: String? {
+    switch self {
+    case .bottom:
+      return "화면 하단에 고정으로 위치한 버튼 컴포넌트"
+    case .box:
+      return "화면 내에 배치하여 사용하는 일반적인 사각 형태의 버튼 컴포넌트"
+    default:
+      return nil
     }
   }
   
