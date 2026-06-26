@@ -23,6 +23,7 @@ struct SDGViewConfig {
     registry.register(id: "component_capsule_button") { SDGCapsuleButtonDemoView() }
     registry.register(id: "component_checkbox") { SDGCheckBoxDemoView() }
     registry.register(id: "component_check_option") { SDGCheckOptionDemoView() }
+    registry.register(id: "component_dropdown") { SDGDropdownDemoView() }
     registry.register(id: "component_floating_button") { SDGFloatingButtonDemoView() }
     registry.register(id: "component_ghost_button") { SDGGhostButtonDemoView() }
     registry.register(id: "component_number_picker") { SDGNumberPickerDemoView() }
@@ -44,6 +45,9 @@ struct SDGViewConfig {
     }
     bottomSheetControlRegistry.register(id: "component_capsule_button") {
       SDGCapsuleButtonBottomSheetControls()
+    }
+    bottomSheetControlRegistry.register(id: "component_dropdown") {
+      SDGDropdownBottomSheetControls()
     }
     bottomSheetControlRegistry.register(id: "component_ghost_button") {
       SDGGhostButtonBottomSheetControls()
