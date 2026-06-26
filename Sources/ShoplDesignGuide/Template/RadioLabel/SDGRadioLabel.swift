@@ -11,20 +11,26 @@ public struct SDGRadioLabel: View {
   
   public var model: RadioLabelModel
   
+  private var radioStatus: SDGRadioStatus {
+    if model.isDisabled { return .disabled }
+    if model.isSelected { return .selected }
+    return .default
+  }
+  
+  private var radioModel: SDGRadio.Model {
+    return SDGRadio.Model(
+      status: radioStatus,
+      spec: .large,
+      isPrimaryColor: !model.isSelectedColorNeturel
+    )
+  }
+  
   private var textColor: SDG.Color {
     if model.isDisabled { return .neutral200 }
     if model.isLabelColorPrimary { return .primary300 }
     return .neutral700
   }
-  
-  private var selectedColor: Color {
-    if model.isSelectedColorNeturel {
-      return .neutral700
-    }
-    
-    return .primary300
-  }
-  
+
   private var onTap: (String) -> Void
   
   public init(
@@ -42,14 +48,10 @@ public struct SDGRadioLabel: View {
       
     } label : {
       HStack(alignment: .top, spacing: 8) {
-        ZStack {
-          Color.neutral0
-            .frame(width: 8, height: 8)
-            .cornerRadius(4)
-            .padding(4)
-        }
-        .background(model.isSelected ? selectedColor : .neutral200)
-        .cornerRadius(8)
+        SDGRadio(
+          model: radioModel,
+          selected: { }
+        )
         .padding(.top, 1)
         
         Text(model.title)
@@ -60,6 +62,8 @@ public struct SDGRadioLabel: View {
           .fixedSize(horizontal: false, vertical: true)
       }
     }
+    .buttonStyle(NoTapAnimationButtonStyle())
+    .disabled(model.isDisabled)
   }
 }
 
