@@ -24,8 +24,6 @@ public struct SDGFixedTextForm: View {
   
   private let isRequiered: Bool
   
-  private let onRefresh: () -> Void
-  
   public init(
     title: String,
     icon: FormIconModel? = nil,
@@ -37,7 +35,6 @@ public struct SDGFixedTextForm: View {
     isFocused: Binding<Bool>,
     inputViewHeight: CGFloat = 94,
     isRequiered: Bool = false,
-    onRefresh: @escaping () -> Void,
     isError: Binding<String?> = .constant(nil)
   ) {
     self.title = title
@@ -50,7 +47,6 @@ public struct SDGFixedTextForm: View {
     self._isFocused = isFocused
     self.inputViewHeight = inputViewHeight
     self.isRequiered = isRequiered
-    self.onRefresh = onRefresh
     self._isError = isError
   }
   
@@ -96,27 +92,6 @@ public struct SDGFixedTextForm: View {
         }
         
         Spacer(minLength: 8)
-        
-        if !text.isEmpty && !isRequiered {
-          
-          Button {
-            
-            onRefresh()
-            
-          } label: {
-            ZStack {
-              
-              Image(sdg: .icCommonRefresh)
-                .resizable()
-                .foregroundStyle(.neutral400)
-                .frame(width: 24, height: 24)
-                .padding(2)
-              
-            }
-            .background(.neutral50)
-            .cornerRadius(14)
-          }
-        }
       }
       
       SDGFixedTextInput(
@@ -147,7 +122,6 @@ public struct SDGFixedTextForm: View {
       isFocused: .constant(false),
       inputViewHeight: 94,
       isRequiered: false,
-      onRefresh: { },
       isError: .constant(nil)
     )
     
@@ -162,7 +136,6 @@ public struct SDGFixedTextForm: View {
       isFocused: .constant(false),
       inputViewHeight: 94,
       isRequiered: true,
-      onRefresh: { },
       isError: .constant(nil)
     )
     
@@ -177,7 +150,6 @@ public struct SDGFixedTextForm: View {
       isFocused: .constant(false),
       inputViewHeight: 94,
       isRequiered: true,
-      onRefresh: { },
       isError: .constant("에러 에러에러에러에러에러에러에러에러에러에러")
     )
   }
