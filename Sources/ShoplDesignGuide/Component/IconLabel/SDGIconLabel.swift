@@ -22,6 +22,14 @@ public struct SDGIconLabel: View {
       }
     }
 
+    var iconVerticalPadding: CGFloat {
+      switch self {
+      case .medium: return 3
+      case .small: return 2
+      case .xsmall: return 1
+      }
+    }
+
     public static func == (lhs: SDGIconLabel.Size, rhs: SDGIconLabel.Size) -> Bool {
       switch (lhs, rhs) {
       case (.medium(let lhsIsBold), .medium(let rhsIsBold)):
@@ -128,7 +136,7 @@ public struct SDGIconLabel: View {
       .resizable()
       .frame(width: 14, height: 14)
       .foregroundStyle(self.imageForegroundColor)
-      .padding(.top, 1)
+      .padding(.vertical, size.iconVerticalPadding)
   }
 }
 
