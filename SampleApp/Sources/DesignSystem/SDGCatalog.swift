@@ -338,6 +338,8 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
       return "여러개의 옵션 중 다중 선택을 위한 컴포넌트"
     case .checkOption:
       return "하나의 옵션을 선택 또는 확인하는 컴포넌트"
+    case .numberPicker:
+      return "어떤 특정한 값의 숫자를 스피너로 선택하는 컴포넌트"
     case .radio:
       return "여러개의 옵션 중 단일 선택을 위한 컴포넌트"
     case .toggle:
@@ -349,7 +351,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
 
   var viewID: String? {
     switch self {
-    case .avatar, .attachmentElement, .checkbox, .checkOption, .radio, .toggle:
+    case .avatar, .attachmentElement, .checkbox, .checkOption, .numberPicker, .radio, .toggle:
       return id
     default:
       return nil

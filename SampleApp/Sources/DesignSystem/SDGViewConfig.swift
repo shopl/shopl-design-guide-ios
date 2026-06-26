@@ -25,6 +25,7 @@ struct SDGViewConfig {
     registry.register(id: "component_check_option") { SDGCheckOptionDemoView() }
     registry.register(id: "component_floating_button") { SDGFloatingButtonDemoView() }
     registry.register(id: "component_ghost_button") { SDGGhostButtonDemoView() }
+    registry.register(id: "component_number_picker") { SDGNumberPickerDemoView() }
     registry.register(id: "component_radio") { SDGRadioDemoView() }
     registry.register(id: "component_toggle") { SDGToggleDemoView() }
     
