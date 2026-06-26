@@ -107,6 +107,8 @@ struct SDGGuideDetailView: View {
       return SDGGhostButton.version
     case "component_radio":
       return SDGRadio.version
+    case "component_toggle":
+      return SDGToggle.version
     default:
       return nil
     }
