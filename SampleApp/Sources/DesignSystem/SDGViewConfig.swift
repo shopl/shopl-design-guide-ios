@@ -22,6 +22,7 @@ struct SDGViewConfig {
     registry.register(id: "component_box_button") { SDGBoxButtonDemoView() }
     registry.register(id: "component_capsule_button") { SDGCapsuleButtonDemoView() }
     registry.register(id: "component_checkbox") { SDGCheckBoxDemoView() }
+    registry.register(id: "component_check_option") { SDGCheckOptionDemoView() }
     registry.register(id: "component_floating_button") { SDGFloatingButtonDemoView() }
     registry.register(id: "component_ghost_button") { SDGGhostButtonDemoView() }
     
