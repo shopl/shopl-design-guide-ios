@@ -9,17 +9,14 @@ import SwiftUI
 import ShoplDesignGuide
 
 final class SDGCheckOptionDemoState: ObservableObject {
-  static let shared = SDGCheckOptionDemoState()
-
   let types = SDGCheckOptionDemoType.allCases
   let specs = SDGCheckOptionDemoSpec.allCases
-  let statuses = SDGCheckOptionDemoStatus.allCases
 
   @Published var selectedTypeIndex = 0
   @Published var selectedSpecIndex = 0
-  @Published var selectedStatusIndex = 0
+  @Published var selectedStatus: SDGCheckOptionDemoStatus = .default
 
-  private init() { }
+  init() { }
 
   var selectedType: SDGCheckOptionDemoType {
     types[safe: selectedTypeIndex] ?? .solid
@@ -27,10 +24,6 @@ final class SDGCheckOptionDemoState: ObservableObject {
 
   var selectedSpec: SDGCheckOptionDemoSpec {
     specs[safe: selectedSpecIndex] ?? .large
-  }
-
-  var selectedStatus: SDGCheckOptionDemoStatus {
-    statuses[safe: selectedStatusIndex] ?? .default
   }
 
   var previewItems: [SDGCheckOptionDemoPreviewItem] {
