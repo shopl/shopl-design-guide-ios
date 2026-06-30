@@ -38,7 +38,8 @@ public enum SDGButtonSize: Equatable {
   var iconSize: CGFloat {
     switch self {
     case .medium: return 16
-    default: return 14
+    case .small, .ssmall: return 14
+    case .xsmall: return 12
     }
   }
   

@@ -95,6 +95,8 @@ struct SDGGuideDetailView: View {
       return SDGBottomButton.version
     case "component_box_button":
       return SDGBoxButton.version
+    case "component_capsule_button":
+      return SDGCapsuleButton.version
     default:
       return nil
     }
@@ -143,6 +145,13 @@ private struct SDGGuideHeaderView: View {
   SDGGuideDetailPreviewWrapper(
     itemID: "component_box_button",
     viewID: "component_box_button"
+  )
+}
+
+#Preview("Capsule Button Bottom Sheet") {
+  SDGGuideDetailPreviewWrapper(
+    itemID: "component_capsule_button",
+    viewID: "component_capsule_button"
   )
 }
 

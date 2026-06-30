@@ -82,7 +82,10 @@ public struct SDGBoxButton: View {
             
             image
               .resizable()
-              .frame(width: 14, height: 14)
+              .frame(
+                width: _option.size.iconSize,
+                height: _option.size.iconSize
+              )
               .foregroundColor(color)
             
           default:
@@ -100,7 +103,10 @@ public struct SDGBoxButton: View {
               .resizable()
           
           
-              .frame(width: _option.size.iconSize, height: _option.size.iconSize)
+              .frame(
+                width: _option.size.iconSize,
+                height: _option.size.iconSize
+              )
               .foregroundColor(color)
             
           default:
