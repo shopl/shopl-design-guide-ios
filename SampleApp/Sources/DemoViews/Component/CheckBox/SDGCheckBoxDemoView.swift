@@ -9,7 +9,7 @@ import SwiftUI
 import ShoplDesignGuide
 
 struct SDGCheckBoxDemoView: View {
-  @ObservedObject private var state = SDGCheckBoxDemoState.shared
+  @StateObject private var state = SDGCheckBoxDemoState()
 
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
@@ -49,14 +49,14 @@ struct SDGCheckBoxDemoView: View {
     VStack(spacing: 16) {
       VStack(alignment: .leading, spacing: 16) {
         HStack(spacing: 8) {
-          radioLabel(for: .default, index: 0)
+          radioLabel(for: .default)
             .frame(width: 144)
 
-          radioLabel(for: .selected, index: 1)
+          radioLabel(for: .selected)
             .frame(width: 144)
         }
 
-        radioLabel(for: .disabled, index: 2)
+        radioLabel(for: .disabled)
           .frame(width: 144)
       }
       .padding(.horizontal, 16)
@@ -87,16 +87,16 @@ struct SDGCheckBoxDemoView: View {
     }
   }
 
-  private func radioLabel(for status: SDGCheckBoxDemoStatus, index: Int) -> some View {
+  private func radioLabel(for status: SDGCheckBoxDemoStatus) -> some View {
     SDGRadioLabel(
       model: RadioLabelModel(
         id: status.id,
-        isSelected: state.selectedStatusIndex == index,
+        isSelected: state.selectedStatus == status,
         isSelectedColorNeturel: true,
         title: status.title
       ),
       onTap: { _ in
-        state.selectedStatusIndex = index
+        state.selectedStatus = status
       }
     )
   }
