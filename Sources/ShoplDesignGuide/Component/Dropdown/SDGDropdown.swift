@@ -8,113 +8,176 @@
 import SwiftUI
 
 public struct SDGDropdown: View {
-  
-  private let _placeHolder: String
-  private let _text: String
-  @Binding private var _disabled: Bool
-  @Binding private var _backgroundColor: Color
-  private let _countText: String?
+  public static let version = "2.0.8"
 
-  private var _textColor: Color {
-    return (_text == "" || _disabled) ? .neutral300 : .neutral700
+  public enum Status: Equatable {
+    case `default`
+    case selected
+    case disabled
+    case error
   }
-  
-  private var _iconColor: Color {
-    return _disabled ? .neutral300 : .neutral700
+
+  public enum BackgroundColor: Equatable {
+    case neutral50
+    case neutral0
+
+    fileprivate var color: Color {
+      switch self {
+      case .neutral50: return .neutral50
+      case .neutral0: return .neutral0
+      }
+    }
   }
-  
+
+  public struct Model: Equatable {
+    public let placeHolder: String
+    public let text: String
+    public let status: Status
+    public let backgroundColor: BackgroundColor
+
+    public init(
+      placeHolder: String,
+      text: String = "",
+      status: Status = .default,
+      backgroundColor: BackgroundColor = .neutral50
+    ) {
+      self.placeHolder = placeHolder
+      self.text = text
+      self.status = status
+      self.backgroundColor = backgroundColor
+    }
+
+    fileprivate var displayText: String {
+      text.isBlank ? placeHolder : text
+    }
+  }
+
+  private let model: Model
+  private let onTap: () -> Void
+
+  private var textColor: SDG.Color {
+    switch model.status {
+    case .default, .disabled: return .neutral300
+    case .selected, .error: return .neutral700
+    }
+  }
+
+  private var iconColor: Color {
+    model.status == .disabled ? .neutral300 : .neutral700
+  }
+
+  private var backgroundColor: Color {
+    switch model.status {
+    case .error: return .red300_10
+    default: return model.backgroundColor.color
+    }
+  }
+
+  private var isDisabled: Bool {
+    model.status == .disabled
+  }
+
   public init(
-    placeHolder: String,
-    text: String,
-    disabled: Binding<Bool>,
-    backgroundColor: Binding<Color>,
-    countText: String? = nil
+    model: Model,
+    onTap: @escaping () -> Void
   ) {
-    _placeHolder = placeHolder
-    _text = text
-    _countText = countText
-    __disabled = disabled
-    __backgroundColor = backgroundColor
+    self.model = model
+    self.onTap = onTap
   }
-  
+
   public var body: some View {
 
-    HStack(spacing: 10) {
-      
-      HStack(spacing: 0) {
-        Text(_text == "" ? _placeHolder : _text)
-          .font(.system(size: 16, weight: .regular))
-          .foregroundColor(_textColor)
-       
-        if let countText = _countText {
-          Text(countText)
-            .font(.system(size: 16, weight: .regular))
-            .foregroundColor(_textColor)
-            .layoutPriority(1)
-        }
-      }
-      .frame(maxWidth: .infinity, alignment: .leading)
-      .lineLimit(1)
+    Button(action: onTap) {
+      HStack(spacing: 10) {
+        Text(model.displayText)
+          .typo(.body1_R, textColor)
+          .lineLimit(1)
+          .truncationMode(.tail)
+          .frame(maxWidth: .infinity, alignment: .leading)
 
-      Image(sdg: .icCommonDropdown)
-        .resizable()
-        .frame(width: 20, height: 20)
-        .foregroundColor(_iconColor)
-        
+        Image(sdg: .icCommonDropdown)
+          .resizable()
+          .frame(width: 20, height: 20)
+          .foregroundColor(iconColor)
+      }
+      .padding(.horizontal, 12)
+      .frame(height: 40)
+      .background(backgroundColor, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
-    .padding([.vertical, .trailing], 10)
-    .padding(.leading, 12)
-    .background(_backgroundColor)
-    .cornerRadius(12)
+    .buttonStyle(NoTapAnimationButtonStyle())
+    .disabled(isDisabled)
   }
-  
+
 }
 
 struct BasicDropdown_Preview: PreviewProvider {
   static var previews: some View {
-    
+
     VStack {
       Spacer()
-      
+
       HStack(spacing: 8) {
         SDGDropdown(
-          placeHolder: "Hint",
-          text: "2023.08.04(금)",
-          disabled: .constant(false),
-          backgroundColor: .constant(.neutral50)
+          model: .init(
+            placeHolder: "Hint",
+            text: "2023.08.04(금)",
+            status: .selected,
+            backgroundColor: .neutral50
+          ),
+          onTap: { }
         )
-        
+
         SDGDropdown(
-          placeHolder: "Hint",
-          text: "16:00",
-          disabled: .constant(false),
-          backgroundColor: .constant(.neutral50)
+          model: .init(
+            placeHolder: "Hint",
+            text: "16:00",
+            status: .selected,
+            backgroundColor: .neutral50
+          ),
+          onTap: { }
         )
         .frame(width: 112)
       }
-      
+
       SDGDropdown(
-        placeHolder: "Hint",
-        text: "Selected",
-        disabled: .constant(false),
-        backgroundColor: .constant(.neutral0)
+        model: .init(
+          placeHolder: "Hint",
+          text: "Selected",
+          status: .selected,
+          backgroundColor: .neutral0
+        ),
+        onTap: { }
       )
-      
-      
+
+
       SDGDropdown(
-        placeHolder: "Hint",
-        text: "",
-        disabled: .constant(false),
-        backgroundColor: .constant(.neutral0)
+        model: .init(
+          placeHolder: "Hint",
+          status: .default,
+          backgroundColor: .neutral0
+        ),
+        onTap: { }
       )
-      
+
       SDGDropdown(
-        placeHolder: "Hint",
-        text: "",
-        disabled: .constant(true),
-        backgroundColor: .constant(.neutral50)
+        model: .init(
+          placeHolder: "Hint",
+          status: .disabled,
+          backgroundColor: .neutral50
+        ),
+        onTap: { }
       )
-      
+
+      SDGDropdown(
+        model: .init(
+          placeHolder: "Hint",
+          text: "Error",
+          status: .error,
+          backgroundColor: .neutral50
+        ),
+        onTap: { }
+      )
+
       Spacer()
     }
     .padding()
@@ -122,7 +185,6 @@ struct BasicDropdown_Preview: PreviewProvider {
       Color.neutral700
         .ignoresSafeArea()
     )
-    
+
   }
 }
-
