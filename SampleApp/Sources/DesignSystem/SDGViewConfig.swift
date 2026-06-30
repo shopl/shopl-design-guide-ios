@@ -26,6 +26,7 @@ struct SDGViewConfig {
     registry.register(id: "component_floating_button") { SDGFloatingButtonDemoView() }
     registry.register(id: "component_ghost_button") { SDGGhostButtonDemoView() }
     registry.register(id: "component_radio") { SDGRadioDemoView() }
+    registry.register(id: "component_toggle") { SDGToggleDemoView() }
     
     let bottomSheetControlRegistry = SDGBottomSheetControlRegistry.shared
     bottomSheetControlRegistry.register(id: "component_avatar") {

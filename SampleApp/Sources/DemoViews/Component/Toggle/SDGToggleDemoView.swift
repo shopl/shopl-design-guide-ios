@@ -1,5 +1,5 @@
 //
-//  SDGRadioDemoView.swift
+//  SDGToggleDemoView.swift
 //  ShoplDesignGuide
 //
 //  Created by Jerry on 6/26/26.
@@ -8,8 +8,8 @@
 import SwiftUI
 import ShoplDesignGuide
 
-struct SDGRadioDemoView: View {
-  @StateObject private var state = SDGRadioDemoState()
+struct SDGToggleDemoView: View {
+  @ObservedObject private var state = SDGToggleDemoState.shared
 
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
@@ -34,7 +34,7 @@ struct SDGRadioDemoView: View {
   private var previewCard: some View {
     VStack(spacing: 0) {
       statusSelector
-      radioPreview
+      togglePreview
     }
     .frame(maxWidth: .infinity)
     .background(Color.neutral0)
@@ -49,15 +49,20 @@ struct SDGRadioDemoView: View {
     VStack(spacing: 16) {
       VStack(alignment: .leading, spacing: 16) {
         HStack(spacing: 8) {
-          radioLabel(for: .default)
+          statusOption(.default)
             .frame(width: 144)
 
-          radioLabel(for: .selected)
+          statusOption(.defaultDisabled)
             .frame(width: 144)
         }
 
-        radioLabel(for: .disabled)
-          .frame(width: 144)
+        HStack(spacing: 8) {
+          statusOption(.active)
+            .frame(width: 144)
+
+          statusOption(.selectedDisabled)
+            .frame(width: 144)
+        }
       }
       .padding(.horizontal, 16)
 
@@ -70,14 +75,16 @@ struct SDGRadioDemoView: View {
     .frame(maxWidth: .infinity, alignment: .leading)
   }
 
-  private var radioPreview: some View {
-    VStack(spacing: 40) {
-      ForEach(state.previewItems) { item in
-        SDGRadio(
-          model: item.model
-        )
-      }
-    }
+  private var togglePreview: some View {
+    SDGToggle(
+      size: state.selectedSpec.toggleSize,
+      isEnabled: state.selectedStatus.isEnabled,
+      onColorType: .primary,
+      isOn: Binding(
+        get: { state.selectedStatus.isOn },
+        set: { state.setPreviewIsOn($0) }
+      )
+    )
     .padding(.horizontal, 16)
     .padding(.vertical, 40)
     .frame(maxWidth: .infinity)
@@ -89,18 +96,34 @@ struct SDGRadioDemoView: View {
     }
   }
 
-  private func radioLabel(for status: SDGRadioDemoStatus) -> some View {
-    SDGRadioLabel(
-      model: RadioLabelModel(
-        id: status.id,
-        isSelected: state.selectedStatus == status,
-        isSelectedColorNeturel: true,
-        title: status.title
-      ),
-      onTap: { _ in
-        state.selectedStatus = status
+  private func statusOption(_ status: SDGToggleDemoStatus) -> some View {
+    Button {
+      state.select(status)
+    } label: {
+      HStack(alignment: .top, spacing: 8) {
+        SDGRadio(
+          model: SDGRadio.Model(
+            status: state.selectedStatus == status ? .selected : .default,
+            spec: .medium,
+            isPrimaryColor: false
+          ),
+          selected: { }
+        )
+        .padding(.top, 2)
+
+        HStack(alignment: .lastTextBaseline, spacing: 0) {
+          Text(status.title)
+            .typo(.body1_R, .neutral700)
+
+          if let suffix = status.suffix {
+            Text(suffix)
+              .typo(.body3_R, .neutral700)
+          }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
       }
-    )
+    }
+    .buttonStyle(NoTapAnimationButtonStyle())
   }
 
   private func sectionTitle(_ title: String) -> some View {
@@ -111,5 +134,5 @@ struct SDGRadioDemoView: View {
 }
 
 #Preview {
-  SDGRadioDemoView()
+  SDGToggleDemoView()
 }

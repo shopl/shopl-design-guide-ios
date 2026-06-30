@@ -2,7 +2,7 @@
 //  SDGCapsuleButtonBottomSheetControls.swift
 //  ShoplDesignGuide
 //
-//  Created by Codex on 6/25/26.
+//  Created by Jerry on 6/25/26.
 //
 
 import SwiftUI

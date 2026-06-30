@@ -8,6 +8,7 @@
 import SwiftUI
 
 public struct SDGToggle: View {
+  public static let version = "2.1.26"
 
   private enum Constants {
     static let animationDuration = 0.2
