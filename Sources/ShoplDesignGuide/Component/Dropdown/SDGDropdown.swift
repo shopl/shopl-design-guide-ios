@@ -48,7 +48,7 @@ public struct SDGDropdown: View {
     }
 
     fileprivate var displayText: String {
-      text.isEmpty ? placeHolder : text
+      text.isBlank ? placeHolder : text
     }
   }
 
@@ -87,10 +87,7 @@ public struct SDGDropdown: View {
 
   public var body: some View {
 
-    Button {
-      guard !isDisabled else { return }
-      onTap()
-    } label: {
+    Button(action: onTap) {
       HStack(spacing: 10) {
         Text(model.displayText)
           .typo(.body1_R, textColor)
@@ -105,8 +102,7 @@ public struct SDGDropdown: View {
       }
       .padding(.horizontal, 12)
       .frame(height: 40)
-      .background(backgroundColor)
-      .cornerRadius(12)
+      .background(backgroundColor, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
     .buttonStyle(NoTapAnimationButtonStyle())
     .disabled(isDisabled)

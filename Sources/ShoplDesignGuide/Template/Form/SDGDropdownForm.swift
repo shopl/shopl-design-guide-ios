@@ -125,10 +125,7 @@ public struct SDGDropdownForm: View {
           status: dropdownStatus,
           backgroundColor: .neutral50
         ),
-        onTap: {
-          guard !disabled else { return }
-          onSelect()
-        }
+        onTap: onSelect
       )
     }
   }
