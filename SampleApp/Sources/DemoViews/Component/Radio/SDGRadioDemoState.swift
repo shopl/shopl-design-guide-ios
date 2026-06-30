@@ -9,22 +9,15 @@ import SwiftUI
 import ShoplDesignGuide
 
 final class SDGRadioDemoState: ObservableObject {
-  static let shared = SDGRadioDemoState()
-
   let specs = SDGRadioDemoSpec.allCases
-  let statuses = SDGRadioDemoStatus.allCases
 
   @Published var selectedSpecIndex = 0
-  @Published var selectedStatusIndex = 0
+  @Published var selectedStatus: SDGRadioDemoStatus = .default
 
-  private init() { }
+  init() { }
 
   var selectedSpec: SDGRadioDemoSpec {
     specs[safe: selectedSpecIndex] ?? .large
-  }
-
-  var selectedStatus: SDGRadioDemoStatus {
-    statuses[safe: selectedStatusIndex] ?? .default
   }
 
   var previewItems: [SDGRadioDemoPreviewItem] {
@@ -83,7 +76,7 @@ enum SDGRadioDemoSpec: String, CaseIterable, Identifiable {
     case .large:
       return .large
     case .medium:
-      return .medim
+      return .medium
     }
   }
 }

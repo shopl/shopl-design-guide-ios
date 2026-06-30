@@ -49,8 +49,7 @@ public struct SDGRadioLabel: View {
     } label : {
       HStack(alignment: .top, spacing: 8) {
         SDGRadio(
-          model: radioModel,
-          selected: { }
+          model: radioModel
         )
         .padding(.top, 1)
         
