@@ -97,6 +97,8 @@ struct SDGGuideDetailView: View {
       return SDGBoxButton.version
     case "component_capsule_button":
       return SDGCapsuleButton.version
+    case "component_checkbox":
+      return SDGCheckBox.version
     case "component_floating_button":
       return SDGFloatingButton.version
     case "component_ghost_button":
