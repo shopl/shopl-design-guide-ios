@@ -105,6 +105,8 @@ struct SDGGuideDetailView: View {
       return SDGFloatingButton.version
     case "component_ghost_button":
       return SDGGhostButton.version
+    case "component_radio":
+      return SDGRadio.version
     default:
       return nil
     }
