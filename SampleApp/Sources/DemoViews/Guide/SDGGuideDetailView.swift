@@ -97,6 +97,8 @@ struct SDGGuideDetailView: View {
       return SDGBoxButton.version
     case "component_capsule_button":
       return SDGCapsuleButton.version
+    case "component_floating_button":
+      return SDGFloatingButton.version
     default:
       return nil
     }
@@ -152,6 +154,13 @@ private struct SDGGuideHeaderView: View {
   SDGGuideDetailPreviewWrapper(
     itemID: "component_capsule_button",
     viewID: "component_capsule_button"
+  )
+}
+
+#Preview("Floating Button") {
+  SDGGuideDetailPreviewWrapper(
+    itemID: "component_floating_button",
+    viewID: "component_floating_button"
   )
 }
 
