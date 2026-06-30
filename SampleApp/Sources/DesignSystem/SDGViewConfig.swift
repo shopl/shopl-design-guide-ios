@@ -22,6 +22,7 @@ struct SDGViewConfig {
     registry.register(id: "component_box_button") { SDGBoxButtonDemoView() }
     registry.register(id: "component_capsule_button") { SDGCapsuleButtonDemoView() }
     registry.register(id: "component_floating_button") { SDGFloatingButtonDemoView() }
+    registry.register(id: "component_ghost_button") { SDGGhostButtonDemoView() }
     
     let bottomSheetControlRegistry = SDGBottomSheetControlRegistry.shared
     bottomSheetControlRegistry.register(id: "component_avatar") {
@@ -38,6 +39,9 @@ struct SDGViewConfig {
     }
     bottomSheetControlRegistry.register(id: "component_capsule_button") {
       SDGCapsuleButtonBottomSheetControls()
+    }
+    bottomSheetControlRegistry.register(id: "component_ghost_button") {
+      SDGGhostButtonBottomSheetControls()
     }
 
   }
