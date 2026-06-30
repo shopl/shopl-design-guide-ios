@@ -104,7 +104,7 @@ struct SDGToggleDemoView: View {
         SDGRadio(
           model: SDGRadio.Model(
             status: state.selectedStatus == status ? .selected : .default,
-            spec: .medim,
+            spec: .medium,
             isPrimaryColor: false
           ),
           selected: { }
