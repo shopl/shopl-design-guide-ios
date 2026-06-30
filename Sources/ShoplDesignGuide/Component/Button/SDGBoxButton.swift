@@ -8,6 +8,7 @@
 import SwiftUI
 
 public struct SDGBoxButton: View {
+  public static let version = "2.3.34"
   
   public struct Option {
     
@@ -81,7 +82,10 @@ public struct SDGBoxButton: View {
             
             image
               .resizable()
-              .frame(width: 14, height: 14)
+              .frame(
+                width: _option.size.iconSize,
+                height: _option.size.iconSize
+              )
               .foregroundColor(color)
             
           default:
@@ -97,7 +101,12 @@ public struct SDGBoxButton: View {
             
             image
               .resizable()
-              .frame(width: 14, height: 14)
+          
+          
+              .frame(
+                width: _option.size.iconSize,
+                height: _option.size.iconSize
+              )
               .foregroundColor(color)
             
           default:

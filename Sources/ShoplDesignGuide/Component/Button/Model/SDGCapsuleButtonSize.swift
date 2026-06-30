@@ -27,6 +27,31 @@ public enum SDGCapsuleButtonSize: Equatable {
     }
   }
   
+  var height: CGFloat {
+    switch self {
+    case .large: return 50
+    case .medium: return 36
+    case .small: return 28
+    case .xsmall: return 20
+    }
+  }
+  
+  var iconSpacing: CGFloat {
+    switch self {
+    case .large: return 8
+    case .medium: return 4
+    case .small, .xsmall: return 2
+    }
+  }
+  
+  var iconSize: CGFloat {
+    switch self {
+    case .large: return 18
+    case .medium: return 16
+    case .small, .xsmall: return 14
+    }
+  }
+  
   var verticalPadding: CGFloat {
     switch self {
     case .large: return 15

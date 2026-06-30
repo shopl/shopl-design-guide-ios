@@ -124,6 +124,7 @@ public extension SDG.Image {
     static let icNaviBack = SDG.Image(name: "ic_navi_back", bundle: dsBundle)
     static let icNaviChat = SDG.Image(name: "ic_navi_chat", bundle: dsBundle)
     static let icNaviClose = SDG.Image(name: "ic_navi_close", bundle: dsBundle)
+    static let icNaviDrawer = SDG.Image(name: "ic_navi_drawer", bundle: dsBundle)
     static let icNaviFilter = SDG.Image(name: "ic_navi_filter", bundle: dsBundle)
     static let icNaviHelp = SDG.Image(name: "ic_navi_help", bundle: dsBundle)
     static let icNaviMode = SDG.Image(name: "ic_navi_mode", bundle: dsBundle)
@@ -167,9 +168,9 @@ public extension SDG.Color {
     static let secondary200 = SDG.Color(name: "Secondary200", bundle: dsBundle)
     static let secondary300_10 = SDG.Color(name: "Secondary300-10", bundle: dsBundle)
     static let secondary300 = SDG.Color(name: "Secondary300", bundle: dsBundle)
+    static let secondary400_10 = SDG.Color(name: "Secondary400-10", bundle: dsBundle)
     static let secondary400 = SDG.Color(name: "Secondary400", bundle: dsBundle)
     static let secondary50 = SDG.Color(name: "Secondary50", bundle: dsBundle)
-    static let sencondary400_10 = SDG.Color(name: "Sencondary400-10", bundle: dsBundle)
     static let info = SDG.Color(name: "Info", bundle: dsBundle)
     static let neutral0_10 = SDG.Color(name: "Neutral0-10", bundle: dsBundle)
     static let neutral0 = SDG.Color(name: "Neutral0", bundle: dsBundle)
@@ -234,9 +235,9 @@ public extension SwiftUI.Color {
     static let secondary200 = SwiftUI.Color(SDG.Color.secondary200)
     static let secondary300_10 = SwiftUI.Color(SDG.Color.secondary300_10)
     static let secondary300 = SwiftUI.Color(SDG.Color.secondary300)
+    static let secondary400_10 = SwiftUI.Color(SDG.Color.secondary400_10)
     static let secondary400 = SwiftUI.Color(SDG.Color.secondary400)
     static let secondary50 = SwiftUI.Color(SDG.Color.secondary50)
-    static let sencondary400_10 = SwiftUI.Color(SDG.Color.sencondary400_10)
     static let info = SwiftUI.Color(SDG.Color.info)
     static let neutral0_10 = SwiftUI.Color(SDG.Color.neutral0_10)
     static let neutral0 = SwiftUI.Color(SDG.Color.neutral0)
@@ -301,9 +302,9 @@ public extension UIColor {
     static let secondary200 = UIColor(sdg: SDG.Color.secondary200)
     static let secondary300_10 = UIColor(sdg: SDG.Color.secondary300_10)
     static let secondary300 = UIColor(sdg: SDG.Color.secondary300)
+    static let secondary400_10 = UIColor(sdg: SDG.Color.secondary400_10)
     static let secondary400 = UIColor(sdg: SDG.Color.secondary400)
     static let secondary50 = UIColor(sdg: SDG.Color.secondary50)
-    static let sencondary400_10 = UIColor(sdg: SDG.Color.sencondary400_10)
     static let info = UIColor(sdg: SDG.Color.info)
     static let neutral0_10 = UIColor(sdg: SDG.Color.neutral0_10)
     static let neutral0 = UIColor(sdg: SDG.Color.neutral0)
@@ -365,9 +366,9 @@ public extension ShapeStyle where Self == SwiftUI.Color {
     static var secondary200: SwiftUI.Color { SwiftUI.Color(SDG.Color.secondary200) }
     static var secondary300_10: SwiftUI.Color { SwiftUI.Color(SDG.Color.secondary300_10) }
     static var secondary300: SwiftUI.Color { SwiftUI.Color(SDG.Color.secondary300) }
+    static var secondary400_10: SwiftUI.Color { SwiftUI.Color(SDG.Color.secondary400_10) }
     static var secondary400: SwiftUI.Color { SwiftUI.Color(SDG.Color.secondary400) }
     static var secondary50: SwiftUI.Color { SwiftUI.Color(SDG.Color.secondary50) }
-    static var sencondary400_10: SwiftUI.Color { SwiftUI.Color(SDG.Color.sencondary400_10) }
     static var info: SwiftUI.Color { SwiftUI.Color(SDG.Color.info) }
     static var neutral0_10: SwiftUI.Color { SwiftUI.Color(SDG.Color.neutral0_10) }
     static var neutral0: SwiftUI.Color { SwiftUI.Color(SDG.Color.neutral0) }
