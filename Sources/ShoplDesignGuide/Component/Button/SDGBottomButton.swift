@@ -78,18 +78,31 @@ public struct SDGBottomButton: View {
   private let _option: Option
   private let _isDisable: Bool
   private let _action: () -> Void
-  
+  private let _hideWhenKeyboardAppear: Bool
+
   public init(
     option: Option,
     isDisable: Bool = false,
-    action: @escaping () -> Void
+    action: @escaping () -> Void,
+    hideWhenKeyboardAppear: Bool = true
   ) {
     _option = option
     _isDisable = isDisable
     _action = action
+    _hideWhenKeyboardAppear = hideWhenKeyboardAppear
   }
-  
+
   public var body: some View {
+    Group {
+      if _hideWhenKeyboardAppear {
+        baseButton.hideWhenKeyboardAppear()
+      } else {
+        baseButton
+      }
+    }
+  }
+
+  private var baseButton: some View {
     Button {
       _action()
     } label: {

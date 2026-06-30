@@ -106,7 +106,7 @@ public struct SDGSimpleInput: View {
     VStack(spacing: 10) {
       
       ZStack {
-        TextField("", text: $_text, axis: .vertical)
+        TextField("", text: $_text)
           .placeholder(when: _text.isEmpty) {
             Text(_hint)
               .font(.system(size: 16))
@@ -120,10 +120,12 @@ public struct SDGSimpleInput: View {
             }
           }
           .limitText($_text, to: _maxCount)
+          .allowsHitTesting(_state != .disabled)
           .foregroundStyle(_state == .disabled ? .neutral300 : .neutral700)
           .padding(.horizontal, 12)
           .padding(.vertical, 10)
       }
+      .frame(height: 40)
       .background(backgroundColor)
       .cornerRadius(12)
       .overlay(

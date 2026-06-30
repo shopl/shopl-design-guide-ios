@@ -44,6 +44,8 @@ public struct SDGBottomPopup<BodyContent: View>: View {
   
   private let topPadding: CGFloat = 24
   private let contentSpacing: CGFloat = 12
+  private let bodyContentTopPadding: CGFloat = 4
+  private let bodyContentBottomPadding: CGFloat = 28
   private var popupHeightLimitSpacing: CGFloat {
     screenHeight * 0.2
   }
@@ -88,6 +90,8 @@ public struct SDGBottomPopup<BodyContent: View>: View {
               if !bodyContent.isEmpty {
                 SDGPopupBody(maxHeight: calculateBodyHeight(in: geometry.size)) {
                   bodyContent
+                    .padding(.top, bodyContentTopPadding)
+                    .padding(.bottom, bodyContentBottomPadding)
                 }
               }
             }
