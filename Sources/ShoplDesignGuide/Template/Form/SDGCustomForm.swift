@@ -8,7 +8,8 @@
 import SwiftUI
 
 public struct SDGCustomForm<Body: View>: View {
-  
+  public static var version: String { "2.0.0" }
+
   private let title: String
   private let type: FormType
   private let isRequired: Bool

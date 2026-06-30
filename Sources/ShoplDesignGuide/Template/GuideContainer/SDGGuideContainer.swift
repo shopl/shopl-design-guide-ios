@@ -8,7 +8,8 @@
 import SwiftUI
 
 public struct SDGGuideContainer<Body: View>: View {
-  
+  public static var version: String { "2.1.10" }
+
   private let model: Model
   private let contentArea: Body
   

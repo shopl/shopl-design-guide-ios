@@ -10,7 +10,8 @@ import SwiftUI
 import Kingfisher
 
 public struct SDGPhotoThumbnailGrid: View {
-  
+  public static let version: String = "2.1.30"
+
   public struct Photo: Identifiable, Equatable {
     public enum Source {
       case image(Image)

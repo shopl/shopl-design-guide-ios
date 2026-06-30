@@ -33,7 +33,8 @@ extension View {
 }
 
 public struct SDGBottomPopup<BodyContent: View>: View {
-  
+  public static var version: String { "2.3.32" }
+
   private let title: SDGPopupTitle?
   private let bodyContent: BodyContent
   private let button: SDGBottomPopupButton

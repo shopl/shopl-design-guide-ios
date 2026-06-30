@@ -8,6 +8,7 @@
 import SwiftUI
 
 public struct SDGSelectInput: View {
+  public static let version: String = "2.0.9"
 
   private let model: SelectInputModel
   private let onTapped: (SelectInputModel.SelectInputItem) -> Void
