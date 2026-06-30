@@ -12,12 +12,12 @@ public struct SDGRadio: View {
   
   public enum Spec: Equatable {
     case large
-    case medim
+    case medium
   
     fileprivate var iconSize: CGFloat {
       switch self {
       case .large: return 16
-      case .medim: return 14
+      case .medium: return 14
       }
     }
   }
@@ -39,17 +39,31 @@ public struct SDGRadio: View {
   }
   
   private var model: Model
-  private var selected: (() -> ())
+  private var selected: (() -> Void)?
   
   public init(
     model: Model,
-    selected: @escaping (() -> ())
+    selected: (() -> Void)? = nil
   ) {
     self.model = model
     self.selected = selected
   }
   
   public var body: some View {
+    if let selected {
+      Button {
+        selected()
+      } label: {
+        radioIndicator
+      }
+      .buttonStyle(NoTapAnimationButtonStyle())
+      .disabled(model.status == .disabled)
+    } else {
+      radioIndicator
+    }
+  }
+  
+  private var radioIndicator: some View {
     
     ZStack(alignment: .center) {
       Circle()
@@ -78,18 +92,15 @@ public struct SDGRadio: View {
       
       HStack(spacing: 16) {
         SDGRadio(
-          model: .init(status: .default, spec: .large),
-          selected: { }
+          model: .init(status: .default, spec: .large)
         )
         
         SDGRadio(
-          model: .init(status: .selected, spec: .large),
-          selected: { }
+          model: .init(status: .selected, spec: .large)
         )
         
         SDGRadio(
-          model: .init(status: .disabled, spec: .large),
-          selected: { }
+          model: .init(status: .disabled, spec: .large)
         )
       }
     }
@@ -100,18 +111,15 @@ public struct SDGRadio: View {
       
       HStack(spacing: 16) {
         SDGRadio(
-          model: .init(status: .default, spec: .medim),
-          selected: { }
+          model: .init(status: .default, spec: .medium)
         )
         
         SDGRadio(
-          model: .init(status: .selected, spec: .medim),
-          selected: { }
+          model: .init(status: .selected, spec: .medium)
         )
         
         SDGRadio(
-          model: .init(status: .disabled, spec: .medim),
-          selected: { }
+          model: .init(status: .disabled, spec: .medium)
         )
       }
     }
@@ -122,18 +130,15 @@ public struct SDGRadio: View {
       
       HStack(spacing: 16) {
         SDGRadio(
-          model: .init(status: .default, spec: .large, isPrimaryColor: false),
-          selected: { }
+          model: .init(status: .default, spec: .large, isPrimaryColor: false)
         )
         
         SDGRadio(
-          model: .init(status: .selected, spec: .large, isPrimaryColor: false),
-          selected: { }
+          model: .init(status: .selected, spec: .large, isPrimaryColor: false)
         )
         
         SDGRadio(
-          model: .init(status: .disabled, spec: .large, isPrimaryColor: false),
-          selected: { }
+          model: .init(status: .disabled, spec: .large, isPrimaryColor: false)
         )
       }
     }
