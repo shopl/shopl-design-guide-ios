@@ -134,6 +134,7 @@ public struct SDGCapsuleButton: View {
       }
     }
     .cornerRadius(_option.size.cornerRadius)
+    .frame(height: _option.size.height)
     .disabled(_isDisable)
     .buttonStyle(
       SDGBoxButtonStyle(

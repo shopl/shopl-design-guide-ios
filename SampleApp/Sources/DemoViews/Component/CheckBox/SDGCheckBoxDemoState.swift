@@ -9,22 +9,15 @@ import SwiftUI
 import ShoplDesignGuide
 
 final class SDGCheckBoxDemoState: ObservableObject {
-  static let shared = SDGCheckBoxDemoState()
-
   let sizes = SDGCheckBoxDemoSize.allCases
-  let statuses = SDGCheckBoxDemoStatus.allCases
 
   @Published var selectedSizeIndex = 0
-  @Published var selectedStatusIndex = 0
+  @Published var selectedStatus: SDGCheckBoxDemoStatus = .default
 
-  private init() { }
+  init() { }
 
   var selectedSize: SDGCheckBoxDemoSize {
     sizes[safe: selectedSizeIndex] ?? .large
-  }
-
-  var selectedStatus: SDGCheckBoxDemoStatus {
-    statuses[safe: selectedStatusIndex] ?? .default
   }
 
   var previewModels: [SDGCheckBox.Model] {

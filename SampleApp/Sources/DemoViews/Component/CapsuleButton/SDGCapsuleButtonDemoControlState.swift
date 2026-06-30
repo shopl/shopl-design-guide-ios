@@ -61,7 +61,7 @@ final class SDGCapsuleButtonDemoControlState: ObservableObject {
   }
   
   private static let shortTitle = "Label"
-  private static let longTitle = "Label Label Label Label"
+  private static let longTitle = "가슴속에 못 시인의 나의 별이 봅니다. 어머님, 멀리 별 이런 나는 추억과 남은 걱정도 쓸쓸함과 있습니다."
 }
 
 enum SDGCapsuleButtonDemoType: String, CaseIterable, Identifiable {
