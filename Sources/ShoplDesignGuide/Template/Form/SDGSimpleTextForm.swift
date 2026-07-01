@@ -21,13 +21,8 @@ public struct SDGSimpleTextForm: View {
   private let maxCount: Int
   private let backgroundColor: Color
   
-  private let onRefresh: () -> Void
   private let onSearchButtonTap: (String) -> Void
   private let onSearchTextChange: (String) -> Void
-  
-  private var isSelected: Bool {
-    return !searchText.isBlank
-  }
   
   public init(
     title: String,
@@ -41,7 +36,6 @@ public struct SDGSimpleTextForm: View {
     isRequiered: Bool = false,
     maxCount: Int = 10000,
     backgroundColor: Color? = nil,
-    onRefresh: @escaping () -> Void,
     onSearchButtonTap: @escaping (String) -> Void,
     onSearchTextChange: @escaping (String) -> Void
   ) {
@@ -62,7 +56,6 @@ public struct SDGSimpleTextForm: View {
     self.isRequiered = isRequiered
     self.errorMessage = errorMessage
     self.maxCount = maxCount
-    self.onRefresh = onRefresh
     self.onSearchButtonTap = onSearchButtonTap
     self.onSearchTextChange = onSearchTextChange
   }
@@ -108,27 +101,6 @@ public struct SDGSimpleTextForm: View {
         }
         
         Spacer(minLength: 8)
-        
-        if isSelected && !isRequiered {
-          
-          Button {
-            
-            onRefresh()
-            
-          } label: {
-            ZStack {
-              
-              Image(sdg: .icCommonRefresh)
-                .resizable()
-                .foregroundStyle(.neutral400)
-                .frame(width: 24, height: 24)
-                .padding(2)
-              
-            }
-            .background(.neutral50)
-            .cornerRadius(14)
-          }
-        }
       }
       
       SDGSimpleInput(
@@ -140,7 +112,6 @@ public struct SDGSimpleTextForm: View {
         backgroundColor: backgroundColor,
         maxCount: maxCount
       )
-      .frame(height: 40)
       .onChange(of: searchText) { newValue in
         onSearchTextChange(newValue)
       }
@@ -163,7 +134,6 @@ struct SDGSimpleTextForm_Wrapper: View {
         searchText: $searchTextOne,
         placeHolder: "입력",
         isRequiered: true,
-        onRefresh: { },
         onSearchButtonTap: { text in },
         onSearchTextChange: { text in }
       )
@@ -174,9 +144,6 @@ struct SDGSimpleTextForm_Wrapper: View {
         searchText: $searchTextTwo,
         placeHolder: "입력",
         isRequiered: false,
-        onRefresh: {
-          searchTextTwo = ""
-        },
         onSearchButtonTap: { text in },
         onSearchTextChange: { text in }
       )
@@ -188,9 +155,6 @@ struct SDGSimpleTextForm_Wrapper: View {
         state: .constant(.error("에러메세지")),
         placeHolder: "입력",
         isRequiered: false,
-        onRefresh: {
-          searchTextTwo = ""
-        },
         onSearchButtonTap: { text in },
         onSearchTextChange: { text in }
       )
@@ -203,9 +167,6 @@ struct SDGSimpleTextForm_Wrapper: View {
         state: .constant(.error("긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지")),
         placeHolder: "입력",
         isRequiered: false,
-        onRefresh: {
-          searchTextTwo = ""
-        },
         onSearchButtonTap: { text in },
         onSearchTextChange: { text in }
       )
