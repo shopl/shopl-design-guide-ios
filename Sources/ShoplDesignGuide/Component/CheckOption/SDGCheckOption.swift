@@ -8,6 +8,8 @@
 import SwiftUI
 
 public struct SDGCheckOption: View {
+  public static let version = "2.0.0"
+
   public enum CheckType: Equatable {
     case solid
     case line

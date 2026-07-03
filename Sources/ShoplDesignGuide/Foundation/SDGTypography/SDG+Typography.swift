@@ -80,7 +80,7 @@ extension SDG {
       case .body1_SB, .body1_R: 20
       case .body2_SB, .body2_R: 18
       case .body3_SB, .body3_R: 16
-      case .body4_SB, .body4_R: 16
+      case .body4_SB, .body4_R: 14
       }
     }
     
