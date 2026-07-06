@@ -60,6 +60,8 @@ public struct ListPopupModel: Equatable {
 }
 
 public struct ListPopupView: View {
+  public static let version: String = "2.0.0"
+
   private let list: [ListPopupModel]
   private let selectAction: (String) -> Void
   

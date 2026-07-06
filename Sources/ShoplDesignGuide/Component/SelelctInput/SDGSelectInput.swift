@@ -8,6 +8,7 @@
 import SwiftUI
 
 public struct SDGSelectInput: View {
+  public static let version: String = "2.0.9"
 
   private let model: SelectInputModel
   private let onTapped: (SelectInputModel.SelectInputItem) -> Void
@@ -81,6 +82,7 @@ public struct SDGSelectInput: View {
             }
 
             if let text = item.text,
+               text.isNotEmpty,
                model.status != .default {
               Text(text)
                 .typo(.body1_R, model.status != .disabled ? .neutral700 : .neutral300)
