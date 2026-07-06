@@ -82,6 +82,7 @@ public struct SDGSelectInput: View {
             }
 
             if let text = item.text,
+               text.isNotEmpty,
                model.status != .default {
               Text(text)
                 .typo(.body1_R, model.status != .disabled ? .neutral700 : .neutral300)
