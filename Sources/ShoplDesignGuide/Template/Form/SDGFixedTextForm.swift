@@ -88,7 +88,7 @@ public struct SDGFixedTextForm: View {
           return .focused
         }
 
-        return text.isEmpty ? .default : .completed
+        return .default
       },
       set: { newState in
         switch newState {
@@ -97,7 +97,7 @@ public struct SDGFixedTextForm: View {
         case .error(let message, let isFocusedValue):
           isFocused = isFocusedValue
           isError = message
-        case .default, .completed, .disabled:
+        case .default, .disabled:
           isFocused = false
         }
       }

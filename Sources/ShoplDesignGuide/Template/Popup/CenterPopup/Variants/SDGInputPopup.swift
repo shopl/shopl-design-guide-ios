@@ -103,7 +103,7 @@ public struct SDGInputPopup: View {
 
   private func syncInputStateWithText(_ text: String, force: Bool = false) {
     guard force || inputState != .focused else { return }
-    inputState = text.isEmpty ? .default : .completed
+    inputState = .default
   }
 }
 

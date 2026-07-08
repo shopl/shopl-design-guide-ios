@@ -30,7 +30,6 @@ public struct SDGFixedTextInput: View {
   public enum State: Equatable {
     case `default`
     case focused
-    case completed
     case disabled
     case error(String?, isFocused: Bool = false)
 
@@ -59,8 +58,8 @@ public struct SDGFixedTextInput: View {
   @Binding private var text: String
   @Binding private var state: State
 
+  @FocusState private var isTextEditorFocused: Bool
   @SwiftUI.State private var internalIsFocused = false
-  @SwiftUI.State private var isTextEditorFocused = false
 
   private let style: Style
   private let placeholder: String?
@@ -68,13 +67,18 @@ public struct SDGFixedTextInput: View {
   private let maxCharacterCount: Int?
   private let inputViewHeight: CGFloat
 
-  private var effectiveState: State {
-    guard !state.isDisabled else { return .disabled }
-    return internalIsFocused || state.isFocused ? .focused : state
+  private var hasError: Bool {
+    state.isError
   }
 
-  private var hasError: Bool {
-    state.isError || effectiveState.isError
+  private var isFocusActive: Bool {
+    internalIsFocused
+      || isTextEditorFocused
+      || state.isFocused
+  }
+
+  private var effectiveState: State {
+    state
   }
 
   private var backgroundColor: Color {
@@ -102,13 +106,6 @@ public struct SDGFixedTextInput: View {
     }
   }
 
-  private var errorMessage: String? {
-    switch state {
-    case .error(let message, _): return message
-    default: return nil
-    }
-  }
-
   private var visibleLineCount: Int {
     max(Int((inputViewHeight - 24) / SDG.Typography.body1_R.lineHeight), 1)
   }
@@ -118,46 +115,30 @@ public struct SDGFixedTextInput: View {
   }
 
   private var isEditingState: Bool {
-    switch effectiveState {
-    case .default, .focused: return true
-    case .completed, .disabled, .error: return false
+    guard !state.isDisabled else { return false }
+
+    if isFocusActive {
+      return true
     }
-  }
 
-  private var focusBinding: Binding<Bool> {
-    Binding(
-      get: {
-        isTextEditorFocused
-      },
-      set: { newValue in
-        guard !state.isDisabled else {
-          isTextEditorFocused = false
-          internalIsFocused = false
-          return
-        }
-
-        if newValue {
-          isTextEditorFocused = true
-          internalIsFocused = true
-          state = nextFocusedState
-        } else {
-          isTextEditorFocused = false
-          deferFocusReleaseIfNeeded()
-        }
-      }
-    )
+    switch state {
+    case .default, .focused:
+      return text.isEmpty
+    case .disabled, .error:
+      return false
+    }
   }
 
   private var nextRestingState: State {
-    if case .error(let message, _) = state {
+    if case let .error(message, _) = state {
       return .error(message)
     }
 
-    return text.isEmpty ? .default : .completed
+    return .default
   }
 
   private var nextFocusedState: State {
-    if case .error(let message, _) = state {
+    if case let .error(message, _) = state {
       return .error(message, isFocused: true)
     }
 
@@ -193,6 +174,8 @@ public struct SDGFixedTextInput: View {
     maxCharacterCount: Int? = nil,
     inputViewHeight: CGFloat = 104
   ) {
+    UITextView.appearance().backgroundColor = .clear
+
     self.style = style
     self.inputFieldColor = inputFieldColor
     self._state = state
@@ -205,15 +188,6 @@ public struct SDGFixedTextInput: View {
   public var body: some View {
     VStack(spacing: 10) {
       inputField
-
-      if let errorMessage = errorMessage {
-        Text(errorMessage)
-          .typo(.body3_R, .red300)
-          .frame(maxWidth: .infinity, alignment: .leading)
-          .multilineTextAlignment(.leading)
-          .lineLimit(nil)
-          .fixedSize(horizontal: false, vertical: true)
-      }
     }
     .onChange(of: state) { newState in
       syncFocus(with: newState)
@@ -261,24 +235,25 @@ public struct SDGFixedTextInput: View {
   }
 
   private var textEditor: some View {
-    SDGTextEditor(
-      text: $text,
-      isFocused: focusBinding
-    )
-    .typo(.body1_R, textColor)
-    .tint(.neutral700)
-    // TextEditor의 기본 내부 여백을 상쇄해 placeholder/display text와 커서 시작점을 맞춥니다.
-    .padding(.top, -8)
-    .padding(.horizontal, -5)
-    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-    .scrollContentBackground(.hidden)
-    .background(Color.clear)
-    .onAppear {
-      focusTextEditorIfNeeded()
-    }
-    .onChange(of: text) { newValue in
-      limitTextIfNeeded(newValue)
-    }
+    TextEditor(text: $text)
+      .typo(.body1_R, textColor)
+      .tint(.neutral700)
+      // TextEditor의 기본 내부 여백을 상쇄해 placeholder/display text와 커서 시작점을 맞춥니다.
+      .padding(.top, -8)
+      .padding(.horizontal, -5)
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+      .focused($isTextEditorFocused)
+      .scrollContentBackground(.hidden)
+      .background(Color.clear)
+      .onAppear {
+        focusTextEditorIfNeeded()
+      }
+      .onChange(of: isTextEditorFocused) { isFocused in
+        updateFocus(isFocused)
+      }
+      .onChange(of: text) { newValue in
+        limitTextIfNeeded(newValue)
+      }
   }
 
   private var displayText: some View {
@@ -291,15 +266,14 @@ public struct SDGFixedTextInput: View {
   }
 
   private func activate() {
-    guard !effectiveState.isDisabled else { return }
+    guard !state.isDisabled else { return }
 
-    internalIsFocused = true
-    state = nextFocusedState
-    isTextEditorFocused = true
+    setFocusActive(true)
+    focusTextEditorIfNeeded()
   }
 
   private func focusTextEditorIfNeeded() {
-    guard effectiveState == .focused, !state.isDisabled else { return }
+    guard isFocusActive, !state.isDisabled else { return }
 
     DispatchQueue.main.async {
       guard !state.isDisabled else { return }
@@ -307,32 +281,52 @@ public struct SDGFixedTextInput: View {
     }
   }
 
-  private func deferFocusReleaseIfNeeded() {
-    // TextEditor는 입력 직후 리렌더링 중 focus false를 순간적으로 보낼 수 있어 실제 blur인지 다음 턴에 확인합니다.
-    DispatchQueue.main.async {
-      guard !isTextEditorFocused else { return }
-      internalIsFocused = false
-      state = nextRestingState
+  private func updateFocus(_ isFocused: Bool) {
+    if isFocused {
+      setFocusActive(true)
+      return
+    }
+
+    deferFocusReleaseIfNeeded()
+  }
+
+  private func setFocusActive(_ isFocused: Bool) {
+    guard !state.isDisabled else {
+      clearFocus()
+      return
+    }
+
+    internalIsFocused = isFocused
+
+    let newState = isFocused ? nextFocusedState : nextRestingState
+    if state != newState {
+      state = newState
     }
   }
 
   private func syncFocus(with newState: State) {
     switch newState {
     case .focused, .error(_, isFocused: true):
-      internalIsFocused = true
+      setFocusActive(true)
       focusTextEditorIfNeeded()
-    case .completed, .disabled:
-      internalIsFocused = false
-      isTextEditorFocused = false
-    case .default:
-      if text.isEmpty, !isTextEditorFocused {
-        internalIsFocused = false
-      }
-    case .error:
-      // 외부 검증에서 에러가 주입되어도 입력 중인 포커스는 유지합니다.
+    case .disabled:
+      clearFocus()
+    case .default, .error:
       if !isTextEditorFocused {
         internalIsFocused = false
       }
+    }
+  }
+
+  private func clearFocus() {
+    internalIsFocused = false
+    isTextEditorFocused = false
+  }
+
+  private func deferFocusReleaseIfNeeded() {
+    DispatchQueue.main.async {
+      guard !isTextEditorFocused else { return }
+      setFocusActive(false)
     }
   }
 
@@ -371,7 +365,6 @@ private struct SDGFixedTextInputDesignResourcePreview: View {
             states: [
               .default,
               .focused,
-              .completed,
               .disabled,
               .error(nil)
             ]
@@ -383,7 +376,6 @@ private struct SDGFixedTextInputDesignResourcePreview: View {
             states: [
               .default,
               .focused,
-              .completed,
               .disabled
             ]
           )
@@ -394,7 +386,6 @@ private struct SDGFixedTextInputDesignResourcePreview: View {
             states: [
               .default,
               .focused,
-              .completed,
               .disabled,
               .error(nil)
             ]
