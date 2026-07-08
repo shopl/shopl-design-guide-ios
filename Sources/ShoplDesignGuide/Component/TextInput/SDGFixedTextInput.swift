@@ -113,6 +113,12 @@ public struct SDGFixedTextInput: View {
     max(Int((inputViewHeight - 24) / SDG.Typography.body1_R.lineHeight), 1)
   }
 
+  private var shouldShowPlaceholder: Bool {
+    guard text.isEmpty, placeholder != nil else { return false }
+    guard !isTextEditorFocused, !internalIsFocused, !state.isFocused else { return false }
+    return state == .default
+  }
+
   private var isEditingState: Bool {
     switch effectiveState {
     case .default, .focused: return true
@@ -216,7 +222,7 @@ public struct SDGFixedTextInput: View {
         displayText
       }
 
-      if effectiveState == .default, text.isEmpty, let placeholder {
+      if shouldShowPlaceholder, let placeholder {
         Text(placeholder)
           .typo(.body1_R, .neutral350)
           .lineLimit(visibleLineCount)
@@ -251,6 +257,9 @@ public struct SDGFixedTextInput: View {
     )
     .typo(.body1_R, textColor)
     .tint(.neutral700)
+    // TextEditor의 기본 내부 여백을 상쇄해 placeholder/display text와 커서 시작점을 맞춥니다.
+    .padding(.top, -8)
+    .padding(.horizontal, -5)
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     .scrollContentBackground(.hidden)
     .background(Color.clear)
