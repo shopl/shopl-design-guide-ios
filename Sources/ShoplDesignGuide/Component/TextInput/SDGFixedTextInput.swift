@@ -215,6 +215,9 @@ public struct SDGFixedTextInput: View {
           .fixedSize(horizontal: false, vertical: true)
       }
     }
+    .onChange(of: state) { newState in
+      syncFocus(with: newState)
+    }
   }
 
   private var inputField: some View {
@@ -222,10 +225,12 @@ public struct SDGFixedTextInput: View {
       textEditor
         .opacity(isEditingState ? 1 : 0)
         .allowsHitTesting(isEditingState)
+        .accessibilityHidden(!isEditingState)
 
       displayText
         .opacity(isEditingState ? 0 : 1)
         .allowsHitTesting(!isEditingState)
+        .accessibilityHidden(isEditingState)
 
       Text(placeholder ?? "")
         .typo(.body1_R, .neutral350)
@@ -233,6 +238,7 @@ public struct SDGFixedTextInput: View {
         .truncationMode(.tail)
         .opacity(shouldShowPlaceholder ? 1 : 0)
         .allowsHitTesting(false)
+        .accessibilityHidden(!shouldShowPlaceholder)
     }
     .padding(12)
     .frame(
@@ -317,6 +323,26 @@ public struct SDGFixedTextInput: View {
       guard !isTextEditorFocused else { return }
       internalIsFocused = false
       state = nextRestingState
+    }
+  }
+
+  private func syncFocus(with newState: State) {
+    switch newState {
+    case .focused, .error(_, isFocused: true):
+      internalIsFocused = true
+      focusTextEditorIfNeeded()
+    case .completed, .disabled:
+      internalIsFocused = false
+      isTextEditorFocused = false
+    case .default:
+      if text.isEmpty, !isTextEditorFocused {
+        internalIsFocused = false
+      }
+    case .error:
+      // 외부 검증에서 에러가 주입되어도 입력 중인 포커스는 유지합니다.
+      if !isTextEditorFocused {
+        internalIsFocused = false
+      }
     }
   }
 
