@@ -121,6 +121,7 @@ public extension SDG.Image {
     static let icCommonStaff = SDG.Image(name: "ic_common_staff", bundle: dsBundle)
     static let icCommonTime = SDG.Image(name: "ic_common_time", bundle: dsBundle)
     static let icCommonTrash = SDG.Image(name: "ic_common_trash", bundle: dsBundle)
+    static let icCommonTree = SDG.Image(name: "ic_common_tree", bundle: dsBundle)
     static let icCommonTriangledown = SDG.Image(name: "ic_common_triangledown", bundle: dsBundle)
     static let icCommonTriangleup = SDG.Image(name: "ic_common_triangleup", bundle: dsBundle)
     static let icCommonWarning = SDG.Image(name: "ic_common_warning", bundle: dsBundle)
