@@ -161,6 +161,7 @@ public extension SDG.Image {
     static let icRemoveM = SDG.Image(name: "ic_remove_m", bundle: dsBundle)
     static let icSearchtext = SDG.Image(name: "ic_searchtext", bundle: dsBundle)
     static let icStarSolid = SDG.Image(name: "ic_star_solid", bundle: dsBundle)
+    static let icSubgroupCheck = SDG.Image(name: "ic_subgroup_check", bundle: dsBundle)
     static let icToolbarBack = SDG.Image(name: "ic_toolbar_back", bundle: dsBundle)
     static let icView = SDG.Image(name: "ic_view", bundle: dsBundle)
     static let icWeek = SDG.Image(name: "ic_week", bundle: dsBundle)
