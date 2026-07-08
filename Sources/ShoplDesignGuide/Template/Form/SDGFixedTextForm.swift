@@ -81,7 +81,7 @@ public struct SDGFixedTextForm: View {
     Binding(
       get: {
         if let errorMessage = isError {
-          return .error(errorMessage)
+          return .error(errorMessage, isFocused: isFocused)
         }
 
         if isFocused {
@@ -94,8 +94,8 @@ public struct SDGFixedTextForm: View {
         switch newState {
         case .focused:
           isFocused = true
-        case .error(let message):
-          isFocused = false
+        case .error(let message, let isFocusedValue):
+          isFocused = isFocusedValue
           isError = message
         case .default, .completed, .disabled:
           isFocused = false

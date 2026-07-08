@@ -32,7 +32,7 @@ public struct SDGFixedTextInput: View {
     case focused
     case completed
     case disabled
-    case error(String?)
+    case error(String?, isFocused: Bool = false)
 
     var isDisabled: Bool {
       switch self {
@@ -44,6 +44,13 @@ public struct SDGFixedTextInput: View {
     var isError: Bool {
       switch self {
       case .error: return true
+      default: return false
+      }
+    }
+
+    var isFocused: Bool {
+      switch self {
+      case .focused, .error(_, isFocused: true): return true
       default: return false
       }
     }
@@ -63,7 +70,7 @@ public struct SDGFixedTextInput: View {
 
   private var effectiveState: State {
     guard !state.isDisabled else { return .disabled }
-    return internalIsFocused ? .focused : state
+    return internalIsFocused || state.isFocused ? .focused : state
   }
 
   private var hasError: Bool {
@@ -97,7 +104,7 @@ public struct SDGFixedTextInput: View {
 
   private var errorMessage: String? {
     switch state {
-    case .error(let message): return message
+    case .error(let message, _): return message
     default: return nil
     }
   }
@@ -127,13 +134,25 @@ public struct SDGFixedTextInput: View {
 
         isTextEditorFocused = newValue
         internalIsFocused = newValue
-        state = newValue ? .focused : nextRestingState
+        state = newValue ? nextFocusedState : nextRestingState
       }
     )
   }
 
   private var nextRestingState: State {
-    text.isEmpty ? .default : .completed
+    if case .error(let message, _) = state {
+      return .error(message)
+    }
+
+    return text.isEmpty ? .default : .completed
+  }
+
+  private var nextFocusedState: State {
+    if case .error(let message, _) = state {
+      return .error(message, isFocused: true)
+    }
+
+    return .focused
   }
 
   public init(
@@ -257,7 +276,7 @@ public struct SDGFixedTextInput: View {
 
     let canFocusImmediately = isEditingState
     internalIsFocused = true
-    state = .focused
+    state = nextFocusedState
     isTextEditorFocused = canFocusImmediately
   }
 
