@@ -59,6 +59,17 @@ public struct SDGSimpleTextForm: View {
     self.onSearchButtonTap = onSearchButtonTap
     self.onSearchTextChange = onSearchTextChange
   }
+
+  private var simpleInputState: Binding<SDGSimpleInput.State> {
+    Binding(
+      get: {
+        state.state
+      },
+      set: { newState in
+        state = .init(state: newState)
+      }
+    )
+  }
   
   public var body: some View {
     VStack(spacing: 8) {
@@ -104,12 +115,13 @@ public struct SDGSimpleTextForm: View {
       }
       
       SDGSimpleInput(
-        type: .solid,
-        state: $state,
+        style: .solid,
+        inputFieldColor: backgroundColor,
+        outlinedStrokeColor: nil,
+        state: simpleInputState,
         text: $searchText,
-        hint: placeHolder,
+        placeholder: placeHolder,
         keyboardType: keyboardType,
-        backgroundColor: backgroundColor,
         maxCount: maxCount
       )
       .onChange(of: searchText) { newValue in
