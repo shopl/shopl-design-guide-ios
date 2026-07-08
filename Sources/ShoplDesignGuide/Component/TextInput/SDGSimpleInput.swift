@@ -348,7 +348,9 @@ public struct SDGSimpleInput: View {
       internalIsFocused = true
       focusTextFieldIfNeeded()
     case .default:
-      break
+      if text.isEmpty, !isTextFieldFocused {
+        internalIsFocused = false
+      }
     case .completed, .disabled, .error:
       internalIsFocused = false
       isTextFieldFocused = false
