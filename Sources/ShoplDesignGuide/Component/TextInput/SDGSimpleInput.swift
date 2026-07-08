@@ -134,6 +134,13 @@ public struct SDGSimpleInput: View {
     }
   }
 
+  private var placeholderColor: SDG.Color {
+    switch effectiveState {
+    case .disabled: return .neutral300
+    default: return .neutral350
+    }
+  }
+
   private var errorMessage: String? {
     switch state {
     case .error(let message): return message
@@ -150,6 +157,10 @@ public struct SDGSimpleInput: View {
 
   private var nextRestingState: State {
     text.isEmpty ? .default : .completed
+  }
+
+  private var nextFocusedState: State {
+    state.isError ? state : .focused
   }
 
   public init(
@@ -287,7 +298,7 @@ public struct SDGSimpleInput: View {
     TextField("", text: $text)
       .placeholder(when: text.isEmpty) {
         Text(placeholder)
-          .typo(.body1_R, .neutral350)
+          .typo(.body1_R, placeholderColor)
       }
       .typo(.body1_R, textColor)
       .keyboardType(keyboardType)
@@ -308,6 +319,10 @@ public struct SDGSimpleInput: View {
 
   private var displayText: some View {
     Text(text)
+      .placeholder(when: text.isEmpty) {
+        Text(placeholder)
+          .typo(.body1_R, placeholderColor)
+      }
       .typo(.body1_R, textColor)
       .frame(maxWidth: .infinity, alignment: .leading)
       .lineLimit(1)
@@ -318,7 +333,7 @@ public struct SDGSimpleInput: View {
     guard !effectiveState.isDisabled else { return }
 
     internalIsFocused = true
-    state = .focused
+    state = nextFocusedState
     focusTextFieldIfNeeded()
   }
 
@@ -339,7 +354,14 @@ public struct SDGSimpleInput: View {
     }
 
     internalIsFocused = isFocused
-    state = isFocused ? .focused : nextRestingState
+    if isFocused {
+      state = nextFocusedState
+      return
+    }
+
+    // 포커스 해제만으로 검증 에러가 정상 상태로 덮이지 않도록 에러 상태는 유지합니다.
+    guard !state.isError else { return }
+    state = nextRestingState
   }
 
   private func syncFocus(with newState: State) {
@@ -351,9 +373,12 @@ public struct SDGSimpleInput: View {
       if text.isEmpty, !isTextFieldFocused {
         internalIsFocused = false
       }
-    case .completed, .disabled, .error:
+    case .completed, .disabled:
       internalIsFocused = false
       isTextFieldFocused = false
+    case .error:
+      // 실시간 검증 중 에러가 주입되어도 키보드가 내려가지 않도록 현재 포커스를 유지합니다.
+      break
     }
   }
 
