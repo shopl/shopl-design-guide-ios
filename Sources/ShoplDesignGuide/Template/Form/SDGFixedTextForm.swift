@@ -11,19 +11,45 @@ public struct SDGFixedTextForm: View {
   @Binding private var text: String
   @Binding private var isFocused: Bool
   @Binding private var isError: String?
-  
+
   private let title: String
-  
+
   private let icon: FormIconModel?
   private let type: FormType
-  
+
   private let placeHolder: String?
-  private let backgroundColor: Color
+  private let inputFieldColor: Color
   private let maxCharacterCount: Int?
   private let inputViewHeight: CGFloat
-  
+
   private let isRequiered: Bool
-  
+
+  public init(
+    title: String,
+    icon: FormIconModel? = nil,
+    type: FormType,
+    text: Binding<String>,
+    placeHolder: String?,
+    inputField: SDGFixedTextInput.InputField = .lightGray,
+    maxCharacterCount: Int? = nil,
+    isFocused: Binding<Bool>,
+    inputViewHeight: CGFloat = 104,
+    isRequiered: Bool = false,
+    isError: Binding<String?> = .constant(nil)
+  ) {
+    self.title = title
+    self.icon = icon
+    self.type = type
+    self._text = text
+    self.placeHolder = placeHolder
+    self.inputFieldColor = inputField.color
+    self.maxCharacterCount = maxCharacterCount
+    self._isFocused = isFocused
+    self.inputViewHeight = inputViewHeight
+    self.isRequiered = isRequiered
+    self._isError = isError
+  }
+
   public init(
     title: String,
     icon: FormIconModel? = nil,
@@ -42,16 +68,44 @@ public struct SDGFixedTextForm: View {
     self.type = type
     self._text = text
     self.placeHolder = placeHolder
-    self.backgroundColor = backgroundColor
+    self.inputFieldColor = backgroundColor
     self.maxCharacterCount = maxCharacterCount
     self._isFocused = isFocused
-    self.inputViewHeight = inputViewHeight
+    // 기존 backgroundColor API는 내부 TextEditor 높이 기준이어서 전체 필드 높이를 유지하도록 보정합니다.
+    self.inputViewHeight = inputViewHeight + 10
     self.isRequiered = isRequiered
     self._isError = isError
   }
-  
+
+  private var fixedTextInputState: Binding<SDGFixedTextInput.State> {
+    Binding(
+      get: {
+        if let errorMessage = isError {
+          return .error(errorMessage)
+        }
+
+        if isFocused {
+          return .focused
+        }
+
+        return text.isEmpty ? .default : .completed
+      },
+      set: { newState in
+        switch newState {
+        case .focused:
+          isFocused = true
+        case .error(let message):
+          isFocused = false
+          isError = message
+        case .default, .completed, .disabled:
+          isFocused = false
+        }
+      }
+    )
+  }
+
   public var body: some View {
-    
+
     VStack(spacing: 8) {
       HStack(spacing: 0) {
         Text("")
@@ -72,9 +126,9 @@ public struct SDGFixedTextForm: View {
           .frame(minHeight: 28, alignment: .leading)
           .multilineTextAlignment(.leading)
           .lineLimit(nil)
-        
+
         if let icon = icon {
-          
+
           Button {
             icon.onImageTap?()
           } label: {
@@ -90,21 +144,20 @@ public struct SDGFixedTextForm: View {
           }
           .buttonStyle(NoTapAnimationButtonStyle())
         }
-        
+
         Spacer(minLength: 8)
       }
-      
+
       SDGFixedTextInput(
-        type: .solid,
+        style: .solid,
+        inputFieldColor: self.inputFieldColor,
+        state: fixedTextInputState,
         text: self.$text,
-        placeHolder: self.placeHolder,
-        backgroundColor: self.backgroundColor,
+        placeholder: self.placeHolder,
         maxCharacterCount: self.maxCharacterCount,
-        isFocused: self.$isFocused,
-        inputViewHeight: self.inputViewHeight,
-        isError: self.$isError
+        inputViewHeight: self.inputViewHeight
       )
-      
+
     }
   }
 }
@@ -117,38 +170,38 @@ public struct SDGFixedTextForm: View {
       type: .normal,
       text: .constant("awdawdad"),
       placeHolder: "입력",
-      backgroundColor: .neutral50,
+      inputField: .lightGray,
       maxCharacterCount: 5000,
       isFocused: .constant(false),
-      inputViewHeight: 94,
+      inputViewHeight: 104,
       isRequiered: false,
       isError: .constant(nil)
     )
-    
+
     SDGFixedTextForm(
       title: "타이틀",
       icon: .init(image: Image(sdg: .icClip), tintColor: .neutral500),
       type: .normal,
       text: .constant("입력입력입력"),
       placeHolder: "입력",
-      backgroundColor: .neutral50,
+      inputField: .lightGray,
       maxCharacterCount: 5000,
       isFocused: .constant(false),
-      inputViewHeight: 94,
+      inputViewHeight: 104,
       isRequiered: true,
       isError: .constant(nil)
     )
-    
+
     SDGFixedTextForm(
       title: "타이틀",
       icon: .init(image: Image(sdg: .icClip), tintColor: .neutral500),
       type: .normal,
       text: .constant(""),
       placeHolder: "입력",
-      backgroundColor: .neutral50,
+      inputField: .lightGray,
       maxCharacterCount: 5000,
       isFocused: .constant(false),
-      inputViewHeight: 94,
+      inputViewHeight: 104,
       isRequiered: true,
       isError: .constant("에러 에러에러에러에러에러에러에러에러에러에러")
     )

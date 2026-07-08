@@ -50,6 +50,7 @@ public struct SDGInputPopup: View {
   let placeholder: String
   let input: Binding<String>
   let maxLength: Int
+  @State private var inputState: SDGFixedTextInput.State = .default
   let leftButtonOption: SDGCenterPopupButton.Button.Option
   let rightButtonOption: SDGCenterPopupButton.Button.Option
   
@@ -74,14 +75,13 @@ public struct SDGInputPopup: View {
               .frame(maxWidth: .infinity, alignment: .leading)
             
             SDGFixedTextInput(
-              type: .solid,
+              style: .solid,
+              inputField: .lightGray,
+              state: $inputState,
               text: input,
-              placeHolder: placeholder,
-              backgroundColor: SDG.Color.neutral50.color,
+              placeholder: placeholder,
               maxCharacterCount: maxLength,
-              isFocused: .constant(false),
-              inputViewHeight: 104,
-              isError: .constant(nil)
+              inputViewHeight: 104
             )
           }
         }
@@ -93,6 +93,17 @@ public struct SDGInputPopup: View {
         )
       )
     )
+    .onAppear {
+      syncInputStateWithText(input.wrappedValue, force: true)
+    }
+    .onChange(of: input.wrappedValue) { newValue in
+      syncInputStateWithText(newValue)
+    }
+  }
+
+  private func syncInputStateWithText(_ text: String, force: Bool = false) {
+    guard force || inputState != .focused else { return }
+    inputState = text.isEmpty ? .default : .completed
   }
 }
 
