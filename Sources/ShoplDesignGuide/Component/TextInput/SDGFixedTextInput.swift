@@ -136,9 +136,14 @@ public struct SDGFixedTextInput: View {
           return
         }
 
-        isTextEditorFocused = newValue
-        internalIsFocused = newValue
-        state = newValue ? nextFocusedState : nextRestingState
+        if newValue {
+          isTextEditorFocused = true
+          internalIsFocused = true
+          state = nextFocusedState
+        } else {
+          isTextEditorFocused = false
+          deferFocusReleaseIfNeeded()
+        }
       }
     )
   }
@@ -214,19 +219,20 @@ public struct SDGFixedTextInput: View {
 
   private var inputField: some View {
     ZStack(alignment: .topLeading) {
-      if isEditingState {
-        textEditor
-      } else {
-        displayText
-      }
+      textEditor
+        .opacity(isEditingState ? 1 : 0)
+        .allowsHitTesting(isEditingState)
 
-      if shouldShowPlaceholder, let placeholder {
-        Text(placeholder)
-          .typo(.body1_R, .neutral350)
-          .lineLimit(visibleLineCount)
-          .truncationMode(.tail)
-          .allowsHitTesting(false)
-      }
+      displayText
+        .opacity(isEditingState ? 0 : 1)
+        .allowsHitTesting(!isEditingState)
+
+      Text(placeholder ?? "")
+        .typo(.body1_R, .neutral350)
+        .lineLimit(visibleLineCount)
+        .truncationMode(.tail)
+        .opacity(shouldShowPlaceholder ? 1 : 0)
+        .allowsHitTesting(false)
     }
     .padding(12)
     .frame(
@@ -266,6 +272,7 @@ public struct SDGFixedTextInput: View {
     }
     .onChange(of: text) { newValue in
       limitTextIfNeeded(newValue)
+      refocusTextEditorIfNeeded()
     }
   }
 
@@ -281,10 +288,9 @@ public struct SDGFixedTextInput: View {
   private func activate() {
     guard !effectiveState.isDisabled else { return }
 
-    let canFocusImmediately = isEditingState
     internalIsFocused = true
     state = nextFocusedState
-    isTextEditorFocused = canFocusImmediately
+    isTextEditorFocused = true
   }
 
   private func focusTextEditorIfNeeded() {
@@ -293,6 +299,24 @@ public struct SDGFixedTextInput: View {
     DispatchQueue.main.async {
       guard !state.isDisabled else { return }
       isTextEditorFocused = true
+    }
+  }
+
+  private func refocusTextEditorIfNeeded() {
+    guard internalIsFocused || state.isFocused else { return }
+
+    DispatchQueue.main.async {
+      guard !state.isDisabled, internalIsFocused || state.isFocused else { return }
+      isTextEditorFocused = true
+    }
+  }
+
+  private func deferFocusReleaseIfNeeded() {
+    // TextEditor는 입력 직후 리렌더링 중 focus false를 순간적으로 보낼 수 있어 실제 blur인지 다음 턴에 확인합니다.
+    DispatchQueue.main.async {
+      guard !isTextEditorFocused else { return }
+      internalIsFocused = false
+      state = nextRestingState
     }
   }
 
