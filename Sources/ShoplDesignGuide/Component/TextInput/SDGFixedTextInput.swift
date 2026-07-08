@@ -278,7 +278,6 @@ public struct SDGFixedTextInput: View {
     }
     .onChange(of: text) { newValue in
       limitTextIfNeeded(newValue)
-      refocusTextEditorIfNeeded()
     }
   }
 
@@ -304,16 +303,6 @@ public struct SDGFixedTextInput: View {
 
     DispatchQueue.main.async {
       guard !state.isDisabled else { return }
-      isTextEditorFocused = true
-    }
-  }
-
-  private func refocusTextEditorIfNeeded() {
-    // 한글 조합 중 포커스를 반복 지정하면 받침 입력이 깨질 수 있어 실제로 포커스를 잃은 경우에만 복구합니다.
-    guard !isTextEditorFocused, internalIsFocused || state.isFocused else { return }
-
-    DispatchQueue.main.async {
-      guard !isTextEditorFocused, !state.isDisabled, internalIsFocused || state.isFocused else { return }
       isTextEditorFocused = true
     }
   }
