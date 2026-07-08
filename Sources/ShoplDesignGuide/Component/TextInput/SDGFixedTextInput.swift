@@ -114,9 +114,7 @@ public struct SDGFixedTextInput: View {
   }
 
   private var shouldShowPlaceholder: Bool {
-    guard text.isEmpty, placeholder != nil else { return false }
-    guard !isTextEditorFocused, !internalIsFocused, !state.isFocused else { return false }
-    return state == .default
+    text.isEmpty && placeholder != nil
   }
 
   private var isEditingState: Bool {
