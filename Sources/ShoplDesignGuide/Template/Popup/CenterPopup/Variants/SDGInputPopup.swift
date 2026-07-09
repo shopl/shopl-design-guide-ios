@@ -16,7 +16,6 @@ extension View {
     inputTitle: String,
     placeholder: String,
     input: Binding<String>,
-    maxLength: Int,
     leftButtonOption: SDGCenterPopupButton.Button.Option,
     rightButtonOption: SDGCenterPopupButton.Button.Option,
     tapOutsideAction: (() -> Void)? = nil
@@ -33,7 +32,6 @@ extension View {
           inputTitle: inputTitle,
           placeholder: placeholder,
           input: input,
-          maxLength: maxLength,
           leftButtonOption: leftButtonOption,
           rightButtonOption: rightButtonOption
         )
@@ -49,8 +47,6 @@ public struct SDGInputPopup: View {
   let inputTitle: String
   let placeholder: String
   let input: Binding<String>
-  let maxLength: Int
-  @State private var inputState: SDGFixedTextInput.State = .default
   let leftButtonOption: SDGCenterPopupButton.Button.Option
   let rightButtonOption: SDGCenterPopupButton.Button.Option
   
@@ -77,10 +73,9 @@ public struct SDGInputPopup: View {
             SDGFixedTextInput(
               style: .solid,
               inputField: .lightGray,
-              state: $inputState,
+              state: .default,
               text: input,
               placeholder: placeholder,
-              maxCharacterCount: maxLength,
               inputViewHeight: 104
             )
           }
@@ -93,17 +88,6 @@ public struct SDGInputPopup: View {
         )
       )
     )
-    .onAppear {
-      syncInputStateWithText(input.wrappedValue, force: true)
-    }
-    .onChange(of: input.wrappedValue) { newValue in
-      syncInputStateWithText(newValue)
-    }
-  }
-
-  private func syncInputStateWithText(_ text: String, force: Bool = false) {
-    guard force || inputState != .focused else { return }
-    inputState = .default
   }
 }
 
@@ -132,7 +116,6 @@ public struct SDGInputPopup: View {
         inputTitle: "인풋 타이틀",
         placeholder: "플레이스홀더",
         input: $input,
-        maxLength: 50,
         leftButtonOption: .init(
           title: "취소",
           action: { showPopup.toggle() }

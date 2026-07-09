@@ -19,7 +19,6 @@ public struct SDGFixedTextForm: View {
 
   private let placeHolder: String?
   private let inputFieldColor: Color
-  private let maxCharacterCount: Int?
   private let inputViewHeight: CGFloat
 
   private let isRequiered: Bool
@@ -31,7 +30,6 @@ public struct SDGFixedTextForm: View {
     text: Binding<String>,
     placeHolder: String?,
     inputField: SDGFixedTextInput.InputField = .lightGray,
-    maxCharacterCount: Int? = nil,
     isFocused: Binding<Bool>,
     inputViewHeight: CGFloat = 104,
     isRequiered: Bool = false,
@@ -43,7 +41,6 @@ public struct SDGFixedTextForm: View {
     self._text = text
     self.placeHolder = placeHolder
     self.inputFieldColor = inputField.color
-    self.maxCharacterCount = maxCharacterCount
     self._isFocused = isFocused
     self.inputViewHeight = inputViewHeight
     self.isRequiered = isRequiered
@@ -57,7 +54,6 @@ public struct SDGFixedTextForm: View {
     text: Binding<String>,
     placeHolder: String?,
     backgroundColor: Color,
-    maxCharacterCount: Int? = nil,
     isFocused: Binding<Bool>,
     inputViewHeight: CGFloat = 94,
     isRequiered: Bool = false,
@@ -69,7 +65,6 @@ public struct SDGFixedTextForm: View {
     self._text = text
     self.placeHolder = placeHolder
     self.inputFieldColor = backgroundColor
-    self.maxCharacterCount = maxCharacterCount
     self._isFocused = isFocused
     // 기존 backgroundColor API는 내부 TextEditor 높이 기준이어서 전체 필드 높이를 유지하도록 보정합니다.
     self.inputViewHeight = inputViewHeight + 10
@@ -77,31 +72,16 @@ public struct SDGFixedTextForm: View {
     self._isError = isError
   }
 
-  private var fixedTextInputState: Binding<SDGFixedTextInput.State> {
-    Binding(
-      get: {
-        if let errorMessage = isError {
-          return .error(errorMessage, isFocused: isFocused)
-        }
+  private var fixedTextInputState: SDGFixedTextInput.State {
+    if let errorMessage = isError {
+      return .error(errorMessage, isFocused: isFocused)
+    }
 
-        if isFocused {
-          return .focused
-        }
+    if isFocused {
+      return .focused
+    }
 
-        return .default
-      },
-      set: { newState in
-        switch newState {
-        case .focused:
-          isFocused = true
-        case .error(let message, let isFocusedValue):
-          isFocused = isFocusedValue
-          isError = message
-        case .default, .disabled:
-          isFocused = false
-        }
-      }
-    )
+    return .default
   }
 
   public var body: some View {
@@ -154,7 +134,6 @@ public struct SDGFixedTextForm: View {
         state: fixedTextInputState,
         text: self.$text,
         placeholder: self.placeHolder,
-        maxCharacterCount: self.maxCharacterCount,
         inputViewHeight: self.inputViewHeight
       )
 
@@ -171,7 +150,6 @@ public struct SDGFixedTextForm: View {
       text: .constant("awdawdad"),
       placeHolder: "입력",
       inputField: .lightGray,
-      maxCharacterCount: 5000,
       isFocused: .constant(false),
       inputViewHeight: 104,
       isRequiered: false,
@@ -185,7 +163,6 @@ public struct SDGFixedTextForm: View {
       text: .constant("입력입력입력"),
       placeHolder: "입력",
       inputField: .lightGray,
-      maxCharacterCount: 5000,
       isFocused: .constant(false),
       inputViewHeight: 104,
       isRequiered: true,
@@ -199,7 +176,6 @@ public struct SDGFixedTextForm: View {
       text: .constant(""),
       placeHolder: "입력",
       inputField: .lightGray,
-      maxCharacterCount: 5000,
       isFocused: .constant(false),
       inputViewHeight: 104,
       isRequiered: true,

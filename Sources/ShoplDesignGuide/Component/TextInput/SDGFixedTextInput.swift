@@ -56,7 +56,7 @@ public struct SDGFixedTextInput: View {
   }
 
   @Binding private var text: String
-  @Binding private var state: State
+  private let state: State
 
   @FocusState private var isTextFieldFocused: Bool
 
@@ -64,15 +64,27 @@ public struct SDGFixedTextInput: View {
   private let placeholder: String?
   private let inputFieldColor: Color
   private let keyboardType: UIKeyboardType
-  private let maxCharacterCount: Int?
   private let inputViewHeight: CGFloat
 
+  private var visualState: State {
+    switch state {
+    case .disabled:
+      return .disabled
+    case .error(let message, let isFocused):
+      return .error(message, isFocused: isFocused || isTextFieldFocused)
+    case .focused:
+      return .focused
+    case .default:
+      return isTextFieldFocused ? .focused : .default
+    }
+  }
+
   private var isEditable: Bool {
-    !state.isDisabled
+    !visualState.isDisabled
   }
 
   private var hasError: Bool {
-    state.isError
+    visualState.isError
   }
 
   private var backgroundColor: Color {
@@ -106,30 +118,13 @@ public struct SDGFixedTextInput: View {
       .foregroundColor(.neutral350)
   }
 
-  private var nextRestingState: State {
-    if case let .error(message, _) = state {
-      return .error(message)
-    }
-
-    return .default
-  }
-
-  private var nextFocusedState: State {
-    if case let .error(message, _) = state {
-      return .error(message, isFocused: true)
-    }
-
-    return .focused
-  }
-
   public init(
     style: Style = .solid,
     inputField: InputField = .lightGray,
-    state: Binding<State>,
+    state: State = .default,
     text: Binding<String>,
     placeholder: String?,
     keyboardType: UIKeyboardType = .default,
-    maxCharacterCount: Int? = nil,
     inputViewHeight: CGFloat = 104
   ) {
     self.init(
@@ -139,7 +134,6 @@ public struct SDGFixedTextInput: View {
       text: text,
       placeholder: placeholder,
       keyboardType: keyboardType,
-      maxCharacterCount: maxCharacterCount,
       inputViewHeight: inputViewHeight
     )
   }
@@ -147,20 +141,18 @@ public struct SDGFixedTextInput: View {
   init(
     style: Style = .solid,
     inputFieldColor: Color,
-    state: Binding<State>,
+    state: State = .default,
     text: Binding<String>,
     placeholder: String?,
     keyboardType: UIKeyboardType = .default,
-    maxCharacterCount: Int? = nil,
     inputViewHeight: CGFloat = 104
   ) {
     self.style = style
     self.inputFieldColor = inputFieldColor
-    self._state = state
+    self.state = state
     self._text = text
     self.placeholder = placeholder
     self.keyboardType = keyboardType
-    self.maxCharacterCount = maxCharacterCount
     self.inputViewHeight = inputViewHeight
   }
 
@@ -169,12 +161,14 @@ public struct SDGFixedTextInput: View {
       inputField
     }
     .onChange(of: state) { newState in
-      syncFocus(with: newState)
+      if newState.isDisabled {
+        isTextFieldFocused = false
+      }
     }
   }
 
   private var inputField: some View {
-    textField
+    textEditor
       .padding(.spacing12)
       .frame(
         maxWidth: .infinity,
@@ -195,64 +189,32 @@ public struct SDGFixedTextInput: View {
       .allowsHitTesting(isEditable)
   }
 
-  private var textField: some View {
-    TextField(
-      "",
-      text: $text,
-      prompt: placeholderText,
-      axis: .vertical
-    )
-      .typo(.body1_R, textColor)
-      .tint(.neutral700)
-      .keyboardType(keyboardType)
-      .focused($isTextFieldFocused)
-      .textFieldStyle(.plain)
-      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-      .disabled(!isEditable)
-      .onChange(of: text) { newValue in
-        limitTextIfNeeded(newValue)
+  private var textEditor: some View {
+    ZStack(alignment: .topLeading) {
+      TextEditor(text: $text)
+        .scrollIndicators(.visible, axes: .vertical)
+        .scrollContentBackground(.hidden)
+        .typo(.body1_R, textColor)
+        .tint(.neutral700)
+        .keyboardType(keyboardType)
+        .focused($isTextFieldFocused)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .disabled(!isEditable)
+
+      if text.isEmpty, let placeholderText {
+        placeholderText
+          .accessibilityHidden(true)
+          .allowsHitTesting(false)
+          .padding(.top, 8)
+          .padding(.leading, 5)
       }
-      .onChange(of: isTextFieldFocused) { isFocused in
-        updateFocus(isFocused)
-      }
+    }
   }
 
   private func activate() {
     guard isEditable else { return }
 
     isTextFieldFocused = true
-  }
-
-  private func updateFocus(_ isFocused: Bool) {
-    guard isEditable else {
-      isTextFieldFocused = false
-      return
-    }
-
-    let newState = isFocused ? nextFocusedState : nextRestingState
-    if state != newState {
-      state = newState
-    }
-  }
-
-  private func syncFocus(with newState: State) {
-    switch newState {
-    case .focused, .error(_, isFocused: true):
-      guard isEditable else { return }
-      DispatchQueue.main.async {
-        guard isEditable else { return }
-        isTextFieldFocused = true
-      }
-    case .disabled:
-      isTextFieldFocused = false
-    case .default, .error:
-      break
-    }
-  }
-
-  private func limitTextIfNeeded(_ newValue: String) {
-    guard let maxCharacterCount, newValue.count > maxCharacterCount else { return }
-    text = String(newValue.prefix(maxCharacterCount))
   }
 }
 
@@ -334,7 +296,7 @@ private struct SDGFixedTextInputDesignResourcePreview: View {
         SDGFixedTextInput(
           style: style,
           inputField: inputField,
-          state: .constant(state),
+          state: state,
           text: .constant(state == .default ? "" : text),
           placeholder: placeholder
         )
