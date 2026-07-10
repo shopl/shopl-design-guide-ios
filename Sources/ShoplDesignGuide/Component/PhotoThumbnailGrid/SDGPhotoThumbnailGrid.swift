@@ -54,13 +54,6 @@ public struct SDGPhotoThumbnailGrid: View {
   private let onRemainingCountTapped: (() -> Void)?
   private let thumbnailMenuContent: ((Photo) -> AnyView)?
   
-  private var columns: [GridItem] {
-    Array(
-      repeating: GridItem(.flexible(minimum: 0), spacing: Constants.spacing),
-      count: Constants.columnCount
-    )
-  }
-  
   private var requiredRowCount: Int {
     guard photos.isNotEmpty else { return 0 }
     return Int(ceil(Double(photos.count) / Double(Constants.columnCount)))
@@ -114,16 +107,24 @@ public struct SDGPhotoThumbnailGrid: View {
   }
   
   public var body: some View {
-    LazyVGrid(columns: columns, spacing: Constants.spacing) {
-      ForEach(0..<displaySlotCount, id: \.self) { index in
-        if index < photos.count {
-          thumbnailCell(
-            photo: photos[index],
-            showsRemainingCount: index == displaySlotCount - 1 && remainingCount > 0
-          )
-        } else {
-          Color.clear
-            .aspectRatio(1, contentMode: .fit)
+    Grid(
+      horizontalSpacing: Constants.spacing,
+      verticalSpacing: Constants.spacing
+    ) {
+      ForEach(0..<displayRowCount, id: \.self) { rowIndex in
+        GridRow {
+          ForEach(0..<Constants.columnCount, id: \.self) { columnIndex in
+            let index = rowIndex * Constants.columnCount + columnIndex
+            if index < photos.count {
+              thumbnailCell(
+                photo: photos[index],
+                showsRemainingCount: index == displaySlotCount - 1 && remainingCount > 0
+              )
+            } else {
+              Color.clear
+                .aspectRatio(1, contentMode: .fit)
+            }
+          }
         }
       }
     }
