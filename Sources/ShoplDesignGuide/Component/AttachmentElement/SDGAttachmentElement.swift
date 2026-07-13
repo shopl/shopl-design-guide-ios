@@ -86,14 +86,15 @@ public struct SDGAttachmentElement: View {
   }
 
   private var content: some View {
-    ZStack {
-      HStack(spacing: 12) {
-        thumbnailBox
-        fileInfo
-      }
-      .opacity(state == .default ? 1 : 0.1)
+    HStack(spacing: 12) {
+      thumbnailBox
+        .opacity(state == .default ? 1 : 0.1)
 
-      stateIndicator
+      fileInfo
+        .opacity(state == .default ? 1 : 0.1)
+        .overlay {
+          stateIndicator
+        }
     }
     .frame(height: 36)
   }
@@ -149,7 +150,6 @@ public struct SDGAttachmentElement: View {
       playIconIfNeeded
     }
     .frame(width: 36, height: 36)
-    .background(.neutral150)
     .cornerRadius(4)
   }
   
@@ -160,7 +160,10 @@ public struct SDGAttachmentElement: View {
       thumbnailImage(image: image, url: url)
       
     case .document:
-      iconView(Image(sdg: .icClip))
+      ZStack {
+        Color.neutral150
+        iconView(Image(sdg: .icClip))
+      }
       
     case let .video(thumbnail, url):
       thumbnailImage(image: thumbnail, url: url)
