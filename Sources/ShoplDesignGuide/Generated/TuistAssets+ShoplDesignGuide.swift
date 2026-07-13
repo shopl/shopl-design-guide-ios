@@ -157,6 +157,7 @@ public extension SDG.Image {
     static let icOt = SDG.Image(name: "ic_ot", bundle: dsBundle)
     static let icProgress = SDG.Image(name: "ic_progress", bundle: dsBundle)
     static let icRemoveM = SDG.Image(name: "ic_remove_m", bundle: dsBundle)
+    static let icRetry = SDG.Image(name: "ic_retry", bundle: dsBundle)
     static let icSearchtext = SDG.Image(name: "ic_searchtext", bundle: dsBundle)
     static let icStarSolid = SDG.Image(name: "ic_star_solid", bundle: dsBundle)
     static let icToolbarBack = SDG.Image(name: "ic_toolbar_back", bundle: dsBundle)

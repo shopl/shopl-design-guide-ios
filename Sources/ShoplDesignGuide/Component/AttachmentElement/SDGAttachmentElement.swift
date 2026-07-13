@@ -10,6 +10,13 @@ import SwiftUI
 import Kingfisher
 
 public struct SDGAttachmentElement: View {
+  public static var version: String { "2.3.40" }
+  
+  public enum State: Equatable {
+    case `default`
+    case uploading
+    case failed
+  }
   
   public struct Model: Equatable {
     public enum `Type`: Equatable {
@@ -20,50 +27,110 @@ public struct SDGAttachmentElement: View {
     
     public let type: `Type`
     public let id: String
-    public let name: String
-    public let size: String
+    public let fileName: String
+    public let fileSize: String
     
-    public init(type: Type, id: String, name: String, size: String) {
+    public init(
+      type: Type,
+      id: String,
+      fileName: String,
+      fileSize: String
+    ) {
       self.type = type
       self.id = id
-      self.name = name
-      self.size = size
+      self.fileName = fileName
+      self.fileSize = fileSize
     }
-    
-    public static func == (lhs: Model, rhs: Model) -> Bool {
-      lhs.id == rhs.id
+
+    @available(*, deprecated, renamed: "init(type:id:fileName:fileSize:)")
+    public init(type: Type, id: String, name: String, size: String) {
+      self.init(
+        type: type,
+        id: id,
+        fileName: name,
+        fileSize: size
+      )
     }
   }
   
   public let model: Model
-  private let onSelect: (Model) -> Void
+  public let state: State
+  private let onSelect: ((Model) -> Void)?
+  private let onRetry: (() -> Void)?
   
-  public init(model: Model, selectedItem: @escaping (Model) -> Void) {
+  public init(
+    model: Model,
+    state: State = .default,
+    selectedItem: ((Model) -> Void)? = nil,
+    onRetry: (() -> Void)? = nil
+  ) {
     self.model = model
+    self.state = state
     self.onSelect = selectedItem
+    self.onRetry = onRetry
   }
   
   public var body: some View {
-    HStack(spacing: 12) {
-      thumbnailBox
-      fileInfo
+    ZStack {
+      HStack(spacing: 12) {
+        thumbnailBox
+        fileInfo
+      }
+      .opacity(state == .default ? 1 : 0.1)
+
+      stateIndicator
     }
-    .onTapGesture { onSelect(model) }
+    .frame(height: 36)
+    .contentShape(Rectangle())
+    .onTapGesture {
+      guard state == .default else { return }
+      onSelect?(model)
+    }
   }
   
   // MARK: - Subviews
   
   private var fileInfo: some View {
     VStack(alignment: .leading, spacing: 0) {
-      Text(model.name)
+      Text(model.fileName)
         .typo(.body2_R, .neutral600)
         .lineLimit(1)
         .truncationMode(.middle)
       
-      Text("(\(model.size))")
-        .typo(.body2_R, .neutral400)
+      Text("(\(model.fileSize))")
+        .typo(.body3_R, .neutral400)
+        .lineLimit(1)
     }
     .frame(maxWidth: .infinity, alignment: .leading)
+  }
+
+  @ViewBuilder
+  private var stateIndicator: some View {
+    switch state {
+    case .default:
+      EmptyView()
+
+    case .uploading:
+      SDGCircularProgress(size: 22, lineWidth: 2)
+
+    case .failed:
+      if let onRetry {
+        Button(action: onRetry) {
+          retryIcon
+        }
+        .buttonStyle(.plain)
+        .frame(width: 36, height: 36)
+      } else {
+        retryIcon
+      }
+    }
+  }
+
+  private var retryIcon: some View {
+    Image(sdg: .icRetry)
+      .resizable()
+      .foregroundStyle(.red300)
+      .frame(width: 24, height: 24)
   }
   
   private var thumbnailBox: some View {
@@ -141,8 +208,8 @@ private extension Image {
       model: .init(
         type: .photo(image: Image(sdg: .avatarEmpty)),
         id: UUID().uuidString,
-        name: "이미지파일.jpg",
-        size: "4MB"
+        fileName: "이미지파일.jpg",
+        fileSize: "4MB"
       ),
       selectedItem: { _ in }
     )
@@ -151,8 +218,8 @@ private extension Image {
       model: .init(
         type: .document,
         id: UUID().uuidString,
-        name: "문서파일.jpg",
-        size: "4MB"
+        fileName: "문서파일.jpg",
+        fileSize: "4MB"
       ),
       selectedItem: { _ in }
     )
@@ -161,8 +228,8 @@ private extension Image {
       model: .init(
         type: .video(thumbnail: Image(sdg: .profileSmall)),
         id: UUID().uuidString,
-        name: "비디오파일.jpg",
-        size: "4MB"
+        fileName: "비디오파일.jpg",
+        fileSize: "4MB"
       ),
       selectedItem: { _ in }
     )
@@ -171,10 +238,10 @@ private extension Image {
       model: .init(
         type: .photo(image: Image(sdg: .avatarEmpty)),
         id: UUID().uuidString,
-        name: "이미지파일 제목이 길어지면 아아아아아아아아아아아아아아아아아아아아아아어ㅏ어어엉아아ㅏ줄임말로.jpg",
-        size: "4MB"
+        fileName: "이미지파일 제목이 길어지면 아아아아아아아아아아아아아아아아아아아아아아어ㅏ어어엉아아ㅏ줄임말로.jpg",
+        fileSize: "4MB"
       ),
-      selectedItem: { _ in }
+      state: .uploading
     )
     
     
@@ -182,18 +249,19 @@ private extension Image {
       model: .init(
         type: .document,
         id: UUID().uuidString,
-        name: "문서파일 제목이 길어지면 아아아아아아아아아아아아아아아아아아아아아아어ㅏ어어엉아아ㅏ줄임말로.pdf",
-        size: "4MB"
+        fileName: "문서파일 제목이 길어지면 아아아아아아아아아아아아아아아아아아아아아아어ㅏ어어엉아아ㅏ줄임말로.pdf",
+        fileSize: "4MB"
       ),
-      selectedItem: { _ in }
+      state: .failed,
+      onRetry: {}
     )
     
     SDGAttachmentElement(
       model: .init(
         type: .video(thumbnail: Image(sdg: .profileSmall)),
         id: UUID().uuidString,
-        name: "비디오파일 제목이 길어지면 아아아아아아아아아아아아아아아아아아아아아아어ㅏ어어엉아아ㅏ줄임말로.mov",
-        size: "4MB"
+        fileName: "비디오파일 제목이 길어지면 아아아아아아아아아아아아아아아아아아아아아아어ㅏ어어엉아아ㅏ줄임말로.mov",
+        fileSize: "4MB"
       ),
       selectedItem: { _ in }
     )
