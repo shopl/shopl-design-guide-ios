@@ -70,7 +70,22 @@ public struct SDGAttachmentElement: View {
     self.onRetry = onRetry
   }
   
+  @ViewBuilder
   public var body: some View {
+    if state == .default, let onSelect {
+      Button {
+        onSelect(model)
+      } label: {
+        content
+          .contentShape(Rectangle())
+      }
+      .buttonStyle(.plain)
+    } else {
+      content
+    }
+  }
+
+  private var content: some View {
     ZStack {
       HStack(spacing: 12) {
         thumbnailBox
@@ -81,11 +96,6 @@ public struct SDGAttachmentElement: View {
       stateIndicator
     }
     .frame(height: 36)
-    .contentShape(Rectangle())
-    .onTapGesture {
-      guard state == .default else { return }
-      onSelect?(model)
-    }
   }
   
   // MARK: - Subviews
