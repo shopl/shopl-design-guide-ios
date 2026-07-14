@@ -60,6 +60,7 @@ public struct SDGRadioLabel: View {
           .fixedSize(horizontal: false, vertical: true)
       }
     }
+    .buttonStyle(NoTapAnimationButtonStyle())
   }
 }
 
