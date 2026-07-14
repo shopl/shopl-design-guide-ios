@@ -52,6 +52,7 @@ public struct SDGCheckBoxLabel: View {
       HStack(spacing: 8) {
         SDGCheckBox(
           model: model.box,
+          onSelect: { onSelect(model.id) }
         )
 
         Text(model.title)
