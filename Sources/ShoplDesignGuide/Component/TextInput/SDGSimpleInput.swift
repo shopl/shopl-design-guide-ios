@@ -113,8 +113,10 @@ public struct SDGSimpleInput: View {
 
   private var isEditingState: Bool {
     switch effectiveState {
-    case .default, .focused: return true
-    case .completed, .disabled, .error: return false
+    // 최대 글자 수 초과 등 실시간 검증 오류가 발생해도 TextField를 유지해야
+    // 상태 변경으로 키보드가 닫히지 않고 바로 수정할 수 있음.
+    case .default, .focused, .error: return true
+    case .completed, .disabled: return false
     }
   }
 
