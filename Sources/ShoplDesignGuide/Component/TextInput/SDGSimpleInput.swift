@@ -102,7 +102,9 @@ public struct SDGSimpleInput: View {
 
   private var effectiveState: State {
     guard !state.isDisabled else { return .disabled }
-    return internalIsFocused ? .focused : state
+    // 외부에서 에러 상태가 들어와도 실제 TextField가 포커스 중이면 편집을 유지함.
+    // state 변경과 FocusState 갱신 사이의 한 프레임 차이로 키보드가 내려가는 것을 방지함.
+    return internalIsFocused || isTextFieldFocused ? .focused : state
   }
 
   private var hasError: Bool {
