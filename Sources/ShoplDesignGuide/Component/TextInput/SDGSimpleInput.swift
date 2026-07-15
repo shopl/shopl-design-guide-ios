@@ -147,26 +147,6 @@ public struct SDGSimpleInput: View {
     keyboardType: UIKeyboardType = .default,
     maxCount: Int = 10000
   ) {
-    self.init(
-      style: style,
-      inputFieldColor: inputFieldColor,
-      state: state,
-      text: text,
-      placeholder: placeholder,
-      keyboardType: keyboardType,
-      maxCount: maxCount
-    )
-  }
-
-  private init(
-    style: Style,
-    inputFieldColor: Color,
-    state: State,
-    text: Binding<String>,
-    placeholder: String,
-    keyboardType: UIKeyboardType,
-    maxCount: Int
-  ) {
     self.style = style
     self.inputFieldColor = inputFieldColor
     self.state = state
