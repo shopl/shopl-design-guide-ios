@@ -86,16 +86,14 @@ public struct SDGSelectInput: View {
           SDGSelectInputElementView(
             element: nil,
             placeholder: model.placeholder,
-            state: model.state,
-            onTapped: onTapped
+            state: model.state
           )
         } else {
           ForEach(Array(model.selectedElements.enumerated()), id: \.offset) { _, element in
             SDGSelectInputElementView(
               element: element,
               placeholder: model.placeholder,
-              state: model.state,
-              onTapped: onTapped
+              state: model.state
             )
           }
         }
@@ -109,6 +107,7 @@ public struct SDGSelectInput: View {
     .frame(height: model.state != .default && model.selectedElements.count == 2 ? 80 : 40)
     .background(backgroundColor)
     .cornerRadius(12)
+    .onTapGesture(perform: onTapped)
     .allowsHitTesting(model.state != .disabled)
     .accessibilityElement(children: .combine)
     .accessibilityHint(model.state == .disabled ? "비활성화됨" : "선택")
@@ -127,7 +126,6 @@ private struct SDGSelectInputElementView: View {
   let element: SDGSelectInput.SelectInputModel.SelectedElement?
   let placeholder: String
   let state: SDGSelectInput.SelectInputModel.State
-  let onTapped: () -> Void
 
   var body: some View {
     HStack(alignment: .center, spacing: 10) {
@@ -143,7 +141,6 @@ private struct SDGSelectInputElementView: View {
     }
     .frame(height: 40)
     .contentShape(Rectangle())
-    .onTapGesture(perform: onTapped)
     .opacity(state == .disabled ? 0.3 : 1)
   }
 }
