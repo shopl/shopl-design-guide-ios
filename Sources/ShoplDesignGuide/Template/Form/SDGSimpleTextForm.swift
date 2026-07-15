@@ -13,7 +13,7 @@ public struct SDGSimpleTextForm: View {
   private let icon: FormIconModel?
   private let type: FormType
   @Binding private var searchText: String
-  @Binding private var state: SDGSimpleInput.InputState
+  private let state: SDGSimpleInput.State
   private let keyboardType: UIKeyboardType
   private let placeHolder: String
   private let isRequiered: Bool
@@ -29,7 +29,7 @@ public struct SDGSimpleTextForm: View {
     icon: FormIconModel? = nil,
     type: FormType,
     searchText: Binding<String>,
-    state: Binding<SDGSimpleInput.InputState> = .constant(.default),
+    state: SDGSimpleInput.State = .default,
     keyboardType: UIKeyboardType = .default,
     placeHolder: String,
     errorMessage: String? = nil,
@@ -50,7 +50,7 @@ public struct SDGSimpleTextForm: View {
       self.backgroundColor = .neutral50
     }
     
-    self._state = state
+    self.state = state
     self.keyboardType = keyboardType
     self.placeHolder = placeHolder
     self.isRequiered = isRequiered
@@ -60,17 +60,6 @@ public struct SDGSimpleTextForm: View {
     self.onSearchTextChange = onSearchTextChange
   }
 
-  private var simpleInputState: Binding<SDGSimpleInput.State> {
-    Binding(
-      get: {
-        state.state
-      },
-      set: { newState in
-        state = .init(state: newState)
-      }
-    )
-  }
-  
   public var body: some View {
     VStack(spacing: 8) {
       HStack(spacing: 0) {
@@ -117,8 +106,7 @@ public struct SDGSimpleTextForm: View {
       SDGSimpleInput(
         style: .solid,
         inputFieldColor: backgroundColor,
-        outlinedStrokeColor: nil,
-        state: simpleInputState,
+        state: state,
         text: $searchText,
         placeholder: placeHolder,
         keyboardType: keyboardType,
@@ -164,7 +152,7 @@ struct SDGSimpleTextForm_Wrapper: View {
         title: "타이틀",
         type: .empha,
         searchText: $searchTextThree,
-        state: .constant(.error("에러메세지")),
+        state: .error("에러메세지"),
         placeHolder: "입력",
         isRequiered: false,
         onSearchButtonTap: { text in },
@@ -176,7 +164,7 @@ struct SDGSimpleTextForm_Wrapper: View {
         icon: FormIconModel(image: Image(sdg: .icClip), tintColor: .neutral500),
         type: .empha,
         searchText: $searchTextFour,
-        state: .constant(.error("긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지")),
+        state: .error("긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지 긴 에러메세지"),
         placeHolder: "입력",
         isRequiered: false,
         onSearchButtonTap: { text in },
