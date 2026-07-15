@@ -119,12 +119,9 @@ public struct SDGGuideContainer<Body: View>: View {
         title: "Select Form",
         type: .normal,
         inputModel: .init(
-          item: .init(
-            text: nil,
-            placeholder: "입력"
-          ),
-          backgroundColor: .neutral0,
-          status: .default
+          placeholder: "입력",
+          inputField: .white,
+          state: .default
         ),
         onRefresh: {},
         onSelect: {}
@@ -142,12 +139,9 @@ public struct SDGGuideContainer<Body: View>: View {
         title: "Select Form",
         type: .normal,
         inputModel: .init(
-          item: .init(
-            text: nil,
-            placeholder: "입력"
-          ),
-          backgroundColor: .neutral0,
-          status: .default
+          placeholder: "입력",
+          inputField: .white,
+          state: .default
         ),
         onRefresh: {},
         onSelect: {}

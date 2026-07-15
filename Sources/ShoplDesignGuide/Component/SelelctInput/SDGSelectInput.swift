@@ -2,71 +2,78 @@
 //  SDGSelectInput.swift
 //  ShoplDesignGuide
 //
-//  Created by dino on 3/5/26.
-//
 
 import SwiftUI
 
 public struct SDGSelectInput: View {
-  public static let version: String = "2.0.9"
+  public static let version: String = "2.3.39"
 
   private let model: SelectInputModel
-  private let onTapped: (SelectInputModel.SelectInputItem) -> Void
+  private let onTapped: () -> Void
 
   public struct SelectInputModel {
-    let items: [SelectInputItem]
-    let backgroundColor: BackgroundColor
-    let status: Status
+    /// 선택된 데이터를 표현하는 요소입니다. Input Field는 최대 두 요소(높이 80pt)까지 지원합니다.
+    public let selectedElements: [SelectedElement]
+    public let placeholder: String
+    public let inputField: InputField
+    public let state: State
 
-    public struct SelectInputItem: Hashable {
-      public static func == (lhs: SelectInputItem, rhs: SelectInputItem) -> Bool {
-        lhs.text == rhs.text
-      }
-
-      public func hash(into hasher: inout Hasher) {
-        hasher.combine(text)
-      }
-
-      let imageArea: AnyView?
-      let text: String?
-      let placeholder: String
-
-      public init<Content: View>(
-        text: String?,
-        placeholder: String,
-        @ViewBuilder imageArea: () -> Content
-      ) {
-        self.imageArea = AnyView(imageArea())
-        self.text = text
-        self.placeholder = placeholder
-      }
+    public init(
+      selectedElements: [SelectedElement] = [],
+      placeholder: String,
+      inputField: InputField,
+      state: State
+    ) {
+      precondition(selectedElements.count <= 2, "SDGSelectInput supports up to two selected elements.")
+      self.selectedElements = selectedElements
+      self.placeholder = placeholder
+      self.inputField = inputField
+      self.state = state
     }
 
-    public enum BackgroundColor {
-      case neutral50
-      case neutral0
+    public enum InputField {
+      case gray
+      case white
 
-      var sdgColor: SDG.Color {
+      fileprivate var color: SDG.Color {
         switch self {
-        case .neutral50:
-          SDG.Color.neutral50
-        case .neutral0:
-          SDG.Color.neutral0
+        case .gray:
+          .neutral50
+        case .white:
+          .neutral0
         }
       }
     }
 
-    public enum Status {
+    public enum State {
       case `default`
-      case completed
+      case selected
       case disabled
       case error
+    }
+
+    public struct SelectedElement {
+      public let text: String
+      let content: AnyView?
+
+      public init(text: String) {
+        self.text = text
+        self.content = nil
+      }
+
+      public init<Content: View>(
+        text: String,
+        @ViewBuilder content: () -> Content
+      ) {
+        self.text = text
+        self.content = AnyView(content())
+      }
     }
   }
 
   public init(
     model: SelectInputModel,
-    onTapped: @escaping (SelectInputModel.SelectInputItem) -> Void
+    onTapped: @escaping () -> Void
   ) {
     self.model = model
     self.onTapped = onTapped
@@ -75,143 +82,115 @@ public struct SDGSelectInput: View {
   public var body: some View {
     HStack(alignment: .center, spacing: 10) {
       VStack(spacing: 0) {
-        ForEach(model.items, id: \.self) { item in
-          HStack(alignment: .center, spacing: 10) {
-            if let imageArea = item.imageArea {
-              imageArea
-            }
-
-            if let text = item.text,
-               model.status != .default {
-              Text(text)
-                .typo(.body1_R, model.status != .disabled ? .neutral700 : .neutral300)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .lineLimit(1)
-            } else {
-              Text(item.placeholder)
-                .typo(.body1_R, .neutral300)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .lineLimit(1)
-            }
-          }
-          .frame(height: 40)
-          .contentShape(Rectangle())
-          .onTapGesture {
-            onTapped(item)
+        if model.state == .default || model.selectedElements.isEmpty {
+          SDGSelectInputElementView(
+            element: nil,
+            placeholder: model.placeholder,
+            state: model.state,
+            onTapped: onTapped
+          )
+        } else {
+          ForEach(Array(model.selectedElements.enumerated()), id: \.offset) { _, element in
+            SDGSelectInputElementView(
+              element: element,
+              placeholder: model.placeholder,
+              state: model.state,
+              onTapped: onTapped
+            )
           }
         }
       }
 
       SDG.Image.icCommonNext.image
-        .templateIcon(size: 24, color: model.status != .disabled ? SDG.Color.neutral700.color : SDG.Color.neutral300.color)
+        .templateIcon(size: 24, color: textColor.color)
+        .opacity(model.state == .disabled ? 0.3 : 1)
     }
     .padding(.horizontal, 12)
-    .padding(.vertical, model.items.count > 1 ? 2 : 0)
-    .background(model.status == .error ? SDG.Color.red300_10.color : model.backgroundColor.sdgColor.color)
+    .frame(height: model.state != .default && model.selectedElements.count == 2 ? 80 : 40)
+    .background(backgroundColor)
     .cornerRadius(12)
-    .allowsHitTesting(model.status != .disabled)
+    .allowsHitTesting(model.state != .disabled)
+    .accessibilityElement(children: .combine)
+    .accessibilityHint(model.state == .disabled ? "비활성화됨" : "선택")
+  }
+
+  private var textColor: SDG.Color {
+    .neutral700
+  }
+
+  private var backgroundColor: Color {
+    (model.state == .error ? SDG.Color.red300_10 : model.inputField.color).color
   }
 }
 
-extension SDGSelectInput.SelectInputModel.SelectInputItem {
-  public init(text: String?, placeholder: String) {
-    self.imageArea = nil
-    self.text = text
-    self.placeholder = placeholder
-  }
+private struct SDGSelectInputElementView: View {
+  let element: SDGSelectInput.SelectInputModel.SelectedElement?
+  let placeholder: String
+  let state: SDGSelectInput.SelectInputModel.State
+  let onTapped: () -> Void
 
-  init(text: String?, placeholder: String, imageArea: AnyView?) {
-    self.imageArea = imageArea
-    self.text = text
-    self.placeholder = placeholder
-  }
-}
+  var body: some View {
+    HStack(alignment: .center, spacing: 10) {
+      if state != .default,
+         let content = element?.content {
+        content
+      }
 
-extension SDGSelectInput.SelectInputModel {
-  public init(item: SelectInputItem, backgroundColor: BackgroundColor, status: Status) {
-    self.init(items: [item], backgroundColor: backgroundColor, status: status)
+      Text(state == .default ? placeholder : element?.text ?? placeholder)
+        .typo(.body1_R, state == .default ? .neutral300 : .neutral700)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .lineLimit(1)
+    }
+    .frame(height: 40)
+    .contentShape(Rectangle())
+    .onTapGesture(perform: onTapped)
+    .opacity(state == .disabled ? 0.3 : 1)
   }
 }
 
 #Preview {
-  VStack {
+  VStack(spacing: 12) {
     SDGSelectInput(
-      model: .init(
-        item: .init(text: "Default Input", placeholder: "placeholder"),
-        backgroundColor: .neutral50,
-        status: .default
-      )
-    ) { item in
-      print(item.text)
-    }
+      model: .init(placeholder: "Placeholder", inputField: .gray, state: .default)
+    ) { }
 
     SDGSelectInput(
       model: .init(
-        item: .init(text: "Completed Input", placeholder: "placeholder"),
-        backgroundColor: .neutral50,
-        status: .completed
+        selectedElements: [.init(text: "Selected Text")],
+        placeholder: "Placeholder",
+        inputField: .gray,
+        state: .selected
       )
-    ) { item in
-      print(item.text)
-    }
+    ) { }
 
     SDGSelectInput(
       model: .init(
-        item: .init(text: "Disabled Input", placeholder: "placeholder"),
-        backgroundColor: .neutral50,
-        status: .disabled
+        selectedElements: [.init(text: "Selected Text") {
+          SDG.Image.icBarcode.image.templateIcon(size: 20, color: SDG.Color.neutral700.color)
+        }],
+        placeholder: "Placeholder",
+        inputField: .white,
+        state: .selected
       )
-    ) { item in
-      print(item.text)
-    }
+    ) { }
 
     SDGSelectInput(
       model: .init(
-        item: .init(text: "Error Input", placeholder: "placeholder"),
-        backgroundColor: .neutral50,
-        status: .error
+        selectedElements: [.init(text: "Selected Text")],
+        placeholder: "Placeholder",
+        inputField: .gray,
+        state: .disabled
       )
-    ) { item in
-      print(item.text)
-    }
+    ) { }
 
     SDGSelectInput(
       model: .init(
-        item: .init(text: "Input with Image", placeholder: "placeholder") {
-          SDG.Image.icBarcode.image
-            .templateIcon(size: 20, color: SDG.Color.neutral700.color)
-        },
-        backgroundColor: .neutral50,
-        status: .completed
+        selectedElements: [.init(text: "Selected Text")],
+        placeholder: "Placeholder",
+        inputField: .gray,
+        state: .error
       )
-    ) { item in
-      print(item.text)
-    }
-
-    SDGSelectInput(
-      model: .init(
-        items: [
-          .init(text: "A", placeholder: "placeholder") {
-            SDG.Image.icBarcode.image
-              .templateIcon(
-                size: 20,
-                color: SDG.Color.neutral700.color
-              )
-          },
-          .init(text: "B", placeholder: "placeholder") {
-            SDG.Image.icBarcode.image
-              .templateIcon(
-                size: 20,
-                color: SDG.Color.neutral700.color
-              )
-          }
-        ],
-        backgroundColor: .neutral50,
-        status: .completed
-      )
-    ) { item in
-      print(item.text)
-    }
+    ) { }
   }
   .padding()
 }
