@@ -129,6 +129,7 @@ public extension SDG.Image {
     static let icCopyM = SDG.Image(name: "ic_copy_m", bundle: dsBundle)
     static let icCrownSolid = SDG.Image(name: "ic_crown_solid", bundle: dsBundle)
     static let icDetailEmptyInfo = SDG.Image(name: "ic_detail_empty_info", bundle: dsBundle)
+    static let icEmptyData = SDG.Image(name: "ic_empty_data", bundle: dsBundle)
     static let icEtcFilter = SDG.Image(name: "ic_etc_filter", bundle: dsBundle)
     static let icEtcZoomin = SDG.Image(name: "ic_etc_zoomin", bundle: dsBundle)
     static let icEtcZoomout = SDG.Image(name: "ic_etc_zoomout", bundle: dsBundle)
