@@ -31,7 +31,7 @@ struct DemoViewTabContainer<Content: View>: View {
         HStack(spacing: 16) {
           ForEach(tabs, id: \.self) { tab in
             Button(action: { selectedTab = tab }) {
-              Text(tab)
+              Text(sdg: tab)
                 .typo(.body1_SB, selectedTab == tab ? .neutral900 : .neutral300)
                 .padding(.vertical, 2)
             }
@@ -58,7 +58,7 @@ struct UnimplementedTabPlaceholder: View {
   let tabName: String
   
   var body: some View {
-    Text("\(tabName) is not implemented yet.")
+    Text(sdg: "\(tabName) is not implemented yet.")
       .typo(.body1_R, .neutral400)
       .padding()
   }

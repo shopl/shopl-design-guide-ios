@@ -14,6 +14,8 @@ struct SDGBoxButtonStyle: ButtonStyle {
   private let cornerRadius: CGFloat
   private let defaultTextColor: Color
   private let selectedColor: SDGButtonColor
+  private let pressedOverlayOpacity: CGFloat
+  private let appliesSelectedStyle: Bool
   private var isDisable: Bool
   
   init(
@@ -21,13 +23,17 @@ struct SDGBoxButtonStyle: ButtonStyle {
     cornerRadius: CGFloat,
     defaultTextColor: Color,
     selectedColor: SDGButtonColor,
-    isDisable: Bool
+    isDisable: Bool,
+    pressedOverlayOpacity: CGFloat = 0.1,
+    appliesSelectedStyle: Bool = true
   ) {
     self._isSelected = isSelected
     
     self.cornerRadius = cornerRadius
     self.defaultTextColor = defaultTextColor
     self.selectedColor = selectedColor
+    self.pressedOverlayOpacity = pressedOverlayOpacity
+    self.appliesSelectedStyle = appliesSelectedStyle
     self.isDisable = isDisable
   }
   
@@ -37,14 +43,14 @@ struct SDGBoxButtonStyle: ButtonStyle {
     configuration.label
       .applyIf(currentState == .pressed) {
         $0.overlay {
-          Color.neutral900.opacity(0.3)
+          Color.neutral900.opacity(self.pressedOverlayOpacity)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
       }
       .applyIf(currentState == .disabled) {
         $0.opacity(self.defaultTextColor == .neutral0 ? 1 : 0.3)
       }
-      .applyIf(currentState == .selected) {
+      .applyIf(currentState == .selected && self.appliesSelectedStyle) {
         $0
           .foregroundStyle(self.selectedColor.textColor)
           .background(self.selectedColor.backgroundColor)
