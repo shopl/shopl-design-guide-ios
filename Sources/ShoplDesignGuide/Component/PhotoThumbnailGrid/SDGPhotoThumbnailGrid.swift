@@ -52,7 +52,6 @@ public struct SDGPhotoThumbnailGrid: View {
   private let onDelete: ((Photo) -> Void)?
   private let onThumbnailTapped: ((Photo) -> Void)?
   private let onRemainingCountTapped: (() -> Void)?
-  private let thumbnailMenuContent: ((Photo) -> AnyView)?
   
   private var requiredRowCount: Int {
     guard photos.isNotEmpty else { return 0 }
@@ -86,24 +85,6 @@ public struct SDGPhotoThumbnailGrid: View {
     self.onDelete = onDelete
     self.onThumbnailTapped = onThumbnailTapped
     self.onRemainingCountTapped = onRemainingCountTapped
-    self.thumbnailMenuContent = nil
-  }
-  
-  public init<MenuContent: View>(
-    photos: [Photo],
-    rowCount: Int? = nil,
-    onDelete: ((Photo) -> Void)? = nil,
-    onRemainingCountTapped: (() -> Void)? = nil,
-    @ViewBuilder thumbnailMenuContent: @escaping (Photo) -> MenuContent
-  ) {
-    self.photos = photos
-    self.rowCount = rowCount
-    self.onDelete = onDelete
-    self.onThumbnailTapped = nil
-    self.onRemainingCountTapped = onRemainingCountTapped
-    self.thumbnailMenuContent = { photo in
-      AnyView(thumbnailMenuContent(photo))
-    }
   }
   
   public var body: some View {
@@ -147,14 +128,7 @@ public struct SDGPhotoThumbnailGrid: View {
   
   @ViewBuilder
   private func thumbnailActionContent(for photo: Photo) -> some View {
-    if let thumbnailMenuContent {
-      Menu {
-        thumbnailMenuContent(photo)
-      } label: {
-        thumbnailCellContent(for: photo)
-      }
-      .buttonStyle(.plain)
-    } else if let onThumbnailTapped {
+    if let onThumbnailTapped {
       Button {
         onThumbnailTapped(photo)
       } label: {
