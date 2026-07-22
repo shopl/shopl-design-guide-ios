@@ -120,7 +120,7 @@ public struct SDGIconLabel: View {
   }
 
   private var titleText: some View {
-    Text(title)
+    Text(sdg: title)
       .typo(size.typoSize, titleColor)
       .applyIf(self.fullSize) {
         $0.frame(maxWidth: .infinity, alignment: .leading)
