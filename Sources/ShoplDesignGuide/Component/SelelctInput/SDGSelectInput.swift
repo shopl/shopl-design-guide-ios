@@ -96,10 +96,6 @@ public struct SDGSelectInput: View {
             }
           }
           .frame(height: 40)
-          .contentShape(Rectangle())
-          .onTapGesture {
-            onTapped(item)
-          }
         }
       }
 
@@ -110,6 +106,11 @@ public struct SDGSelectInput: View {
     .padding(.vertical, model.items.count > 1 ? 2 : 0)
     .background(model.status == .error ? SDG.Color.red300_10.color : model.backgroundColor.sdgColor.color)
     .cornerRadius(12)
+    .contentShape(Rectangle())
+    .onTapGesture {
+      guard let item = model.items.first else { return }
+      onTapped(item)
+    }
     .allowsHitTesting(model.status != .disabled)
   }
 }
