@@ -148,6 +148,10 @@ public struct SDGBoxButton: View {
         isDisable: self._isDisable
       )
     )
+    .sdgBoxButtonIOS16PressFeedback(
+      isDisabled: _isDisable,
+      cornerRadius: _option.size.cornerRadius
+    )
     
   }
   
