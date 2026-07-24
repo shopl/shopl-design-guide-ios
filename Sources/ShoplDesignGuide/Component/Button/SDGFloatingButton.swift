@@ -8,30 +8,22 @@
 import SwiftUI
 
 public struct SDGFloatingButton: View {
+  public static let version = "2.0.0"
   
   private let icon: Image
   private let iconTintColor: Color
   private let isDisabled: Bool
-  private let backgroundColor: Color
   private let action: () -> Void
   
   public init(
     icon: Image,
     iconTintColor: Color,
     isDisabled: Bool = false,
-    backgroundColor: Color? = nil,
     action: @escaping () -> Void
   ) {
     self.icon = icon
     self.iconTintColor = iconTintColor
     self.isDisabled = isDisabled
-    
-    if let backgroundColor = backgroundColor {
-      self.backgroundColor = backgroundColor
-    } else {
-      self.backgroundColor = .primary300
-    }
-    
     self.action = action
   }
   

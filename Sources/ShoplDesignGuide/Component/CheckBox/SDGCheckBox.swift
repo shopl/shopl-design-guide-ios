@@ -8,6 +8,7 @@
 import SwiftUI
 
 public struct SDGCheckBox: View {
+  public static let version = "2.0.0"
   
   public enum Size: Equatable {
     case large, medim
@@ -108,4 +109,3 @@ struct CheckBox_Multi_Preview: PreviewProvider {
     
   }
 }
-

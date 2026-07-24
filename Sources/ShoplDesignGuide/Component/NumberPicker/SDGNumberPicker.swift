@@ -8,6 +8,7 @@
 import SwiftUI
 
 public struct SDGNumberPicker: View {
+  public static let version = "2.0.6"
   
   public enum `Type` {
     case one(Binding<Int>, [Int])
