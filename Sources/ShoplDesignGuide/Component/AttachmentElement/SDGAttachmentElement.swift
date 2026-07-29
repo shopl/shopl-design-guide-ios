@@ -29,6 +29,12 @@ public struct SDGAttachmentElement: View {
     public let id: String
     public let fileName: String
     public let fileSize: String
+
+    @available(*, deprecated, renamed: "fileName")
+    public var name: String { fileName }
+
+    @available(*, deprecated, renamed: "fileSize")
+    public var size: String { fileSize }
     
     public init(
       type: Type,
