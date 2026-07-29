@@ -16,7 +16,7 @@ public struct SDGToggle: View {
     static let mediumHeight: CGFloat = 22
     static let mediumThumbSize: CGFloat = 18
     static let mediumThumbOffset: CGFloat = 9
-    static let smallWidth: CGFloat = 30
+    static let smallWidth: CGFloat = 28
     static let smallHeight: CGFloat = 16
     static let smallThumbSize: CGFloat = 14
     static let smallThumbOffset: CGFloat = 6.75

@@ -52,14 +52,6 @@ public struct SDGPhotoThumbnailGrid: View {
   private let onDelete: ((Photo) -> Void)?
   private let onThumbnailTapped: ((Photo) -> Void)?
   private let onRemainingCountTapped: (() -> Void)?
-  private let thumbnailMenuContent: ((Photo) -> AnyView)?
-  
-  private var columns: [GridItem] {
-    Array(
-      repeating: GridItem(.flexible(minimum: 0), spacing: Constants.spacing),
-      count: Constants.columnCount
-    )
-  }
   
   private var requiredRowCount: Int {
     guard photos.isNotEmpty else { return 0 }
@@ -93,37 +85,27 @@ public struct SDGPhotoThumbnailGrid: View {
     self.onDelete = onDelete
     self.onThumbnailTapped = onThumbnailTapped
     self.onRemainingCountTapped = onRemainingCountTapped
-    self.thumbnailMenuContent = nil
-  }
-  
-  public init<MenuContent: View>(
-    photos: [Photo],
-    rowCount: Int? = nil,
-    onDelete: ((Photo) -> Void)? = nil,
-    onRemainingCountTapped: (() -> Void)? = nil,
-    @ViewBuilder thumbnailMenuContent: @escaping (Photo) -> MenuContent
-  ) {
-    self.photos = photos
-    self.rowCount = rowCount
-    self.onDelete = onDelete
-    self.onThumbnailTapped = nil
-    self.onRemainingCountTapped = onRemainingCountTapped
-    self.thumbnailMenuContent = { photo in
-      AnyView(thumbnailMenuContent(photo))
-    }
   }
   
   public var body: some View {
-    LazyVGrid(columns: columns, spacing: Constants.spacing) {
-      ForEach(0..<displaySlotCount, id: \.self) { index in
-        if index < photos.count {
-          thumbnailCell(
-            photo: photos[index],
-            showsRemainingCount: index == displaySlotCount - 1 && remainingCount > 0
-          )
-        } else {
-          Color.clear
-            .aspectRatio(1, contentMode: .fit)
+    Grid(
+      horizontalSpacing: Constants.spacing,
+      verticalSpacing: Constants.spacing
+    ) {
+      ForEach(0..<displayRowCount, id: \.self) { rowIndex in
+        GridRow {
+          ForEach(0..<Constants.columnCount, id: \.self) { columnIndex in
+            let index = rowIndex * Constants.columnCount + columnIndex
+            if index < photos.count {
+              thumbnailCell(
+                photo: photos[index],
+                showsRemainingCount: index == displaySlotCount - 1 && remainingCount > 0
+              )
+            } else {
+              Color.clear
+                .aspectRatio(1, contentMode: .fit)
+            }
+          }
         }
       }
     }
@@ -146,14 +128,7 @@ public struct SDGPhotoThumbnailGrid: View {
   
   @ViewBuilder
   private func thumbnailActionContent(for photo: Photo) -> some View {
-    if let thumbnailMenuContent {
-      Menu {
-        thumbnailMenuContent(photo)
-      } label: {
-        thumbnailCellContent(for: photo)
-      }
-      .buttonStyle(.plain)
-    } else if let onThumbnailTapped {
+    if let onThumbnailTapped {
       Button {
         onThumbnailTapped(photo)
       } label: {
