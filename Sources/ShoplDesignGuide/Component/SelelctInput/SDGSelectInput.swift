@@ -24,8 +24,8 @@ public struct SDGSelectInput: View {
       inputField: InputField,
       state: State
     ) {
-      precondition(selectedElements.count <= 2, "SDGSelectInput supports up to two selected elements.")
-      self.selectedElements = selectedElements
+      assert(selectedElements.count <= 2, "SDGSelectInput supports up to two selected elements.")
+      self.selectedElements = Array(selectedElements.prefix(2))
       self.placeholder = placeholder
       self.inputField = inputField
       self.state = state
@@ -86,14 +86,16 @@ public struct SDGSelectInput: View {
           SDGSelectInputElementView(
             element: nil,
             placeholder: model.placeholder,
-            state: model.state
+            state: model.state,
+            isMultipleSelection: false
           )
         } else {
           ForEach(Array(model.selectedElements.enumerated()), id: \.offset) { _, element in
             SDGSelectInputElementView(
               element: element,
               placeholder: model.placeholder,
-              state: model.state
+              state: model.state,
+              isMultipleSelection: model.selectedElements.count > 1
             )
           }
         }
@@ -126,6 +128,7 @@ private struct SDGSelectInputElementView: View {
   let element: SDGSelectInput.SelectInputModel.SelectedElement?
   let placeholder: String
   let state: SDGSelectInput.SelectInputModel.State
+  let isMultipleSelection: Bool
 
   var body: some View {
     HStack(alignment: .center, spacing: 10) {
@@ -138,6 +141,7 @@ private struct SDGSelectInputElementView: View {
         .typo(.body1_R, state == .default ? .neutral300 : .neutral700)
         .frame(maxWidth: .infinity, alignment: .leading)
         .lineLimit(1)
+        .truncationMode(isMultipleSelection ? .middle : .tail)
     }
     .frame(height: 40)
     .contentShape(Rectangle())

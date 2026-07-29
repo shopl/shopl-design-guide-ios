@@ -54,6 +54,7 @@ public struct SDGCheckBoxLabel: View {
           model: model.box,
           onSelect: { onSelect(model.id) }
         )
+        .allowsHitTesting(false)
 
         Text(model.title)
           .typo(
