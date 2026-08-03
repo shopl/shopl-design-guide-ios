@@ -2,18 +2,28 @@
 //  SDGPhotoThumbnailGrid.swift
 //  ShoplDesignGuide
 //
-//  Created by Codex on 6/15/26.
+//  Created by dino on 6/15/26.
 //
 
+import Foundation
 import SwiftUI
+
+import UIKit
 
 import Kingfisher
 
 public struct SDGPhotoThumbnailGrid: View {
   public static let version: String = "2.1.30"
 
+  public enum Layout: Equatable {
+    /// `LazyVGrid` 사용 시 키보드 노출과 자동 스크롤이 겹쳐 스크롤이 튀는 화면에서 사용한다.
+    case grid
+    case lazyGrid
+  }
+
   public struct Photo: Identifiable, Equatable {
     public enum Source {
+      case data(Data)
       case image(Image)
       case url(URL)
     }
@@ -28,6 +38,10 @@ public struct SDGPhotoThumbnailGrid: View {
     
     public init(id: String, image: Image) {
       self.init(id: id, source: .image(image))
+    }
+
+    public init(id: String, data: Data) {
+      self.init(id: id, source: .data(data))
     }
     
     public init(id: String, url: URL) {
@@ -49,6 +63,7 @@ public struct SDGPhotoThumbnailGrid: View {
   
   private let photos: [Photo]
   private let rowCount: Int?
+  private let layout: Layout
   private let onDelete: ((Photo) -> Void)?
   private let onThumbnailTapped: ((Photo) -> Void)?
   private let onRemainingCountTapped: (() -> Void)?
@@ -72,22 +87,42 @@ public struct SDGPhotoThumbnailGrid: View {
     guard rowCount != nil else { return 0 }
     return max(photos.count - displaySlotCount, 0)
   }
-  
+
+  private var columns: [GridItem] {
+    Array(
+      repeating: GridItem(.flexible(minimum: 0), spacing: Constants.spacing),
+      count: Constants.columnCount
+    )
+  }
+
   public init(
     photos: [Photo],
     rowCount: Int? = nil,
+    layout: Layout = .lazyGrid,
     onDelete: ((Photo) -> Void)? = nil,
     onThumbnailTapped: ((Photo) -> Void)? = nil,
     onRemainingCountTapped: (() -> Void)? = nil
   ) {
     self.photos = photos
     self.rowCount = rowCount
+    self.layout = layout
     self.onDelete = onDelete
     self.onThumbnailTapped = onThumbnailTapped
     self.onRemainingCountTapped = onRemainingCountTapped
   }
   
+  @ViewBuilder
   public var body: some View {
+    switch layout {
+    case .grid:
+      grid
+
+    case .lazyGrid:
+      lazyGrid
+    }
+  }
+
+  private var grid: some View {
     Grid(
       horizontalSpacing: Constants.spacing,
       verticalSpacing: Constants.spacing
@@ -107,6 +142,26 @@ public struct SDGPhotoThumbnailGrid: View {
             }
           }
         }
+      }
+    }
+  }
+
+  private var lazyGrid: some View {
+    let displayPhotos = Array(photos.prefix(displaySlotCount))
+    let placeholderCount = max(displaySlotCount - displayPhotos.count, 0)
+    let lastPhotoID = displayPhotos.last?.id
+
+    return LazyVGrid(columns: columns, spacing: Constants.spacing) {
+      ForEach(displayPhotos) { photo in
+        thumbnailCell(
+          photo: photo,
+          showsRemainingCount: photo.id == lastPhotoID && remainingCount > 0
+        )
+      }
+
+      ForEach(0..<placeholderCount, id: \.self) { _ in
+        Color.clear
+          .aspectRatio(1, contentMode: .fit)
       }
     }
   }
@@ -184,6 +239,9 @@ public struct SDGPhotoThumbnailGrid: View {
   @ViewBuilder
   private func thumbnailContent(for photo: Photo) -> some View {
     switch photo.source {
+    case .data(let data):
+      dataImage(data)
+
     case .image(let image):
       image
         .resizable()
@@ -193,6 +251,16 @@ public struct SDGPhotoThumbnailGrid: View {
           Color.neutral150
         }
         .resizable()
+    }
+  }
+
+  @ViewBuilder
+  private func dataImage(_ data: Data) -> some View {
+    if let image = UIImage(data: data) {
+      Image(uiImage: image)
+        .resizable()
+    } else {
+      Color.neutral150
     }
   }
 }
