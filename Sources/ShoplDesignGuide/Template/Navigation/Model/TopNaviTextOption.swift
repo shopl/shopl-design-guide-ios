@@ -20,7 +20,7 @@ public struct TopNaviTextOption {
     if let tintColor = tintColor {
       self.tintColor = tintColor
     } else {
-      self.tintColor = .neutral700
+      self.tintColor = .neutral900
     }
   }
 }
