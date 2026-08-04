@@ -16,8 +16,11 @@ public struct SDGPhotoThumbnailGrid: View {
   public static let version: String = "2.1.30"
 
   public enum Layout: Equatable {
-    /// `LazyVGrid` 사용 시 키보드 노출과 자동 스크롤이 겹쳐 스크롤이 튀는 화면에서 사용한다.
+    /// 기존 `Grid` 동작을 유지하는 기본 레이아웃이다.
+    /// `LazyVGrid` 사용 시 키보드 노출과 자동 스크롤이 겹쳐 스크롤이 튀는 화면에도 사용한다.
     case grid
+
+    /// 대량 사진에서 노출되는 셀만 지연 렌더링해야 하는 화면에 사용한다.
     case lazyGrid
   }
 
@@ -98,7 +101,7 @@ public struct SDGPhotoThumbnailGrid: View {
   public init(
     photos: [Photo],
     rowCount: Int? = nil,
-    layout: Layout = .lazyGrid,
+    layout: Layout = .grid,
     onDelete: ((Photo) -> Void)? = nil,
     onThumbnailTapped: ((Photo) -> Void)? = nil,
     onRemainingCountTapped: (() -> Void)? = nil
@@ -291,6 +294,7 @@ public struct SDGPhotoThumbnailGrid: View {
         .init(id: "image-\($0)", image: Image(sdg: .profileSmall))
       },
       rowCount: 2,
+      layout: .lazyGrid,
       onThumbnailTapped: { _ in },
       onRemainingCountTapped: {}
     )
