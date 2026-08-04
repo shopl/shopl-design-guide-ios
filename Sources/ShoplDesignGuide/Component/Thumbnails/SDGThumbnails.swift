@@ -5,7 +5,10 @@
 //  Created by kai.kim on 7/30/26.
 //
 
+import Foundation
 import SwiftUI
+
+import UIKit
 
 import Kingfisher
 
@@ -14,6 +17,15 @@ public struct SDGThumbnails: View {
 
   public typealias ThumbnailType = SDGThumbnailElement.ThumbnailType
   public typealias Thumbnail = SDGThumbnailElement.Thumbnail
+
+  public enum Layout: Equatable {
+    /// 기존 `Grid` 동작을 유지하는 기본 레이아웃이다.
+    /// `LazyVGrid` 사용 시 키보드 노출과 자동 스크롤이 겹쳐 스크롤이 튀는 화면에도 사용한다.
+    case grid
+
+    /// 대량 썸네일에서 노출되는 셀만 지연 렌더링해야 하는 화면에 사용한다.
+    case lazyGrid
+  }
 
   @available(*, deprecated, renamed: "Thumbnail")
   public typealias Photo = Thumbnail
@@ -27,6 +39,7 @@ public struct SDGThumbnails: View {
   private let thumbnails: [Thumbnail]
   private let type: ThumbnailType
   private let rowCount: Int?
+  private let layout: Layout
   private let onDelete: ((Thumbnail) -> Void)?
   private let onThumbnailTapped: ((Thumbnail) -> Void)?
   private let onRemainingCountTapped: (() -> Void)?
@@ -53,10 +66,18 @@ public struct SDGThumbnails: View {
     return max(thumbnails.count - displaySlotCount, 0)
   }
 
+  private var columns: [GridItem] {
+    Array(
+      repeating: GridItem(.flexible(minimum: 0), spacing: Constants.spacing),
+      count: Constants.columnCount
+    )
+  }
+
   public init(
     thumbnails: [Thumbnail],
     type: ThumbnailType = .photo,
     rowCount: Int? = nil,
+    layout: Layout = .grid,
     onDelete: ((Thumbnail) -> Void)? = nil,
     onThumbnailTapped: ((Thumbnail) -> Void)? = nil,
     onRemainingCountTapped: (() -> Void)? = nil
@@ -64,16 +85,18 @@ public struct SDGThumbnails: View {
     self.thumbnails = thumbnails
     self.type = type
     self.rowCount = rowCount
+    self.layout = layout
     self.onDelete = onDelete
     self.onThumbnailTapped = onThumbnailTapped
     self.onRemainingCountTapped = onRemainingCountTapped
   }
 
   /// 기존 Photo 전용 API를 사용하는 화면의 동작과 호출 방식을 유지함.
-  @available(*, deprecated, renamed: "init(thumbnails:type:rowCount:onDelete:onThumbnailTapped:onRemainingCountTapped:)")
+  @available(*, deprecated, renamed: "init(thumbnails:type:rowCount:layout:onDelete:onThumbnailTapped:onRemainingCountTapped:)")
   public init(
     photos: [Photo],
     rowCount: Int? = nil,
+    layout: Layout = .grid,
     onDelete: ((Photo) -> Void)? = nil,
     onThumbnailTapped: ((Photo) -> Void)? = nil,
     onRemainingCountTapped: (() -> Void)? = nil
@@ -82,13 +105,25 @@ public struct SDGThumbnails: View {
       thumbnails: photos,
       type: .photo,
       rowCount: rowCount,
+      layout: layout,
       onDelete: onDelete,
       onThumbnailTapped: onThumbnailTapped,
       onRemainingCountTapped: onRemainingCountTapped
     )
   }
 
+  @ViewBuilder
   public var body: some View {
+    switch layout {
+    case .grid:
+      grid
+
+    case .lazyGrid:
+      lazyGrid
+    }
+  }
+
+  private var grid: some View {
     Grid(
       horizontalSpacing: Constants.spacing,
       verticalSpacing: Constants.spacing
@@ -108,6 +143,26 @@ public struct SDGThumbnails: View {
             }
           }
         }
+      }
+    }
+  }
+
+  private var lazyGrid: some View {
+    let displayThumbnails = Array(thumbnails.prefix(displaySlotCount))
+    let placeholderCount = max(displaySlotCount - displayThumbnails.count, 0)
+    let lastThumbnailID = displayThumbnails.last?.id
+
+    return LazyVGrid(columns: columns, spacing: Constants.spacing) {
+      ForEach(displayThumbnails) { thumbnail in
+        thumbnailCell(
+          thumbnail: thumbnail,
+          showsRemainingCount: thumbnail.id == lastThumbnailID && remainingCount > 0
+        )
+      }
+
+      ForEach(0..<placeholderCount, id: \.self) { _ in
+        Color.clear
+          .aspectRatio(1, contentMode: .fit)
       }
     }
   }
@@ -158,6 +213,7 @@ public struct SDGThumbnailElement: View {
 
   public struct Thumbnail: Identifiable, Equatable {
     public enum Source {
+      case data(Data)
       case image(Image)
       case url(URL)
     }
@@ -172,6 +228,10 @@ public struct SDGThumbnailElement: View {
 
     public init(id: String, image: Image) {
       self.init(id: id, source: .image(image))
+    }
+
+    public init(id: String, data: Data) {
+      self.init(id: id, source: .data(data))
     }
 
     public init(id: String, url: URL) {
@@ -276,6 +336,9 @@ public struct SDGThumbnailElement: View {
   @ViewBuilder
   private var thumbnailImage: some View {
     switch thumbnail.source {
+    case .data(let data):
+      dataImage(data)
+
     case .image(let image):
       image
         .resizable()
@@ -286,6 +349,16 @@ public struct SDGThumbnailElement: View {
           Color.neutral150
         }
         .resizable()
+    }
+  }
+
+  @ViewBuilder
+  private func dataImage(_ data: Data) -> some View {
+    if let image = UIImage(data: data) {
+      Image(uiImage: image)
+        .resizable()
+    } else {
+      Color.neutral150
     }
   }
 }
@@ -317,6 +390,7 @@ public typealias SDGPhotoThumbnailGrid = SDGThumbnails
         .init(id: "photo-\($0)", image: Image(sdg: .avatarEmptyDot))
       },
       rowCount: 1,
+      layout: .lazyGrid,
       onThumbnailTapped: { _ in },
       onRemainingCountTapped: {}
     )
