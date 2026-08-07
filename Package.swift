@@ -31,5 +31,6 @@ let package = Package(
       name: "ShoplDesignGuideTests",
       dependencies: ["ShoplDesignGuide"]
     ),
-  ]
+  ],
+  swiftLanguageModes: [.v5]
 )
