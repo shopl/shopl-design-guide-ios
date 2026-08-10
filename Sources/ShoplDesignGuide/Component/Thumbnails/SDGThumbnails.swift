@@ -363,9 +363,6 @@ public struct SDGThumbnailElement: View {
   }
 }
 
-@available(*, deprecated, renamed: "SDGThumbnails")
-public typealias SDGPhotoThumbnailGrid = SDGThumbnails
-
 #Preview {
   VStack(alignment: .leading, spacing: 24) {
     SDGThumbnails(
