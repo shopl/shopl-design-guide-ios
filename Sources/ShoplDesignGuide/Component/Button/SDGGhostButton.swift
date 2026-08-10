@@ -9,6 +9,7 @@
 import SwiftUI
 
 public struct SDGGhostButton: View {
+  public static let version = "2.0.0"
   
   private let title: String
   private let titleColor: SDG.Color

@@ -8,6 +8,7 @@
 import SwiftUI
 
 public struct SDGToggle: View {
+  public static let version = "2.1.26"
 
   private enum Constants {
     static let animationDuration = 0.2
@@ -15,7 +16,7 @@ public struct SDGToggle: View {
     static let mediumHeight: CGFloat = 22
     static let mediumThumbSize: CGFloat = 18
     static let mediumThumbOffset: CGFloat = 9
-    static let smallWidth: CGFloat = 30
+    static let smallWidth: CGFloat = 28
     static let smallHeight: CGFloat = 16
     static let smallThumbSize: CGFloat = 14
     static let smallThumbOffset: CGFloat = 6.75

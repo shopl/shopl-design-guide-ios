@@ -9,7 +9,8 @@
 import SwiftUI
 
 public struct SDGBottomButton: View {
-    
+  public static let version = "2.0.0"
+
   public struct Option {
     let type: `Type`
     let spec: Spec

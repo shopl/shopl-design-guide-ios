@@ -49,45 +49,7 @@ public struct SDGSimpleInput: View {
     }
   }
 
-  public enum `Type`: Equatable {
-    case solid
-    case line(color: Color)
-  }
-
-  public enum InputState: Equatable {
-    case `default`
-    case active
-    case completed
-    case error(String?)
-    case disabled
-
-    var state: State {
-      switch self {
-      case .default: return .default
-      case .active: return .focused
-      case .completed: return .completed
-      case .error(let message): return .error(message)
-      case .disabled: return .disabled
-      }
-    }
-
-    init(state: State) {
-      switch state {
-      case .default:
-        self = .default
-      case .focused:
-        self = .active
-      case .completed:
-        self = .completed
-      case .disabled:
-        self = .disabled
-      case .error(let message):
-        self = .error(message)
-      }
-    }
-  }
-
-  @Binding private var state: State
+  private let state: State
   @Binding private var text: String
 
   @FocusState private var isTextFieldFocused: Bool
@@ -96,13 +58,14 @@ public struct SDGSimpleInput: View {
   private let style: Style
   private let placeholder: String
   private let inputFieldColor: Color
-  private let outlinedStrokeColor: Color?
   private let keyboardType: UIKeyboardType
   private let maxCount: Int
 
   private var effectiveState: State {
     guard !state.isDisabled else { return .disabled }
-    return internalIsFocused ? .focused : state
+    // 외부에서 에러 상태가 들어와도 실제 TextField가 포커스 중이면 편집을 유지함.
+    // state 변경과 FocusState 갱신 사이의 한 프레임 차이로 키보드가 내려가는 것을 방지함.
+    return internalIsFocused || isTextFieldFocused ? .focused : state
   }
 
   private var hasError: Bool {
@@ -123,7 +86,7 @@ public struct SDGSimpleInput: View {
     case .solid:
       return .clear
     case .outlined:
-      return hasError ? .red300 : outlinedStrokeColor ?? .neutral200
+      return hasError ? .red300 : .neutral200
     }
   }
 
@@ -150,23 +113,17 @@ public struct SDGSimpleInput: View {
 
   private var isEditingState: Bool {
     switch effectiveState {
-    case .default, .focused: return true
-    case .completed, .disabled, .error: return false
+    // 최대 글자 수 초과 등 실시간 검증 오류가 발생해도 TextField를 유지해야
+    // 상태 변경으로 키보드가 닫히지 않고 바로 수정할 수 있음.
+    case .default, .focused, .error: return true
+    case .completed, .disabled: return false
     }
-  }
-
-  private var nextRestingState: State {
-    text.isEmpty ? .default : .completed
-  }
-
-  private var nextFocusedState: State {
-    state.isError ? state : .focused
   }
 
   public init(
     style: Style = .solid,
     inputField: InputField = .lightGray,
-    state: Binding<State>,
+    state: State = .default,
     text: Binding<String>,
     placeholder: String,
     keyboardType: UIKeyboardType = .default,
@@ -175,7 +132,6 @@ public struct SDGSimpleInput: View {
     self.init(
       style: style,
       inputFieldColor: inputField.color,
-      outlinedStrokeColor: nil,
       state: state,
       text: text,
       placeholder: placeholder,
@@ -184,63 +140,18 @@ public struct SDGSimpleInput: View {
     )
   }
 
-  // 기존 type/state/hint API를 사용하는 호출부 호환용입니다.
-  @available(*, deprecated, message: "Use init(style:inputField:state:text:placeholder:keyboardType:maxCount:) instead.")
   public init(
-    type: `Type`,
-    state: Binding<SDGSimpleInput.InputState>,
-    text: Binding<String>,
-    hint: String,
-    keyboardType: UIKeyboardType = .default,
-    backgroundColor: Color? = nil,
-    maxCount: Int = 10000
-  ) {
-    switch type {
-    case .solid:
-      self.init(
-        style: .solid,
-        inputFieldColor: backgroundColor ?? .neutral50,
-        outlinedStrokeColor: nil,
-        state: Binding<State>(
-          get: { state.wrappedValue.state },
-          set: { state.wrappedValue = InputState(state: $0) }
-        ),
-        text: text,
-        placeholder: hint,
-        keyboardType: keyboardType,
-        maxCount: maxCount
-      )
-    case .line(let color):
-      self.init(
-        style: .outlined,
-        inputFieldColor: .neutral0,
-        outlinedStrokeColor: color,
-        state: Binding<State>(
-          get: { state.wrappedValue.state },
-          set: { state.wrappedValue = InputState(state: $0) }
-        ),
-        text: text,
-        placeholder: hint,
-        keyboardType: keyboardType,
-        maxCount: maxCount
-      )
-    }
-  }
-
-  init(
-    style: Style,
+    style: Style = .solid,
     inputFieldColor: Color,
-    outlinedStrokeColor: Color?,
-    state: Binding<State>,
+    state: State = .default,
     text: Binding<String>,
     placeholder: String,
-    keyboardType: UIKeyboardType,
-    maxCount: Int
+    keyboardType: UIKeyboardType = .default,
+    maxCount: Int = 10000
   ) {
     self.style = style
     self.inputFieldColor = inputFieldColor
-    self.outlinedStrokeColor = outlinedStrokeColor
-    self._state = state
+    self.state = state
     self._text = text
     self.placeholder = placeholder
     self.keyboardType = keyboardType
@@ -333,7 +244,6 @@ public struct SDGSimpleInput: View {
     guard !effectiveState.isDisabled else { return }
 
     internalIsFocused = true
-    state = nextFocusedState
     focusTextFieldIfNeeded()
   }
 
@@ -354,14 +264,6 @@ public struct SDGSimpleInput: View {
     }
 
     internalIsFocused = isFocused
-    if isFocused {
-      state = nextFocusedState
-      return
-    }
-
-    // 포커스 해제만으로 검증 에러가 정상 상태로 덮이지 않도록 에러 상태는 유지합니다.
-    guard !state.isError else { return }
-    state = nextRestingState
   }
 
   private func syncFocus(with newState: State) {
@@ -480,7 +382,7 @@ private struct SDGSimpleInputDesignResourcePreview: View {
         SDGSimpleInput(
           style: style,
           inputField: inputField,
-          state: .constant(state),
+          state: state,
           text: .constant(state == .default ? "" : text),
           placeholder: placeholder
         )

@@ -20,8 +20,8 @@ public enum SDGButtonSize: Equatable {
   var cornerRadius: CGFloat {
     switch self {
     case .medium: return 12
-    case .small: return 10
-    case .ssmall: return 10
+    case .small: return 8
+    case .ssmall: return 8
     case .xsmall: return 6
     }
   }
@@ -32,6 +32,14 @@ public enum SDGButtonSize: Equatable {
     case .small: return 3
     case .ssmall: return 2
     case .xsmall: return 2
+    }
+  }
+  
+  var iconSize: CGFloat {
+    switch self {
+    case .medium: return 16
+    case .small, .ssmall: return 14
+    case .xsmall: return 12
     }
   }
   

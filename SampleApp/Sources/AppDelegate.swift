@@ -10,15 +10,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     
+    SDGViewConfig.configure()
+    
     let appView = AppView()
     
     let window = UIWindow(frame: UIScreen.main.bounds)
     window.rootViewController = UIHostingController(rootView: appView)
     self.window = window
     window.makeKeyAndVisible()
-    
-    DSViewConfig.configure()
-    
+
     return true
   }
 }
