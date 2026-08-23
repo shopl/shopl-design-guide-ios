@@ -125,7 +125,6 @@ extension SDGCustomForm {
 
 struct SDGCustomForm_Wrapper: View {
   @State var simpleInputText: String = ""
-  @State var inputState: SDGSimpleInput.InputState = .default
 
   var body: some View {
     VStack {
@@ -137,20 +136,16 @@ struct SDGCustomForm_Wrapper: View {
                     tintColor: .neutral700),
         onRefresh: {
           simpleInputText = ""
-          inputState = .default
         },
         bodyArea: {
           SDGSimpleInput(
-            type: .solid,
-            state: $inputState,
+            style: .solid,
+            state: .default,
             text: $simpleInputText,
-            hint: "입력"
+            placeholder: "입력"
           )
-          .onChange(of: simpleInputText) { newValue in
-            inputState = newValue.isEmpty ? .default : .completed
-          }
         },
-        status: inputState == .default ? .default : .completed
+        status: simpleInputText.isEmpty ? .default : .completed
       )
 
       SDGCustomForm(
