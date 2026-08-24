@@ -8,18 +8,56 @@
 import SwiftUI
 
 public struct SDGGuideContainer<Body: View>: View {
-  public static var version: String { "2.1.10" }
+  public static var version: String { "2.3.27" }
 
   private let model: Model
   private let contentArea: Body
   
+  public enum TextAlignment {
+    case left
+    case right
+
+    var frameAlignment: Alignment {
+      switch self {
+      case .left: return .leading
+      case .right: return .trailing
+      }
+    }
+
+    var multilineTextAlignment: SwiftUI.TextAlignment {
+      switch self {
+      case .left: return .leading
+      case .right: return .trailing
+      }
+    }
+  }
+
   public struct Model {
-    let message: String?
-    let messageColor: SDG.Color
+    let text: String?
+    let textColor: SDG.Color
+    let textAlignment: TextAlignment
     
-    public init(message: String?, messageColor: SDG.Color) {
-      self.message = message
-      self.messageColor = messageColor
+    public init(
+      text: String?,
+      textColor: SDG.Color = .neutral700,
+      textAlignment: TextAlignment = .left
+    ) {
+      self.text = text
+      self.textColor = textColor
+      self.textAlignment = textAlignment
+    }
+
+    // 기존 message/messageColor API를 사용하는 호출부 호환용입니다.
+    @available(*, deprecated, message: "Use init(text:textColor:textAlignment:) instead.")
+    public init(
+      message: String?,
+      messageColor: SDG.Color
+    ) {
+      self.init(
+        text: message,
+        textColor: messageColor,
+        textAlignment: .left
+      )
     }
   }
   
@@ -30,21 +68,40 @@ public struct SDGGuideContainer<Body: View>: View {
     self.model = model
     self.contentArea = contentArea()
   }
+
+  public init(
+    text: String?,
+    textColor: SDG.Color = .neutral700,
+    textAlignment: TextAlignment = .left,
+    @ViewBuilder contentArea: @escaping () -> Body,
+  ) {
+    self.init(
+      model: .init(
+        text: text,
+        textColor: textColor,
+        textAlignment: textAlignment
+      ),
+      contentArea: contentArea
+    )
+  }
   
   public var body: some View {
     VStack(spacing: 10) {
       contentArea
       
-      message
+      guideText
     }
   }
   
   @ViewBuilder
-  private var message: some View {
-    if let message = model.message {
-      Text(message)
-        .typo(.body3_R, model.messageColor)
-        .frame(maxWidth: .infinity, alignment: .leading)
+  private var guideText: some View {
+    if let text = model.text {
+      Text(text)
+        .typo(.body3_R, model.textColor)
+        .frame(maxWidth: .infinity, alignment: model.textAlignment.frameAlignment)
+        .multilineTextAlignment(model.textAlignment.multilineTextAlignment)
+        .lineLimit(nil)
+        .fixedSize(horizontal: false, vertical: true)
     }
   }
 }
@@ -53,20 +110,18 @@ public struct SDGGuideContainer<Body: View>: View {
   VStack(spacing: 20) {
     SDGGuideContainer(
       model: .init(
-        message: "meassage area",
-        messageColor: .red300
+        text: "text area",
+        textColor: .red300,
+        textAlignment: .left
       )
     ) {
       SDGSelectForm(
         title: "Select Form",
         type: .normal,
         inputModel: .init(
-          item: .init(
-            text: nil,
-            placeholder: "입력"
-          ),
-          backgroundColor: .neutral0,
-          status: .default
+          placeholder: "입력",
+          inputField: .white,
+          state: .default
         ),
         onRefresh: {},
         onSelect: {}
@@ -75,20 +130,18 @@ public struct SDGGuideContainer<Body: View>: View {
     
     SDGGuideContainer(
       model: .init(
-        message: nil,
-        messageColor: .red300
+        text: "right aligned text area",
+        textColor: .neutral700,
+        textAlignment: .right
       )
     ) {
       SDGSelectForm(
         title: "Select Form",
         type: .normal,
         inputModel: .init(
-          item: .init(
-            text: nil,
-            placeholder: "입력"
-          ),
-          backgroundColor: .neutral0,
-          status: .default
+          placeholder: "입력",
+          inputField: .white,
+          state: .default
         ),
         onRefresh: {},
         onSelect: {}

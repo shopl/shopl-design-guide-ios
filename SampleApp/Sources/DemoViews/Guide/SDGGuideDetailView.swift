@@ -113,6 +113,8 @@ struct SDGGuideDetailView: View {
       return SDGRadio.version
     case "component_toggle":
       return SDGToggle.version
+    case "component_thumbnails":
+      return SDGThumbnails.version
     default:
       return nil
     }
