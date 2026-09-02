@@ -197,6 +197,7 @@ public extension SDG.Image {
     static let icTypeWorkplace = SDG.Image(name: "ic_type_workplace", bundle: dsBundle)
     static let icTypeYesno = SDG.Image(name: "ic_type_yesno", bundle: dsBundle)
     static let icView = SDG.Image(name: "ic_view", bundle: dsBundle)
+    static let icWarning = SDG.Image(name: "ic_warning", bundle: dsBundle)
     static let icWeek = SDG.Image(name: "ic_week", bundle: dsBundle)
     static let icons = SDG.Image(name: "icons", bundle: dsBundle)
     static let leaderBadge = SDG.Image(name: "leader_badge", bundle: dsBundle)
