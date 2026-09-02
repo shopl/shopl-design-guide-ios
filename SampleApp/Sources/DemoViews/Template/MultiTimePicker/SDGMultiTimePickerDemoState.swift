@@ -20,9 +20,12 @@ final class SDGMultiTimePickerDemoState: ObservableObject {
   @Published var showsTitle = true
   @Published var is24HourFormat = true
   @Published var isPresented = false
-  @Published private(set) var selectedDate = SDGMultiTimePickerDemoState.makeDate(hour: 9)
-  @Published private(set) var startDate = SDGMultiTimePickerDemoState.makeDate(hour: 9)
-  @Published private(set) var endDate = SDGMultiTimePickerDemoState.makeDate(hour: 18)
+  @Published private(set) var selectedTime =
+    SDGMultiTimePickerDemoState.makeTime(hour: 9)
+  @Published private(set) var startTime =
+    SDGMultiTimePickerDemoState.makeTime(hour: 9)
+  @Published private(set) var endTime =
+    SDGMultiTimePickerDemoState.makeTime(hour: 18)
 
   private init() { }
 
@@ -41,11 +44,11 @@ final class SDGMultiTimePickerDemoState: ObservableObject {
   var pickerType: SDGMultiTimePicker.`Type` {
     switch selectedType {
     case .single:
-      return .single(selectedDate: selectedDate)
+      return .single(selectedTime: selectedTime)
     case .multi:
       return .multi(
-        startDate: startDate,
-        endDate: endDate,
+        startTime: startTime,
+        endTime: endTime,
         initialSelection: initialSelection.selection
       )
     }
@@ -54,9 +57,9 @@ final class SDGMultiTimePickerDemoState: ObservableObject {
   var confirmedValue: String {
     switch selectedType {
     case .single:
-      return formattedTime(selectedDate)
+      return selectedTime.hhmm
     case .multi:
-      return "\(formattedTime(startDate)) ~ \(formattedTime(endDate))"
+      return "\(startTime.hhmm) ~ \(endTime.hhmm)"
     }
   }
 
@@ -70,29 +73,18 @@ final class SDGMultiTimePickerDemoState: ObservableObject {
 
   func confirm(_ value: SDGMultiTimePicker.Value) {
     switch value {
-    case let .single(date):
-      selectedDate = date
-    case let .multi(startDate, endDate):
-      self.startDate = startDate
-      self.endDate = endDate
+    case let .single(time):
+      selectedTime = time
+    case let .multi(startTime, endTime):
+      self.startTime = startTime
+      self.endTime = endTime
     }
 
     isPresented = false
   }
 
-  private func formattedTime(_ date: Date) -> String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "HH:mm"
-    return formatter.string(from: date)
-  }
-
-  private static func makeDate(hour: Int) -> Date {
-    Calendar.current.date(
-      bySettingHour: hour,
-      minute: 0,
-      second: 0,
-      of: Date()
-    ) ?? Date()
+  private static func makeTime(hour: Int) -> SDGTimeValue {
+    return SDGTimeValue(hour: hour, minute: 0) ?? .midnight
   }
 }
 
