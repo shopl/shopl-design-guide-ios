@@ -44,8 +44,12 @@ public struct SDGMultiTimePicker: View {
   public static let version = "2.0.0"
 
   public enum `Type`: Equatable {
-    case single(selectedDate: Date)
-    case multi(startDate: Date, endDate: Date, initialSelection: Selection)
+    case single(selectedTime: SDGTimeValue)
+    case multi(
+      startTime: SDGTimeValue,
+      endTime: SDGTimeValue,
+      initialSelection: Selection
+    )
   }
 
   public enum Selection: Equatable {
@@ -54,8 +58,11 @@ public struct SDGMultiTimePicker: View {
   }
 
   public enum Value: Equatable {
-    case single(Date)
-    case multi(startDate: Date, endDate: Date)
+    case single(SDGTimeValue)
+    case multi(
+      startTime: SDGTimeValue,
+      endTime: SDGTimeValue
+    )
   }
 
   private enum Mode {
@@ -65,25 +72,25 @@ public struct SDGMultiTimePicker: View {
 
   private struct Draft {
     let mode: Mode
-    var selectedDate: Date
-    var startDate: Date
-    var endDate: Date
+    var selectedTime: SDGTimeValue
+    var startTime: SDGTimeValue
+    var endTime: SDGTimeValue
     var selection: Selection
 
     init(type: Type) {
       switch type {
-      case let .single(selectedDate):
+      case let .single(selectedTime):
         self.mode = .single
-        self.selectedDate = selectedDate
-        self.startDate = selectedDate
-        self.endDate = selectedDate
+        self.selectedTime = selectedTime
+        self.startTime = selectedTime
+        self.endTime = selectedTime
         self.selection = .start
 
-      case let .multi(startDate, endDate, initialSelection):
+      case let .multi(startTime, endTime, initialSelection):
         self.mode = .multi
-        self.selectedDate = startDate
-        self.startDate = startDate
-        self.endDate = endDate
+        self.selectedTime = startTime
+        self.startTime = startTime
+        self.endTime = endTime
         self.selection = initialSelection
       }
     }
@@ -91,9 +98,9 @@ public struct SDGMultiTimePicker: View {
     var value: Value {
       switch mode {
       case .single:
-        return .single(selectedDate)
+        return .single(selectedTime)
       case .multi:
-        return .multi(startDate: startDate, endDate: endDate)
+        return .multi(startTime: startTime, endTime: endTime)
       }
     }
   }
@@ -166,6 +173,8 @@ public struct SDGMultiTimePicker: View {
         selectedDate: selectedDateBinding,
         is24HourFormat: is24HourFormat
       )
+      .environment(\.timeZone, SDGTimeValueDateBridge.timeZone)
+      .environment(\.calendar, SDGTimeValueDateBridge.calendar)
 
     case .multi:
       VStack(spacing: 24) {
@@ -175,6 +184,8 @@ public struct SDGMultiTimePicker: View {
           selectedDate: selectedMultiDateBinding,
           is24HourFormat: is24HourFormat
         )
+        .environment(\.timeZone, SDGTimeValueDateBridge.timeZone)
+        .environment(\.calendar, SDGTimeValueDateBridge.calendar)
       }
     }
   }
@@ -182,7 +193,7 @@ public struct SDGMultiTimePicker: View {
   private var multiTimeBoxes: some View {
     HStack(spacing: 4) {
       timeBox(
-        date: draft.startDate,
+        time: draft.startTime,
         selection: .start
       )
 
@@ -190,20 +201,20 @@ public struct SDGMultiTimePicker: View {
         .typo(.body1_R, .neutral700)
 
       timeBox(
-        date: draft.endDate,
+        time: draft.endTime,
         selection: .end
       )
     }
   }
 
   private func timeBox(
-    date: Date,
+    time: SDGTimeValue,
     selection: Selection
   ) -> some View {
     Button {
       draft.selection = selection
     } label: {
-      Text(sdg: formattedTime(date))
+      Text(sdg: time.hhmm)
         .typo(.body1_R, draft.selection == selection ? .primary300 : .neutral700)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 12)
@@ -223,10 +234,10 @@ public struct SDGMultiTimePicker: View {
   private var selectedDateBinding: Binding<Date> {
     Binding(
       get: {
-        draft.selectedDate
+        SDGTimeValueDateBridge.date(from: draft.selectedTime)
       },
-      set: {
-        draft.selectedDate = $0
+      set: { selectedDate in
+        draft.selectedTime = SDGTimeValueDateBridge.time(from: selectedDate)
       }
     )
   }
@@ -236,25 +247,52 @@ public struct SDGMultiTimePicker: View {
       get: {
         switch draft.selection {
         case .start:
-          return draft.startDate
+          return SDGTimeValueDateBridge.date(from: draft.startTime)
         case .end:
-          return draft.endDate
+          return SDGTimeValueDateBridge.date(from: draft.endTime)
         }
       },
       set: { selectedDate in
+        let selectedTime = SDGTimeValueDateBridge.time(from: selectedDate)
+
         switch draft.selection {
         case .start:
-          draft.startDate = selectedDate
+          draft.startTime = selectedTime
         case .end:
-          draft.endDate = selectedDate
+          draft.endTime = selectedTime
         }
       }
     )
   }
+}
 
-  private func formattedTime(_ date: Date) -> String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "HH:mm"
-    return formatter.string(from: date)
+enum SDGTimeValueDateBridge {
+  static let timeZone = TimeZone.gmt
+
+  static let calendar: Calendar = {
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = timeZone
+    return calendar
+  }()
+
+  private static let referenceDate = Date(timeIntervalSinceReferenceDate: 0)
+
+  static func date(from time: SDGTimeValue) -> Date {
+    return referenceDate.addingTimeInterval(
+      TimeInterval(time.hour * 60 * 60 + time.minute * 60)
+    )
+  }
+
+  static func time(from date: Date) -> SDGTimeValue {
+    let components = calendar.dateComponents([.hour, .minute], from: date)
+
+    guard let hour = components.hour,
+      let minute = components.minute,
+      let time = SDGTimeValue(hour: hour, minute: minute)
+    else {
+      return .midnight
+    }
+
+    return time
   }
 }
