@@ -82,7 +82,7 @@ struct HideWhenKeyboardAppearModifier: ViewModifier {
       let keyboardIntersection = window.bounds.intersection(keyboardFrame)
 
       isKeyboardVisible = !keyboardIntersection.isNull
-        && keyboardIntersection.height > 0
+        && keyboardIntersection.height > 0.5
     }
 
     guard window.isKeyWindow,
