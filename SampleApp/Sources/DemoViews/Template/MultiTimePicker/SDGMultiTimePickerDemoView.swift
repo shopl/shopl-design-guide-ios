@@ -59,10 +59,7 @@ struct SDGMultiTimePickerDemoView: View {
   }
 
   private var optionsSection: some View {
-    VStack(spacing: 16) {
-      optionRow(title: "Title", isOn: $state.showsTitle)
-      optionRow(title: "24-hour format", isOn: $state.is24HourFormat)
-    }
+    optionRow(title: "Title", isOn: $state.showsTitle)
   }
 
   private var confirmedValueSection: some View {
@@ -104,7 +101,6 @@ struct SDGMultiTimePickerDemoView: View {
       isPresented: state.isPresented,
       title: state.title,
       type: state.pickerType,
-      is24HourFormat: state.is24HourFormat,
       cancelTitle: "Cancel",
       confirmTitle: "Confirm",
       cancelAction: {
