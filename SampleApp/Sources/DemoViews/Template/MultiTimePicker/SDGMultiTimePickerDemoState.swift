@@ -18,7 +18,6 @@ final class SDGMultiTimePickerDemoState: ObservableObject {
   @Published var selectedTypeIndex = 0
   @Published var initialSelectionIndex = 0
   @Published var showsTitle = true
-  @Published var is24HourFormat = true
   @Published var isPresented = false
   @Published private(set) var selectedTime =
     SDGMultiTimePickerDemoState.makeTime(hour: 9)

@@ -13,7 +13,6 @@ extension View {
     isPresented: Bool,
     title: String? = nil,
     type: SDGMultiTimePicker.`Type`,
-    is24HourFormat: Bool,
     cancelTitle: String,
     confirmTitle: String,
     cancelAction: @escaping () -> Void,
@@ -29,7 +28,6 @@ extension View {
         SDGMultiTimePicker(
           title: title,
           type: type,
-          is24HourFormat: is24HourFormat,
           cancelTitle: cancelTitle,
           confirmTitle: confirmTitle,
           cancelAction: cancelAction,
@@ -106,7 +104,6 @@ public struct SDGMultiTimePicker: View {
   }
 
   private let title: String?
-  private let is24HourFormat: Bool
   private let cancelTitle: String
   private let confirmTitle: String
   private let cancelAction: () -> Void
@@ -117,14 +114,12 @@ public struct SDGMultiTimePicker: View {
   public init(
     title: String? = nil,
     type: Type,
-    is24HourFormat: Bool,
     cancelTitle: String,
     confirmTitle: String,
     cancelAction: @escaping () -> Void,
     confirmAction: @escaping (Value) -> Void
   ) {
     self.title = title
-    self.is24HourFormat = is24HourFormat
     self.cancelTitle = cancelTitle
     self.confirmTitle = confirmTitle
     self.cancelAction = cancelAction
@@ -170,8 +165,7 @@ public struct SDGMultiTimePicker: View {
     switch draft.mode {
     case .single:
       SDGTimePicker(
-        selectedDate: selectedDateBinding,
-        is24HourFormat: is24HourFormat
+        selectedDate: selectedDateBinding
       )
       .environment(\.timeZone, SDGTimeValueDateBridge.timeZone)
       .environment(\.calendar, SDGTimeValueDateBridge.calendar)
@@ -181,8 +175,7 @@ public struct SDGMultiTimePicker: View {
         multiTimeBoxes
 
         SDGTimePicker(
-          selectedDate: selectedMultiDateBinding,
-          is24HourFormat: is24HourFormat
+          selectedDate: selectedMultiDateBinding
         )
         .environment(\.timeZone, SDGTimeValueDateBridge.timeZone)
         .environment(\.calendar, SDGTimeValueDateBridge.calendar)
