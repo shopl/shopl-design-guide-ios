@@ -169,7 +169,9 @@ public struct SDGFixedTextInput: View {
 
   private var inputField: some View {
     textEditor
-      .padding(.spacing12)
+    // Include TextEditor's default insets (vertical 8, horizontal 5) in the 12pt padding.
+      .padding(.vertical, 4)
+      .padding(.horizontal, 7)
       .frame(
         maxWidth: .infinity,
         minHeight: inputViewHeight,
