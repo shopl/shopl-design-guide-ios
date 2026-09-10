@@ -138,7 +138,7 @@ private struct SDGSelectInputElementView: View {
       }
 
       Text(state == .default ? placeholder : element?.text ?? placeholder)
-        .typo(.body1_R, state == .default ? .neutral300 : .neutral700)
+        .typo(.body1_R, state == .default ? .neutral350 : .neutral700)
         .frame(maxWidth: .infinity, alignment: .leading)
         .lineLimit(1)
         .truncationMode(isMultipleSelection ? .middle : .tail)
