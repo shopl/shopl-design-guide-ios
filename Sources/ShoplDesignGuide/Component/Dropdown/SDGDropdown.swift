@@ -57,13 +57,13 @@ public struct SDGDropdown: View {
 
   private var textColor: SDG.Color {
     switch model.status {
-    case .default, .disabled: return .neutral300
-    case .selected, .error: return .neutral700
+    case .default: return .neutral350
+    case .selected, .disabled, .error: return .neutral700
     }
   }
 
   private var iconColor: Color {
-    model.status == .disabled ? .neutral300 : .neutral700
+    .neutral700
   }
 
   private var backgroundColor: Color {
@@ -91,6 +91,7 @@ public struct SDGDropdown: View {
       HStack(spacing: 10) {
         Text(model.displayText)
           .typo(.body1_R, textColor)
+          .opacity(isDisabled ? 0.3 : 1)
           .lineLimit(1)
           .truncationMode(.tail)
           .frame(maxWidth: .infinity, alignment: .leading)
@@ -99,6 +100,7 @@ public struct SDGDropdown: View {
           .resizable()
           .frame(width: 20, height: 20)
           .foregroundColor(iconColor)
+          .opacity(isDisabled ? 0.3 : 1)
       }
       .padding(.horizontal, 12)
       .frame(height: 40)

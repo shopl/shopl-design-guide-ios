@@ -16,7 +16,6 @@ extension View {
     inputTitle: String,
     placeholder: String,
     input: Binding<String>,
-    maxLength: Int,
     leftButtonOption: SDGCenterPopupButton.Button.Option,
     rightButtonOption: SDGCenterPopupButton.Button.Option,
     tapOutsideAction: (() -> Void)? = nil
@@ -33,7 +32,6 @@ extension View {
           inputTitle: inputTitle,
           placeholder: placeholder,
           input: input,
-          maxLength: maxLength,
           leftButtonOption: leftButtonOption,
           rightButtonOption: rightButtonOption
         )
@@ -49,7 +47,6 @@ public struct SDGInputPopup: View {
   let inputTitle: String
   let placeholder: String
   let input: Binding<String>
-  let maxLength: Int
   let leftButtonOption: SDGCenterPopupButton.Button.Option
   let rightButtonOption: SDGCenterPopupButton.Button.Option
   
@@ -74,14 +71,12 @@ public struct SDGInputPopup: View {
               .frame(maxWidth: .infinity, alignment: .leading)
             
             SDGFixedTextInput(
-              type: .solid,
+              style: .solid,
+              inputField: .lightGray,
+              state: .default,
               text: input,
-              placeHolder: placeholder,
-              backgroundColor: SDG.Color.neutral50.color,
-              maxCharacterCount: maxLength,
-              isFocused: .constant(false),
-              inputViewHeight: 104,
-              isError: .constant(nil)
+              placeholder: placeholder,
+              inputViewHeight: 104
             )
           }
         }
@@ -121,7 +116,6 @@ public struct SDGInputPopup: View {
         inputTitle: "인풋 타이틀",
         placeholder: "플레이스홀더",
         input: $input,
-        maxLength: 50,
         leftButtonOption: .init(
           title: "취소",
           action: { showPopup.toggle() }
