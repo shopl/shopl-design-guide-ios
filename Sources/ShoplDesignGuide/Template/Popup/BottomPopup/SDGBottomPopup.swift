@@ -104,7 +104,7 @@ public struct SDGBottomPopup<BodyContent: View>: View {
             
             Group {
               if hideButtonWhenKeyboardAppears {
-                button.hideWhenKeyboardAppear()
+                button.hideWhenKeyboardAppear(preservesLayout: false)
               } else {
                 button
               }
