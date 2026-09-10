@@ -113,6 +113,8 @@ struct SDGGuideDetailView: View {
       return SDGRadio.version
     case "component_toggle":
       return SDGToggle.version
+    case "template_multi_time_picker":
+      return SDGMultiTimePicker.version
     default:
       return nil
     }
