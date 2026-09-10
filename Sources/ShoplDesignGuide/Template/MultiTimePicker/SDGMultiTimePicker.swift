@@ -148,6 +148,7 @@ public struct SDGMultiTimePicker: View {
         )
       )
     )
+    .ignoresSafeArea(.keyboard, edges: .bottom)
   }
 
   private var popupTitle: SDGPopupTitle? {
