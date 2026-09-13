@@ -84,7 +84,7 @@ public struct SDGSelectForm: View {
 
         Spacer(minLength: 8)
 
-        if inputModel.status == .completed && !isRequiered {
+        if inputModel.state == .selected && !isRequiered {
           Button {
             onRefresh()
           } label: {
@@ -102,7 +102,7 @@ public struct SDGSelectForm: View {
         }
       }
 
-      SDGSelectInput(model: inputModel) { item in
+      SDGSelectInput(model: inputModel) {
         onSelect()
       }
     }
@@ -115,9 +115,9 @@ public struct SDGSelectForm: View {
       title: "타이틀",
       type: .empha,
       inputModel: .init(
-        item: .init(text: nil, placeholder: "입력"),
-        backgroundColor: .neutral50,
-        status: .default
+        placeholder: "입력",
+        inputField: .gray,
+        state: .default
       ),
       onRefresh: { },
       onSelect: { }
@@ -129,9 +129,9 @@ public struct SDGSelectForm: View {
       type: .empha,
       isRequiered: true,
       inputModel: .init(
-        item: .init(text: nil, placeholder: "입력"),
-        backgroundColor: .neutral50,
-        status: .default
+        placeholder: "입력",
+        inputField: .gray,
+        state: .default
       ),
       onRefresh: { },
       onSelect: { }
@@ -143,9 +143,10 @@ public struct SDGSelectForm: View {
       type: .empha,
       isRequiered: true,
       inputModel: .init(
-        item: .init(text: "입력했음", placeholder: "입력"),
-        backgroundColor: .neutral50,
-        status: .completed
+        selectedElements: [.init(text: "입력했음")],
+        placeholder: "입력",
+        inputField: .gray,
+        state: .selected
       ),
       onRefresh: { },
       onSelect: { }
@@ -156,9 +157,10 @@ public struct SDGSelectForm: View {
       type: .empha,
       isRequiered: true,
       inputModel: .init(
-        item: .init(text: "입력했음", placeholder: "입력"),
-        backgroundColor: .neutral50,
-        status: .completed
+        selectedElements: [.init(text: "입력했음")],
+        placeholder: "입력",
+        inputField: .gray,
+        state: .selected
       ),
       onRefresh: { },
       onSelect: { }
@@ -172,9 +174,10 @@ public struct SDGSelectForm: View {
       ],
       type: .empha,
       inputModel: .init(
-        item: .init(text: "입력했음", placeholder: "입력"),
-        backgroundColor: .neutral50,
-        status: .completed
+        selectedElements: [.init(text: "입력했음")],
+        placeholder: "입력",
+        inputField: .gray,
+        state: .selected
       ),
       onRefresh: { },
       onSelect: { }
@@ -184,12 +187,13 @@ public struct SDGSelectForm: View {
       title: "imageArea 있는 케이스",
       type: .empha,
       inputModel: .init(
-        item: .init(text: "입력했음", placeholder: "입력") {
+        selectedElements: [.init(text: "입력했음") {
           SDG.Image.icBarcode.image
             .templateIcon(size: 20, color: SDG.Color.neutral700.color)
-        },
-        backgroundColor: .neutral50,
-        status: .completed
+        }],
+        placeholder: "입력",
+        inputField: .gray,
+        state: .selected
       ),
       onRefresh: { },
       onSelect: { }
