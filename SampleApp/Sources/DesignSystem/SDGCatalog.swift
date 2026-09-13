@@ -833,6 +833,15 @@ enum SDGTemplateCatalog: CaseIterable, SDGCatalogItemRepresentable {
     case .radioLabel: return "Radio Label"
     }
   }
+
+  var viewID: String? {
+    switch self {
+    case .multiTimePicker:
+      return id
+    default:
+      return nil
+    }
+  }
   
   var implementationNames: [String] {
     switch self {

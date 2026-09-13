@@ -81,6 +81,7 @@ enum SDGImplementationManifest {
     "SDGListHeaderLabel",
     "SDGLoginInput",
     "SDGMiniProfile",
+    "SDGMultiTimePicker",
     "SDGNaviFilterChip",
     "SDGNumberIndicator",
     "SDGNumberPicker",

@@ -10,18 +10,29 @@ import SwiftUI
 import UIKit
 
 extension View {
-  public func hideWhenKeyboardAppear() -> some View {
-    self.modifier(HideWhenKeyboardAppearModifier())
+  public func hideWhenKeyboardAppear(
+    preservesLayout: Bool = true
+  ) -> some View {
+    self.modifier(
+      HideWhenKeyboardAppearModifier(
+        preservesLayout: preservesLayout
+      )
+    )
   }
 }
 
 struct HideWhenKeyboardAppearModifier: ViewModifier {
+  let preservesLayout: Bool
+
   @State private var isKeyboardAppeared: Bool = false
   @State private var markerViewBox = WeakViewBox()
 
   func body(content: Content) -> some View {
     content
       .isHidden(isKeyboardAppeared)
+      .frame(
+        height: isKeyboardAppeared && !preservesLayout ? 0 : nil
+      )
       .background(
         ScreenMarkerViewReader(
           viewBox: markerViewBox,
@@ -82,7 +93,7 @@ struct HideWhenKeyboardAppearModifier: ViewModifier {
       let keyboardIntersection = window.bounds.intersection(keyboardFrame)
 
       isKeyboardVisible = !keyboardIntersection.isNull
-        && keyboardIntersection.height > 0
+        && keyboardIntersection.height > 0.5
     }
 
     guard window.isKeyWindow,
