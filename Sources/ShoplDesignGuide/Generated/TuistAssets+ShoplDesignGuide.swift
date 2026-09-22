@@ -98,6 +98,7 @@ public extension SDG.Image {
     static let icCommonDropup = SDG.Image(name: "ic_common_dropup", bundle: dsBundle)
     static let icCommonDropupS = SDG.Image(name: "ic_common_dropup_s", bundle: dsBundle)
     static let icCommonEdit = SDG.Image(name: "ic_common_edit", bundle: dsBundle)
+    static let icCommonGo = SDG.Image(name: "ic_common_go", bundle: dsBundle)
     static let icCommonGps = SDG.Image(name: "ic_common_gps", bundle: dsBundle)
     static let icCommonGroup = SDG.Image(name: "ic_common_group", bundle: dsBundle)
     static let icCommonHelp2 = SDG.Image(name: "ic_common_help2", bundle: dsBundle)
