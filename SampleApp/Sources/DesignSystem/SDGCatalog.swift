@@ -836,7 +836,7 @@ enum SDGTemplateCatalog: CaseIterable, SDGCatalogItemRepresentable {
 
   var viewID: String? {
     switch self {
-    case .multiTimePicker:
+    case .history, .multiTimePicker:
       return id
     default:
       return nil
@@ -851,7 +851,7 @@ enum SDGTemplateCatalog: CaseIterable, SDGCatalogItemRepresentable {
     case .emptyImg: return ["SDGEmptyImg"]
     case .form: return ["SDGFixedTextForm", "SDGDropdownForm", "SDGSelectForm", "SDGSimpleTextForm", "SDGTimeSelectForm"]
     case .foundationList: return ["SDGFoundationList"]
-    case .history: return ["SDGHistoryHeader"]
+    case .history: return ["SDGHistoryHeader", "SDGCustomHistory"]
     case .listHeader: return ["SDGButtonHeader", "SDGIconHeader"]
     case .multiCalendar: return ["SDGMultiCalendar"]
     case .multiTimePicker: return ["SDGMultiTimePicker"]
