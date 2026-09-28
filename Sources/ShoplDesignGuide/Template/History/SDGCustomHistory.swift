@@ -82,9 +82,17 @@ public struct SDGCustomHistory<Header: View, Content: View>: View {
 
   public var body: some View {
     VStack(alignment: .leading, spacing: 0) {
-      headerArea
-        .padding(.top, .spacing20)
-        .padding(.bottom, .spacing16)
+      VStack(alignment: .leading, spacing: 0) {
+        headerArea
+      }
+      .transformAnchorPreference(
+        key: SDGHistoryHeaderBoundsKey.self,
+        value: .bounds
+      ) { bounds, anchor in
+        bounds = anchor
+      }
+      .padding(.top, .spacing20)
+      .padding(.bottom, .spacing16)
       if hasBody {
         bodyArea
           .padding(.bottom, .spacing20)
@@ -92,24 +100,42 @@ public struct SDGCustomHistory<Header: View, Content: View>: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding(.leading, .spacing32)
-    .overlay(alignment: .leading) {
-      SDGCustomHistoryTimeline(positionType: positionType, dotColor: dotColor)
-        .frame(width: 16)
-        .accessibilityHidden(true)
-        .allowsHitTesting(false)
+    .overlayPreferenceValue(SDGHistoryHeaderBoundsKey.self) { bounds in
+      GeometryReader { geometry in
+        if let bounds {
+          SDGCustomHistoryTimeline(
+            positionType: positionType,
+            dotColor: dotColor,
+            dotCenterY: geometry[bounds].midY
+          )
+          .frame(width: 16, height: geometry.size.height)
+        }
+      }
+      .accessibilityHidden(true)
+      .allowsHitTesting(false)
     }
+    .transformPreference(SDGHistoryHeaderBoundsKey.self) { $0 = nil }
+  }
+}
+
+private struct SDGHistoryHeaderBoundsKey: PreferenceKey {
+  static var defaultValue: Anchor<CGRect>? { nil }
+
+  static func reduce(value: inout Anchor<CGRect>?, nextValue: () -> Anchor<CGRect>?) {
+    value = nextValue() ?? value
   }
 }
 
 private struct SDGCustomHistoryTimeline: View {
   let positionType: HistoryPositionType
   let dotColor: SDG.Color
+  let dotCenterY: CGFloat
 
   var body: some View {
     VStack(spacing: .spacing4) {
       Rectangle()
         .fill(positionType.firstFooterColor)
-        .frame(width: 1, height: 21)
+        .frame(width: 1, height: max(0, dotCenterY - 8))
 
       Circle()
         .fill(dotColor.color)
@@ -132,17 +158,24 @@ private struct SDGCustomHistoryTimeline: View {
           totalCount: 3,
           dotColor: index == 2 ? .neutral700 : .neutral300
         ) {
-          HStack(spacing: 4) {
-            Text("\(index + 1)단계")
-              .typo(.body1_SB, .neutral700)
-            SDGBoxBadge(
-              text: index == 2 ? "협조" : "승인",
-              type: .solid(.init(backgroundColor: .neutral150, textColor: .neutral600))
-            )
-            Spacer()
-            Image(sdg: .icCommonNextS)
-              .resizable().frame(width: 14, height: 14)
+          VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 4) {
+              Text("\(index + 1)단계")
+                .typo(.body1_SB, .neutral700)
+              SDGBoxBadge(
+                text: index == 2 ? "협조" : "승인",
+                type: .solid(.init(backgroundColor: .neutral150, textColor: .neutral600))
+              )
+              Spacer()
+              Image(sdg: .icCommonNextS)
+                .resizable().frame(width: 14, height: 14)
+            }
+            if index == 1 {
+              Text("추가 설명이 포함된 Header")
+                .typo(.body2_R, .neutral400)
+            }
           }
+          .padding(.vertical, index == 1 ? 12 : 0)
         } bodyArea: {
           VStack(alignment: .leading, spacing: 8) {
             if index != 1 {
