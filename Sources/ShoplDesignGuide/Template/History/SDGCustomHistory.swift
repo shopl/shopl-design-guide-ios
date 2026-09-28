@@ -110,7 +110,7 @@ private struct SDGCustomHistoryTimeline: View {
     VStack(spacing: .spacing4) {
       Rectangle()
         .fill(positionType.firstFooterColor)
-        .frame(width: 1, height: 21)
+        .frame(width: 1, height: 20)
 
       Circle()
         .fill(dotColor.color)
