@@ -8,8 +8,5 @@
 
 import Foundation
 
-public enum SDGCheckOptionStatus {
-  case `default`
-  case selected
-  case disabled
-}
+@available(*, deprecated, renamed: "SDGCheckOptionState")
+public typealias SDGCheckOptionStatus = SDGCheckOptionState

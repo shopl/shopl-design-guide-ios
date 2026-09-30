@@ -9,17 +9,17 @@ import SwiftUI
 import ShoplDesignGuide
 
 final class SDGCheckOptionDemoState: ObservableObject {
-  let types = SDGCheckOptionDemoType.allCases
+  let styles = SDGCheckOptionDemoStyle.allCases
   let specs = SDGCheckOptionDemoSpec.allCases
 
-  @Published var selectedTypeIndex = 0
+  @Published var selectedStyleIndex = 0
   @Published var selectedSpecIndex = 0
-  @Published var selectedStatus: SDGCheckOptionDemoStatus = .default
+  @Published var selectedState: SDGCheckOptionDemoStateOption = .default
 
   init() { }
 
-  var selectedType: SDGCheckOptionDemoType {
-    types[safe: selectedTypeIndex] ?? .solid
+  var selectedStyle: SDGCheckOptionDemoStyle {
+    styles[safe: selectedStyleIndex] ?? .solid
   }
 
   var selectedSpec: SDGCheckOptionDemoSpec {
@@ -27,38 +27,36 @@ final class SDGCheckOptionDemoState: ObservableObject {
   }
 
   var previewItems: [SDGCheckOptionDemoPreviewItem] {
-    switch selectedStatus {
+    switch selectedState {
     case .default:
       return [
-        previewItem(id: "default", status: .default)
+        previewItem(id: "default", state: .default)
       ]
     case .selected:
       return [
-        previewItem(id: "selected-primary", status: .selected),
-        previewItem(id: "selected-neutral", status: .selected, selectedColor: .neutral)
+        previewItem(id: "selected-normal", state: .selected),
+        previewItem(id: "selected-neutral", state: .selected, selectColor: .neutral)
       ]
     case .disabled:
       return [
-        previewItem(id: "disabled", status: .disabled)
+        previewItem(id: "disabled", state: .disabled)
       ]
     }
   }
 
   private func previewItem(
     id: String,
-    status: SDGCheckOptionStatus,
-    selectedColor: SDGCheckOptionDemoSelectedColor = .primary
+    state: SDGCheckOptionState,
+    selectColor: SDGCheckOptionDemoSelectColor = .normal
   ) -> SDGCheckOptionDemoPreviewItem {
     SDGCheckOptionDemoPreviewItem(
-      id: "\(selectedType.id)-\(selectedSpec.id)-\(id)",
+      id: "\(selectedStyle.id)-\(selectedSpec.id)-\(id)",
       model: SDGCheckOption.Model(
-        status: status,
-        type: selectedType.checkOptionType,
-        spec: selectedSpec.checkOptionSpec
-      ),
-      type: selectedType,
-      spec: selectedSpec,
-      selectedColor: selectedColor
+        state: state,
+        style: selectedStyle.checkOptionStyle,
+        spec: selectedSpec.checkOptionSpec,
+        selectColor: selectColor.checkOptionSelectColor
+      )
     )
   }
 }
@@ -66,12 +64,9 @@ final class SDGCheckOptionDemoState: ObservableObject {
 struct SDGCheckOptionDemoPreviewItem: Identifiable {
   let id: String
   let model: SDGCheckOption.Model
-  let type: SDGCheckOptionDemoType
-  let spec: SDGCheckOptionDemoSpec
-  let selectedColor: SDGCheckOptionDemoSelectedColor
 }
 
-enum SDGCheckOptionDemoType: String, CaseIterable, Identifiable {
+enum SDGCheckOptionDemoStyle: String, CaseIterable, Identifiable {
   case solid = "Solid"
   case line = "Line"
 
@@ -83,7 +78,7 @@ enum SDGCheckOptionDemoType: String, CaseIterable, Identifiable {
     rawValue
   }
 
-  var checkOptionType: SDGCheckOption.CheckType {
+  var checkOptionStyle: SDGCheckOption.Style {
     switch self {
     case .solid:
       return .solid
@@ -113,18 +108,9 @@ enum SDGCheckOptionDemoSpec: String, CaseIterable, Identifiable {
       return .medim
     }
   }
-
-  var iconSize: CGFloat {
-    switch self {
-    case .large:
-      return 16
-    case .medium:
-      return 14
-    }
-  }
 }
 
-enum SDGCheckOptionDemoStatus: String, CaseIterable, Identifiable {
+enum SDGCheckOptionDemoStateOption: String, CaseIterable, Identifiable {
   case `default` = "Default"
   case selected = "Selected"
   case disabled = "Disabled"
@@ -138,9 +124,18 @@ enum SDGCheckOptionDemoStatus: String, CaseIterable, Identifiable {
   }
 }
 
-enum SDGCheckOptionDemoSelectedColor: Equatable {
-  case primary
+enum SDGCheckOptionDemoSelectColor: Equatable {
+  case normal
   case neutral
+
+  var checkOptionSelectColor: SDGCheckOption.SelectColor {
+    switch self {
+    case .normal:
+      return .normal
+    case .neutral:
+      return .neutral
+    }
+  }
 }
 
 private extension Array {
