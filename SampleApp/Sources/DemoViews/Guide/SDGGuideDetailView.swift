@@ -107,6 +107,8 @@ struct SDGGuideDetailView: View {
       return SDGFloatingButton.version
     case "component_ghost_button":
       return SDGGhostButton.version
+    case "component_icon_tab":
+      return SDGIconTab.version
     case "component_number_picker":
       return SDGNumberPicker.version
     case "component_radio":
