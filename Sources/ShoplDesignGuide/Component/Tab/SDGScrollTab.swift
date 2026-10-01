@@ -412,100 +412,213 @@ private struct LegacyConstrainedTabLayout: Layout {
   }
 }
 
-#Preview {
-  struct SDGScrollTabPreviewWrapper: View {
-    @State private var textSelectedIndex = 0
-    @State private var underlineSelectedIndex = 0
-    @State private var longTextSelectedIndex = 2
-    @State private var maxWidthSelectedIndex = 0
-    @State private var maxWidthTextSelectedIndex = 0
-    
-    var body: some View {
-      
-      VStack(spacing: 20) {
-        
-        Spacer()
-        
-        SDGScrollTab(
-          type: .text,
-          list: [
-            .init(id: "0", title: "첫번째"),
-            .init(id: "1", title: "두번째"),
-            .init(id: "2", title: "세번째"),
-            .init(id: "3", title: "네번째")
-          ],
-          selectedIndex: $textSelectedIndex
-        )
+#Preview("Style × Size") {
+  VStack(alignment: .leading, spacing: 24) {
+    SDGScrollTabPreviewRow(style: .withUnderline, size: .large)
+    SDGScrollTabPreviewRow(style: .withUnderline, size: .medium)
+    SDGScrollTabPreviewRow(style: .onlyText, size: .large)
+    SDGScrollTabPreviewRow(style: .onlyText, size: .medium)
+  }
+  .padding(.vertical, 20)
+}
+
+#Preview("긴 라벨 / 수평 스크롤") {
+  VStack(alignment: .leading, spacing: 24) {
+    SDGScrollTabPreviewRow(style: .withUnderline, size: .large, longTitle: true)
+    SDGScrollTabPreviewRow(style: .withUnderline, size: .medium, longTitle: true)
+    SDGScrollTabPreviewRow(style: .onlyText, size: .large, longTitle: true)
+    SDGScrollTabPreviewRow(style: .onlyText, size: .medium, longTitle: true)
+  }
+  .padding(.vertical, 20)
+}
+
+#Preview("짧은 라벨 8개 / 280pt 수평 스크롤") {
+  VStack(alignment: .leading, spacing: 24) {
+    SDGScrollTabOverflowPreviewRow(style: .withUnderline, size: .large)
+    SDGScrollTabOverflowPreviewRow(style: .withUnderline, size: .medium)
+    SDGScrollTabOverflowPreviewRow(style: .onlyText, size: .large)
+    SDGScrollTabOverflowPreviewRow(style: .onlyText, size: .medium)
+  }
+  .frame(width: 280)
+  .padding(.vertical, 20)
+}
+
+#Preview("짧은 라벨 2개 / 280pt 스크롤 비활성") {
+  VStack(alignment: .leading, spacing: 24) {
+    SDGScrollTabOverflowPreviewRow(style: .withUnderline, size: .large, itemCount: 2)
+    SDGScrollTabOverflowPreviewRow(style: .withUnderline, size: .medium, itemCount: 2)
+    SDGScrollTabOverflowPreviewRow(style: .onlyText, size: .large, itemCount: 2)
+    SDGScrollTabOverflowPreviewRow(style: .onlyText, size: .medium, itemCount: 2)
+  }
+  .frame(width: 280)
+  .padding(.vertical, 20)
+}
+
+#Preview("Baseline Divider / 여백과 남는 영역") {
+  VStack(alignment: .leading, spacing: 24) {
+    SDGScrollTabPreviewRow(style: .withUnderline, size: .large, showsBaselineDivider: true, itemCount: 2)
+    SDGScrollTabPreviewRow(style: .withUnderline, size: .medium, showsBaselineDivider: true, itemCount: 2)
+    SDGScrollTabPreviewRow(style: .onlyText, size: .large, showsBaselineDivider: true, itemCount: 2)
+    SDGScrollTabPreviewRow(style: .onlyText, size: .medium, showsBaselineDivider: true, itemCount: 2)
+  }
+  .padding(.vertical, 20)
+}
+
+#Preview("외부 선택 / 8개 탭 / 빈 목록") {
+  SDGScrollTabSelectionPreview()
+}
+
+#Preview("초기 선택이 화면 밖인 경우") {
+  SDGScrollTabSelectionPreview(initialSelectedIndex: 3)
+}
+
+#Preview("긴 라벨 재탭 / 선택값 유지") {
+  VStack(alignment: .leading, spacing: 8) {
+    Text("선택된 네 번째 라벨의 앞부분을 스크롤로 가린 뒤 같은 라벨을 다시 탭하세요.")
+      .typo(.body2_R, .neutral500)
+      .padding(.horizontal, 16)
+
+    SDGScrollTabSelectionPreview(initialSelectedIndex: 3)
+  }
+}
+
+#Preview("앞부분 여백 / Large 20pt") {
+  SDGScrollTabSelectionPreview(initialSelectedIndex: 7, initialLongLabel: false)
+}
+
+#Preview("앞부분 여백 / Medium 18pt") {
+  SDGScrollTabSelectionPreview(size: .medium, initialSelectedIndex: 7, initialLongLabel: false)
+}
+
+private struct SDGScrollTabPreviewRow: View {
+  let style: SDGScrollTab.Style
+  let size: SDGScrollTab.Size
+  var longTitle = false
+  var showsBaselineDivider = false
+  var itemCount = 5
+
+  @State private var selectedIndex = 0
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 8) {
+      Text("\(style == .withUnderline ? "With Underline" : "Only Text") / \(size == .large ? "Large" : "Medium")")
+        .typo(.body3_SB, .neutral500)
         .padding(.horizontal, 16)
-        
-        SDGScrollTab(
-          type: .underline,
-          list: [
-            .init(id: "0", title: "첫번째 요소"),
-            .init(id: "1", title: "두번째 요소"),
-            .init(id: "2", title: "세번째 요소"),
-            .init(id: "3", title: "네번째 요소")
-          ],
-          selectedIndex: $underlineSelectedIndex
-        )
-        .padding(.horizontal, 16)
-        
-        SDGScrollTab(
-          type: .underline,
-          list: [
-            .init(id: "0", title: "아주 길고 긴 첫번째 요소인데 어떻게 나오지"),
-            .init(id: "1", title: "두번째 요소"),
-            .init(id: "2", title: "세번째 요소"),
-            .init(id: "3", title: "네번째 요소")
-          ],
-          selectedIndex: $longTextSelectedIndex
-        )
-        .padding(.horizontal, 16)
-        
-        SDGScrollTab(
-          type: .underline,
-          list: [
-            .init(id: "0", title: "Label이 길어지면 한줄로 줄임말 처리합니다."),
-            .init(id: "1", title: "Label"),
-            .init(id: "2", title: "Label"),
-            .init(id: "3", title: "Label")
-          ],
-          selectedIndex: $maxWidthSelectedIndex,
-          maxWidth: 370
-        )
-        .padding(.horizontal, 16)
-        
-        SDGScrollTab(
-          type: .underline,
-          list: [
-            .init(id: "0", title: "아주 길고 긴 첫번째 요소인데 어떻게 나오지"),
-            .init(id: "1", title: "두번째 요소"),
-            .init(id: "2", title: "세번째 요소"),
-            .init(id: "3", title: "네번째 요소")
-          ],
-          selectedIndex: $maxWidthSelectedIndex,
-          maxWidth: 300
-        )
-        .padding(.horizontal, 16)
-        
-        SDGScrollTab(
-          type: .text,
-          list: [
-            .init(id: "0", title: "Label이 길어지면 한줄로 줄임말 처리합니다."),
-            .init(id: "1", title: "Label"),
-            .init(id: "2", title: "Label"),
-            .init(id: "3", title: "Label")
-          ],
-          selectedIndex: $maxWidthTextSelectedIndex,
-          maxWidth: 280
-        )
-        .padding(.horizontal, 16)
-        
-        Spacer()
-        
-      }
+
+      SDGScrollTab(
+        style: style,
+        size: size,
+        items: (0..<itemCount).map { index in
+          .init(
+            id: String(index),
+            title: longTitle && index == 0
+              ? "긴 라벨도 한 줄에 전체 표시하고 수평 스크롤로 탐색합니다"
+              : "Label"
+          )
+        },
+        selectedIndex: selectedIndex,
+        horizontalPadding: 16,
+        showsBaselineDivider: showsBaselineDivider,
+        onItemTapped: { selectedIndex = $0 }
+      )
     }
   }
-  
-  return SDGScrollTabPreviewWrapper()
+}
+
+private struct SDGScrollTabOverflowPreviewRow: View {
+  let style: SDGScrollTab.Style
+  let size: SDGScrollTab.Size
+  var itemCount = 8
+
+  @State private var selectedIndex = 0
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 8) {
+      Text("\(style == .withUnderline ? "With Underline" : "Only Text") / \(size == .large ? "Large" : "Medium")")
+        .typo(.body3_SB, .neutral500)
+        .padding(.horizontal, 16)
+
+      SDGScrollTab(
+        style: style,
+        size: size,
+        items: (0..<itemCount).map { .init(id: String($0), title: "Label \($0 + 1)") },
+        selectedIndex: selectedIndex,
+        horizontalPadding: 16,
+        onItemTapped: { selectedIndex = $0 }
+      )
+
+      Text("선택: Label \(selectedIndex + 1)")
+        .typo(.body3_SB, .neutral500)
+        .padding(.horizontal, 16)
+    }
+  }
+}
+
+private struct SDGScrollTabSelectionPreview: View {
+  let size: SDGScrollTab.Size
+
+  @State private var selectedIndex: Int
+  @State private var lastClickedIndex: Int?
+  @State private var acceptsSelection = true
+  @State private var isEmpty = false
+  @State private var usesFewItems = false
+  @State private var showsBaselineDivider = false
+  @State private var usesLongLabel: Bool
+
+  init(
+    size: SDGScrollTab.Size = .large,
+    initialSelectedIndex: Int = 0,
+    initialLongLabel: Bool = true
+  ) {
+    self.size = size
+    self._selectedIndex = State(initialValue: initialSelectedIndex)
+    self._usesLongLabel = State(initialValue: initialLongLabel)
+  }
+
+  private var items: [SDGScrollTab.Item] {
+    isEmpty ? [] : (0..<(usesFewItems ? 2 : 8)).map { index in
+      .init(
+        id: String(index),
+        title: usesLongLabel && index == 3
+          ? "스크롤 영역보다 긴 라벨은 선택하면 이 문장의 시작부터 표시합니다"
+          : "Label \(index + 1)"
+      )
+    }
+  }
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 20) {
+      SDGScrollTab(
+        size: size,
+        items: items,
+        selectedIndex: selectedIndex,
+        horizontalPadding: 16,
+        showsBaselineDivider: showsBaselineDivider,
+        onItemTapped: { index in
+          lastClickedIndex = index
+          if acceptsSelection {
+            selectedIndex = index
+          }
+        }
+      )
+      .frame(width: 280)
+
+      VStack(alignment: .leading, spacing: 16) {
+        Text("선택 인덱스: \(selectedIndex)")
+        Text("마지막 클릭: \(lastClickedIndex.map { String($0) } ?? "없음")")
+        Toggle("클릭 시 선택 변경", isOn: $acceptsSelection)
+        Toggle("네 번째에 긴 라벨 사용", isOn: $usesLongLabel)
+        Toggle("짧은 라벨 2개만 표시", isOn: $usesFewItems)
+        Toggle("빈 목록", isOn: $isEmpty)
+        Toggle("Baseline Divider", isOn: $showsBaselineDivider)
+        Button("외부에서 첫 번째 선택") { selectedIndex = 0 }
+        Button("외부에서 네 번째 선택") { selectedIndex = 3 }
+        Button("외부에서 다섯 번째 선택") { selectedIndex = 4 }
+        Button("외부에서 여덟 번째 선택") { selectedIndex = 7 }
+        Button("유효하지 않은 인덱스 전달") { selectedIndex = 99 }
+      }
+      .padding(.horizontal, 16)
+    }
+    .padding(.vertical, 20)
+  }
 }
