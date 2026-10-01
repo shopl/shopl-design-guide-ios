@@ -70,8 +70,45 @@ public struct SDGScrollTab: View {
   private var legacyMaxWidth: CGFloat? = nil
 
   @Namespace private var underlineNamespace
+  @Namespace private var contentCoordinateSpace
+  @Namespace private var viewportCoordinateSpace
+  @State private var selectionGeometry: SelectionGeometry?
+  @State private var contentFrame: CGRect = .zero
+  @State private var reselectionCount = 0
 
   private let selectionAnimation = Animation.easeInOut(duration: 0.3)
+
+  private enum ScrollTarget: Hashable {
+    case start
+    case item(String)
+    case itemLeading(String)
+  }
+
+  private struct SelectionGeometry: Equatable {
+    let itemID: String
+    let frame: CGRect
+  }
+
+  private struct SelectionGeometryKey: PreferenceKey {
+    static var defaultValue: SelectionGeometry? { nil }
+
+    static func reduce(value: inout SelectionGeometry?, nextValue: () -> SelectionGeometry?) {
+      if let nextValue = nextValue() {
+        value = nextValue
+      }
+    }
+  }
+
+  private struct ContentFrameKey: PreferenceKey {
+    static var defaultValue: CGRect? { nil }
+
+    static func reduce(value: inout CGRect?, nextValue: () -> CGRect?) {
+      // 측정값이 없는 형제 뷰의 기본값으로 실제 콘텐츠 프레임을 지우지 않습니다.
+      if let nextValue = nextValue() {
+        value = nextValue
+      }
+    }
+  }
 
   /// - Parameters:
   ///   - items: 고유한 id를 가진 항목입니다. 항목 개수에는 제한이 없습니다.
@@ -83,6 +120,10 @@ public struct SDGScrollTab: View {
   ///
   /// 선택 상태는 호출부가 소유합니다. 호출부가 selectedIndex를 변경해야 선택 표시가 바뀝니다.
   /// 라벨은 내용 길이대로 한 줄에 표시합니다.
+  /// 라벨·간격·좌우 여백의 전체 너비가 가용 너비를 초과할 때만 수평 스크롤을 허용합니다.
+  /// 선택 라벨이 보이는 데 필요한 만큼 스크롤하며, 라벨이 스크롤 영역보다 길면 시작점을 표시합니다.
+  /// 이미 선택된 라벨을 다시 탭해도 같은 스크롤 규칙을 적용합니다.
+  /// 시작점을 드러낼 때 첫 항목은 horizontalPadding, 나머지는 아이템 간격만큼 앞쪽 여백을 확보합니다.
   /// Baseline Divider는 콘텐츠와 함께 스크롤하지 않으며 좌우 콘텐츠 여백까지 이어집니다.
   public init(
     style: Style = .withUnderline,
@@ -123,21 +164,50 @@ public struct SDGScrollTab: View {
   }
 
   public var body: some View {
-    ScrollViewReader { proxy in
-      ScrollView(.horizontal) {
-        tabContent
-          .animation(selectionAnimation, value: selectedIndex)
-          .padding(.horizontal, horizontalPadding)
-      }
-      .scrollIndicators(.hidden)
-      .onAppear {
-        withAnimation(selectionAnimation) {
-          proxy.scrollTo(selectedIndex)
+    GeometryReader { viewport in
+      ScrollViewReader { proxy in
+        ScrollView(.horizontal) {
+          tabContent
+            .animation(selectionAnimation, value: selectedIndex)
+            .padding(.horizontal, horizontalPadding)
+            .background {
+              GeometryReader { content in
+                Color.clear.preference(
+                  key: ContentFrameKey.self,
+                  value: CGRect(
+                    origin: content.frame(in: .named(viewportCoordinateSpace)).origin,
+                    size: content.size
+                  )
+                )
+              }
+            }
+            .coordinateSpace(name: contentCoordinateSpace)
+            .id(ScrollTarget.start)
         }
-      }
-      .onChange(of: selectedIndex) { index in
-        withAnimation(selectionAnimation) {
-          proxy.scrollTo(index)
+        .coordinateSpace(name: viewportCoordinateSpace)
+        .scrollIndicators(.hidden)
+        .scrollDisabled(contentFrame.width <= viewport.size.width)
+        .onPreferenceChange(ContentFrameKey.self) { frame in
+          guard let frame else { return }
+          contentFrame = frame
+        }
+        .onPreferenceChange(SelectionGeometryKey.self) { geometry in
+          selectionGeometry = geometry
+          // 외부 선택 변경도 대상 라벨의 레이아웃이 반영된 뒤 스크롤합니다.
+          scrollToSelection(geometry, in: viewport.size.width, using: proxy)
+        }
+        .onAppear {
+          scrollToSelection(selectionGeometry, in: viewport.size.width, using: proxy)
+        }
+        .onChange(of: reselectionCount) { _ in
+          scrollToSelection(selectionGeometry, in: viewport.size.width, using: proxy)
+        }
+        // 원점은 수동 스크롤 중에도 변하므로 너비가 바뀔 때만 다시 정렬합니다.
+        .onChange(of: contentFrame.width) { _ in
+          scrollToSelection(selectionGeometry, in: viewport.size.width, using: proxy)
+        }
+        .onChange(of: viewport.size.width) { width in
+          scrollToSelection(selectionGeometry, in: width, using: proxy)
         }
       }
     }
@@ -147,6 +217,31 @@ public struct SDGScrollTab: View {
         Color.neutral200
           .frame(height: 1)
       }
+    }
+  }
+
+  private func scrollToSelection(
+    _ geometry: SelectionGeometry?,
+    in viewportWidth: CGFloat,
+    using proxy: ScrollViewProxy
+  ) {
+    guard let geometry,
+          viewportWidth > 0,
+          items.indices.contains(selectedIndex),
+          geometry.itemID == items[selectedIndex].id else { return }
+
+    let isLeadingClipped = geometry.frame.minX + contentFrame.minX < 0
+    let isWiderThanViewport = geometry.frame.width > viewportWidth
+    let revealsLeading = isLeadingClipped || isWiderThanViewport
+    let target: ScrollTarget
+    if revealsLeading {
+      target = selectedIndex == 0 ? .start : .itemLeading(geometry.itemID)
+    } else {
+      // 라벨 끝을 드러내는 이동에는 앞쪽 여백을 추가하지 않습니다.
+      target = .item(geometry.itemID)
+    }
+    withAnimation(selectionAnimation) {
+      proxy.scrollTo(target, anchor: revealsLeading ? .leading : nil)
     }
   }
 
@@ -186,6 +281,10 @@ public struct SDGScrollTab: View {
 
     return Button {
       onItemTapped(index)
+      // 탭하기 전부터 선택된 항목만 재탭으로 처리합니다.
+      if isSelected {
+        reselectionCount &+= 1
+      }
     } label: {
       Text(item.title)
         .typo(size.typography, textColor)
@@ -203,7 +302,27 @@ public struct SDGScrollTab: View {
         }
     }
     .buttonStyle(NoTapAnimationButtonStyle())
-    .id(index)
+    .background {
+      if isSelected {
+        GeometryReader { geometry in
+          Color.clear.preference(
+            key: SelectionGeometryKey.self,
+            value: SelectionGeometry(
+              itemID: item.id,
+              frame: geometry.frame(in: .named(contentCoordinateSpace))
+            )
+          )
+          .background(alignment: .trailing) {
+            // 표시 너비와 간격은 그대로 두고, 스크롤 목표만 앞쪽 간격까지 확장합니다.
+            Color.clear
+              .frame(width: geometry.size.width + size.spacing, height: geometry.size.height)
+              .id(ScrollTarget.itemLeading(item.id))
+              .allowsHitTesting(false)
+          }
+        }
+      }
+    }
+    .id(ScrollTarget.item(item.id))
   }
 }
 
