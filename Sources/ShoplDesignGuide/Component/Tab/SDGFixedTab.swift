@@ -9,6 +9,12 @@
 import SwiftUI
 
 public struct SDGFixedTab: View {
+  public static let version = "2.3.48"
+
+  private enum State {
+    case unselected
+    case selected
+  }
 
   public struct Model: Equatable, Hashable {
 
@@ -42,7 +48,7 @@ public struct SDGFixedTab: View {
     
     ZStack(alignment: .bottom) {
 
-      Color.neutral200
+      self._unSelectedUnderlineColor
         .frame(maxWidth: .infinity, minHeight: 1, maxHeight: 1)
       
       HStack(spacing: 0) {
@@ -51,13 +57,14 @@ public struct SDGFixedTab: View {
           Array(zip(self._list.indices, self._list)),
           id: \.1.id
         ) { index, model in
+          let state: State = index == _selectedIndex ? .selected : .unselected
           
           var selectedColor: SDG.Color {
-            return index == _selectedIndex ? .neutral700 : .neutral350
+            return state == .selected ? .neutral700 : .neutral350
           }
 
           var underlineColor: Color {
-            return index == _selectedIndex ? .neutral700 : self._unSelectedUnderlineColor
+            return state == .selected ? .neutral700 : self._unSelectedUnderlineColor
           }
           
           Button {
@@ -69,11 +76,11 @@ public struct SDGFixedTab: View {
               Text(model.title)
                 .typo(.body1_SB, selectedColor)
                 .lineLimit(1)
-                .frame(maxWidth: .infinity, minHeight: 22, maxHeight: 22)
+                .frame(maxWidth: .infinity, minHeight: 20, maxHeight: 20)
                 .padding(.bottom, SDGSpacing.spacing12)
                 .padding(.horizontal, SDGSpacing.spacing8)
               
-              if index == self._selectedIndex {
+              if state == .selected {
                 underlineColor
                   .frame(height: 2)
                   .matchedGeometryEffect(id: "underline", in: underlineNamespace)
