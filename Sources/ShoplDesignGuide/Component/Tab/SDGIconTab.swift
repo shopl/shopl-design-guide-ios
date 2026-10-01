@@ -71,12 +71,12 @@ public struct SDGIconTab: View {
 
   private let items: [Item]
   private let selectedIndex: Int
-  private let onTabClick: (Int) -> Void
+  private let onItemTapped: (Int) -> Void
 
   /// - Parameters:
   ///   - option: 고유한 id를 가진 3·4·5개의 항목입니다.
   ///   - selectedIndex: 0부터 시작하는 선택 인덱스입니다. 항목 수보다 작아야 합니다.
-  ///   - onTabClick: 클릭한 항목의 인덱스(0부터 시작)를 전달합니다.
+  ///   - onItemTapped: 탭한 항목의 인덱스(0부터 시작)를 전달합니다.
   ///
   /// 선택 상태는 호출부가 소유합니다. 호출부가 selectedIndex를 변경해야 선택 표시가 바뀝니다.
   /// 외부 여백은 호출부의 padding으로 설정합니다.
@@ -84,11 +84,11 @@ public struct SDGIconTab: View {
   public init(
     option: Option,
     selectedIndex: Int,
-    onTabClick: @escaping (Int) -> Void
+    onItemTapped: @escaping (Int) -> Void
   ) {
     self.items = option.items
     self.selectedIndex = selectedIndex
-    self.onTabClick = onTabClick
+    self.onItemTapped = onItemTapped
   }
 
   public var body: some View {
@@ -105,7 +105,7 @@ public struct SDGIconTab: View {
     let shape = RoundedRectangle(cornerRadius: SDGCornerRadius.radius12.rawValue)
 
     return Button {
-      onTabClick(index)
+      onItemTapped(index)
     } label: {
       tabContent(item: item, isSelected: isSelected)
         .padding(.horizontal, SDGSpacing.spacing4.rawValue)
@@ -208,17 +208,17 @@ private struct SDGIconTabPreview: View {
       SDGIconTab(
         option: .three(item(0), item(1), item(2)),
         selectedIndex: threeSelectedIndex,
-        onTabClick: { threeSelectedIndex = $0 }
+        onItemTapped: { threeSelectedIndex = $0 }
       )
       SDGIconTab(
         option: .four(item(0), item(1), item(2), item(3)),
         selectedIndex: fourSelectedIndex,
-        onTabClick: { fourSelectedIndex = $0 }
+        onItemTapped: { fourSelectedIndex = $0 }
       )
       SDGIconTab(
         option: .five(item(0), item(1), item(2), item(3), item(4)),
         selectedIndex: fiveSelectedIndex,
-        onTabClick: { fiveSelectedIndex = $0 }
+        onItemTapped: { fiveSelectedIndex = $0 }
       )
     }
     .frame(width: 335)
