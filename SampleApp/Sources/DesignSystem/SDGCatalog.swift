@@ -730,6 +730,15 @@ enum SDGTabCatalog: CaseIterable, SDGCatalogItemRepresentable {
     case .scroll: return "Scroll Tab"
     }
   }
+
+  var catalogSubDescription: String? {
+    switch self {
+    case .scroll:
+      return "수평 스크롤을 통해 다수의 카테고리를 탐색하고, 선택 상태를 전달하는 탭 컴포넌트"
+    default:
+      return nil
+    }
+  }
   
   var viewID: String? {
     id
