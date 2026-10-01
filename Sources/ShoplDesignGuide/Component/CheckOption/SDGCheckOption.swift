@@ -8,12 +8,15 @@
 import SwiftUI
 
 public struct SDGCheckOption: View {
-  public static let version = "2.0.0"
+  public static let version = "2.3.42"
 
-  public enum CheckType: Equatable {
+  public enum Style: Equatable {
     case solid
     case line
   }
+
+  @available(*, deprecated, renamed: "Style")
+  public typealias CheckType = Style
   
   public enum Spec: Equatable {
     case large
@@ -26,16 +29,81 @@ public struct SDGCheckOption: View {
       }
     }
   }
-  
+
+  public enum SelectColor: Equatable {
+    case normal
+    case neutral
+
+    var backgroundColor: Color {
+      switch self {
+      case .normal:
+        SDG.Color.primary300.color
+      case .neutral:
+        SDG.Color.neutral700.color
+      }
+    }
+  }
+
   public struct Model: Equatable {
-    public var status: SDGCheckOptionStatus
-    public var type: CheckType
+    public var state: SDGCheckOptionState
+    public var style: Style
     public let spec: Spec
-    
-    public init(status: SDGCheckOptionStatus, type: CheckType, spec: Spec) {
-      self.status = status
-      self.type = type
+    public let selectColor: SelectColor
+
+    @available(*, deprecated, renamed: "state")
+    public var status: SDGCheckOptionState {
+      get { state }
+      set { state = newValue }
+    }
+
+    @available(*, deprecated, renamed: "style")
+    public var type: Style {
+      get { style }
+      set { style = newValue }
+    }
+
+    public init(
+      state: SDGCheckOptionState,
+      style: Style,
+      spec: Spec,
+      selectColor: SelectColor
+    ) {
+      self.state = state
+      self.style = style
       self.spec = spec
+      self.selectColor = selectColor
+    }
+
+    @available(*, deprecated, renamed: "init(state:style:spec:selectColor:)")
+    public init(
+      status: SDGCheckOptionState,
+      type: Style,
+      spec: Spec,
+      selectColor: SelectColor
+    ) {
+      self.init(state: status, style: type, spec: spec, selectColor: selectColor)
+    }
+
+    fileprivate var solidBackgroundColor: Color {
+      switch state {
+      case .default:
+        return .neutral250
+      case .selected:
+        return selectColor.backgroundColor
+      case .disabled:
+        return .neutral200
+      }
+    }
+
+    fileprivate var lineColor: Color {
+      switch state {
+      case .default:
+        return .neutral350
+      case .selected:
+        return selectColor.backgroundColor
+      case .disabled:
+        return .neutral300
+      }
     }
   }
   
@@ -54,14 +122,14 @@ public struct SDGCheckOption: View {
     Button {
       self.selected()
     } label: {
-      switch model.type {
+      switch model.style {
       case .solid:
         Image(sdg: .icCommonCheckS)
           .resizable()
           .renderingMode(.template)
           .frame(width: model.spec.iconSize, height: model.spec.iconSize, alignment: .center)
           .padding(.all, 1)
-          .background(model.status == .selected ? .primary300 : .neutral200)
+          .background(model.solidBackgroundColor)
           .foregroundStyle(.neutral0)
           .clipShape(Circle())
         
@@ -72,20 +140,20 @@ public struct SDGCheckOption: View {
             .renderingMode(.template)
             .frame(width: model.spec.iconSize, height: model.spec.iconSize)
             .background(.clear)
-            .tint(model.status == .selected ? .primary300 : .neutral350)
+            .foregroundStyle(model.lineColor)
             .clipShape(Circle())
         }
         .padding(.all, 1)
         .overlay(
           Circle()
             .strokeBorder(
-              model.status == .selected ? .primary300 : .neutral350,
+              model.lineColor,
               lineWidth: 1
             )
         )
       }
     }
-    .allowsHitTesting(model.status != .disabled)
+    .allowsHitTesting(model.state != .disabled)
   }
 }
 
@@ -96,99 +164,46 @@ public struct SDGCheckOption: View {
       HStack {
         SDGCheckOption(
           model: .init(
-            status: .default,
-            type: .solid,
-            spec: .medim
+            state: .default,
+            style: .solid,
+            spec: .medim,
+            selectColor: .normal
           ),
           selected: {
             
           }
         )
+
         SDGCheckOption(
           model: .init(
-            status: .selected,
-            type: .solid,
-            spec: .medim
+            state: .selected,
+            style: .solid,
+            spec: .medim,
+            selectColor: .normal
           ),
           selected: {
             
           }
         )
-        
+
         SDGCheckOption(
           model: .init(
-            status: .disabled,
-            type: .solid,
-            spec: .medim
+            state: .selected,
+            style: .solid,
+            spec: .medim,
+            selectColor: .neutral
           ),
           selected: {
-            
+
           }
         )
-      }
-      
-      HStack {
-        
+
         SDGCheckOption(
           model: .init(
-            status: .default,
-            type: .line,
-            spec: .medim
-          ),
-          selected: {
-            
-          }
-        )
-        SDGCheckOption(
-          model: .init(
-            status: .selected,
-            type: .line,
-            spec: .medim
-          ),
-          selected: {
-            
-          }
-        )
-        
-        SDGCheckOption(
-          model: .init(
-            status: .disabled,
-            type: .line,
-            spec: .medim
-          ),
-          selected: {
-            
-          }
-        )
-      }
-      
-      HStack {
-        SDGCheckOption(
-          model: .init(
-            status: .default,
-            type: .solid,
-            spec: .large
-          ),
-          selected: {
-            
-          }
-        )
-        SDGCheckOption(
-          model: .init(
-            status: .selected,
-            type: .solid,
-            spec: .large
-          ),
-          selected: {
-            
-          }
-        )
-        
-        SDGCheckOption(
-          model: .init(
-            status: .disabled,
-            type: .solid,
-            spec: .large
+            state: .disabled,
+            style: .solid,
+            spec: .medim,
+            selectColor: .normal
           ),
           selected: {
             
@@ -200,19 +215,34 @@ public struct SDGCheckOption: View {
         
         SDGCheckOption(
           model: .init(
-            status: .default,
-            type: .line,
-            spec: .large
+            state: .default,
+            style: .line,
+            spec: .medim,
+            selectColor: .neutral
           ),
           selected: {
             
           }
         )
+
         SDGCheckOption(
           model: .init(
-            status: .selected,
-            type: .line,
-            spec: .large
+            state: .selected,
+            style: .line,
+            spec: .medim,
+            selectColor: .normal
+          ),
+          selected: {
+
+          }
+        )
+
+        SDGCheckOption(
+          model: .init(
+            state: .selected,
+            style: .line,
+            spec: .medim,
+            selectColor: .neutral
           ),
           selected: {
             
@@ -221,9 +251,111 @@ public struct SDGCheckOption: View {
         
         SDGCheckOption(
           model: .init(
-            status: .disabled,
-            type: .line,
-            spec: .large
+            state: .disabled,
+            style: .line,
+            spec: .medim,
+            selectColor: .neutral
+          ),
+          selected: {
+            
+          }
+        )
+      }
+      
+      HStack {
+        SDGCheckOption(
+          model: .init(
+            state: .default,
+            style: .solid,
+            spec: .large,
+            selectColor: .normal
+          ),
+          selected: {
+            
+          }
+        )
+
+        SDGCheckOption(
+          model: .init(
+            state: .selected,
+            style: .solid,
+            spec: .large,
+            selectColor: .normal
+          ),
+          selected: {
+
+          }
+        )
+
+        SDGCheckOption(
+          model: .init(
+            state: .selected,
+            style: .solid,
+            spec: .large,
+            selectColor: .neutral
+          ),
+          selected: {
+            
+          }
+        )
+        
+        SDGCheckOption(
+          model: .init(
+            state: .disabled,
+            style: .solid,
+            spec: .large,
+            selectColor: .normal
+          ),
+          selected: {
+            
+          }
+        )
+      }
+      
+      HStack {
+        
+        SDGCheckOption(
+          model: .init(
+            state: .default,
+            style: .line,
+            spec: .large,
+            selectColor: .normal
+          ),
+          selected: {
+            
+          }
+        )
+
+        SDGCheckOption(
+          model: .init(
+            state: .selected,
+            style: .line,
+            spec: .large,
+            selectColor: .normal
+          ),
+          selected: {
+
+          }
+        )
+
+        SDGCheckOption(
+          model: .init(
+            state: .selected,
+            style: .line,
+            spec: .large,
+            selectColor: .neutral
+          ),
+          selected: {
+            
+          }
+        )
+        
+        SDGCheckOption(
+          model: .init(
+            state: .disabled,
+            style: .line,
+            spec: .large,
+            selectColor: .normal
           ),
           selected: {
             
