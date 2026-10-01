@@ -15,9 +15,6 @@ public struct SDGCheckOption: View {
     case line
   }
 
-  @available(*, deprecated, renamed: "Style")
-  public typealias CheckType = Style
-  
   public enum Spec: Equatable {
     case large
     case medim
@@ -50,18 +47,6 @@ public struct SDGCheckOption: View {
     public let spec: Spec
     public let selectColor: SelectColor
 
-    @available(*, deprecated, renamed: "state")
-    public var status: SDGCheckOptionState {
-      get { state }
-      set { state = newValue }
-    }
-
-    @available(*, deprecated, renamed: "style")
-    public var type: Style {
-      get { style }
-      set { style = newValue }
-    }
-
     public init(
       state: SDGCheckOptionState,
       style: Style,
@@ -72,16 +57,6 @@ public struct SDGCheckOption: View {
       self.style = style
       self.spec = spec
       self.selectColor = selectColor
-    }
-
-    @available(*, deprecated, renamed: "init(state:style:spec:selectColor:)")
-    public init(
-      status: SDGCheckOptionState,
-      type: Style,
-      spec: Spec,
-      selectColor: SelectColor = .normal
-    ) {
-      self.init(state: status, style: type, spec: spec, selectColor: selectColor)
     }
 
     fileprivate var solidBackgroundColor: Color {
