@@ -79,7 +79,7 @@ public struct SDGCheckOption: View {
       status: SDGCheckOptionState,
       type: Style,
       spec: Spec,
-      selectColor: SelectColor
+      selectColor: SelectColor = .normal
     ) {
       self.init(state: status, style: type, spec: spec, selectColor: selectColor)
     }
