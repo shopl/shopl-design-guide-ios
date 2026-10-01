@@ -49,10 +49,13 @@ public struct SDGCheckBoxLabel: View {
     Button {
       onSelect(model.id)
     } label: {
-      HStack(spacing: 8) {
+      HStack(alignment: .top, spacing: 8) {
         SDGCheckBox(
           model: model.box,
+          onSelect: { onSelect(model.id) }
         )
+        .padding(.vertical, model.box.size == .medim ? 2 : 1)
+        .allowsHitTesting(false)
 
         Text(model.title)
           .typo(

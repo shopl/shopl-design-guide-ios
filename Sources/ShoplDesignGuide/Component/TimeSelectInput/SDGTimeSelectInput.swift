@@ -64,6 +64,17 @@ public struct SDGTimeSelectInput: View {
     default: return nil
     }
   }
+
+  private var isDisabled: Bool {
+    status == .disalbed
+  }
+
+  private var textColor: SDG.Color {
+    switch status {
+    case .default: return .neutral350
+    case .selected, .disalbed, .error: return .neutral700
+    }
+  }
   
   public init(
     status: Binding<Status>,
@@ -84,14 +95,16 @@ public struct SDGTimeSelectInput: View {
       ZStack {
         HStack(spacing: 12) {
           Text(start)
-            .typo(.body1_R, startTime == nil ? .neutral300 : .neutral700)
+            .typo(.body1_R, textColor)
+            .opacity(isDisabled ? 0.3 : 1)
             .frame(maxWidth: .infinity, alignment: .center)
           
           Text("~")
             .typo(.body1_R, .neutral700)
           
           Text(end)
-            .typo(.body1_R, startTime == nil ? .neutral300 : .neutral700)
+            .typo(.body1_R, textColor)
+            .opacity(isDisabled ? 0.3 : 1)
             .frame(maxWidth: .infinity, alignment: .center)
         }
         .padding(.vertical, 10)

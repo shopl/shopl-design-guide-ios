@@ -107,12 +107,18 @@ struct SDGGuideDetailView: View {
       return SDGFloatingButton.version
     case "component_ghost_button":
       return SDGGhostButton.version
+    case "component_icon_tab":
+      return SDGIconTab.version
     case "component_number_picker":
       return SDGNumberPicker.version
     case "component_radio":
       return SDGRadio.version
     case "component_toggle":
       return SDGToggle.version
+    case "component_thumbnails":
+      return SDGThumbnails.version
+    case "template_multi_time_picker":
+      return SDGMultiTimePicker.version
     default:
       return nil
     }

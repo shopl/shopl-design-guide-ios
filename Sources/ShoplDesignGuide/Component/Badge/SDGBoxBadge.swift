@@ -26,7 +26,7 @@ public struct SDGBoxBadge: View {
     }
   }
   
-  public struct Spec {
+  public struct Spec: Sendable {
     let height: CGFloat
     let cornerRadius: CGFloat
     let typo: SDG.Typography

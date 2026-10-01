@@ -33,10 +33,12 @@ extension View {
 }
 
 public struct SDGBottomPopup<BodyContent: View>: View {
-  
+  public static var version: String { "2.3.32" }
+
   private let title: SDGPopupTitle?
   private let bodyContent: BodyContent
   private let button: SDGBottomPopupButton
+  private let hideButtonWhenKeyboardAppears: Bool
   
   @State private var screenHeight: CGFloat = 0
   @State private var titleHeight: CGFloat = 0
@@ -44,6 +46,8 @@ public struct SDGBottomPopup<BodyContent: View>: View {
   
   private let topPadding: CGFloat = 24
   private let contentSpacing: CGFloat = 12
+  private let bodyContentTopPadding: CGFloat = 4
+  private let bodyContentBottomPadding: CGFloat = 28
   private var popupHeightLimitSpacing: CGFloat {
     screenHeight * 0.2
   }
@@ -64,11 +68,13 @@ public struct SDGBottomPopup<BodyContent: View>: View {
   public init(
     title: SDGPopupTitle?,
     @ViewBuilder bodyContent: () -> BodyContent,
-    button: SDGBottomPopupButton
+    button: SDGBottomPopupButton,
+    hideButtonWhenKeyboardAppears: Bool = false
   ) {
     self.title = title
     self.bodyContent = bodyContent()
     self.button = button
+    self.hideButtonWhenKeyboardAppears = hideButtonWhenKeyboardAppears
   }
   
   public var body: some View {
@@ -88,14 +94,22 @@ public struct SDGBottomPopup<BodyContent: View>: View {
               if !bodyContent.isEmpty {
                 SDGPopupBody(maxHeight: calculateBodyHeight(in: geometry.size)) {
                   bodyContent
+                    .padding(.top, bodyContentTopPadding)
+                    .padding(.bottom, bodyContentBottomPadding)
                 }
               }
             }
             .padding(.top, topPadding)
             .padding(.horizontal, 24)
             
-            button
-              .readHeight(to: $buttonHeight)
+            Group {
+              if hideButtonWhenKeyboardAppears {
+                button.hideWhenKeyboardAppear(preservesLayout: false)
+              } else {
+                button
+              }
+            }
+            .readHeight(to: $buttonHeight)
           }
           .background(.neutral0)
           .cornerRadius(20, corners: [.topLeft, .topRight])

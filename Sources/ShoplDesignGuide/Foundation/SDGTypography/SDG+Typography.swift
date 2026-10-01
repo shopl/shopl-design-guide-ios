@@ -9,7 +9,7 @@
 import SwiftUI
 
 extension SDG {
-  public enum Typography {
+  public enum Typography: Sendable {
     /// size 19 / weight 400
     case naviTitle
     /// size 44 / weight 600

@@ -52,6 +52,7 @@ struct PopupViewControllerPresenter<PopupContent: View>: UIViewControllerReprese
     coordinator.dismissImmediately()
   }
 
+  @MainActor
   final class Coordinator {
     fileprivate weak var hostViewController: UIViewController?
 

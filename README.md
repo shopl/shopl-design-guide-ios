@@ -175,7 +175,7 @@ SDGCheckBox(
 
 #### 기타 컴포넌트
 - **SDGAvatar** - 사용자 아바타 (6가지 사이즈: XXS ~ XL)
-- **SDGThumbnail** - 이미지 썸네일
+- **SDGPhotoThumbnailGrid** - 이미지 썸네일 그리드
 - **SDGDropdown** - 드롭다운 선택기
 - **SDGTooltip** - 스마트 툴팁 (8가지 위치)
 - **Calendar** - 캘린더 피커
