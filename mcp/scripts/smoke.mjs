@@ -62,7 +62,12 @@ step('list_tokens / get_token');
 
 // 아이콘
 const trash = await call('search_icon', { query: 'trash' });
-assert.ok(trash.icons.some((icon) => icon.name === 'icCommonTrash' && icon.usage[0] === 'Image(sdg: .icCommonTrash)'));
+const trashIcon = trash.icons.find((icon) => icon.name === 'icCommonTrash');
+assert.equal(trashIcon?.usage[0], 'Image(sdg: .icCommonTrash)');
+// templateIcon은 Color·SDG.Color 오버로드가 모두 있어 `.neutral700`은 모호하다. 타입을 명시해야 컴파일된다.
+assert.ok(trashIcon.usage.some((line) => line.includes('templateIcon(size: 20, color: Color.neutral700)')));
+const templateIcon = await call('get_component_api', { name: 'Image.templateIcon' });
+assert.ok(templateIcon.notes?.some((note) => note.includes('Color.neutral700')));
 const plus = await call('search_icon', { query: '추가' });
 assert.ok(plus.icons.some((icon) => icon.name === 'icAddPlus'));
 step('search_icon');
@@ -89,7 +94,7 @@ assert.equal(confirmApi.kind, 'modifier');
 assert.ok(confirmApi.relatedTypes.some((type) => type.name === 'SDGCenterPopupButton.Button.Option'));
 
 const confirmView = await call('get_component_api', { name: 'SDGConfirmPopup' });
-assert.match(confirmView.note ?? '', /centerConfirmPopup/);
+assert.ok(confirmView.notes?.some((note) => note.includes('centerConfirmPopup')));
 
 const apiMiss = await call('get_component_api', { name: 'SDGBoxButon' });
 assert.equal(apiMiss.found, false);
@@ -112,6 +117,8 @@ assert.equal(setup.package.import, 'import ShoplDesignGuide');
 assert.ok(setup.package.platforms.includes('iOS 16.0+'));
 assert.equal(setup.localization.required, true);
 assert.match(setup.localization.snippet, /SDGString\.shared\.setProvider\(provider:/);
+// NSLocalizedString을 쓰므로 단독 파일로 붙여 넣어도 컴파일되게 Foundation을 import해야 한다.
+assert.match(setup.localization.snippet, /^import Foundation$/m);
 
 const guide = await call('get_design_guide', { query: '하단' });
 assert.ok(guide.items.some((item) => item.path.endsWith('Bottom Button') && item.implemented));

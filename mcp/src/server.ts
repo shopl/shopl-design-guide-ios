@@ -540,11 +540,34 @@ function tokenUsage(index: SDGIndex, type: TokenType, token?: TokenRecord): stri
 function iconSummary(index: SDGIndex, icon: IconRecord) {
   const usage = [`Image(sdg: .${icon.name})`];
   if (icon.renderingMode === 'template' && index.extensionMembers('Image.templateIcon')) {
-    usage.push(`Image(sdg: .${icon.name}).templateIcon(size: 20, color: .neutral700)`);
+    // templateIcon은 Color·SDG.Color 오버로드가 모두 있어 `.neutral700`만 쓰면 모호성 오류가 난다.
+    usage.push(`Image(sdg: .${icon.name}).templateIcon(size: 20, color: Color.neutral700)`);
   } else {
     usage.push(`Image(sdg: .${icon.name}).resizable().frame(width: 20, height: 20)`);
   }
   return compact({ name: icon.name, assetName: icon.assetName, kind: icon.kind, renderingMode: icon.renderingMode, usage });
+}
+
+/**
+ * 같은 라벨의 오버로드가 한쪽은 `Color`, 다른 쪽은 `SDG.Color`를 받으면 `.neutral700` 같은 암시적 멤버가
+ * 두 타입 모두에 있어 컴파일 오류(ambiguous use)가 난다. 그런 API에는 타입을 명시하라고 안내한다.
+ */
+function colorOverloadNote(members: Member[]): string | undefined {
+  const isColor = (type: string) => /^(SwiftUI\.)?Color\??$/.test(type.trim());
+  const isSDGColor = (type: string) => /^SDG\.Color\??$/.test(type.trim());
+  for (const first of members) {
+    for (const second of members) {
+      const lhs = first.parameters;
+      const rhs = second.parameters;
+      if (first === second || !lhs || !rhs || lhs.length !== rhs.length) continue;
+      const sameLabels = lhs.every((parameter, position) => parameter.label === rhs[position]!.label);
+      const colorPair = lhs.some((parameter, position) => isColor(parameter.type) && isSDGColor(rhs[position]!.type));
+      if (sameLabels && colorPair) {
+        return 'Overloads accept both `Color` and `SDG.Color` for the same argument, so an implicit member such as `.neutral700` is ambiguous and does not compile. Write `Color.neutral700` (or `SDG.Color.neutral700`).';
+      }
+    }
+  }
+  return undefined;
 }
 
 function exampleView(example: ExampleRecord & { via?: string }) {
@@ -606,6 +629,7 @@ function describeSymbol(index: SDGIndex, name: string) {
       name: modifierName,
       import: `import ShoplDesignGuide`,
       usage: `Chain on any view: someView.${overloads[0]!.name}(…)`,
+      notes: [colorOverloadNote(overloads)].filter((note): note is string => note !== undefined),
       overloads: overloads.map((overload) => compact({ ...memberView(overload), file: overload.file })),
       relatedTypes: related.map((type) => briefType(type)),
       designGuide: guide,
@@ -615,7 +639,13 @@ function describeSymbol(index: SDGIndex, name: string) {
 
   const members = index.extensionMembers(name);
   if (members?.length) {
-    return { found: true, kind: 'extension', name: `${members[0]!.owner}.${members[0]!.name}`, overloads: members.map(memberView) };
+    return compact({
+      found: true,
+      kind: 'extension',
+      name: `${members[0]!.owner}.${members[0]!.name}`,
+      notes: [colorOverloadNote(members)].filter((note): note is string => note !== undefined),
+      overloads: members.map(memberView),
+    });
   }
 
   return notFound(index, name);
@@ -646,10 +676,13 @@ function describeType(index: SDGIndex, card: TypeCard) {
     aliasOf: card.aliasOf,
     designGuide: guide,
     initializers: card.initializers.map(memberView),
-    note:
+    notes: [
       card.isView && card.initializers.length === 0 && presentedBy.length
         ? `${card.name} has no public initializer. Present it with ${presentedBy.map((modifier) => `.${modifier.name}(…)`).join(' or ')}.`
         : undefined,
+      colorOverloadNote(card.initializers),
+      colorOverloadNote(card.methods),
+    ].filter((note): note is string => note !== undefined),
     presentedBy: presentedBy.map(memberView),
     methods: card.methods.map(memberView),
     properties: card.properties.map(memberView),
@@ -697,6 +730,8 @@ function setupGuide(index: SDGIndex, product: string) {
   const providerSnippet =
     setProvider && getString && stringType?.properties.some((property) => property.name === 'shared')
       ? [
+          // NSLocalizedString은 Foundation 함수다. ShoplDesignGuide는 Foundation을 다시 내보내지 않는다.
+          'import Foundation',
           `import ${product}`,
           '',
           'final class AppStringProvider: SDGStringProvider {',
