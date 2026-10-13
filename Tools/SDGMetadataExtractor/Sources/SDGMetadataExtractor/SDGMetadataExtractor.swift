@@ -45,6 +45,14 @@ struct SDGMetadataExtractor {
       try writer.write(catalog, to: "catalog.generated.json")
       report.summary("catalog", catalog.counts["items", default: 0], details: catalog.counts.filter { $0.key != "items" })
 
+      let setup = try SetupExtractor(repository: repository, api: api).extract()
+      try writer.write(setup, to: "setup.generated.json")
+      report.summary("setup", setup.products.count, details: [
+        "platforms": setup.platforms.count,
+        "dependencies": setup.dependencies.count,
+        "localizedSymbols": setup.localizedSymbols.count
+      ])
+
       report.printAll()
       if report.hasEmptyResult {
         FileHandle.standardError.write(Data("✗ 비어 있는 결과가 있습니다. 추출기의 소스 구조 가정이 깨졌을 수 있습니다.\n".utf8))
