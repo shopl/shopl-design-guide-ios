@@ -87,6 +87,9 @@ const typo = await call('search_component', { query: 'typo' });
 const typoEntries = typo.results.filter((result) => result.name === 'View.typo');
 assert.equal(typoEntries.length, 1);
 assert.equal(typoEntries[0].signatures.length, 2);
+// 묶인 모디파이어는 오버로드 중 하나라도 해당 레이어면 레이어 필터에 걸린다(cornerRadius: Foundation·Util).
+const utilRadius = await call('search_component', { query: 'cornerRadius', layer: 'Util' });
+assert.ok(utilRadius.results.some((result) => result.name === 'View.cornerRadius'));
 // Object.prototype 속성과 같은 질의어도 오류 없이 처리한다.
 await call('search_component', { query: 'constructor' });
 await call('search_icon', { query: 'constructor' });
@@ -120,6 +123,9 @@ const bareTemplateIcon = await call('get_component_api', { name: 'templateIcon' 
 assert.equal(bareTemplateIcon.kind, 'extension');
 const templateTypo = await call('get_component_api', { name: 'Image.templateIcn' });
 assert.ok(templateTypo.suggestions.includes('Image.templateIcon'));
+// 이름만으로 찾아 여러 타입의 멤버가 섞이면 오버로드마다 소유 타입을 표시한다.
+const bareInit = await call('get_component_api', { name: 'init' });
+assert.ok(bareInit.owners.length > 1 && bareInit.overloads.every((overload) => typeof overload.owner === 'string'));
 
 // public init이 없는 타입과, 그런 타입을 필수로 받아 모듈 밖에서 호출할 수 없는 init을 알린다.
 const loginInput = await call('get_component_api', { name: 'SDGLoginInput' });
