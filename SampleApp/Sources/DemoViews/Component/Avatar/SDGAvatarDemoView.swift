@@ -64,12 +64,15 @@ struct SDGAvatarDemoView: View {
   private var avatarPreviewCard: some View {
     VStack(spacing: 0) {
       SDGAvatar(
-        type: .round,
         model: state.avatarModel,
         size: state.selectedSize.avatarSize,
+        showFace: state.isPhotoEnabled,
+        icon: state.icon,
+        outlineColor: state.outlineColor,
+        showRetry: state.isRetryEnabled,
+        onRetry: { state.isRetryEnabled = false },
         action: { _ in }
       )
-      .id(state.avatarPreviewID)
     }
     .frame(maxWidth: .infinity)
     .frame(minHeight: 170)

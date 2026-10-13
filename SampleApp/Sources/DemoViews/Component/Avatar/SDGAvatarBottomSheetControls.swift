@@ -22,8 +22,32 @@ struct SDGAvatarBottomSheetControls: View {
       SDGSampleBottomSheetDivider()
       
       SDGSampleBottomSheetControlSection {
-        SDGSampleBottomSheetControlRow(title: "임산부 설정") {
-          SDGToggle(size: .m, isOn: $state.isMaternityEnabled)
+        SDGSampleBottomSheetControlRow(title: "아이콘") {
+          SDGToggle(size: .m, isOn: $state.isIconEnabled)
+        }
+      }
+
+      SDGSampleBottomSheetDivider()
+
+      SDGSampleBottomSheetControlSection {
+        SDGSampleBottomSheetControlRow(title: "Outline") {
+          SDGToggle(size: .m, isOn: $state.isOutlineEnabled)
+        }
+
+        if state.isOutlineEnabled {
+          SDGSegment(
+            selectedSegmentIndex: $state.selectedOutlineColorIndex,
+            textLine: .one,
+            items: state.outlineColors.map(\.rawValue)
+          )
+        }
+      }
+
+      SDGSampleBottomSheetDivider()
+
+      SDGSampleBottomSheetControlSection {
+        SDGSampleBottomSheetControlRow(title: "Retry") {
+          SDGToggle(size: .m, isOn: $state.isRetryEnabled)
         }
       }
     }
