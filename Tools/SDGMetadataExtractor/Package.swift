@@ -22,6 +22,10 @@ let package = Package(
         .product(name: "SwiftSyntax", package: "swift-syntax"),
         .product(name: "SwiftParser", package: "swift-syntax")
       ]
+    ),
+    .testTarget(
+      name: "SDGMetadataExtractorTests",
+      dependencies: ["SDGMetadataExtractor"]
     )
   ]
 )
