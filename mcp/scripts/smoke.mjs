@@ -43,6 +43,9 @@ const colors = await call('list_tokens', { type: 'color', query: 'neutral700' })
 const neutral700 = colors.tokens.find((token) => token.name === 'neutral700');
 assert.equal(neutral700?.hex, '#333333');
 assert.ok(colors.tokens.some((token) => token.name === 'neutral700_10' && token.opacity === 10 && token.baseToken === 'neutral700'));
+const black40 = await call('get_token', { name: 'sdgBlack_40' });
+assert.equal(black40.token.opacity, 40);
+assert.equal(black40.token.baseToken, undefined, 'baseToken must not point to a token that does not exist');
 assert.ok(colors.usage.color.some((line) => line.includes('.foregroundStyle(.neutral700)')));
 
 const body = await call('get_token', { name: '.body1_R' });

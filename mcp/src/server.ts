@@ -506,7 +506,9 @@ function tokenUsage(index: SDGIndex, type: TokenType, token?: TokenRecord): stri
         `Color.${color} / SDG.Color.${color} — SwiftUI Color and SDG.Color expose the same static names`,
       ];
       if (index.hasModifier('typo')) usage.push(`Text("…").typo(.body2_R, .${color})`);
-      usage.push('Suffix `_10`, `_40`, `_80` = the same color at 10/40/80% opacity.');
+      usage.push(
+        'Names ending in `_10`, `_40`, `_80` are 10/40/80% opacity colors. `baseToken` names the opaque token of the same color when one exists (some, like `sdgBlack_40`, have none).',
+      );
       return usage;
     }
     case 'typography': {

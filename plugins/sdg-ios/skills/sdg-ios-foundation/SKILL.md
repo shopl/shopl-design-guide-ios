@@ -22,7 +22,7 @@ description: SDG iOS 디자인 토큰(컬러·타이포그래피·간격·코너
 ## 컬러
 
 - SwiftUI `Color`, `SDG.Color`, `ShapeStyle`에 같은 이름의 static 멤버가 있어서 `.foregroundStyle(.neutral700)`, `.background(.neutral0)`처럼 쓴다. `SDG.Color`를 받는 파라미터(`.typo`의 두 번째 인자 등)에도 같은 이름을 쓴다.
-- 이름 끝의 `_10`, `_40`, `_80`은 같은 색의 10/40/80% 불투명도 변형이다(`neutral700_10`).
+- 이름 끝의 `_10`, `_40`, `_80`은 불투명도 10/40/80%를 뜻한다(`neutral700_10`). 같은 색의 불투명 토큰은 `baseToken`에 표시되며, `sdgBlack_40`처럼 불투명 토큰이 없는 색도 있다.
 - 시안의 hex를 토큰으로 바꿀 때는 `list_tokens`에 `type: "color"`, `query: "#333333"`을 넘긴다.
 - 컬러 에셋은 display-p3 색 공간으로 저장되어 있다. 토큰의 hex는 에셋에 저장된 값이다.
 
