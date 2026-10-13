@@ -172,6 +172,8 @@ public struct SDGAvatar: View {
         }
       } label: {
         content
+          // 눌림 효과를 Avatar 전체에 적용해 Retry 아래의 이미지가 비치지 않게 합니다.
+          .compositingGroup()
       }
       .buttonStyle(.plain)
     }
