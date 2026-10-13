@@ -6,6 +6,7 @@
 //
 
 import Combine
+import SwiftUI
 import UIKit
 import ShoplDesignGuide
 
@@ -14,11 +15,15 @@ final class SDGAvatarDemoState: ObservableObject {
   
   let roles = SDGAvatarDemoRole.allCases
   let sizes = SDGAvatarDemoSize.allCases
+  let outlineColors = SDGAvatarDemoOutlineColor.allCases
   
   @Published var selectedRoleIndex = 0
   @Published var selectedSizeIndex = 0
   @Published var isPhotoEnabled = false
-  @Published var isMaternityEnabled = false
+  @Published var isIconEnabled = true
+  @Published var isOutlineEnabled = false
+  @Published var selectedOutlineColorIndex = 0
+  @Published var isRetryEnabled = false
   
   private init() { }
   
@@ -30,22 +35,20 @@ final class SDGAvatarDemoState: ObservableObject {
     sizes[safe: selectedSizeIndex] ?? .xlarge
   }
   
-  var avatarModel: AvatarModel {
-    AvatarModel(
+  var avatarModel: SDGAvatar.Model {
+    SDGAvatar.Model(
       userId: "avatar_sample_user",
-      imageURL: isPhotoEnabled ? Self.sampleImageURL : nil,
-      roleType: selectedRole.roleType,
-      maternity: isMaternityEnabled ? .pre : .none
+      imageURL: Self.sampleImageURL
     )
   }
-  
-  var avatarPreviewID: String {
-    [
-      selectedRole.id,
-      selectedSize.id,
-      isPhotoEnabled ? "photo_on" : "photo_off",
-      isMaternityEnabled ? "maternity_on" : "maternity_off"
-    ].joined(separator: "_")
+
+  var icon: Image? {
+    isIconEnabled ? selectedRole.icon : nil
+  }
+
+  var outlineColor: Color? {
+    guard isOutlineEnabled else { return nil }
+    return (outlineColors[safe: selectedOutlineColorIndex] ?? .pink).color
   }
   
   private static let sampleImageURL: URL? = {
@@ -79,14 +82,14 @@ enum SDGAvatarDemoRole: String, CaseIterable, Identifiable {
     rawValue
   }
   
-  var roleType: AvatarModel.RoleType {
+  var icon: Image? {
     switch self {
     case .admin:
-      return .opLeader
+      return Image(sdg: .adminBadge)
     case .leader:
-      return .leader
+      return Image(sdg: .leaderBadge)
     case .staff:
-      return .worker
+      return nil
     }
   }
 }
@@ -121,6 +124,20 @@ enum SDGAvatarDemoSize: String, CaseIterable, Identifiable {
       return .xs
     case .xxsmall:
       return .xxs
+    }
+  }
+}
+
+enum SDGAvatarDemoOutlineColor: String, CaseIterable {
+  case pink = "Pink"
+  case primary = "Primary"
+  case neutral = "Neutral"
+
+  var color: Color {
+    switch self {
+    case .pink: return .sdgSpecialPink
+    case .primary: return .primary300
+    case .neutral: return .neutral700
     }
   }
 }
