@@ -30,15 +30,22 @@ interface DesignGuideEntry {
 /** 조회용 색인. 이름 키는 대소문자·백틱을 무시한다. */
 class SDGIndex {
   readonly cards = new Map<string, TypeCard>();
+  /** 모디파이어 이름 → 오버로드 목록 (padding처럼 오버로드가 여럿인 경우를 한 항목으로 다룬다) */
   readonly modifiers = new Map<string, Member[]>();
+  /** `Image.templateIcon` 형태의 키 */
   readonly extensions = new Map<string, Member[]>();
+  /** `templateIcon`처럼 소유 타입 없이 이름만으로 찾을 때 */
+  readonly extensionsByName = new Map<string, Member[]>();
   readonly designGuide = new Map<string, DesignGuideEntry>();
   readonly tokens = new Map<string, TokenRecord>();
 
   constructor(readonly data: SDGData) {
     for (const card of [...data.api.views, ...data.api.types]) this.cards.set(key(card.name), card);
     for (const modifier of data.api.modifiers) push(this.modifiers, key(modifier.name), modifier);
-    for (const member of data.api.extensions) push(this.extensions, key(`${member.owner}.${member.name}`), member);
+    for (const member of data.api.extensions) {
+      push(this.extensions, key(`${member.owner}.${member.name}`), member);
+      push(this.extensionsByName, key(member.name), member);
+    }
     for (const token of data.tokens.tokens) this.tokens.set(key(token.name), token);
 
     const visit = (item: CatalogItem, path: string[]) => {
@@ -69,8 +76,9 @@ class SDGIndex {
     return this.modifiers.get(key(name.replace(/^(SwiftUI\.)?View\./i, '').replace(/^\./, '')));
   }
 
+  /** `Image.templateIcon` 또는 `templateIcon`, `.templateIcon` */
   extensionMembers(name: string): Member[] | undefined {
-    return this.extensions.get(key(name));
+    return this.extensions.get(key(name)) ?? this.extensionsByName.get(key(name.replace(/^\./, '')));
   }
 
   hasModifier(name: string): boolean {
@@ -115,6 +123,26 @@ class SDGIndex {
     }
     return [...found.values()].slice(0, 15);
   }
+
+  /** public init이 없는 struct·class는 모듈 밖에서 만들 수 없다(내부 memberwise init만 있는 경우 등). */
+  isUnconstructible(card: TypeCard): boolean {
+    return (card.kind === 'struct' || card.kind === 'class') && card.initializers.length === 0;
+  }
+
+  /**
+   * 이 init·메서드를 모듈 밖에서 호출하지 못하게 막는 필수 파라미터 타입.
+   * 기본값이 없고, 옵셔널·배열·클로저가 아니며, 모듈 밖에서 만들 수 없는 SDG 타입이면 호출할 방법이 없다.
+   */
+  constructionBlocker(member: Member, owner: string): TypeCard | undefined {
+    for (const parameter of member.parameters ?? []) {
+      if (parameter.defaultValue !== undefined) continue;
+      const type = parameter.type.replace(/@\w+\s*/g, '').trim();
+      if (/[?!]$/.test(type) || type.startsWith('[') || type.includes('->')) continue;
+      const card = this.resolveType(type.replace(/`/g, ''), owner);
+      if (card && !card.isView && this.isUnconstructible(card)) return card;
+    }
+    return undefined;
+  }
 }
 
 export function createServer(data: SDGData, version: string): McpServer {
@@ -151,7 +179,7 @@ export function createServer(data: SDGData, version: string): McpServer {
           text: JSON.stringify(
             {
               views: data.api.views.map((view) => viewSummary(index, view)),
-              modifiers: data.api.modifiers.map((modifier) => modifierSummary(index, modifier)),
+              modifiers: [...index.modifiers.values()].map((overloads) => modifierSummary(index, overloads)),
             },
             null,
             2,
@@ -177,7 +205,8 @@ export function createServer(data: SDGData, version: string): McpServer {
       annotations: READ_ONLY,
     },
     async ({ type, group, query }) => {
-      const needle = query?.toLowerCase();
+      // `.neutral700`처럼 코드 표기 그대로 물어도 찾도록 앞의 점을 뗀다.
+      const needle = query?.toLowerCase().replace(/^\./, '');
       const tokens = data.tokens.tokens.filter((token) => {
         if (type && token.type !== type) return false;
         if (group && token.group?.toLowerCase() !== group.toLowerCase()) return false;
@@ -263,17 +292,17 @@ export function createServer(data: SDGData, version: string): McpServer {
       const terms = parseQuery(query);
       const candidates = [
         ...data.api.views.map((view) => ({ kind: 'view' as const, view })),
-        ...data.api.modifiers.map((modifier) => ({ kind: 'modifier' as const, modifier })),
+        // 오버로드가 여럿인 모디파이어(padding 등)는 한 항목으로 묶는다.
+        ...[...index.modifiers.values()].map((overloads) => ({ kind: 'modifier' as const, overloads })),
         ...data.api.types.filter((type) => !type.name.includes('.')).map((type) => ({ kind: 'type' as const, view: type })),
       ];
       const results = candidates
         .map((candidate) => {
           if (candidate.kind === 'modifier') {
-            const location = locationOf(candidate.modifier.file);
-            if (layer && location.layer !== layer) return undefined;
-            const score = scoreTerms(terms, (term) => scoreModifier(index, candidate.modifier, term));
-            const name = `View.${candidate.modifier.name}`;
-            return score > 0 ? { score, name, summary: modifierSummary(index, candidate.modifier) } : undefined;
+            const first = candidate.overloads[0]!;
+            if (layer && locationOf(first.file).layer !== layer) return undefined;
+            const score = scoreTerms(terms, (term) => Math.max(...candidate.overloads.map((overload) => scoreModifier(index, overload, term))));
+            return score > 0 ? { score, name: `View.${first.name}`, summary: modifierSummary(index, candidate.overloads) } : undefined;
           }
           if (layer && candidate.view.location.layer !== layer) return undefined;
           // 컴포넌트를 찾는 도구이므로 보조 타입(enum·struct)은 같은 점수에서 뒤로 보낸다.
@@ -327,7 +356,7 @@ export function createServer(data: SDGData, version: string): McpServer {
     {
       title: 'Get SDG usage examples',
       description:
-        'Real call sites of an SDG component or view modifier, taken from the library #Preview blocks and the SDG SampleApp. The code compiles against the public API, so copy its argument labels and nesting.',
+        'Real call sites of an SDG component or view modifier from the SDG SampleApp (a separate module, so public API only; listed first) and the library #Preview blocks. Each call and the SDG initializers nested in its arguments were checked against public initializers, but code inside closures was not, so re-check with get_component_api if something does not compile. Copy the argument labels and nesting.',
       inputSchema: {
         name: z.string().describe('Component or modifier name, e.g. `SDGBoxButton`, `centerConfirmPopup`.'),
         limit: z.number().int().min(1).max(10).optional().describe('Max examples (default 5).'),
@@ -339,10 +368,11 @@ export function createServer(data: SDGData, version: string): McpServer {
       const card = index.card(name);
       if (card) {
         const own = data.examples.examples[card.name] ?? [];
-        const viaModifiers = index
-          .presentingModifiers(card)
-          .flatMap((modifier) => (data.examples.examples[`View.${modifier.name}`] ?? []).map((example) => ({ ...example, via: `View.${modifier.name}` })));
-        const examples = [...own, ...viaModifiers].slice(0, max);
+        const modifierNames = [...new Set(index.presentingModifiers(card).map((modifier) => modifier.name))];
+        const viaModifiers = modifierNames.flatMap((modifierName) =>
+          (data.examples.examples[`View.${modifierName}`] ?? []).map((example) => ({ ...example, via: `View.${modifierName}` })),
+        );
+        const examples = publicFirst([...own, ...viaModifiers]).slice(0, max);
         return asText({
           found: examples.length > 0,
           name: card.name,
@@ -353,7 +383,7 @@ export function createServer(data: SDGData, version: string): McpServer {
       const overloads = index.modifierOverloads(name);
       if (overloads?.length) {
         const modifierKey = `View.${overloads[0]!.name}`;
-        const examples = (data.examples.examples[modifierKey] ?? []).slice(0, max);
+        const examples = publicFirst(data.examples.examples[modifierKey] ?? []).slice(0, max);
         return asText({
           found: examples.length > 0,
           name: modifierKey,
@@ -465,16 +495,18 @@ function viewSummary(index: SDGIndex, card: TypeCard) {
   });
 }
 
-function modifierSummary(index: SDGIndex, modifier: Member) {
-  const location = locationOf(modifier.file);
+/** 같은 이름의 오버로드(padding 3종 등)를 한 항목으로 요약한다. */
+function modifierSummary(index: SDGIndex, overloads: Member[]) {
+  const first = overloads[0]!;
+  const location = locationOf(first.file);
   return compact({
-    name: `View.${modifier.name}`,
+    name: `View.${first.name}`,
     kind: 'modifier',
     layer: location.layer,
     group: location.group,
-    signature: modifier.signature,
-    designGuide: guideLine(index.designGuide.get(key(`View.${modifier.name}`))),
-    deprecated: modifier.deprecated,
+    signatures: overloads.map((overload) => overload.signature),
+    designGuide: guideLine(index.designGuide.get(key(`View.${first.name}`))),
+    deprecated: overloads.every((overload) => overload.deprecated) ? first.deprecated : undefined,
   });
 }
 
@@ -570,6 +602,11 @@ function colorOverloadNote(members: Member[]): string | undefined {
   return undefined;
 }
 
+/** 모듈 밖에서 컴파일된(공개 API만 쓰는) SampleApp 예제를 프리뷰 예제보다 앞에 둔다. */
+function publicFirst<T extends ExampleRecord>(examples: T[]): T[] {
+  return [...examples.filter((example) => example.source === 'sample-app'), ...examples.filter((example) => example.source !== 'sample-app')];
+}
+
 function exampleView(example: ExampleRecord & { via?: string }) {
   return compact({ source: example.source, file: example.file, via: example.via, code: example.code, truncated: example.truncated });
 }
@@ -631,7 +668,7 @@ function describeSymbol(index: SDGIndex, name: string) {
       usage: `Chain on any view: someView.${overloads[0]!.name}(…)`,
       notes: [colorOverloadNote(overloads)].filter((note): note is string => note !== undefined),
       overloads: overloads.map((overload) => compact({ ...memberView(overload), file: overload.file })),
-      relatedTypes: related.map((type) => briefType(type)),
+      relatedTypes: related.map((type) => briefType(index, type)),
       designGuide: guide,
       examples: index.data.examples.examples[modifierName]?.length ?? 0,
     });
@@ -654,14 +691,27 @@ function describeSymbol(index: SDGIndex, name: string) {
 function describeType(index: SDGIndex, card: TypeCard) {
   const nested = index.descendants(card);
   const exclude = new Set([card, ...nested].map((type) => key(type.name)));
-  const signatures = [card, ...nested].flatMap((type) => [
-    ...type.initializers.map((member) => member.signature),
-    ...type.properties.map((member) => member.signature),
-    ...type.cases.map((enumCase) => enumCase.associatedValues ?? ''),
-    type.aliasOf ?? '',
-  ]);
+  // 시그니처 안의 타입 이름은 그 시그니처가 속한 타입의 스코프에서 찾아야 한다(중첩 타입 안의 `Option` 등).
+  const related = new Map<string, TypeCard>();
+  for (const type of [card, ...nested]) {
+    const signatures = [
+      ...type.initializers.map((member) => member.signature),
+      ...type.properties.map((member) => member.signature),
+      ...type.methods.map((member) => member.signature),
+      ...type.cases.map((enumCase) => enumCase.associatedValues ?? ''),
+      type.aliasOf ?? '',
+    ];
+    for (const relatedType of index.relatedTypes(signatures, type.name, exclude)) related.set(relatedType.name, relatedType);
+  }
   const presentedBy = index.presentingModifiers(card);
   const guide = index.designGuide.get(key(card.name));
+
+  const blockedInitializers = card.initializers.flatMap((initializer) => {
+    const blocker = index.constructionBlocker(initializer, card.name);
+    return blocker
+      ? [`\`${initializer.signature}\` cannot be called outside ShoplDesignGuide: it requires \`${blocker.name}\`, which has no public initializer.`]
+      : [];
+  });
 
   return compact({
     found: true,
@@ -678,8 +728,10 @@ function describeType(index: SDGIndex, card: TypeCard) {
     initializers: card.initializers.map(memberView),
     notes: [
       card.isView && card.initializers.length === 0 && presentedBy.length
-        ? `${card.name} has no public initializer. Present it with ${presentedBy.map((modifier) => `.${modifier.name}(…)`).join(' or ')}.`
+        ? `${card.name} has no public initializer. Present it with ${[...new Set(presentedBy.map((modifier) => `.${modifier.name}(…)`))].join(' or ')}.`
         : undefined,
+      index.isUnconstructible(card) && !(card.isView && presentedBy.length) ? unconstructibleNote(card) : undefined,
+      ...blockedInitializers,
       colorOverloadNote(card.initializers),
       colorOverloadNote(card.methods),
     ].filter((note): note is string => note !== undefined),
@@ -687,19 +739,25 @@ function describeType(index: SDGIndex, card: TypeCard) {
     methods: card.methods.map(memberView),
     properties: card.properties.map(memberView),
     cases: card.cases.map(caseView),
-    nestedTypes: nested.map((type) => briefType(type)),
-    relatedTypes: index.relatedTypes(signatures, card.name, exclude).map((type) => briefType(type)),
+    nestedTypes: nested.map((type) => briefType(index, type)),
+    relatedTypes: [...related.values()].slice(0, 15).map((type) => briefType(index, type)),
     examples: card.isView ? (index.data.examples.examples[card.name]?.length ?? 0) : undefined,
   });
 }
 
+function unconstructibleNote(card: TypeCard): string {
+  const statics = card.properties.filter((property) => property.isStatic).map((property) => `${card.name}.${property.name}`);
+  return `${card.name} has no public initializer, so it cannot be created outside ShoplDesignGuide.${statics.length ? ` Use ${statics.join(', ')}.` : ''}`;
+}
+
 /** 관련 타입은 한 단계만 펼친다(케이스·이니셜라이저·프로퍼티 시그니처). */
-function briefType(card: TypeCard) {
+function briefType(index: SDGIndex, card: TypeCard) {
   return compact({
     name: card.name,
     declaration: card.declaration,
     deprecated: card.deprecated,
     aliasOf: card.aliasOf,
+    note: index.isUnconstructible(card) && !card.isView ? unconstructibleNote(card) : undefined,
     cases: card.cases.map(caseView),
     initializers: card.initializers.map(memberView),
     properties: card.properties.map((member) => member.signature),
@@ -712,6 +770,7 @@ function notFound(index: SDGIndex, name: string) {
     ...index.data.api.views.map((view) => view.name),
     ...index.data.api.types.map((type) => type.name),
     ...index.data.api.modifiers.map((modifier) => `View.${modifier.name}`),
+    ...index.data.api.extensions.map((member) => `${member.owner}.${member.name}`),
   ];
   return { found: false, name, suggestions: suggest(name, [...new Set(candidates)]) };
 }
