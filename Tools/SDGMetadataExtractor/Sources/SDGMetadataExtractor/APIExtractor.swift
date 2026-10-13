@@ -107,6 +107,7 @@ struct APIExtractor {
         collector.collectTypes(in: decl, file: file, defaultPublic: false)
       }
     }
+    collector.removeTypesNestedInNonPublicTypes()
     // 2차: 익스텐션 멤버를 기존 타입에 합치거나 View 모디파이어·외부 타입 확장으로 분류한다.
     for file in files {
       for decl in topLevelDecls(of: file.tree) {
@@ -158,8 +159,8 @@ private enum Members {
   static func flatten(_ decl: DeclSyntax) -> [DeclSyntax] {
     guard let ifConfig = decl.as(IfConfigDeclSyntax.self) else { return [decl] }
     return ifConfig.clauses.flatMap { clause -> [DeclSyntax] in
-      // `#if DEBUG` 전용 선언은 앱의 릴리스 빌드에서 쓸 수 없으므로 뺀다.
-      if let condition = clause.condition, SyntaxText.compact(condition) == "DEBUG" { return [] }
+      // DEBUG에서만 컴파일되는 선언은 앱의 릴리스 빌드에서 쓸 수 없으므로 뺀다.
+      if let condition = clause.condition, requiresDebug(SyntaxText.compact(condition)) { return [] }
       switch clause.elements {
       case .statements(let statements):
         return statements.compactMap { Syntax($0.item).as(DeclSyntax.self) }.flatMap(flatten)
@@ -173,6 +174,14 @@ private enum Members {
 
   static func of(_ memberBlock: MemberBlockSyntax) -> [DeclSyntax] {
     memberBlock.members.map(\.decl).flatMap(flatten)
+  }
+
+  /// `DEBUG`, `DEBUG && X`처럼 DEBUG일 때만 참인 조건. `!DEBUG`, `DEBUG || X`는 릴리스에서도 컴파일될 수 있다.
+  static func requiresDebug(_ condition: String) -> Bool {
+    let flattened = condition.replacingOccurrences(of: "(", with: " ").replacingOccurrences(of: ")", with: " ")
+    return flattened.components(separatedBy: "||").allSatisfy { disjunct in
+      disjunct.components(separatedBy: "&&").map { $0.trimmingCharacters(in: .whitespaces) }.contains("DEBUG")
+    }
   }
 }
 
@@ -233,6 +242,20 @@ private struct Collector {
     }
 
     cards[name] = card
+  }
+
+  /// `extension InternalType { public struct X }`처럼 부모 타입이 public이 아니면 중첩 타입도 모듈 밖에서 보이지 않는다.
+  mutating func removeTypesNestedInNonPublicTypes() {
+    for name in cards.keys.sorted() {
+      var ancestor = ""
+      for component in name.split(separator: ".").dropLast() {
+        ancestor = ancestor.isEmpty ? String(component) : ancestor + "." + component
+        if declaredTypes.contains(ancestor) && cards[ancestor] == nil {
+          cards[name] = nil
+          break
+        }
+      }
+    }
   }
 
   /// 익스텐션에서 선언된 중첩 타입(`extension SDGBoxButton { public enum X }`)도 부모의 `nestedTypes`에 연결한다.

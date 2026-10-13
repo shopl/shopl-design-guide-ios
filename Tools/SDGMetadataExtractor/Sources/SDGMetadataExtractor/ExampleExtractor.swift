@@ -180,8 +180,10 @@ private struct CallValidator {
 
     let initializers = card.initializers.compactMap(\.parameters)
     guard !initializers.isEmpty else {
-      // public init이 없는 struct·class는 모듈 밖에서 만들 수 없다(내부 memberwise init만 있는 경우 등).
-      return card.kind != "struct" && card.kind != "class"
+      // public init이 없는 struct는 모듈 밖에서 만들 수 없다(내부 memberwise init만 있는 경우 등).
+      // 클래스는 상위 클래스의 public init을 물려받을 수 있으므로 상속이 없을 때만 막는다.
+      let isUnconstructible = card.kind == "struct" || (card.kind == "class" && card.inherits.isEmpty)
+      return !isUnconstructible
     }
     return isValid(call, overloads: initializers, owner: card.name, depth: depth + 1)
   }
