@@ -30,6 +30,10 @@ struct SDGMetadataExtractor {
       try writer.write(api, to: "api.generated.json")
       report.summary("api", api.views.count + api.types.count + api.modifiers.count + api.extensions.count, details: api.counts)
 
+      let examples = try ExampleExtractor(repository: repository, api: api).extract()
+      try writer.write(examples, to: "examples.generated.json")
+      report.summary("examples", examples.count, details: ["symbols": examples.examples.count])
+
       report.printAll()
       if report.hasEmptyResult {
         FileHandle.standardError.write(Data("✗ 비어 있는 결과가 있습니다. 추출기의 소스 구조 가정이 깨졌을 수 있습니다.\n".utf8))
