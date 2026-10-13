@@ -242,365 +242,58 @@ public struct SDGAvatar: View {
   }
 }
 
-struct Avatar_Preview: PreviewProvider {
-  static var previews: some View {
-    VStack(spacing: 5) {
-      Group {
-        Text("XXS")
-        
-        HStack(spacing: 10) {
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .worker
-            ),
-            size: .xxs,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .leader
-            ),
-            size: .xxs,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .opLeader
-            ),
-            size: .xxs,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .opLeader,
-              maternity: .pre
-            ),
-            size: .xxs,
-            action: { userId in
-              
-            }
-          )
+private struct AvatarPreview: View {
+  private let sizes: [SDGAvatar.Size] = [.xxs, .xs, .s, .m, .l, .xl]
+  private let model = SDGAvatar.Model(userId: "preview", imageURL: nil)
+
+  var body: some View {
+    ScrollView(.horizontal) {
+      Grid(horizontalSpacing: 20, verticalSpacing: 20) {
+        GridRow {
+          Text("Size")
+          Text("Empty")
+          Text("Outline")
+          Text("Icon")
+          Text("Retry")
+        }
+        .font(.caption)
+
+        ForEach(sizes, id: \.rawValue) { size in
+          GridRow {
+            Text("\(Int(size.rawValue))")
+              .font(.caption)
+            SDGAvatar(model: model, size: size, action: { _ in })
+            SDGAvatar(
+              model: model,
+              size: size,
+              outlineColor: .sdgSpecialPink,
+              action: { _ in }
+            )
+            SDGAvatar(
+              model: model,
+              size: size,
+              icon: Image(sdg: .leaderBadge),
+              action: { _ in }
+            )
+            SDGAvatar(
+              model: model,
+              size: size,
+              icon: Image(sdg: .adminBadge),
+              outlineColor: .primary300,
+              showRetry: true,
+              onRetry: { },
+              action: { _ in }
+            )
+          }
         }
       }
-      .padding(.top, 10)
-      
-      Group {
-        Text("XS")
-        HStack(spacing: 10) {
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .worker
-            ),
-            size: .xs,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .leader
-            ),
-            size: .xs,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .opLeader
-            ),
-            size: .xs,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .opLeader,
-              maternity: .pre
-            ),
-            size: .xs,
-            action: { userId in
-              
-            }
-          )
-        }
-      }
-      .padding(.top, 10)
-      
-      Group {
-        Text("S")
-        HStack(spacing: 10) {
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .worker
-            ),
-            size: .s,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .leader
-            ),
-            size: .s,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .opLeader
-            ),
-            size: .s,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .opLeader,
-              maternity: .pre
-            ),
-            size: .s,
-            action: { userId in
-              
-            }
-          )
-        }
-      }
-      .padding(.top, 10)
-      
-      Group {
-        Text("M")
-        HStack(spacing: 10) {
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .worker
-            ),
-            size: .m,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .leader
-            ),
-            size: .m,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .opLeader
-            ),
-            size: .m,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .opLeader,
-              maternity: .pre
-            ),
-            size: .m,
-            action: { userId in
-              
-            }
-          )
-        }
-      }
-      .padding(.top, 10)
-      
-      Group {
-        Text("L")
-        HStack(spacing: 10) {
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .worker
-            ),
-            size: .l,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .leader
-            ),
-            size: .l,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .opLeader
-            ),
-            size: .l,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .opLeader,
-              maternity: .pre
-            ),
-            size: .l,
-            action: { userId in
-              
-            }
-          )
-        }
-      }
-      .padding(.top, 10)
-      
-      Group {
-        Text("XL")
-        HStack(spacing: 10) {
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .worker
-            ),
-            size: .xl,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .leader
-            ),
-            size: .xl,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .opLeader
-            ),
-            size: .xl,
-            action: { userId in
-              
-            }
-          )
-          
-          SDGAvatar(
-            type: .round,
-            model: AvatarModel(
-              userId: "",
-              imageURL: nil,
-              roleType: .opLeader,
-              maternity: .pre
-            ),
-            size: .xl,
-            action: { userId in
-              
-            }
-          )
-        }
-      }
-      .padding(.top, 10)
-      
+      .fixedSize(horizontal: true, vertical: false)
+      .padding(24)
     }
+    .background(Color.neutral0)
   }
+}
+
+#Preview {
+  AvatarPreview()
 }
