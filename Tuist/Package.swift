@@ -9,6 +9,11 @@
 let packageSettings = PackageSettings(
   productTypes: [
     "Kingfisher": .framework,
+  ],
+  targetSettings: [
+    "Kingfisher": .settings(base: [
+      "IPHONEOS_DEPLOYMENT_TARGET": "16.0",
+    ]),
   ]
 )
 
