@@ -22,7 +22,8 @@ description: SDG iOS 디자인 토큰(컬러·타이포그래피·간격·코너
 ## 컬러
 
 - SwiftUI `Color`, `SDG.Color`, `ShapeStyle`에 같은 이름의 static 멤버가 있어서 `.foregroundStyle(.neutral700)`, `.background(.neutral0)`처럼 쓴다. `SDG.Color`를 받는 파라미터(`.typo`의 두 번째 인자 등)에도 같은 이름을 쓴다.
-- 이름 끝의 `_10`, `_40`, `_80`은 같은 색의 10/40/80% 불투명도 변형이다(`neutral700_10`).
+- 단, 한 메서드에 `Color`를 받는 오버로드와 `SDG.Color`를 받는 오버로드가 함께 있으면(`templateIcon`) `.neutral700`이 어느 쪽인지 정할 수 없어 컴파일 오류(ambiguous use)가 난다. 이때는 `Color.neutral700`처럼 타입을 붙인다. `get_component_api` 응답의 `notes`가 이런 API를 알려 준다.
+- 이름 끝의 `_10`, `_40`, `_80`은 불투명도 10/40/80%를 뜻한다(`neutral700_10`). 같은 색의 불투명 토큰은 `baseToken`에 표시되며, `sdgBlack_40`처럼 불투명 토큰이 없는 색도 있다.
 - 시안의 hex를 토큰으로 바꿀 때는 `list_tokens`에 `type: "color"`, `query: "#333333"`을 넘긴다.
 - 컬러 에셋은 display-p3 색 공간으로 저장되어 있다. 토큰의 hex는 에셋에 저장된 값이다.
 
@@ -42,5 +43,5 @@ description: SDG iOS 디자인 토큰(컬러·타이포그래피·간격·코너
 ## 아이콘
 
 - `search_icon`으로 찾은 이름만 쓴다: `Image(sdg: .icCommonTrash)`.
-- `renderingMode`가 `template`인 아이콘은 색을 입힌다: `Image(sdg: .icCommonTrash).templateIcon(size: 20, color: .neutral700)`.
+- `renderingMode`가 `template`인 아이콘은 색을 입힌다: `Image(sdg: .icCommonTrash).templateIcon(size: 20, color: Color.neutral700)` (위의 오버로드 모호성 때문에 `Color.`를 붙인다).
 - `original` 아이콘(배지 등)은 색을 바꾸지 않고 `.resizable().frame(width:height:)`로 크기만 정한다.

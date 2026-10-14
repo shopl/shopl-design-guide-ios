@@ -41,7 +41,7 @@ plugins/sdg-ios/                 배포 단위 (Claude Code 플러그인)
 | `tokens.generated.json` | `Colors.xcassets`, Tuist 생성 심볼, `SDG+Typography.swift`, `SDGSpacing.swift`, `SDGCornerRadius.swift` | 컬러(hex·불투명도·기본 토큰), 타이포(크기·굵기·줄 높이), 간격·라운드(pt, MARK 그룹) |
 | `icons.generated.json` | `Images.xcassets`, Tuist 생성 심볼 | Swift 심볼, 에셋 이름, 렌더링 모드, 포맷, 검색 키워드 |
 | `api.generated.json` | `Sources/ShoplDesignGuide/**` (Generated 제외) | 공개 View·타입·중첩 타입·typealias, init/메서드/프로퍼티 시그니처, enum 케이스, deprecated, 문서 주석, 디자인 스펙 버전, View 모디파이어 |
-| `examples.generated.json` | 라이브러리 `#Preview`와 프리뷰 헬퍼, SampleApp | 공개 시그니처와 인자 라벨이 맞는 실제 호출부 |
+| `examples.generated.json` | 라이브러리 `#Preview`와 프리뷰 헬퍼, SampleApp | 호출과 그 안의 중첩 SDG 생성 호출(`.init(...)`)이 공개 init과 맞는 실제 호출부 |
 | `catalog.generated.json` | `SampleApp/Sources/DesignSystem/SDGCatalog.swift` | 디자인 가이드 섹션·항목·설명, 실제 공개 심볼로 계산한 iOS 구현 여부 |
 | `setup.generated.json` | `Package.swift`, 다국어 키 사용 파일 | 플랫폼·제품·의존성, 다국어 Provider가 필요한 심볼 |
 
@@ -110,7 +110,7 @@ CI(`.github/workflows/mcp-check.yml`)가 같은 명령으로 다시 생성해 �
 | 서버는 TypeScript, 번들 커밋 | MCP SDK가 가장 성숙하고, 플러그인은 설치 시 npm install을 하지 않으므로 의존성 포함 번들이 필요 |
 | 데이터는 번들 밖 JSON | 소스 변경이 PR diff에서 데이터 변경으로 보이게 하고, 데이터만 바뀔 때 번들이 바뀌지 않게 함 |
 | 플러그인 `version` 미지정 | 커밋 SHA 기준으로 업데이트되어 main 반영분이 별도 버전 올림 없이 전달됨 |
-| 예제는 공개 시그니처와 라벨 대조 | 모듈 내부 init을 쓰는 프리뷰나 같은 이름의 SwiftUI 타입 호출을 예제로 내보내지 않기 위함 |
+| 예제는 호출과 중첩 SDG 생성 호출을 공개 init과 대조 | 프리뷰는 모듈 안에서 컴파일되어 internal init을 쓸 수 있다. 앱에 복사하면 컴파일되지 않는 예제나 같은 이름의 SwiftUI 타입 호출을 내보내지 않기 위함 |
 | 구현 여부는 실제 공개 심볼로 계산 | SampleApp의 수동 목록은 실제와 어긋날 수 있음 |
 
 ## 알려진 한계

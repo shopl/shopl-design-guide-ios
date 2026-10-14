@@ -74,6 +74,7 @@ struct TokenExtractor {
   private func colors(report: inout Report) throws -> [TokenRecord] {
     var records: [TokenRecord] = []
     var seenAssets = Set<String>()
+    let colorSymbols = Set(symbols.colors.values)
 
     for colorset in try repository.directories(in: repository.colorAssets, withExtension: "colorset") {
       let assetName = colorset.deletingPathExtension().lastPathComponent
@@ -89,7 +90,10 @@ struct TokenExtractor {
         ? nil
         : colorset.deletingLastPathComponent().lastPathComponent
       let opacity = Int((value.alpha * 100).rounded())
-      let baseToken = symbol.range(of: #"_\d+$"#, options: .regularExpression).map { String(symbol[..<$0.lowerBound]) }
+      // `neutral700_10` → `neutral700`. sdgBlack_40처럼 불투명한 기본 토큰이 없는 색은 비워 둔다.
+      let baseToken = symbol.range(of: #"_\d+$"#, options: .regularExpression)
+        .map { String(symbol[..<$0.lowerBound]) }
+        .flatMap { colorSymbols.contains($0) ? $0 : nil }
 
       records.append(TokenRecord(
         name: symbol,

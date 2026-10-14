@@ -105,19 +105,27 @@ enum Comments {
   /// 선언 바로 앞의 `///`, `/** */` 문서 주석을 이어 붙인다.
   static func documentation(of node: some SyntaxProtocol) -> String? {
     var lines: [String] = []
+    // 공백만 있는 줄도 빈 줄이므로 줄바꿈 사이의 공백은 무시하고 연속 줄바꿈 수를 센다.
+    var consecutiveNewlines = 0
     for piece in node.leadingTrivia {
       switch piece {
       case .docLineComment(let text):
         lines.append(stripLinePrefix(text, prefix: "///"))
+        consecutiveNewlines = 0
       case .docBlockComment(let text):
         lines.append(contentsOf: stripBlock(text))
-      case .newlines(let count), .carriageReturnLineFeeds(let count):
+        consecutiveNewlines = 0
+      case .newlines(let count), .carriageReturns(let count), .carriageReturnLineFeeds(let count):
         // 빈 줄로 떨어진 앞쪽 문서 주석은 다른 선언의 것이므로 버린다.
-        if count > 1 { lines.removeAll() }
+        consecutiveNewlines += count
+        if consecutiveNewlines > 1 { lines.removeAll() }
+      case .spaces, .tabs:
+        continue
       case .lineComment, .blockComment:
         lines.removeAll()
+        consecutiveNewlines = 0
       default:
-        continue
+        consecutiveNewlines = 0
       }
     }
     let text = lines.joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
@@ -210,25 +218,46 @@ private final class CommentStripper: SyntaxRewriter {
 
 // MARK: - Attributes
 
+struct Availability {
+  /// deprecated 안내 문구. `message:`와 `renamed:`를 합친다. deprecated가 아니면 nil.
+  var deprecated: String?
+  /// `unavailable`·`obsoleted` — 사용할 수 없는 선언이므로 추출 결과에서 뺀다.
+  var isUnavailable = false
+}
+
 enum Attributes {
-  /// `@available(*, deprecated, message: "...")`에서 메시지를 읽는다. 메시지가 없으면 "deprecated".
-  static func deprecation(in attributes: AttributeListSyntax) -> String? {
+  /// `@available(*, deprecated, message: "...", renamed: "...")`, `@available(*, unavailable)`를 읽는다.
+  static func availability(in attributes: AttributeListSyntax) -> Availability {
+    var result = Availability()
     for element in attributes {
       guard case .attribute(let attribute) = element,
             attribute.attributeName.trimmedDescription == "available",
-            let arguments = attribute.arguments?.trimmedDescription,
-            arguments.contains("deprecated")
+            let arguments = attribute.arguments?.trimmedDescription
       else { continue }
 
-      if let range = arguments.range(of: #"message:\s*"([^"]*)""#, options: .regularExpression) {
-        let match = arguments[range]
-        if let open = match.firstIndex(of: "\""), let close = match.lastIndex(of: "\""), open < close {
-          return String(match[match.index(after: open)..<close])
-        }
+      if arguments.contains("unavailable") || arguments.contains("obsoleted") {
+        result.isUnavailable = true
       }
-      return "deprecated"
+      guard arguments.contains("deprecated") else { continue }
+
+      let message = labeledString("message", in: arguments)
+      let renamed = labeledString("renamed", in: arguments)
+      switch (message, renamed) {
+      case let (message?, renamed?): result.deprecated = "\(message) (renamed: \(renamed))"
+      case let (message?, nil): result.deprecated = message
+      case let (nil, renamed?): result.deprecated = "renamed: \(renamed)"
+      case (nil, nil): result.deprecated = "deprecated"
+      }
     }
-    return nil
+    return result
+  }
+
+  /// `label: "value"` 형태의 문자열 인자 값.
+  private static func labeledString(_ label: String, in arguments: String) -> String? {
+    guard let range = arguments.range(of: label + #":\s*"[^"]*""#, options: .regularExpression) else { return nil }
+    let match = arguments[range]
+    guard let open = match.firstIndex(of: "\""), let close = match.lastIndex(of: "\""), open < close else { return nil }
+    return String(match[match.index(after: open)..<close])
   }
 }
 

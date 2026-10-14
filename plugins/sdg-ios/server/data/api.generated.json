@@ -2560,7 +2560,7 @@
           "signature" : "init(type: Type, id: String, fileName: String, fileSize: String)"
         },
         {
-          "deprecated" : "deprecated",
+          "deprecated" : "renamed: init(type:id:fileName:fileSize:)",
           "file" : "Sources/ShoplDesignGuide/Component/AttachmentElement/SDGAttachmentElement.swift",
           "kind" : "initializer",
           "name" : "init",
@@ -2629,14 +2629,14 @@
           "signature" : "let fileSize: String"
         },
         {
-          "deprecated" : "deprecated",
+          "deprecated" : "renamed: fileName",
           "file" : "Sources/ShoplDesignGuide/Component/AttachmentElement/SDGAttachmentElement.swift",
           "kind" : "property",
           "name" : "name",
           "signature" : "var name: String"
         },
         {
-          "deprecated" : "deprecated",
+          "deprecated" : "renamed: fileSize",
           "file" : "Sources/ShoplDesignGuide/Component/AttachmentElement/SDGAttachmentElement.swift",
           "kind" : "property",
           "name" : "size",
@@ -8385,7 +8385,7 @@
 
       ],
       "declaration" : "public typealias Photo = Thumbnail",
-      "deprecated" : "deprecated",
+      "deprecated" : "renamed: Thumbnail",
       "inherits" : [
 
       ],
@@ -13729,7 +13729,7 @@
           "signature" : "init(thumbnails: [Thumbnail], type: ThumbnailType = .photo, rowCount: Int? = nil, layout: Layout = .grid, onDelete: ((Thumbnail) -> Void)? = nil, onThumbnailTapped: ((Thumbnail) -> Void)? = nil, onRemainingCountTapped: (() -> Void)? = nil)"
         },
         {
-          "deprecated" : "deprecated",
+          "deprecated" : "renamed: init(thumbnails:type:rowCount:layout:onDelete:onThumbnailTapped:onRemainingCountTapped:)",
           "doc" : "기존 Photo 전용 API를 사용하는 화면의 동작과 호출 방식을 유지함.",
           "file" : "Sources/ShoplDesignGuide/Component/Thumbnails/SDGThumbnails.swift",
           "kind" : "initializer",

@@ -43,6 +43,9 @@ const colors = await call('list_tokens', { type: 'color', query: 'neutral700' })
 const neutral700 = colors.tokens.find((token) => token.name === 'neutral700');
 assert.equal(neutral700?.hex, '#333333');
 assert.ok(colors.tokens.some((token) => token.name === 'neutral700_10' && token.opacity === 10 && token.baseToken === 'neutral700'));
+const black40 = await call('get_token', { name: 'sdgBlack_40' });
+assert.equal(black40.token.opacity, 40);
+assert.equal(black40.token.baseToken, undefined, 'baseToken must not point to a token that does not exist');
 assert.ok(colors.usage.color.some((line) => line.includes('.foregroundStyle(.neutral700)')));
 
 const body = await call('get_token', { name: '.body1_R' });
@@ -52,6 +55,9 @@ assert.ok(body.usage.some((line) => line.includes('.typo(.body1_R')));
 const spacing = await call('list_tokens', { type: 'spacing' });
 assert.ok(spacing.tokens.some((token) => token.name === 'spacing16' && token.points === 16));
 
+const dotted = await call('list_tokens', { query: '.neutral700' });
+assert.ok(dotted.count > 0, 'a leading dot in the query must be ignored');
+
 const tokenMiss = await call('get_token', { name: 'neutral701' });
 assert.equal(tokenMiss.found, false);
 assert.ok(tokenMiss.suggestions.includes('neutral700'));
@@ -59,7 +65,12 @@ step('list_tokens / get_token');
 
 // 아이콘
 const trash = await call('search_icon', { query: 'trash' });
-assert.ok(trash.icons.some((icon) => icon.name === 'icCommonTrash' && icon.usage[0] === 'Image(sdg: .icCommonTrash)'));
+const trashIcon = trash.icons.find((icon) => icon.name === 'icCommonTrash');
+assert.equal(trashIcon?.usage[0], 'Image(sdg: .icCommonTrash)');
+// templateIcon은 Color·SDG.Color 오버로드가 모두 있어 `.neutral700`은 모호하다. 타입을 명시해야 컴파일된다.
+assert.ok(trashIcon.usage.some((line) => line.includes('templateIcon(size: 20, color: Color.neutral700)')));
+const templateIcon = await call('get_component_api', { name: 'Image.templateIcon' });
+assert.ok(templateIcon.notes?.some((note) => note.includes('Color.neutral700')));
 const plus = await call('search_icon', { query: '추가' });
 assert.ok(plus.icons.some((icon) => icon.name === 'icAddPlus'));
 step('search_icon');
@@ -71,6 +82,15 @@ const bottom = await call('search_component', { query: '하단 버튼' });
 assert.equal(bottom.results[0]?.name, 'SDGBottomButton');
 const confirm = await call('search_component', { query: 'confirm popup' });
 assert.ok(confirm.results.some((result) => result.name === 'View.centerConfirmPopup'));
+// 오버로드가 여럿인 모디파이어는 한 항목으로 묶인다.
+const typo = await call('search_component', { query: 'typo' });
+const typoEntries = typo.results.filter((result) => result.name === 'View.typo');
+assert.equal(typoEntries.length, 1);
+assert.equal(typoEntries[0].signatures.length, 2);
+// Object.prototype 속성과 같은 질의어도 오류 없이 처리한다.
+await call('search_component', { query: 'constructor' });
+await call('search_icon', { query: 'constructor' });
+await call('get_design_guide', { query: 'constructor' });
 step('search_component');
 
 // 컴포넌트 API
@@ -86,7 +106,7 @@ assert.equal(confirmApi.kind, 'modifier');
 assert.ok(confirmApi.relatedTypes.some((type) => type.name === 'SDGCenterPopupButton.Button.Option'));
 
 const confirmView = await call('get_component_api', { name: 'SDGConfirmPopup' });
-assert.match(confirmView.note ?? '', /centerConfirmPopup/);
+assert.ok(confirmView.notes?.some((note) => note.includes('centerConfirmPopup')));
 
 const apiMiss = await call('get_component_api', { name: 'SDGBoxButon' });
 assert.equal(apiMiss.found, false);
@@ -94,6 +114,20 @@ assert.ok(apiMiss.suggestions.includes('SDGBoxButton'));
 
 const size = await call('get_type', { name: 'SDGButtonSize' });
 assert.ok(size.cases.some((entry) => entry.case === '.medium'));
+
+// 익스텐션 멤버는 소유 타입 없이 이름만으로도 찾고, 오타 제안에도 포함한다.
+const bareTemplateIcon = await call('get_component_api', { name: 'templateIcon' });
+assert.equal(bareTemplateIcon.kind, 'extension');
+const templateTypo = await call('get_component_api', { name: 'Image.templateIcn' });
+assert.ok(templateTypo.suggestions.includes('Image.templateIcon'));
+
+// public init이 없는 타입과, 그런 타입을 필수로 받아 모듈 밖에서 호출할 수 없는 init을 알린다.
+const loginInput = await call('get_component_api', { name: 'SDGLoginInput' });
+assert.ok(loginInput.notes?.some((note) => note.includes('SDGLoginInput.Icon')));
+const loginIcon = await call('get_type', { name: 'SDGLoginInput.Icon' });
+assert.ok(loginIcon.notes?.some((note) => note.includes('no public initializer')));
+const sdgString = await call('get_type', { name: 'SDGString' });
+assert.ok(sdgString.notes?.some((note) => note.includes('SDGString.shared')));
 step('get_component_api / get_type');
 
 // 사용 예제
@@ -101,6 +135,12 @@ const examples = await call('get_usage_example', { name: 'SDGBoxButton' });
 assert.ok(examples.examples.length > 0 && examples.examples.every((example) => example.code.startsWith('SDGBoxButton(')));
 const popupExamples = await call('get_usage_example', { name: 'SDGConfirmPopup' });
 assert.ok(popupExamples.examples.some((example) => example.code.startsWith('.centerConfirmPopup(')));
+// 모듈 밖에서 컴파일된 SampleApp 예제가 프리뷰 예제보다 먼저 온다.
+for (const name of ['SDGBoxButton', 'SDGToggle', 'listPopup', 'SDGDropdown']) {
+  const { examples: list } = await call('get_usage_example', { name, limit: 10 });
+  const firstPreview = list.findIndex((example) => example.source === 'preview');
+  assert.ok(firstPreview === -1 || list.slice(firstPreview).every((example) => example.source === 'preview'), `${name}: sample-app examples must come first`);
+}
 step('get_usage_example');
 
 // 셋업·디자인 가이드
@@ -109,6 +149,8 @@ assert.equal(setup.package.import, 'import ShoplDesignGuide');
 assert.ok(setup.package.platforms.includes('iOS 16.0+'));
 assert.equal(setup.localization.required, true);
 assert.match(setup.localization.snippet, /SDGString\.shared\.setProvider\(provider:/);
+// NSLocalizedString을 쓰므로 단독 파일로 붙여 넣어도 컴파일되게 Foundation을 import해야 한다.
+assert.match(setup.localization.snippet, /^import Foundation$/m);
 
 const guide = await call('get_design_guide', { query: '하단' });
 assert.ok(guide.items.some((item) => item.path.endsWith('Bottom Button') && item.implemented));

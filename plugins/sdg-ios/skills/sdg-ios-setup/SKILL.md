@@ -21,6 +21,7 @@ description: ShoplDesignGuide(SDG iOS) 패키지 설치와 앱 시작 시 필수
 - 대상 컴포넌트를 하나라도 쓰면 앱 시작 시 한 번 등록한다.
 
 ```swift
+import Foundation  // NSLocalizedString. ShoplDesignGuide를 import해도 Foundation이 따라오지 않는다.
 import ShoplDesignGuide
 
 final class AppStringProvider: SDGStringProvider {

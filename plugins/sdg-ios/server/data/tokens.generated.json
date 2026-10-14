@@ -475,7 +475,6 @@
     },
     {
       "assetName" : "SDGBlack-40",
-      "baseToken" : "sdgBlack",
       "colorSpace" : "display-p3",
       "group" : "Special Color",
       "hex" : "#000000",
@@ -598,7 +597,6 @@
     },
     {
       "assetName" : "SDGWhite-40",
-      "baseToken" : "sdgWhite",
       "colorSpace" : "display-p3",
       "group" : "Special Color",
       "hex" : "#FFFFFF",
@@ -611,7 +609,6 @@
     },
     {
       "assetName" : "SDGWhite-80",
-      "baseToken" : "sdgWhite",
       "colorSpace" : "display-p3",
       "group" : "Special Color",
       "hex" : "#FFFFFF",
