@@ -12,7 +12,7 @@ struct ParsedFile {
 
   init(url: URL, repository: Repository) throws {
     self.url = url
-    self.relativePath = repository.relativePath(of: url)
+    self.relativePath = try repository.relativePath(of: url)
     self.source = try String(contentsOf: url, encoding: .utf8)
     self.tree = Parser.parse(source: source)
     self.converter = SourceLocationConverter(fileName: relativePath, tree: tree)
@@ -227,21 +227,28 @@ struct Availability {
 
 enum Attributes {
   /// `@available(*, deprecated, message: "...", renamed: "...")`, `@available(*, unavailable)`를 읽는다.
+  ///
+  /// 토큰 단위로 읽어 메시지 문자열 안의 단어("unavailable" 등)를 키워드로 오인하지 않고,
+  /// macOS 등 다른 플랫폼 전용 표시는 iOS 앱에 해당하지 않으므로 무시한다.
   static func availability(in attributes: AttributeListSyntax) -> Availability {
     var result = Availability()
     for element in attributes {
       guard case .attribute(let attribute) = element,
             attribute.attributeName.trimmedDescription == "available",
-            let arguments = attribute.arguments?.trimmedDescription
+            let arguments = attribute.arguments
       else { continue }
 
-      if arguments.contains("unavailable") || arguments.contains("obsoleted") {
+      let tokens = Array(arguments.tokens(viewMode: .sourceAccurate))
+      guard let platform = tokens.first?.text, platform == "*" || platform == "iOS" else { continue }
+      let keywords = Set(tokens.filter { !isStringSegment($0) }.map(\.text))
+
+      if keywords.contains("unavailable") || keywords.contains("obsoleted") {
         result.isUnavailable = true
       }
-      guard arguments.contains("deprecated") else { continue }
+      guard keywords.contains("deprecated") else { continue }
 
-      let message = labeledString("message", in: arguments)
-      let renamed = labeledString("renamed", in: arguments)
+      let message = labeledString("message", in: tokens)
+      let renamed = labeledString("renamed", in: tokens)
       switch (message, renamed) {
       case let (message?, renamed?): result.deprecated = "\(message) (renamed: \(renamed))"
       case let (message?, nil): result.deprecated = message
@@ -252,12 +259,32 @@ enum Attributes {
     return result
   }
 
-  /// `label: "value"` 형태의 문자열 인자 값.
-  private static func labeledString(_ label: String, in arguments: String) -> String? {
-    guard let range = arguments.range(of: label + #":\s*"[^"]*""#, options: .regularExpression) else { return nil }
-    let match = arguments[range]
-    guard let open = match.firstIndex(of: "\""), let close = match.lastIndex(of: "\""), open < close else { return nil }
-    return String(match[match.index(after: open)..<close])
+  /// `label: "value"` — 라벨 토큰 뒤 문자열 리터럴의 조각을 이어 붙인다.
+  private static func labeledString(_ label: String, in tokens: [TokenSyntax]) -> String? {
+    guard let index = tokens.firstIndex(where: { $0.text == label && !isStringSegment($0) }),
+          index + 1 < tokens.count,
+          tokens[index + 1].tokenKind == .colon
+    else { return nil }
+
+    var value = ""
+    var isInsideLiteral = false
+    for token in tokens[(index + 2)...] {
+      switch token.tokenKind {
+      case .stringQuote:
+        if isInsideLiteral { return value }
+        isInsideLiteral = true
+      case .stringSegment(let text):
+        value += text
+      default:
+        if !isInsideLiteral { return nil }
+      }
+    }
+    return nil
+  }
+
+  private static func isStringSegment(_ token: TokenSyntax) -> Bool {
+    if case .stringSegment = token.tokenKind { return true }
+    return false
   }
 }
 
