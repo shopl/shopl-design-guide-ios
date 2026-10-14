@@ -301,6 +301,21 @@ Text("본문")
 
 각 컴포넌트 파일의 `#Preview` 블록에서 자세한 사용 예제를 확인하세요. 모든 컴포넌트는 다양한 상태와 구성을 보여주는 포괄적인 프리뷰를 포함합니다.
 
+### AI 에이전트 지원 (MCP)
+
+Claude Code가 SDG 토큰·컴포넌트 API·아이콘·사용 예제를 추측하지 않고 조회하도록 MCP 서버와 스킬을 플러그인으로 제공합니다.
+
+```
+/plugin marketplace add shopl/shopl-design-guide-ios
+/plugin install sdg-ios@sdg-marketplace
+```
+
+Claude Code 2.1.275 이상에서는 `/plugin install sdg-ios --marketplace shopl/shopl-design-guide-ios` 한 줄로도 설치할 수 있습니다.
+
+- 사용법: [plugins/sdg-ios/README.md](plugins/sdg-ios/README.md)
+- 구조·유지보수: [mcp/README.md](mcp/README.md)
+- SDG 소스를 바꾼 PR에서는 `cd mcp && npm run build`로 생성 데이터를 갱신해 함께 커밋합니다. CI가 최신 여부를 검사합니다.
+
 ### 의존성
 
 - [Kingfisher](https://github.com/onevcat/Kingfisher) (7.10.0) - 이미지 다운로드 및 캐싱

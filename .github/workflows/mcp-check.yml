@@ -1,0 +1,96 @@
+name: SDG MCP Check
+
+# SDG 소스가 바뀌면 플러그인의 생성 데이터·번들도 같은 PR에서 갱신되어야 한다.
+# 여기서 다시 생성한 결과가 커밋된 파일과 다르면 실패시켜, 오래된 메타데이터가 배포되는 것을 막는다.
+
+on:
+  pull_request:
+    paths:
+      - 'Sources/**'
+      - 'SampleApp/Sources/**'
+      - 'Package.swift'
+      - 'Tools/SDGMetadataExtractor/**'
+      - 'mcp/**'
+      - 'plugins/**'
+      - '.claude-plugin/**'
+      - '.github/workflows/mcp-check.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'Sources/**'
+      - 'SampleApp/Sources/**'
+      - 'Package.swift'
+      - 'Tools/SDGMetadataExtractor/**'
+      - 'mcp/**'
+      - 'plugins/**'
+      - '.claude-plugin/**'
+      - '.github/workflows/mcp-check.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mcp:
+    # 공개 레포라 포크 PR도 실행된다. self-hosted 러너 대신 GitHub 호스트 러너를 쓴다.
+    runs-on: macos-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Toolchain versions
+        run: |
+          xcodebuild -version
+          swift --version
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: mcp/package-lock.json
+
+      - name: Cache extractor build
+        uses: actions/cache@v4
+        with:
+          path: Tools/SDGMetadataExtractor/.build
+          key: sdg-extractor-${{ runner.os }}-${{ hashFiles('Tools/SDGMetadataExtractor/Package.resolved') }}
+
+      - name: Install MCP dependencies
+        working-directory: mcp
+        run: npm ci
+
+      - name: Type check
+        working-directory: mcp
+        run: npm run typecheck
+
+      - name: Regenerate metadata and bundle
+        working-directory: mcp
+        run: npm run build
+
+      - name: Check committed plugin files are up to date
+        run: |
+          if ! git diff --exit-code --stat -- plugins/sdg-ios/server; then
+            echo "::error::plugins/sdg-ios/server가 현재 소스로 생성한 결과와 다릅니다. 'cd mcp && npm run build'를 실행하고 변경된 파일을 커밋하세요."
+            exit 1
+          fi
+          untracked="$(git ls-files --others --exclude-standard -- plugins/sdg-ios/server)"
+          if [ -n "$untracked" ]; then
+            echo "::error::커밋되지 않은 생성 파일이 있습니다: $untracked"
+            exit 1
+          fi
+
+      - name: Smoke test
+        working-directory: mcp
+        run: npm run smoke
+
+      - name: Validate marketplace and plugin manifests
+        run: |
+          npx --yes @anthropic-ai/claude-code@2.1.296 plugin validate .
+          npx --yes @anthropic-ai/claude-code@2.1.296 plugin validate ./plugins/sdg-ios
