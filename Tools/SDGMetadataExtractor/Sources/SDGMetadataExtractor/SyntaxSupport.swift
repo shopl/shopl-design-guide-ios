@@ -56,6 +56,7 @@ enum DeclNames {
     if let decl = node.as(ClassDeclSyntax.self) { return decl.name.text }
     if let decl = node.as(ActorDeclSyntax.self) { return decl.name.text }
     if let decl = node.as(ProtocolDeclSyntax.self) { return decl.name.text }
+    if let decl = node.as(TypeAliasDeclSyntax.self) { return decl.name.text }
     if let decl = node.as(ExtensionDeclSyntax.self) { return SyntaxText.compact(decl.extendedType) }
     return nil
   }

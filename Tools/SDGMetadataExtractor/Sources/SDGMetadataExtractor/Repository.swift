@@ -62,11 +62,17 @@ struct Repository {
 }
 
 /// `Sources/ShoplDesignGuide/<Layer>/<Group>/...` 경로에서 레이어와 그룹을 읽는다.
-struct SourceLocation: Codable, Equatable {
+///
+/// 줄 번호는 정렬에만 쓰고 출력하지 않는다. 코드가 몇 줄 밀릴 때마다 생성 데이터 diff가 생기는 것을 막기 위해서다.
+struct SourceLocation: Encodable, Equatable {
   let file: String
   let line: Int
   let layer: String
   let group: String
+
+  private enum CodingKeys: String, CodingKey {
+    case file, layer, group
+  }
 
   init(file: String, line: Int) {
     self.file = file
