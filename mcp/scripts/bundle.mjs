@@ -3,13 +3,15 @@
 // 생성 데이터(JSON)는 번들에 넣지 않고 server/data/에서 읽는다. 데이터만 바뀌면 번들은 그대로라 PR diff가 데이터에만 남는다.
 
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 
 const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 
 await build({
-  entryPoints: [new URL('../src/index.ts', import.meta.url).pathname],
-  outfile: new URL('../../plugins/sdg-ios/server/index.mjs', import.meta.url).pathname,
+  // URL.pathname은 공백·한글을 퍼센트 인코딩하고 Windows에서 `/C:/...`가 되므로 파일 경로로 변환한다.
+  entryPoints: [fileURLToPath(new URL('../src/index.ts', import.meta.url))],
+  outfile: fileURLToPath(new URL('../../plugins/sdg-ios/server/index.mjs', import.meta.url)),
   bundle: true,
   platform: 'node',
   format: 'esm',
