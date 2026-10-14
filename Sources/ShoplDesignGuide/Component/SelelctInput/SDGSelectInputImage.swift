@@ -10,7 +10,7 @@ import SwiftUI
 extension SDGSelectInput {
   /// SelectInput의 1 Image / 2 Image 요소에 사용하는 이미지입니다.
   public struct SelectedElementImage: View {
-    public enum ImageType: CaseIterable {
+    public enum ImageType: CaseIterable, Sendable {
       /// 30×30pt Neutral200 배경, Radius15, 중앙 14×14pt 아이콘.
       case withCircular
       /// 24×24pt 이미지.
@@ -22,7 +22,7 @@ extension SDGSelectInput {
     private let image: Image
     private let type: ImageType
 
-    public init(image: Image, type: ImageType) {
+    public nonisolated init(image: Image, type: ImageType) {
       self.image = image
       self.type = type
     }
