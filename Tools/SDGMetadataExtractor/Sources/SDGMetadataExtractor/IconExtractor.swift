@@ -45,7 +45,7 @@ struct IconExtractor {
         renderingMode: contents.renderingIntent,
         formats: contents.formats,
         keywords: keywords(of: assetName),
-        source: repository.relativePath(of: imageset)
+        source: try repository.relativePath(of: imageset)
       ))
     }
 
@@ -56,7 +56,7 @@ struct IconExtractor {
     icons.sort { $0.name < $1.name }
     let counts = Dictionary(grouping: icons, by: \.kind).mapValues(\.count)
     return IconFile(
-      sources: [repository.relativePath(of: repository.imageAssets)] + symbols.sources,
+      sources: [try repository.relativePath(of: repository.imageAssets)] + symbols.sources,
       count: icons.count,
       countsByKind: counts,
       icons: icons

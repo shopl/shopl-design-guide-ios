@@ -125,8 +125,8 @@ struct APIExtractor {
     let extensions = collector.extensions.sorted(by: Self.memberOrder)
 
     return APIFile(
-      sources: [repository.relativePath(of: repository.librarySources)],
-      excluded: [repository.relativePath(of: repository.generatedSources)],
+      sources: [try repository.relativePath(of: repository.librarySources)],
+      excluded: [try repository.relativePath(of: repository.generatedSources)],
       counts: [
         "views": views.count,
         "types": types.count,

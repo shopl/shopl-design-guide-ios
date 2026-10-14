@@ -123,6 +123,27 @@ final class APIExtractorTests: XCTestCase {
     XCTAssertTrue(names.contains("DebugElse"), "#else 절의 조건은 알 수 없으므로 유지한다")
   }
 
+  func testSymlinkedRepositoryRootKeepsRelativePathsAndExclusions() throws {
+    let fixture = try FixtureRepository(files: [
+      path: """
+        public struct Linked {
+          public init() {}
+        }
+        """,
+      "Sources/ShoplDesignGuide/Generated/Assets.swift": """
+        public struct GeneratedOnly {}
+        """,
+    ], throughSymlink: true, testCase: self)
+    let api = try fixture.api()
+
+    let names = (api.views + api.types).map(\.name)
+    XCTAssertEqual(names, ["Linked"], "Generated 폴더는 심볼릭 링크 루트에서도 제외되어야 한다")
+    XCTAssertEqual(api.card("Linked")?.location.file, path)
+    XCTAssertEqual(api.sources, ["Sources/ShoplDesignGuide"])
+    // 루트 밖 경로는 절대 경로로 남기지 않고 실패한다.
+    XCTAssertThrowsError(try fixture.repository.relativePath(of: URL(filePath: "/usr/bin")))
+  }
+
   func testDocCommentSeparatedByWhitespaceOnlyLineIsDropped() throws {
     let api = try FixtureRepository(files: [path: "public struct Doc {\n  /// detached\n  \n  public init() {}\n  /// attached\n  public init(y: Int) {}\n}\n"], testCase: self).api()
 

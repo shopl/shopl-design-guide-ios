@@ -63,7 +63,7 @@ struct TokenExtractor {
       counts[kind.rawValue] = tokens.filter { $0.type == kind }.count
     }
     let sources = Set(tokens.filter { $0.type != .color }.map(\.source))
-      .union([repository.relativePath(of: repository.colorAssets)])
+      .union([try repository.relativePath(of: repository.colorAssets)])
       .union(symbols.sources)
       .sorted()
     return TokenFile(sources: sources, count: tokens.count, countsByType: counts, tokens: tokens)
@@ -101,7 +101,7 @@ struct TokenExtractor {
         group: group,
         swift: "." + symbol,
         swiftType: "SDG.Color",
-        source: repository.relativePath(of: colorset),
+        source: try repository.relativePath(of: colorset),
         hex: value.hex,
         opacity: opacity,
         baseToken: baseToken,

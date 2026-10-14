@@ -7,7 +7,8 @@ import XCTest
 struct FixtureRepository {
   let repository: Repository
 
-  init(files: [String: String], testCase: XCTestCase) throws {
+  /// `throughSymlink`이 참이면 레포 폴더를 가리키는 심볼릭 링크를 루트로 넘긴다.
+  init(files: [String: String], throughSymlink: Bool = false, testCase: XCTestCase) throws {
     let root = FileManager.default.temporaryDirectory
       .appending(path: "sdg-metadata-tests-\(UUID().uuidString)", directoryHint: .isDirectory)
     try FileManager.default.createDirectory(
@@ -20,7 +21,16 @@ struct FixtureRepository {
       try contents.write(to: url, atomically: true, encoding: .utf8)
     }
     testCase.addTeardownBlock { try? FileManager.default.removeItem(at: root) }
-    repository = Repository(root: root)
+
+    guard throughSymlink else {
+      repository = Repository(root: root)
+      return
+    }
+    let link = root.deletingLastPathComponent()
+      .appending(path: "\(root.lastPathComponent)-link", directoryHint: .isDirectory)
+    try FileManager.default.createSymbolicLink(at: link, withDestinationURL: root)
+    testCase.addTeardownBlock { try? FileManager.default.removeItem(at: link) }
+    repository = Repository(root: link)
   }
 
   func api() throws -> APIFile {

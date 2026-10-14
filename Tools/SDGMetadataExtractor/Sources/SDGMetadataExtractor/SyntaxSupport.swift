@@ -12,7 +12,7 @@ struct ParsedFile {
 
   init(url: URL, repository: Repository) throws {
     self.url = url
-    self.relativePath = repository.relativePath(of: url)
+    self.relativePath = try repository.relativePath(of: url)
     self.source = try String(contentsOf: url, encoding: .utf8)
     self.tree = Parser.parse(source: source)
     self.converter = SourceLocationConverter(fileName: relativePath, tree: tree)

@@ -104,7 +104,7 @@ struct SetupExtractor {
     for url in files {
       let source = try String(contentsOf: url, encoding: .utf8)
       if source.contains("SDGLocalizationKey") || source.contains("getSDGString") {
-        localizedFiles.append(repository.relativePath(of: url))
+        localizedFiles.append(try repository.relativePath(of: url))
       }
     }
 

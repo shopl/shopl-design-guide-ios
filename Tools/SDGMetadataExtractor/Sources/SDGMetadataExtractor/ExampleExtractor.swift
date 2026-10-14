@@ -77,8 +77,8 @@ struct ExampleExtractor {
 
     return ExampleFile(
       sources: [
-        repository.relativePath(of: repository.librarySources) + " (#Preview)",
-        repository.relativePath(of: repository.sampleAppSources)
+        try repository.relativePath(of: repository.librarySources) + " (#Preview)",
+        try repository.relativePath(of: repository.sampleAppSources)
       ],
       count: examples.values.reduce(0) { $0 + $1.count },
       examples: examples
