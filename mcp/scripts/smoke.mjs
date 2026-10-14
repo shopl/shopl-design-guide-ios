@@ -90,6 +90,9 @@ assert.equal(typoEntries[0].signatures.length, 2);
 // 묶인 모디파이어는 오버로드 중 하나라도 해당 레이어면 레이어 필터에 걸린다(cornerRadius: Foundation·Util).
 const utilRadius = await call('search_component', { query: 'cornerRadius', layer: 'Util' });
 assert.ok(utilRadius.results.some((result) => result.name === 'View.cornerRadius'));
+// UIViewRepresentable로 만든 컴포넌트도 뷰로 분류한다.
+const focusable = await call('search_component', { query: 'focusable' });
+assert.equal(focusable.results.find((result) => result.name === 'SDGFocusableTextField')?.kind, 'view');
 // Object.prototype 속성과 같은 질의어도 오류 없이 처리한다.
 await call('search_component', { query: 'constructor' });
 await call('search_icon', { query: 'constructor' });

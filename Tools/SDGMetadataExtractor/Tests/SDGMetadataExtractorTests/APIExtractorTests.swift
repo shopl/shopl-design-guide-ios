@@ -21,6 +21,32 @@ final class APIExtractorTests: XCTestCase {
     XCTAssertFalse(card.properties.contains { $0.name == "body" })
   }
 
+  func testRepresentableTypesAreViews() throws {
+    let api = try FixtureRepository(files: [path: """
+      import SwiftUI
+
+      public struct Field: UIViewRepresentable {
+        public init() {}
+        public func makeUIView(context: Context) -> UITextField { UITextField() }
+        public func updateUIView(_ uiView: UITextField, context: Context) {}
+      }
+      public struct Controller: SwiftUI.UIViewControllerRepresentable {
+        public init() {}
+      }
+      public struct ConformLater {
+        public init() {}
+      }
+      extension ConformLater: UIViewRepresentable {}
+      // View를 꾸미는 익스텐션만 모디파이어다. UIViewRepresentable 익스텐션 멤버는 모디파이어가 아니다.
+      public extension UIViewRepresentable {
+        func helper() {}
+      }
+      """], testCase: self).api()
+
+    XCTAssertEqual(api.views.map(\.name), ["ConformLater", "Controller", "Field"])
+    XCTAssertFalse(api.modifiers.contains { $0.name == "helper" })
+  }
+
   func testNestedTypeDeclaredInExtensionIsLinkedToParent() throws {
     let api = try FixtureRepository(files: [path: """
       public struct Holder {
