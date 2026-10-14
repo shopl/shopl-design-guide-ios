@@ -30,6 +30,29 @@ struct SDGMetadataExtractor {
       try writer.write(api, to: "api.generated.json")
       report.summary("api", api.views.count + api.types.count + api.modifiers.count + api.extensions.count, details: api.counts)
 
+      let examples = try ExampleExtractor(repository: repository, api: api).extract()
+      try writer.write(examples, to: "examples.generated.json")
+      report.summary("examples", examples.count, details: ["symbols": examples.examples.count])
+
+      var knownSymbols = Set(api.views.map(\.name) + api.types.map(\.name))
+      knownSymbols.formUnion(api.modifiers.map { "View." + $0.name })
+      knownSymbols.formUnion(api.extensions.compactMap { member in member.owner.map { $0 + "." + member.name } })
+      // SDG.Color·SDG.Image 타입은 Tuist 생성 파일에 있어 API 추출에서 빠지므로 에셋 데이터로 확인한다.
+      if tokens.countsByType["color", default: 0] > 0 { knownSymbols.insert("SDG.Color") }
+      if icons.count > 0 { knownSymbols.insert("SDG.Image") }
+
+      let catalog = try CatalogExtractor(repository: repository, knownSymbols: knownSymbols).extract()
+      try writer.write(catalog, to: "catalog.generated.json")
+      report.summary("catalog", catalog.counts["items", default: 0], details: catalog.counts.filter { $0.key != "items" })
+
+      let setup = try SetupExtractor(repository: repository, api: api).extract()
+      try writer.write(setup, to: "setup.generated.json")
+      report.summary("setup", setup.products.count, details: [
+        "platforms": setup.platforms.count,
+        "dependencies": setup.dependencies.count,
+        "localizedSymbols": setup.localizedSymbols.count
+      ])
+
       report.printAll()
       if report.hasEmptyResult {
         FileHandle.standardError.write(Data("✗ 비어 있는 결과가 있습니다. 추출기의 소스 구조 가정이 깨졌을 수 있습니다.\n".utf8))
