@@ -59,6 +59,11 @@ public struct SDGCheckOption: View {
       self.selectColor = selectColor
     }
 
+    @available(*, deprecated, message: "Use init(state:style:spec:selectColor:) instead.")
+    public init(status: SDGCheckOptionState, type: Style, spec: Spec) {
+      self.init(state: status, style: type, spec: spec, selectColor: .normal)
+    }
+
     fileprivate var solidBackgroundColor: Color {
       switch state {
       case .default:
