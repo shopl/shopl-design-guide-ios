@@ -39,6 +39,11 @@ assert.match(client.getInstructions() ?? '', /setProvider/);
 // SDG.Color는 ShapeStyle이 아니어서 SwiftUI API에 넘기면 컴파일되지 않는다. 바꿔 써도 되는 것처럼 안내하지 않되, 공개 변환(.color)은 알려 준다.
 assert.match(client.getInstructions() ?? '', /`SDG\.Color` is not a ShapeStyle/);
 assert.match(client.getInstructions() ?? '', /sdgColor\.color/);
+// Codex는 instructions의 앞 512자만으로도 핵심이 전달되게 쓰라고 권장한다. 규칙 5개의 요약이 그 안에 있어야 한다.
+const instructionsHead = (client.getInstructions() ?? '').slice(0, 512);
+for (const anchor of ['search_component', 'get_component_api', 'list_tokens', 'search_icon', 'centerConfirmPopup', 'setProvider', 'get_setup_guide']) {
+  assert.ok(instructionsHead.includes(anchor), `the first 512 characters of instructions must mention ${anchor}`);
+}
 step(`tools: ${tools.length}, instructions ok`);
 
 // 토큰
