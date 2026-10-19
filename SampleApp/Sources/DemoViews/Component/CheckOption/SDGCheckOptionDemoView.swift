@@ -13,7 +13,7 @@ struct SDGCheckOptionDemoView: View {
 
   var body: some View {
     VStack(alignment: .leading, spacing: 16) {
-      typeSection
+      styleSection
       specSection
     }
     .padding(.top, 16)
@@ -21,16 +21,16 @@ struct SDGCheckOptionDemoView: View {
     .frame(maxWidth: .infinity, alignment: .leading)
   }
 
-  private var typeSection: some View {
+  private var styleSection: some View {
     VStack(alignment: .leading, spacing: 12) {
       VStack(alignment: .leading, spacing: 8) {
-        sectionTitle("Type")
+        sectionTitle("Style")
           .padding(.horizontal, 16)
 
         SDGScrollTab(
           type: .text,
-          list: typeTabModels,
-          selectedIndex: $state.selectedTypeIndex,
+          list: styleTabModels,
+          selectedIndex: $state.selectedStyleIndex,
           horizontalPadding: 16
         )
       }
@@ -63,7 +63,7 @@ struct SDGCheckOptionDemoView: View {
 
   private var previewCard: some View {
     VStack(spacing: 0) {
-      statusSelector
+      stateSelector
       checkOptionPreview
     }
     .frame(maxWidth: .infinity)
@@ -75,7 +75,7 @@ struct SDGCheckOptionDemoView: View {
     }
   }
 
-  private var statusSelector: some View {
+  private var stateSelector: some View {
     VStack(spacing: 16) {
       VStack(alignment: .leading, spacing: 16) {
         HStack(spacing: 8) {
@@ -103,7 +103,7 @@ struct SDGCheckOptionDemoView: View {
   private var checkOptionPreview: some View {
     VStack(spacing: 40) {
       ForEach(state.previewItems) { item in
-        SDGCheckOptionPreviewItemView(item: item)
+        SDGCheckOption(model: item.model, selected: { })
       }
     }
     .padding(.horizontal, 16)
@@ -111,8 +111,8 @@ struct SDGCheckOptionDemoView: View {
     .frame(maxWidth: .infinity)
   }
 
-  private var typeTabModels: [SDGScrollTab.Model] {
-    state.types.map {
+  private var styleTabModels: [SDGScrollTab.Model] {
+    state.styles.map {
       SDGScrollTab.Model(id: $0.id, title: $0.title)
     }
   }
@@ -123,16 +123,16 @@ struct SDGCheckOptionDemoView: View {
     }
   }
 
-  private func radioLabel(for status: SDGCheckOptionDemoStatus) -> some View {
+  private func radioLabel(for option: SDGCheckOptionDemoStateOption) -> some View {
     SDGRadioLabel(
       model: RadioLabelModel(
-        id: status.id,
-        isSelected: state.selectedStatus == status,
+        id: option.id,
+        isSelected: state.selectedState == option,
         isSelectedColorNeturel: true,
-        title: status.title
+        title: option.title
       ),
       onTap: { _ in
-        state.selectedStatus = status
+        state.selectedState = option
       }
     )
   }
@@ -141,44 +141,6 @@ struct SDGCheckOptionDemoView: View {
     Text(sdg: title)
       .typo(.body3_SB, .neutral350)
       .frame(maxWidth: .infinity, alignment: .leading)
-  }
-}
-
-private struct SDGCheckOptionPreviewItemView: View {
-  let item: SDGCheckOptionDemoPreviewItem
-
-  var body: some View {
-    if item.selectedColor == .neutral, item.model.status == .selected {
-      neutralSelectedPreview
-    } else {
-      SDGCheckOption(model: item.model, selected: { })
-    }
-  }
-
-  @ViewBuilder
-  private var neutralSelectedPreview: some View {
-    switch item.type {
-    case .solid:
-      Image(sdg: .icCommonCheckS)
-        .resizable()
-        .renderingMode(.template)
-        .frame(width: item.spec.iconSize, height: item.spec.iconSize, alignment: .center)
-        .padding(.all, 1)
-        .background(Color.neutral700)
-        .foregroundStyle(Color.neutral0)
-        .clipShape(Circle())
-    case .line:
-      Image(sdg: .icCommonCheckS)
-        .resizable()
-        .renderingMode(.template)
-        .frame(width: item.spec.iconSize, height: item.spec.iconSize)
-        .foregroundStyle(Color.neutral700)
-        .padding(.all, 1)
-        .overlay {
-          Circle()
-            .strokeBorder(Color.neutral700, lineWidth: 1)
-        }
-    }
   }
 }
 
