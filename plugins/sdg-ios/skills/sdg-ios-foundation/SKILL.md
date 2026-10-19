@@ -22,6 +22,7 @@ description: SDG iOS 디자인 토큰(컬러·타이포그래피·간격·코너
 ## 컬러
 
 - SwiftUI `Color`, `SDG.Color`, `ShapeStyle`에 같은 이름의 static 멤버가 있어서 `.foregroundStyle(.neutral700)`, `.background(.neutral0)`처럼 쓴다. `SDG.Color`를 받는 파라미터(`.typo`의 두 번째 인자 등)에도 같은 이름을 쓴다.
+- `SDG.Color` 값은 `ShapeStyle`이 아니어서 `.foregroundStyle(SDG.Color.neutral700)`처럼 SwiftUI API에 바로 넘기면 컴파일되지 않는다. SwiftUI API에는 `.neutral700`이나 `Color.neutral700`을 쓰고, 이미 `SDG.Color` 타입으로 받은 값(SDG 옵션의 컬러 등)은 `.color`로 SwiftUI `Color`로 바꿔 쓴다(`.foregroundStyle(sdgColor.color)`).
 - 단, 한 메서드에 `Color`를 받는 오버로드와 `SDG.Color`를 받는 오버로드가 함께 있으면(`templateIcon`) `.neutral700`이 어느 쪽인지 정할 수 없어 컴파일 오류(ambiguous use)가 난다. 이때는 `Color.neutral700`처럼 타입을 붙인다. `get_component_api` 응답의 `notes`가 이런 API를 알려 준다.
 - 이름 끝의 `_10`, `_40`, `_80`은 불투명도 10/40/80%를 뜻한다(`neutral700_10`). 같은 색의 불투명 토큰은 `baseToken`에 표시되며, `sdgBlack_40`처럼 불투명 토큰이 없는 색도 있다.
 - 시안의 hex를 토큰으로 바꿀 때는 `list_tokens`에 `type: "color"`, `query: "#333333"`을 넘긴다.

@@ -126,7 +126,9 @@ class SDGIndex {
 
   /** public init이 없는 struct·class는 모듈 밖에서 만들 수 없다(내부 memberwise init만 있는 경우 등). */
   isUnconstructible(card: TypeCard): boolean {
-    return (card.kind === 'struct' || card.kind === 'class') && card.initializers.length === 0;
+    if (card.initializers.length > 0) return false;
+    // 클래스는 상위 클래스의 public init을 물려받을 수 있으므로 상속이 없을 때만 생성 불가로 본다.
+    return card.kind === 'struct' || (card.kind === 'class' && card.inherits.length === 0);
   }
 
   /**
@@ -300,7 +302,8 @@ export function createServer(data: SDGData, version: string): McpServer {
         .map((candidate) => {
           if (candidate.kind === 'modifier') {
             const first = candidate.overloads[0]!;
-            if (layer && locationOf(first.file).layer !== layer) return undefined;
+            // 오버로드가 여러 레이어에 흩어져 있을 수 있다(cornerRadius: Foundation·Util). 하나라도 맞으면 포함한다.
+            if (layer && !candidate.overloads.some((overload) => locationOf(overload.file).layer === layer)) return undefined;
             const score = scoreTerms(terms, (term) => Math.max(...candidate.overloads.map((overload) => scoreModifier(index, overload, term))));
             return score > 0 ? { score, name: `View.${first.name}`, summary: modifierSummary(index, candidate.overloads) } : undefined;
           }
@@ -535,7 +538,10 @@ function tokenUsage(index: SDGIndex, type: TokenType, token?: TokenRecord): stri
       const usage = [
         `.foregroundStyle(.${color})`,
         `.background(.${color})`,
-        `Color.${color} / SDG.Color.${color} — SwiftUI Color and SDG.Color expose the same static names`,
+        `Color.${color}  // SwiftUI Color: use in SwiftUI APIs, or to disambiguate Color/SDG.Color overloads`,
+        // SDG.Color는 ShapeStyle이 아니라 SwiftUI API에 바로 넘길 수 없다. 이미 가진 SDG.Color 값은 공개 프로퍼티 .color로 Color로 바꾼다.
+        `SDG.Color.${color}  // for SDG parameters typed SDG.Color (e.g. .typo); it is not a ShapeStyle, so never pass it directly to .foregroundStyle/.background`,
+        `.foregroundStyle(sdgColor.color)  // an SDG.Color value you already hold (e.g. from an SDG option) converts to SwiftUI Color with .color; if you know the token name, write .${color} instead`,
       ];
       if (index.hasModifier('typo')) usage.push(`Text("…").typo(.body2_R, .${color})`);
       usage.push(
@@ -676,12 +682,18 @@ function describeSymbol(index: SDGIndex, name: string) {
 
   const members = index.extensionMembers(name);
   if (members?.length) {
+    // 이름만으로 찾으면 여러 타입의 멤버가 섞일 수 있다(init: VStack·HStack 등). 오버로드마다 소유 타입을 붙인다.
+    const owners = [...new Set(members.map((member) => member.owner))];
     return compact({
       found: true,
       kind: 'extension',
-      name: `${members[0]!.owner}.${members[0]!.name}`,
-      notes: [colorOverloadNote(members)].filter((note): note is string => note !== undefined),
-      overloads: members.map(memberView),
+      name: owners.length === 1 ? `${owners[0]}.${members[0]!.name}` : members[0]!.name,
+      owners: owners.length > 1 ? owners : undefined,
+      // 오버로드 모호성은 같은 타입의 멤버끼리만 생긴다.
+      notes: owners
+        .map((owner) => colorOverloadNote(members.filter((member) => member.owner === owner)))
+        .filter((note): note is string => note !== undefined),
+      overloads: members.map((member) => compact({ owner: owners.length > 1 ? member.owner : undefined, ...memberView(member) })),
     });
   }
 

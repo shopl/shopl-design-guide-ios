@@ -36,6 +36,9 @@ assert.deepEqual(
   ],
 );
 assert.match(client.getInstructions() ?? '', /setProvider/);
+// SDG.Color는 ShapeStyle이 아니어서 SwiftUI API에 넘기면 컴파일되지 않는다. 바꿔 써도 되는 것처럼 안내하지 않되, 공개 변환(.color)은 알려 준다.
+assert.match(client.getInstructions() ?? '', /`SDG\.Color` is not a ShapeStyle/);
+assert.match(client.getInstructions() ?? '', /sdgColor\.color/);
 step(`tools: ${tools.length}, instructions ok`);
 
 // 토큰
@@ -47,6 +50,9 @@ const black40 = await call('get_token', { name: 'sdgBlack_40' });
 assert.equal(black40.token.opacity, 40);
 assert.equal(black40.token.baseToken, undefined, 'baseToken must not point to a token that does not exist');
 assert.ok(colors.usage.color.some((line) => line.includes('.foregroundStyle(.neutral700)')));
+assert.ok(colors.usage.color.some((line) => line.startsWith('SDG.Color.neutral700') && line.includes('not a ShapeStyle')));
+assert.ok(colors.usage.color.some((line) => line.includes('sdgColor.color')));
+assert.ok(!colors.usage.color.some((line) => line.includes('cannot be converted')));
 
 const body = await call('get_token', { name: '.body1_R' });
 assert.deepEqual([body.token.size, body.token.weight, body.token.lineHeight], [16, 400, 20]);
@@ -87,6 +93,12 @@ const typo = await call('search_component', { query: 'typo' });
 const typoEntries = typo.results.filter((result) => result.name === 'View.typo');
 assert.equal(typoEntries.length, 1);
 assert.equal(typoEntries[0].signatures.length, 2);
+// 묶인 모디파이어는 오버로드 중 하나라도 해당 레이어면 레이어 필터에 걸린다(cornerRadius: Foundation·Util).
+const utilRadius = await call('search_component', { query: 'cornerRadius', layer: 'Util' });
+assert.ok(utilRadius.results.some((result) => result.name === 'View.cornerRadius'));
+// UIViewRepresentable로 만든 컴포넌트도 뷰로 분류한다.
+const focusable = await call('search_component', { query: 'focusable' });
+assert.equal(focusable.results.find((result) => result.name === 'SDGFocusableTextField')?.kind, 'view');
 // Object.prototype 속성과 같은 질의어도 오류 없이 처리한다.
 await call('search_component', { query: 'constructor' });
 await call('search_icon', { query: 'constructor' });
@@ -120,6 +132,9 @@ const bareTemplateIcon = await call('get_component_api', { name: 'templateIcon' 
 assert.equal(bareTemplateIcon.kind, 'extension');
 const templateTypo = await call('get_component_api', { name: 'Image.templateIcn' });
 assert.ok(templateTypo.suggestions.includes('Image.templateIcon'));
+// 이름만으로 찾아 여러 타입의 멤버가 섞이면 오버로드마다 소유 타입을 표시한다.
+const bareInit = await call('get_component_api', { name: 'init' });
+assert.ok(bareInit.owners.length > 1 && bareInit.overloads.every((overload) => typeof overload.owner === 'string'));
 
 // public init이 없는 타입과, 그런 타입을 필수로 받아 모듈 밖에서 호출할 수 없는 init을 알린다.
 const loginInput = await call('get_component_api', { name: 'SDGLoginInput' });

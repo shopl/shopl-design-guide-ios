@@ -68,6 +68,9 @@ jobs:
           path: Tools/SDGMetadataExtractor/.build
           key: sdg-extractor-${{ runner.os }}-${{ steps.toolchain.outputs.swift }}-${{ hashFiles('Tools/SDGMetadataExtractor/Package.resolved') }}
 
+      - name: Extractor tests
+        run: swift test --package-path Tools/SDGMetadataExtractor
+
       - name: Install MCP dependencies
         working-directory: mcp
         run: npm ci

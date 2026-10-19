@@ -5,7 +5,7 @@ struct Repository {
   let root: URL
 
   init(root: URL) {
-    self.root = root.standardizedFileURL
+    self.root = Self.canonical(root)
   }
 
   var librarySources: URL { root.appending(path: "Sources/ShoplDesignGuide") }
@@ -17,15 +17,19 @@ struct Repository {
   var packageManifest: URL { root.appending(path: "Package.swift") }
 
   /// 레포 루트 기준 상대 경로. 생성 데이터에 절대 경로가 남지 않도록 항상 이 값을 쓴다.
-  func relativePath(of url: URL) -> String {
-    let path = url.standardizedFileURL.path
+  func relativePath(of url: URL) throws -> String {
+    let path = Self.canonical(url).path
     let rootPath = root.path.hasSuffix("/") ? root.path : root.path + "/"
-    return path.hasPrefix(rootPath) ? String(path.dropFirst(rootPath.count)) : path
+    // 루트 밖 경로를 그대로 쓰면 생성 데이터에 절대 경로가 남는다. 조용히 넘기지 않고 실패시킨다.
+    guard path.hasPrefix(rootPath) else {
+      throw ExtractionError.unexpectedStructure("레포 루트(\(root.path)) 밖의 경로입니다: \(path)")
+    }
+    return String(path.dropFirst(rootPath.count))
   }
 
   /// 디렉터리 아래의 `.swift` 파일을 상대 경로 순으로 반환한다. 숨김 폴더는 건너뛴다.
   func swiftFiles(in directory: URL, excluding excluded: [URL] = []) throws -> [URL] {
-    let excludedPaths = excluded.map { $0.standardizedFileURL.path + "/" }
+    let excludedPaths = excluded.map { Self.canonical($0).path + "/" }
     return try files(in: directory, matching: { $0.pathExtension == "swift" })
       .filter { file in !excludedPaths.contains { file.path.hasPrefix($0) } }
   }
@@ -43,21 +47,35 @@ struct Repository {
     matching predicate: (URL) -> Bool
   ) throws -> [URL] {
     guard let enumerator = FileManager.default.enumerator(
-      at: directory,
+      at: Self.canonical(directory),
       includingPropertiesForKeys: [.isDirectoryKey],
       options: [.skipsHiddenFiles]
     ) else {
-      throw ExtractionError.missingPath(relativePath(of: directory))
+      throw ExtractionError.missingPath((try? relativePath(of: directory)) ?? directory.path)
     }
 
-    var result: [URL] = []
+    var result: [(path: String, url: URL)] = []
     for case let url as URL in enumerator {
       let isDirectory = (try? url.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) ?? false
       let candidate = isDirectory ? url.appending(path: "", directoryHint: .isDirectory) : url
       if isDirectory && !includeDirectories { continue }
-      if predicate(candidate) { result.append(candidate.standardizedFileURL) }
+      if predicate(candidate) {
+        let canonical = Self.canonical(candidate)
+        result.append((try relativePath(of: canonical), canonical))
+      }
     }
-    return result.sorted { relativePath(of: $0) < relativePath(of: $1) }
+    return result.sorted { $0.path < $1.path }.map(\.url)
+  }
+
+  /// 심볼릭 링크를 푼 절대 경로. FileManager 열거는 링크를 푼 경로를 돌려주므로 루트와 비교할 경로는 모두 이 형태로 맞춘다.
+  /// `resolvingSymlinksInPath()`는 경로 끝이 존재하지 않으면 아무것도 풀지 않으므로, 존재하는 가장 가까운 상위 폴더까지 올라가 푼다.
+  static func canonical(_ url: URL) -> URL {
+    let url = url.standardizedFileURL
+    let parent = url.deletingLastPathComponent()
+    if FileManager.default.fileExists(atPath: url.path) || parent.path == url.path {
+      return url.resolvingSymlinksInPath()
+    }
+    return canonical(parent).appending(path: url.lastPathComponent, directoryHint: url.hasDirectoryPath ? .isDirectory : .notDirectory)
   }
 }
 

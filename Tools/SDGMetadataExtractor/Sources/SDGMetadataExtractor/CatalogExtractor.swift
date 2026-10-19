@@ -45,7 +45,7 @@ struct CatalogExtractor {
 
     let leaves = sections.flatMap { $0.items.flatMap(Self.leaves) }
     return CatalogFile(
-      sources: [repository.relativePath(of: catalogSource)],
+      sources: [try repository.relativePath(of: catalogSource)],
       counts: [
         "items": leaves.count,
         "implemented": leaves.filter(\.implemented).count,
