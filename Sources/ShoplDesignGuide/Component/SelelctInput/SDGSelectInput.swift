@@ -2,125 +2,152 @@
 //  SDGSelectInput.swift
 //  ShoplDesignGuide
 //
+//  Created by dino on 3/18/26.
+//
 
 import SwiftUI
 
 public struct SDGSelectInput: View {
-  public static let version: String = "2.3.39"
+  public static let version: String = "2.3.51"
 
   private let model: SelectInputModel
+  private let onClearTapped: (() -> Void)?
   private let onTapped: () -> Void
 
-  public struct SelectInputModel {
-    /// 선택된 데이터를 표현하는 요소입니다. Input Field는 최대 두 요소(높이 80pt)까지 지원합니다.
-    public let selectedElements: [SelectedElement]
-    public let placeholder: String
-    public let inputField: InputField
-    public let state: State
-
-    public init(
-      selectedElements: [SelectedElement] = [],
-      placeholder: String,
-      inputField: InputField,
-      state: State
-    ) {
-      assert(selectedElements.count <= 2, "SDGSelectInput supports up to two selected elements.")
-      self.selectedElements = Array(selectedElements.prefix(2))
-      self.placeholder = placeholder
-      self.inputField = inputField
-      self.state = state
-    }
-
-    public enum InputField {
-      case gray
-      case white
-
-      fileprivate var color: SDG.Color {
-        switch self {
-        case .gray:
-          .neutral50
-        case .white:
-          .neutral0
-        }
-      }
-    }
-
-    public enum State {
-      case `default`
-      case selected
-      case disabled
-      case error
-    }
-
-    public struct SelectedElement {
-      public let text: String
-      let content: AnyView?
-
-      public init(text: String) {
-        self.text = text
-        self.content = nil
-      }
-
-      public init<Content: View>(
-        text: String,
-        @ViewBuilder content: () -> Content
-      ) {
-        self.text = text
-        self.content = AnyView(content())
-      }
-    }
-  }
-
+  /// 기존 초기화 함수 참조와 호출 방식을 유지합니다.
   public init(
     model: SelectInputModel,
     onTapped: @escaping () -> Void
   ) {
+    self.init(model: model, onClearTapped: nil, onTapped: onTapped)
+  }
+
+  /// onClearTapped에서 호출부의 선택값을 비우고 state를 .default로 갱신합니다.
+  /// Clear 노출은 model.showClearIcon으로 제어하며, 초기화 액션은 Selected 상태에서만 실행합니다.
+  public init(
+    model: SelectInputModel,
+    onClearTapped: (() -> Void)?,
+    onTapped: @escaping () -> Void
+  ) {
     self.model = model
+    self.onClearTapped = onClearTapped
     self.onTapped = onTapped
   }
 
   public var body: some View {
+    ZStack {
+      // 형제 뷰로 분리하여 Clear 탭이 필드 선택 액션으로 전파되지 않게 합니다.
+      selectionButton
+      content
+    }
+    .frame(height: fieldHeight)
+    .background(backgroundColor, in: RoundedRectangle(cornerRadius: 12))
+    .disabled(isDisabled)
+    .allowsHitTesting(!isDisabled)
+    .accessibilityElement(children: .contain)
+  }
+}
+
+private extension SDGSelectInput {
+  var isDisabled: Bool {
+    model.state == .disabled
+  }
+
+  var showsPlaceholder: Bool {
+    model.state == .default || model.selectedElements.isEmpty
+  }
+
+  var fieldHeight: CGFloat {
+    model.state != .default && model.selectedElements.count == 2 ? 80 : 40
+  }
+
+  var backgroundColor: Color {
+    (model.state == .error ? SDG.Color.red300_10 : model.inputField.color).color
+  }
+
+  var selectionLabel: String {
+    showsPlaceholder ? model.placeholder : model.selectedElements.map(\.text).joined(separator: ", ")
+  }
+
+  var selectionButton: some View {
+    Button(action: onTapped) {
+      RoundedRectangle(cornerRadius: 12)
+        .fill(Color.clear)
+        .contentShape(Rectangle())
+    }
+    .buttonStyle(.plain)
+    .accessibilityLabel(selectionLabel)
+    .accessibilityHint(isDisabled ? "비활성화됨" : "선택")
+  }
+
+  var content: some View {
     HStack(alignment: .center, spacing: 10) {
-      VStack(spacing: 0) {
-        if model.state == .default || model.selectedElements.isEmpty {
-          SDGSelectInputElementView(
-            element: nil,
-            placeholder: model.placeholder,
-            state: model.state,
-            isMultipleSelection: false
-          )
-        } else {
-          ForEach(Array(model.selectedElements.enumerated()), id: \.offset) { _, element in
-            SDGSelectInputElementView(
-              element: element,
-              placeholder: model.placeholder,
-              state: model.state,
-              isMultipleSelection: model.selectedElements.count > 1
-            )
-          }
-        }
+      selectedElements
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+
+      if model.showClearIcon {
+        clearControl
       }
 
-      SDG.Image.icCommonNext.image
-        .templateIcon(size: 24, color: textColor.color)
-        .opacity(model.state == .disabled ? 0.3 : 1)
+      if !isDisabled {
+        chevronIcon
+      }
     }
     .padding(.horizontal, 12)
-    .frame(height: model.state != .default && model.selectedElements.count == 2 ? 80 : 40)
-    .background(backgroundColor)
-    .cornerRadius(12)
-    .onTapGesture(perform: onTapped)
-    .allowsHitTesting(model.state != .disabled)
-    .accessibilityElement(children: .combine)
-    .accessibilityHint(model.state == .disabled ? "비활성화됨" : "선택")
   }
 
-  private var textColor: SDG.Color {
-    .neutral700
+  var selectedElements: some View {
+    VStack(spacing: 0) {
+      if showsPlaceholder {
+        elementView(nil)
+      } else {
+        ForEach(Array(model.selectedElements.enumerated()), id: \.offset) { _, element in
+          elementView(element)
+        }
+      }
+    }
   }
 
-  private var backgroundColor: Color {
-    (model.state == .error ? SDG.Color.red300_10 : model.inputField.color).color
+  func elementView(_ element: SelectInputModel.SelectedElement?) -> some View {
+    SDGSelectInputElementView(
+      element: element,
+      placeholder: model.placeholder,
+      state: model.state,
+      isMultipleSelection: element != nil && model.isMultipleSelection
+    )
+  }
+
+  @ViewBuilder
+  var clearControl: some View {
+    if model.state == .selected, let onClearTapped {
+      Button(action: onClearTapped) {
+        clearIcon
+          .contentShape(Rectangle())
+      }
+      .buttonStyle(.plain)
+      .accessibilityLabel("선택 초기화")
+    } else {
+      // 별도 초기화 액션이 없으면 필드의 터치 정책을 따릅니다.
+      clearIcon
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+  }
+
+  var clearIcon: some View {
+    SDG.Image.icInputDelete.image
+      .resizable()
+      .frame(width: 18, height: 18)
+      .frame(width: 24, height: 28)
+  }
+
+  var chevronIcon: some View {
+    SDG.Image.icCommonNext.image
+      .templateIcon(size: 24, color: SDG.Color.neutral700.color)
+      .frame(width: 24, height: 28)
+      .allowsHitTesting(false)
+      .accessibilityHidden(true)
   }
 }
 
@@ -147,51 +174,4 @@ private struct SDGSelectInputElementView: View {
     .contentShape(Rectangle())
     .opacity(state == .disabled ? 0.3 : 1)
   }
-}
-
-#Preview {
-  VStack(spacing: 12) {
-    SDGSelectInput(
-      model: .init(placeholder: "Placeholder", inputField: .gray, state: .default)
-    ) { }
-
-    SDGSelectInput(
-      model: .init(
-        selectedElements: [.init(text: "Selected Text")],
-        placeholder: "Placeholder",
-        inputField: .gray,
-        state: .selected
-      )
-    ) { }
-
-    SDGSelectInput(
-      model: .init(
-        selectedElements: [.init(text: "Selected Text") {
-          SDG.Image.icBarcode.image.templateIcon(size: 20, color: SDG.Color.neutral700.color)
-        }],
-        placeholder: "Placeholder",
-        inputField: .white,
-        state: .selected
-      )
-    ) { }
-
-    SDGSelectInput(
-      model: .init(
-        selectedElements: [.init(text: "Selected Text")],
-        placeholder: "Placeholder",
-        inputField: .gray,
-        state: .disabled
-      )
-    ) { }
-
-    SDGSelectInput(
-      model: .init(
-        selectedElements: [.init(text: "Selected Text")],
-        placeholder: "Placeholder",
-        inputField: .gray,
-        state: .error
-      )
-    ) { }
-  }
-  .padding()
 }
