@@ -303,14 +303,14 @@ Text("본문")
 
 ### AI 에이전트 지원 (MCP)
 
-Claude Code가 SDG 토큰·컴포넌트 API·아이콘·사용 예제를 추측하지 않고 조회하도록 MCP 서버와 스킬을 플러그인으로 제공합니다.
+AI 코딩 에이전트가 SDG 토큰·컴포넌트 API·아이콘·사용 예제를 추측하지 않고 조회하도록 MCP 서버와 스킬을 플러그인으로 제공합니다. Claude Code는 다음과 같이 설치합니다.
 
 ```
 /plugin marketplace add shopl/shopl-design-guide-ios
 /plugin install sdg-ios@sdg-marketplace
 ```
 
-Claude Code 2.1.275 이상에서는 `/plugin install sdg-ios --marketplace shopl/shopl-design-guide-ios` 한 줄로도 설치할 수 있습니다.
+Claude Code 2.1.275 이상에서는 `/plugin install sdg-ios --marketplace shopl/shopl-design-guide-ios` 한 줄로도 설치할 수 있습니다. Cursor, Codex, VS Code(GitHub Copilot)와 그 밖의 에이전트는 사용법 문서를 참고하세요.
 
 - 사용법: [plugins/sdg-ios/README.md](plugins/sdg-ios/README.md)
 - 구조·유지보수: [mcp/README.md](mcp/README.md)
