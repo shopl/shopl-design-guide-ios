@@ -1,5 +1,5 @@
 {
-  "count" : 199,
+  "count" : 196,
   "examples" : {
     "Divider" : [
       {
@@ -615,23 +615,6 @@
       {
         "code" : "SDGListHeaderLabel(\n\t\tmodel: .init(\n\t\t  title: \"타이틀 엄청 긴 텍스트입니다아아아아아아아\",\n\t\t  count: nil,\n\t\t  isShowDropdownIcon: true\n\t\t)\n\t  )",
         "file" : "Sources/ShoplDesignGuide/Component/ListHeaderLabel/SDGListHeaderLabel.swift",
-        "source" : "preview"
-      }
-    ],
-    "SDGLoginInput" : [
-      {
-        "code" : "SDGLoginInput(\n  text: $text,\n  isFieldFocused: $isFieldFocused,\n  placeholder: \"입력\",\n  icon: .init(\n    iamge: Image(sdg: .icClip),\n    tintColor: .neutral500\n  )\n)",
-        "file" : "Sources/ShoplDesignGuide/Component/TextInput/SDGLoginInput.swift",
-        "source" : "preview"
-      },
-      {
-        "code" : "SDGLoginInput(\n  text: $text,\n  isFieldFocused: $isFieldFocused,\n  placeholder: \"입력\",\n  errorMessage: .constant(\"에러ㅔㅇㅇ러ㅔ렁렝렁레얼엘\"),\n  icon: .init(\n    iamge: Image(sdg: .icClip),\n    tintColor: .neutral500\n  )\n)",
-        "file" : "Sources/ShoplDesignGuide/Component/TextInput/SDGLoginInput.swift",
-        "source" : "preview"
-      },
-      {
-        "code" : "SDGLoginInput(\n  text: .constant(\"1231241\"),\n  isFieldFocused: $isFieldFocused,\n  placeholder: \"입력\",\n  icon: .init(\n    iamge: Image(sdg: .icClip),\n    tintColor: .neutral500\n  )\n)",
-        "file" : "Sources/ShoplDesignGuide/Component/TextInput/SDGLoginInput.swift",
         "source" : "preview"
       }
     ],
