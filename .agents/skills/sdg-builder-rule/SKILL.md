@@ -1,5 +1,5 @@
 ---
-name: ios-sdg-minimum-rules
+name: sdg-builder-rule
 description: SwiftUI SDG 컴포넌트·템플릿과 SampleApp 연결을 새로 만들거나 수정할 때 최소 공통 컨벤션과 필수 문서 주석·컴포넌트 디자인 버전을 적용한다.
 ---
 
