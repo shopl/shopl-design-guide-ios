@@ -1,0 +1,16 @@
+{
+  "_note": "사람이 직접 관리하는 유일한 파일. 설치 절차·주의사항처럼 코드에서 뽑을 수 없는 판단만 둔다. 플랫폼·의존성·다국어 대상 컴포넌트·Provider API처럼 코드에서 확인되는 사실은 setup.generated.json과 api.generated.json에서 자동으로 합쳐지므로 여기에 다시 적지 않는다.",
+  "packageURL": "https://github.com/shopl/shopl-design-guide-ios",
+  "packageName": "shopl-design-guide-ios",
+  "installSteps": [
+    "Xcode > File > Add Package Dependencies에서 패키지 URL을 추가한다. 버전은 GitHub Releases의 최신 태그를 확인해 지정한다.",
+    "앱 타깃에 ShoplDesignGuide 라이브러리를 연결하고, 사용하는 파일에서 import ShoplDesignGuide 한다.",
+    "다국어 문자열을 내장한 컴포넌트(localization.affectedSymbols)를 쓴다면 앱 시작 시 SDGString.shared.setProvider(provider:)로 문자열 공급자를 등록한다. 등록하지 않으면 해당 컴포넌트가 화면에 그려질 때 fatalError가 발생한다."
+  ],
+  "notes": [
+    "텍스트 스타일은 .typo(_:_:)로 적용한다. Pretendard 폰트 등록과 줄 높이 보정이 함께 처리되므로 .font(.system(...))로 대체하지 않는다.",
+    "UserDefaults의 \"language\" 값이 \"ja\"이면 Pretendard JP 폰트가 사용된다.",
+    "한국어 문장은 Text(sdg:)로 만들면 기기 언어가 한국어일 때 어절 단위로 줄바꿈된다."
+  ],
+  "instructions": "SDG iOS (ShoplDesignGuide) rules for generating SwiftUI code. (1) Never guess SDG APIs: before using a component call `search_component`, then `get_component_api`, and copy the real initializer signature. SDG components are configured through nested `Option`/`Model` structs, enums and `Binding`s. (2) Use SDG tokens instead of raw values: colors like `.neutral700` (SwiftUI Color and SDG.Color share the same names), text via `.typo(.body1_R, .neutral700)`, spacing via `.padding(.spacing16)` or `VStack(spacing: .spacing12)`, corner radius via `.cornerRadius(.radius8)`. Confirm names with `list_tokens`. (3) Use icons only as `Image(sdg: .<name>)` with names found by `search_icon`. (4) Popups are View modifiers such as `.centerConfirmPopup(isPresented:...)`, not views you instantiate. (5) Components with built-in localized strings require `SDGString.shared.setProvider(provider:)` at app launch or they crash with fatalError; see `get_setup_guide`. Import with `import ShoplDesignGuide` (iOS 16+)."
+}
