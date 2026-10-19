@@ -36,8 +36,9 @@ assert.deepEqual(
   ],
 );
 assert.match(client.getInstructions() ?? '', /setProvider/);
-// SDG.Color는 ShapeStyle이 아니어서 SwiftUI API에 넘기면 컴파일되지 않는다. 바꿔 써도 되는 것처럼 안내하지 않는다.
+// SDG.Color는 ShapeStyle이 아니어서 SwiftUI API에 넘기면 컴파일되지 않는다. 바꿔 써도 되는 것처럼 안내하지 않되, 공개 변환(.color)은 알려 준다.
 assert.match(client.getInstructions() ?? '', /`SDG\.Color` is not a ShapeStyle/);
+assert.match(client.getInstructions() ?? '', /sdgColor\.color/);
 step(`tools: ${tools.length}, instructions ok`);
 
 // 토큰
@@ -50,6 +51,8 @@ assert.equal(black40.token.opacity, 40);
 assert.equal(black40.token.baseToken, undefined, 'baseToken must not point to a token that does not exist');
 assert.ok(colors.usage.color.some((line) => line.includes('.foregroundStyle(.neutral700)')));
 assert.ok(colors.usage.color.some((line) => line.startsWith('SDG.Color.neutral700') && line.includes('not a ShapeStyle')));
+assert.ok(colors.usage.color.some((line) => line.includes('sdgColor.color')));
+assert.ok(!colors.usage.color.some((line) => line.includes('cannot be converted')));
 
 const body = await call('get_token', { name: '.body1_R' });
 assert.deepEqual([body.token.size, body.token.weight, body.token.lineHeight], [16, 400, 20]);

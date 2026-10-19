@@ -539,8 +539,9 @@ function tokenUsage(index: SDGIndex, type: TokenType, token?: TokenRecord): stri
         `.foregroundStyle(.${color})`,
         `.background(.${color})`,
         `Color.${color}  // SwiftUI Color: use in SwiftUI APIs, or to disambiguate Color/SDG.Color overloads`,
-        // SDG.Color는 ShapeStyle이 아니고 Color로 바꾸는 공개 API도 없다(Color.init(_: SDG.Color)는 internal).
-        `SDG.Color.${color}  // only for SDG parameters typed SDG.Color (e.g. .typo); it is not a ShapeStyle and cannot be converted to Color, so never pass it to .foregroundStyle/.background`,
+        // SDG.Color는 ShapeStyle이 아니라 SwiftUI API에 바로 넘길 수 없다. 이미 가진 SDG.Color 값은 공개 프로퍼티 .color로 Color로 바꾼다.
+        `SDG.Color.${color}  // for SDG parameters typed SDG.Color (e.g. .typo); it is not a ShapeStyle, so never pass it directly to .foregroundStyle/.background`,
+        `.foregroundStyle(sdgColor.color)  // an SDG.Color value you already hold (e.g. from an SDG option) converts to SwiftUI Color with .color; if you know the token name, write .${color} instead`,
       ];
       if (index.hasModifier('typo')) usage.push(`Text("…").typo(.body2_R, .${color})`);
       usage.push(
