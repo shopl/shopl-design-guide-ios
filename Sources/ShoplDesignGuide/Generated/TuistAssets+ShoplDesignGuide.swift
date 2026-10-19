@@ -114,6 +114,7 @@ public extension SDG.Image {
     static let icCommonMore = SDG.Image(name: "ic_common_more", bundle: dsBundle)
     static let icCommonNext = SDG.Image(name: "ic_common_next", bundle: dsBundle)
     static let icCommonNextS = SDG.Image(name: "ic_common_next_s", bundle: dsBundle)
+    static let icCommonPaper = SDG.Image(name: "ic_common_paper", bundle: dsBundle)
     static let icCommonPhoto = SDG.Image(name: "ic_common_photo", bundle: dsBundle)
     static let icCommonPlay = SDG.Image(name: "ic_common_play", bundle: dsBundle)
     static let icCommonPosition = SDG.Image(name: "ic_common_position", bundle: dsBundle)
