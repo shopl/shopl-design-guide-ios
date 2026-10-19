@@ -26,10 +26,13 @@ struct SDGViewConfig {
     registry.register(id: "component_dropdown") { SDGDropdownDemoView() }
     registry.register(id: "component_floating_button") { SDGFloatingButtonDemoView() }
     registry.register(id: "component_ghost_button") { SDGGhostButtonDemoView() }
+    registry.register(id: "component_icon_tab") { SDGIconTabDemoView() }
     registry.register(id: "component_number_picker") { SDGNumberPickerDemoView() }
     registry.register(id: "component_radio") { SDGRadioDemoView() }
+    registry.register(id: "component_scroll_tab") { SDGScrollTabDemoView() }
     registry.register(id: "component_toggle") { SDGToggleDemoView() }
     registry.register(id: "template_multi_time_picker") { SDGMultiTimePickerDemoView() }
+    registry.register(id: "template_history") { SDGCustomHistoryDemoView() }
     
     let bottomSheetControlRegistry = SDGBottomSheetControlRegistry.shared
     bottomSheetControlRegistry.register(id: "component_avatar") {
@@ -52,6 +55,12 @@ struct SDGViewConfig {
     }
     bottomSheetControlRegistry.register(id: "component_ghost_button") {
       SDGGhostButtonBottomSheetControls()
+    }
+    bottomSheetControlRegistry.register(id: "component_icon_tab") {
+      SDGIconTabBottomSheetControls()
+    }
+    bottomSheetControlRegistry.register(id: "component_scroll_tab") {
+      SDGScrollTabBottomSheetControls()
     }
 
   }

@@ -107,10 +107,14 @@ struct SDGGuideDetailView: View {
       return SDGFloatingButton.version
     case "component_ghost_button":
       return SDGGhostButton.version
+    case "component_icon_tab":
+      return SDGIconTab.version
     case "component_number_picker":
       return SDGNumberPicker.version
     case "component_radio":
       return SDGRadio.version
+    case "component_scroll_tab":
+      return SDGScrollTab.version
     case "component_toggle":
       return SDGToggle.version
     case "component_thumbnails":
@@ -186,6 +190,13 @@ private struct SDGGuideHeaderView: View {
   SDGGuideDetailPreviewWrapper(
     itemID: "component_ghost_button",
     viewID: "component_ghost_button"
+  )
+}
+
+#Preview("Scroll Tab Bottom Sheet") {
+  SDGGuideDetailPreviewWrapper(
+    itemID: "component_scroll_tab",
+    viewID: "component_scroll_tab"
   )
 }
 
