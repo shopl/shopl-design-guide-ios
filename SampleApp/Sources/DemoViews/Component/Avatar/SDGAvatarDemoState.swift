@@ -10,6 +10,7 @@ import SwiftUI
 import UIKit
 import ShoplDesignGuide
 
+/// 샘플의 표시 옵션을 보관하고 Avatar·Outline·ic 입력으로 변환합니다.
 final class SDGAvatarDemoState: ObservableObject {
   static let shared = SDGAvatarDemoState()
   
@@ -42,11 +43,15 @@ final class SDGAvatarDemoState: ObservableObject {
     )
   }
 
-  var icon: Image? {
+  var avatar: SDGAvatar.Avatar {
+    .init(showFace: isPhotoEnabled, showRetry: isRetryEnabled)
+  }
+
+  var ic: Image? {
     isIconEnabled ? selectedRole.icon : nil
   }
 
-  var outlineColor: Color? {
+  var outline: Color? {
     guard isOutlineEnabled else { return nil }
     return (outlineColors[safe: selectedOutlineColorIndex] ?? .pink).color
   }
@@ -110,7 +115,7 @@ enum SDGAvatarDemoSize: String, CaseIterable, Identifiable {
     rawValue
   }
   
-  var avatarSize: SDGAvatar.Size {
+  var avatarSpec: SDGAvatar.Spec {
     switch self {
     case .xlarge:
       return .xl
