@@ -8,22 +8,19 @@
 import SwiftUI
 import ShoplDesignGuide
 
+/// 가이드의 Face·Retry·Outline·ic 표시 옵션을 독립적으로 조절합니다.
 struct SDGAvatarBottomSheetControls: View {
   @ObservedObject private var state = SDGAvatarDemoState.shared
   
   var body: some View {
     VStack(alignment: .leading, spacing: 28) {
       SDGSampleBottomSheetControlSection {
-        SDGSampleBottomSheetControlRow(title: "사진") {
+        SDGSampleBottomSheetControlRow(title: "Show Face") {
           SDGToggle(size: .m, isOn: $state.isPhotoEnabled)
         }
-      }
-      
-      SDGSampleBottomSheetDivider()
-      
-      SDGSampleBottomSheetControlSection {
-        SDGSampleBottomSheetControlRow(title: "아이콘") {
-          SDGToggle(size: .m, isOn: $state.isIconEnabled)
+
+        SDGSampleBottomSheetControlRow(title: "Show Retry") {
+          SDGToggle(size: .m, isOn: $state.isRetryEnabled)
         }
       }
 
@@ -46,8 +43,8 @@ struct SDGAvatarBottomSheetControls: View {
       SDGSampleBottomSheetDivider()
 
       SDGSampleBottomSheetControlSection {
-        SDGSampleBottomSheetControlRow(title: "Retry") {
-          SDGToggle(size: .m, isOn: $state.isRetryEnabled)
+        SDGSampleBottomSheetControlRow(title: "ic") {
+          SDGToggle(size: .m, isOn: $state.isIconEnabled)
         }
       }
     }

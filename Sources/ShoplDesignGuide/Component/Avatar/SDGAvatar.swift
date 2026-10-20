@@ -299,10 +299,10 @@ private struct AvatarPreview: View {
     ScrollView(.horizontal) {
       Grid(horizontalSpacing: 20, verticalSpacing: 20) {
         GridRow {
-          Text("Size")
+          Text("Spec")
           Text("Empty")
           Text("Outline")
-          Text("Icon")
+          Text("ic")
           Text("Retry")
         }
         .font(.caption)
