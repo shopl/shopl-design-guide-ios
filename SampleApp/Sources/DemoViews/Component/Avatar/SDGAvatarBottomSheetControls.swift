@@ -8,7 +8,7 @@
 import SwiftUI
 import ShoplDesignGuide
 
-/// 가이드의 Face·Retry·Outline·ic 표시 옵션을 독립적으로 조절합니다.
+/// Figma의 Show Face·Show Retry·Show Outline·Show Ic를 독립적으로 조절합니다.
 struct SDGAvatarBottomSheetControls: View {
   @ObservedObject private var state = SDGAvatarDemoState.shared
   
@@ -27,7 +27,7 @@ struct SDGAvatarBottomSheetControls: View {
       SDGSampleBottomSheetDivider()
 
       SDGSampleBottomSheetControlSection {
-        SDGSampleBottomSheetControlRow(title: "Outline") {
+        SDGSampleBottomSheetControlRow(title: "Show Outline") {
           SDGToggle(size: .m, isOn: $state.isOutlineEnabled)
         }
 
@@ -43,7 +43,7 @@ struct SDGAvatarBottomSheetControls: View {
       SDGSampleBottomSheetDivider()
 
       SDGSampleBottomSheetControlSection {
-        SDGSampleBottomSheetControlRow(title: "ic") {
+        SDGSampleBottomSheetControlRow(title: "Show Ic") {
           SDGToggle(size: .m, isOn: $state.isIconEnabled)
         }
       }

@@ -8,14 +8,14 @@
 import SwiftUI
 import ShoplDesignGuide
 
-/// 아바타의 Spec과 우측 하단 ic에 사용할 뱃지 예시를 보여주는 샘플입니다.
+/// 아바타의 Size와 우측 하단 ic에 사용할 뱃지 예시를 보여주는 샘플입니다.
 struct SDGAvatarDemoView: View {
   @ObservedObject private var state = SDGAvatarDemoState.shared
   
   var body: some View {
     VStack(alignment: .leading, spacing: 16) {
       icSection
-      specSection
+      sizeSection
     }
     .padding(.top, 16)
     .padding(.bottom, 40)
@@ -44,10 +44,10 @@ struct SDGAvatarDemoView: View {
     .frame(maxWidth: .infinity, alignment: .leading)
   }
   
-  private var specSection: some View {
+  private var sizeSection: some View {
     VStack(alignment: .leading, spacing: 12) {
       VStack(alignment: .leading, spacing: 8) {
-        sectionTitle("Spec")
+        sectionTitle("Size")
         
         SDGScrollTab(
           type: .text,
