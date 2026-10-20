@@ -11,10 +11,10 @@ import Kingfisher
 /// 기존 역할 뱃지와 임산부 Outline 호출의 호환성을 유지하는 아바타 모델입니다.
 @available(*, deprecated, message: "SDGAvatar.Model을 사용하고 outline과 ic를 SDGAvatar에 전달하세요.")
 public struct AvatarModel: Equatable, Hashable {
-  
+
   public enum RoleType: Equatable {
     case worker, leader, opLeader
-    
+
     public init(rawValue: String) {
       switch rawValue {
       case "1", "LEADER", "leader":
@@ -30,16 +30,16 @@ public struct AvatarModel: Equatable, Hashable {
       }
     }
   }
-  
+
   public enum Maternity: Equatable {
     case none, pre, post
   }
-  
+
   public let userId: String
   public let imageURL: URL?
   public let roleType: RoleType
   public let maternity: Maternity
-  
+
   public init(userId: String, imageURL: URL?, roleType: RoleType, maternity: Maternity = .none) {
     self.userId = userId
     self.imageURL = imageURL
@@ -106,16 +106,16 @@ public struct SDGAvatar: View {
   /// 가이드의 Spec에 대응하는 크기입니다. 기존 `Size`의 케이스와 raw value를 공유합니다.
   public typealias Spec = Size
 
-  private let _model: Model
-  private let _avatar: Avatar
-  private let _outline: Color?
-  private let _ic: Image?
-  private let _spec: Spec
-  private let _onRetry: (() -> Void)?
-  private let _action: (String) -> Void
+  private let model: Model
+  private let avatar: Avatar
+  private let outline: Color?
+  private let ic: Image?
+  private let spec: Spec
+  private let onRetry: (() -> Void)?
+  private let action: (String) -> Void
 
-  private var _outlineWidth: CGFloat {
-    switch _spec {
+  private var outlineWidth: CGFloat {
+    switch spec {
     case .xxs: return 1.5
     case .xs: return 1.8
     case .s: return 2.4
@@ -125,8 +125,8 @@ public struct SDGAvatar: View {
     }
   }
 
-  private var _iconSize: CGFloat {
-    switch _spec {
+  private var iconSize: CGFloat {
+    switch spec {
     case .xxs: return 8
     case .xs: return 10
     case .s: return 12
@@ -136,8 +136,8 @@ public struct SDGAvatar: View {
     }
   }
 
-  private var _retryIconSize: CGFloat {
-    switch _spec {
+  private var retryIconSize: CGFloat {
+    switch spec {
     case .xxs: return 10
     case .xs: return 12
     case .s: return 16
@@ -168,13 +168,13 @@ public struct SDGAvatar: View {
     onRetry: (() -> Void)? = nil,
     action: @escaping (String) -> Void
   ) {
-    _model = model
-    _avatar = avatar
-    _outline = outline
-    _ic = ic
-    _spec = spec
-    _onRetry = onRetry
-    _action = action
+    self.model = model
+    self.avatar = avatar
+    self.outline = outline
+    self.ic = ic
+    self.spec = spec
+    self.onRetry = onRetry
+    self.action = action
   }
 
   /// 기존 배포 API의 역할 뱃지와 임산부 Outline을 새 표시 옵션으로 변환합니다.
@@ -185,7 +185,12 @@ public struct SDGAvatar: View {
   ///   - size: 기존 아바타 크기입니다. 새 API의 `spec`과 동일한 규격입니다.
   ///   - action: 아바타를 누르면 유저 식별자를 전달합니다.
   @available(*, deprecated, message: "init(model:avatar:outline:ic:spec:onRetry:action:)을 사용하세요.")
-  public init(type: AvatarType, model: AvatarModel, size: Size, action: @escaping (String) -> Void) {
+  public init(
+    type: AvatarType,
+    model: AvatarModel,
+    size: Size,
+    action: @escaping (String) -> Void
+  ) {
     let icon: Image?
     switch model.roleType {
     case .worker:
@@ -208,14 +213,14 @@ public struct SDGAvatar: View {
 
   @ViewBuilder
   public var body: some View {
-    if _avatar.showRetry, _onRetry == nil {
+    if avatar.showRetry, onRetry == nil {
       content
     } else {
       Button {
-        if _avatar.showRetry {
-          _onRetry?()
+        if avatar.showRetry {
+          onRetry?()
         } else {
-          _action(_model.userId)
+          action(model.userId)
         }
       } label: {
         content
@@ -229,10 +234,10 @@ public struct SDGAvatar: View {
   private var content: some View {
     ZStack {
       face
-        .frame(width: _spec.rawValue, height: _spec.rawValue)
+        .frame(width: spec.rawValue, height: spec.rawValue)
         .clipShape(Circle())
 
-      if _avatar.showRetry {
+      if avatar.showRetry {
         Circle()
           .fill(Color.sdgCoolGray)
           .overlay {
@@ -240,24 +245,24 @@ public struct SDGAvatar: View {
               .resizable()
               .scaledToFit()
               .foregroundStyle(Color.neutral600)
-              .frame(width: _retryIconSize, height: _retryIconSize)
+              .frame(width: retryIconSize, height: retryIconSize)
           }
       }
     }
-    .frame(width: _spec.rawValue, height: _spec.rawValue)
+    .frame(width: spec.rawValue, height: spec.rawValue)
     .overlay {
-      if let color = _outline {
+      if let color = outline {
         Circle()
-          .inset(by: -_outlineWidth / 2)
-          .stroke(color, lineWidth: _outlineWidth)
+          .inset(by: -outlineWidth / 2)
+          .stroke(color, lineWidth: outlineWidth)
       }
     }
     .overlay(alignment: .bottomTrailing) {
-      if let icon = _ic {
+      if let icon = ic {
         icon
           .resizable()
           .scaledToFit()
-          .frame(width: _iconSize, height: _iconSize)
+          .frame(width: iconSize, height: iconSize)
       }
     }
     .contentShape(Rectangle())
@@ -265,7 +270,7 @@ public struct SDGAvatar: View {
 
   @ViewBuilder
   private var face: some View {
-    if _avatar.showFace, let imageURL = _model.imageURL {
+    if avatar.showFace, let imageURL = model.imageURL {
       KFImage(imageURL)
         .placeholder {
           emptyImage
@@ -282,7 +287,7 @@ public struct SDGAvatar: View {
       .resizable()
       .scaledToFit()
       .foregroundStyle(Color.neutral400)
-      .frame(width: _spec.rawValue, height: _spec.rawValue)
+      .frame(width: spec.rawValue, height: spec.rawValue)
       .overlay {
         Rectangle()
           .fill(Color.secondary300_10)
