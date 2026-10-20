@@ -9,7 +9,7 @@ import SwiftUI
 import Kingfisher
 
 /// 기존 역할 뱃지와 임산부 Outline 호출의 호환성을 유지하는 아바타 모델입니다.
-@available(*, deprecated, message: "SDGAvatar.Model을 사용하고 outline과 ic를 SDGAvatar에 전달하세요.")
+@available(*, deprecated, message: "데이터와 표시 설정을 SDGAvatar.Model에 담아 사용하세요.")
 public struct AvatarModel: Equatable, Hashable {
 
   public enum RoleType: Equatable {
@@ -48,44 +48,69 @@ public struct AvatarModel: Equatable, Hashable {
   }
 }
 
-/// 가이드의 Avatar, Outline, ic, Spec 입력으로 유저의 원형 프로필을 표시합니다.
+/// Figma의 Size와 Show Face·Show Ic·Show Outline·Show Retry 설정으로 원형 프로필을 표시합니다.
+/// 데이터와 디자인 설정은 Model로 받고, 탭·재시도 동작은 별도 콜백으로 연결합니다.
 /// 프로필 API의 재요청과 표시 상태 갱신은 호출 화면에서 담당합니다.
 public struct SDGAvatar: View {
   /// 이 컴포넌트에 적용된 디자인 가이드 버전입니다.
   public static let version = "2.3.50"
 
-  /// 아바타에 표시할 이미지와 정상 탭 이벤트에 전달할 유저 식별자입니다.
-  public struct Model: Equatable, Hashable {
+  /// 아바타의 데이터와 디자인 설정을 한 단위로 전달하는 모델입니다.
+  /// 표시 상태는 호출 화면이 소유하며, 아바타 내부에서 변경하지 않습니다.
+  public struct Model: Equatable {
     /// 정상 상태에서 아바타를 누르면 `action`에 전달하는 식별자입니다.
     public let userId: String
     /// 서버에서 받은 표시용 URL입니다. 서버의 Empty 이미지 URL도 포함합니다.
     public let imageURL: URL?
+    /// Figma의 Size입니다. 아바타 크기와 Outline·아이콘 규격을 결정합니다.
+    public var size: Size
+    /// Figma의 Show Face입니다. Retry가 꺼져 있을 때 `false`이면 URL을 사용하지 않고 placeholder를 표시합니다.
+    public var showFace: Bool
+    /// Figma의 Show Ic입니다. `true`이고 `ic`가 있을 때 우측 하단 아이콘을 표시합니다.
+    public var showIc: Bool
+    /// Figma의 Show Outline입니다. `true`이고 `outline`이 있을 때 외곽선을 표시합니다.
+    public var showOutline: Bool
+    /// Figma의 Show Retry입니다. `true`이면 Face보다 우선하며 이미지 뷰를 생성하지 않습니다.
+    /// 호출 화면의 프로필 API 실패 표시에 사용하며, 내부 이미지 다운로드 실패로 자동 변경되지 않습니다.
+    public var showRetry: Bool
+    /// 원 바깥에 그릴 외곽선 색상입니다. `showOutline`을 꺼도 값은 유지합니다.
+    public var outline: Color?
+    /// 우측 하단에 표시할 아이콘입니다. `showIc`를 꺼도 값은 유지합니다.
+    public var ic: Image?
 
-    /// 아바타 표시 데이터를 생성합니다.
+    /// 데이터와 크기·표시 옵션을 명시해 아바타 입력을 생성합니다.
+    /// Retry를 해제하면 현재 `showFace`와 `imageURL`에 따라 표시합니다.
     /// - Parameters:
     ///   - userId: 정상 탭 이벤트에 전달할 유저 식별자입니다.
-    ///   - imageURL: 표시할 이미지 URL입니다. `nil`이면 로컬 placeholder를 사용합니다.
-    public init(userId: String, imageURL: URL?) {
+    ///   - imageURL: 표시할 이미지 URL입니다. 서버 Empty 이미지도 그대로 표시합니다.
+    ///     URL 없음·이미지 로딩 중·다운로드 실패는 로컬 placeholder로 처리합니다.
+    ///   - size: Figma의 Size에 대응하는 아바타 크기입니다.
+    ///   - showFace: Retry가 꺼져 있을 때 이미지 표시 여부입니다. `false`여도 모델의 이미지 URL은 유지됩니다.
+    ///   - showIc: 우측 하단 아이콘 표시 여부입니다. `true`여도 `ic`가 없으면 숨깁니다.
+    ///   - showOutline: 외곽선 표시 여부입니다. `true`여도 `outline`이 없으면 숨깁니다.
+    ///   - showRetry: `true`이면 Face와 이미지 다운로드를 생략하고 Retry를 우선 표시합니다.
+    ///   - outline: 외곽선 색상입니다. 기본값인 `nil`이면 표시하지 않습니다.
+    ///   - ic: 우측 하단 아이콘입니다. 기본값인 `nil`이면 표시하지 않습니다.
+    public init(
+      userId: String,
+      imageURL: URL?,
+      size: Size,
+      showFace: Bool,
+      showIc: Bool,
+      showOutline: Bool,
+      showRetry: Bool,
+      outline: Color? = nil,
+      ic: Image? = nil
+    ) {
       self.userId = userId
       self.imageURL = imageURL
-    }
-  }
-
-  /// 가이드의 Face와 Retry 표시 옵션입니다. 두 값이 모두 `true`이면 Retry를 우선 표시합니다.
-  /// 값은 호출 화면이 소유하며, 아바타 내부에서 변경하지 않습니다.
-  public struct Avatar: Equatable, Hashable {
-    /// Retry가 꺼져 있을 때 전달된 이미지를 표시할지 결정합니다. `false`이면 placeholder를 표시합니다.
-    public var showFace: Bool
-    /// 프로필 API 실패에 대한 Retry를 표시합니다. 내부 이미지 다운로드 실패로 자동 변경되지 않습니다.
-    public var showRetry: Bool
-
-    /// Face와 Retry의 표시 옵션을 모두 명시해 생성합니다.
-    /// - Parameters:
-    ///   - showFace: Retry가 꺼져 있을 때 이미지 표시 여부입니다. `false`여도 모델의 이미지 URL은 유지됩니다.
-    ///   - showRetry: `true`이면 Face와 이미지 다운로드를 생략하고 Retry를 우선 표시합니다.
-    public init(showFace: Bool, showRetry: Bool) {
+      self.size = size
       self.showFace = showFace
+      self.showIc = showIc
+      self.showOutline = showOutline
       self.showRetry = showRetry
+      self.outline = outline
+      self.ic = ic
     }
   }
 
@@ -93,7 +118,7 @@ public struct SDGAvatar: View {
     case round
   }
 
-  /// 아바타의 너비와 높이를 포인트 단위로 정의한 기존 크기입니다.
+  /// Figma의 Size에 대응하며 아바타의 너비와 높이를 포인트 단위로 정의합니다.
   public enum Size: CGFloat {
     case xxs = 20
     case xs = 24
@@ -103,19 +128,12 @@ public struct SDGAvatar: View {
     case xl = 90
   }
 
-  /// 가이드의 Spec에 대응하는 크기입니다. 기존 `Size`의 케이스와 raw value를 공유합니다.
-  public typealias Spec = Size
-
   private let model: Model
-  private let avatar: Avatar
-  private let outline: Color?
-  private let ic: Image?
-  private let spec: Spec
   private let onRetry: (() -> Void)?
   private let action: (String) -> Void
 
   private var outlineWidth: CGFloat {
-    switch spec {
+    switch model.size {
     case .xxs: return 1.5
     case .xs: return 1.8
     case .s: return 2.4
@@ -126,7 +144,7 @@ public struct SDGAvatar: View {
   }
 
   private var iconSize: CGFloat {
-    switch spec {
+    switch model.size {
     case .xxs: return 8
     case .xs: return 10
     case .s: return 12
@@ -137,7 +155,7 @@ public struct SDGAvatar: View {
   }
 
   private var retryIconSize: CGFloat {
-    switch spec {
+    switch model.size {
     case .xxs: return 10
     case .xs: return 12
     case .s: return 16
@@ -147,32 +165,21 @@ public struct SDGAvatar: View {
     }
   }
 
-  /// 가이드의 Anatomy와 Spec에 맞춰 아바타를 생성합니다.
+  /// 데이터와 디자인 설정을 담은 Model로 아바타를 생성합니다.
   /// Retry가 Face보다 우선하며, 해제하면 전달된 Face 설정과 이미지 URL로 표시합니다.
   /// URL 없음·이미지 로딩 중·다운로드 실패는 로컬 placeholder로 처리하고 Retry를 자동으로 켜지 않습니다.
   /// - Parameters:
-  ///   - model: 유저 식별자와 표시용 이미지 URL입니다. 서버 Empty 이미지도 그대로 표시합니다.
-  ///   - avatar: Face·Retry 표시 옵션을 모두 명시합니다. 두 값이 모두 `true`이면 Retry를 우선 표시합니다.
-  ///   - outline: 원 바깥에 그릴 테두리 색상입니다. 기본값인 `nil`이면 숨깁니다.
-  ///   - ic: 우측 하단 아이콘입니다. 기본값인 `nil`이면 숨기며 크기는 Spec에 따릅니다.
-  ///   - spec: 아바타 크기와 테두리 두께, 하단·Retry 아이콘 크기를 결정하는 규격입니다.
+  ///   - model: 유저 식별자·이미지 URL과 Figma의 Size·표시 옵션, 외곽선 색상·하단 아이콘입니다.
+  ///     Outline과 ic는 Retry 표시 중에도 각 표시 옵션과 값에 따라 독립적으로 표시합니다.
   ///   - onRetry: Retry 상태에서 탭하면 호출합니다. 기본값인 `nil`이면 표시만 합니다.
   ///     프로필 API 재요청과 결과에 따른 모델·표시 옵션 갱신은 호출 화면에서 담당합니다.
   ///   - action: Retry가 꺼진 상태에서 탭하면 유저 식별자를 전달합니다.
   public init(
     model: Model,
-    avatar: Avatar,
-    outline: Color? = nil,
-    ic: Image? = nil,
-    spec: Spec,
     onRetry: (() -> Void)? = nil,
     action: @escaping (String) -> Void
   ) {
     self.model = model
-    self.avatar = avatar
-    self.outline = outline
-    self.ic = ic
-    self.spec = spec
     self.onRetry = onRetry
     self.action = action
   }
@@ -182,9 +189,9 @@ public struct SDGAvatar: View {
   /// - Parameters:
   ///   - type: 기존 원형 아바타 타입입니다.
   ///   - model: 이미지와 역할·임산부 정보입니다. 리더·관리자는 기존 뱃지, 임산부는 분홍색 테두리로 표시합니다.
-  ///   - size: 기존 아바타 크기입니다. 새 API의 `spec`과 동일한 규격입니다.
+  ///   - size: 기존 아바타 크기입니다. 새 Model의 `size`와 동일한 규격입니다.
   ///   - action: 아바타를 누르면 유저 식별자를 전달합니다.
-  @available(*, deprecated, message: "init(model:avatar:outline:ic:spec:onRetry:action:)을 사용하세요.")
+  @available(*, deprecated, message: "데이터와 표시 설정을 SDGAvatar.Model에 담아 init(model:onRetry:action:)을 사용하세요.")
   public init(
     type: AvatarType,
     model: AvatarModel,
@@ -202,22 +209,28 @@ public struct SDGAvatar: View {
     }
 
     self.init(
-      model: Model(userId: model.userId, imageURL: model.imageURL),
-      avatar: .init(showFace: true, showRetry: false),
-      outline: model.maternity == .none ? nil : .sdgSpecialPink,
-      ic: icon,
-      spec: size,
+      model: Model(
+        userId: model.userId,
+        imageURL: model.imageURL,
+        size: size,
+        showFace: true,
+        showIc: icon != nil,
+        showOutline: model.maternity != .none,
+        showRetry: false,
+        outline: model.maternity == .none ? nil : .sdgSpecialPink,
+        ic: icon
+      ),
       action: action
     )
   }
 
   @ViewBuilder
   public var body: some View {
-    if avatar.showRetry, onRetry == nil {
+    if model.showRetry, onRetry == nil {
       content
     } else {
       Button {
-        if avatar.showRetry {
+        if model.showRetry {
           onRetry?()
         } else {
           action(model.userId)
@@ -233,44 +246,27 @@ public struct SDGAvatar: View {
 
   private var content: some View {
     ZStack {
-      if avatar.showRetry {
-        Circle()
-          .fill(Color.sdgCoolGray)
-          .overlay {
-            Image(sdg: .icRetry)
-              .resizable()
-              .scaledToFit()
-              .foregroundStyle(Color.neutral600)
-              .frame(width: retryIconSize, height: retryIconSize)
-          }
+      if model.showRetry {
+        retry
       } else {
         face
-          .frame(width: spec.rawValue, height: spec.rawValue)
+          .frame(width: model.size.rawValue, height: model.size.rawValue)
           .clipShape(Circle())
       }
     }
-    .frame(width: spec.rawValue, height: spec.rawValue)
+    .frame(width: model.size.rawValue, height: model.size.rawValue)
     .overlay {
-      if let color = outline {
-        Circle()
-          .inset(by: -outlineWidth / 2)
-          .stroke(color, lineWidth: outlineWidth)
-      }
+      outline
     }
     .overlay(alignment: .bottomTrailing) {
-      if let icon = ic {
-        icon
-          .resizable()
-          .scaledToFit()
-          .frame(width: iconSize, height: iconSize)
-      }
+      ic
     }
     .contentShape(Rectangle())
   }
 
   @ViewBuilder
   private var face: some View {
-    if avatar.showFace, let imageURL = model.imageURL {
+    if model.showFace, let imageURL = model.imageURL {
       KFImage(imageURL)
         .placeholder {
           emptyImage
@@ -282,12 +278,43 @@ public struct SDGAvatar: View {
     }
   }
 
+  private var retry: some View {
+    Circle()
+      .fill(Color.sdgCoolGray)
+      .overlay {
+        Image(sdg: .icRetry)
+          .resizable()
+          .scaledToFit()
+          .foregroundStyle(Color.neutral600)
+          .frame(width: retryIconSize, height: retryIconSize)
+      }
+  }
+
+  @ViewBuilder
+  private var outline: some View {
+    if model.showOutline, let color = model.outline {
+      Circle()
+        .inset(by: -outlineWidth / 2)
+        .stroke(color, lineWidth: outlineWidth)
+    }
+  }
+
+  @ViewBuilder
+  private var ic: some View {
+    if model.showIc, let icon = model.ic {
+      icon
+        .resizable()
+        .scaledToFit()
+        .frame(width: iconSize, height: iconSize)
+    }
+  }
+
   private var emptyImage: some View {
     Image(sdg: .icDashPerson)
       .resizable()
       .scaledToFit()
       .foregroundStyle(Color.neutral400)
-      .frame(width: spec.rawValue, height: spec.rawValue)
+      .frame(width: model.size.rawValue, height: model.size.rawValue)
       .overlay {
         Rectangle()
           .fill(Color.secondary300_10)
@@ -297,14 +324,13 @@ public struct SDGAvatar: View {
 }
 
 private struct AvatarPreview: View {
-  private let specs: [SDGAvatar.Spec] = [.xxs, .xs, .s, .m, .l, .xl]
-  private let model = SDGAvatar.Model(userId: "preview", imageURL: nil)
+  private let sizes: [SDGAvatar.Size] = [.xxs, .xs, .s, .m, .l, .xl]
 
   var body: some View {
     ScrollView(.horizontal) {
       Grid(horizontalSpacing: 20, verticalSpacing: 20) {
         GridRow {
-          Text("Spec")
+          Text("Size")
           Text("Empty")
           Text("Outline")
           Text("ic")
@@ -312,36 +338,60 @@ private struct AvatarPreview: View {
         }
         .font(.caption)
 
-        ForEach(specs, id: \.rawValue) { spec in
+        ForEach(sizes, id: \.rawValue) { size in
           GridRow {
-            Text("\(Int(spec.rawValue))")
+            Text("\(Int(size.rawValue))")
               .font(.caption)
             SDGAvatar(
-              model: model,
-              avatar: .init(showFace: true, showRetry: false),
-              spec: spec,
+              model: .init(
+                userId: "preview",
+                imageURL: nil,
+                size: size,
+                showFace: true,
+                showIc: false,
+                showOutline: false,
+                showRetry: false
+              ),
               action: { _ in }
             )
             SDGAvatar(
-              model: model,
-              avatar: .init(showFace: true, showRetry: false),
-              outline: .sdgSpecialPink,
-              spec: spec,
+              model: .init(
+                userId: "preview",
+                imageURL: nil,
+                size: size,
+                showFace: true,
+                showIc: false,
+                showOutline: true,
+                showRetry: false,
+                outline: .sdgSpecialPink
+              ),
               action: { _ in }
             )
             SDGAvatar(
-              model: model,
-              avatar: .init(showFace: true, showRetry: false),
-              ic: Image(sdg: .leaderBadge),
-              spec: spec,
+              model: .init(
+                userId: "preview",
+                imageURL: nil,
+                size: size,
+                showFace: true,
+                showIc: true,
+                showOutline: false,
+                showRetry: false,
+                ic: Image(sdg: .leaderBadge)
+              ),
               action: { _ in }
             )
             SDGAvatar(
-              model: model,
-              avatar: .init(showFace: true, showRetry: true),
-              outline: .primary300,
-              ic: Image(sdg: .adminBadge),
-              spec: spec,
+              model: .init(
+                userId: "preview",
+                imageURL: nil,
+                size: size,
+                showFace: true,
+                showIc: true,
+                showOutline: true,
+                showRetry: true,
+                outline: .primary300,
+                ic: Image(sdg: .adminBadge)
+              ),
               onRetry: { },
               action: { _ in }
             )

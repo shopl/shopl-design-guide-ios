@@ -10,7 +10,7 @@ import SwiftUI
 import UIKit
 import ShoplDesignGuide
 
-/// 샘플의 표시 옵션을 보관하고 Avatar·Outline·ic 입력으로 변환합니다.
+/// 샘플의 데이터와 Figma 표시 옵션을 하나의 아바타 Model로 전달합니다.
 final class SDGAvatarDemoState: ObservableObject {
   static let shared = SDGAvatarDemoState()
   
@@ -39,23 +39,17 @@ final class SDGAvatarDemoState: ObservableObject {
   var avatarModel: SDGAvatar.Model {
     SDGAvatar.Model(
       userId: "avatar_sample_user",
-      imageURL: Self.sampleImageURL
+      imageURL: Self.sampleImageURL,
+      size: selectedSize.avatarSize,
+      showFace: isPhotoEnabled,
+      showIc: isIconEnabled,
+      showOutline: isOutlineEnabled,
+      showRetry: isRetryEnabled,
+      outline: (outlineColors[safe: selectedOutlineColorIndex] ?? .pink).color,
+      ic: selectedRole.icon
     )
   }
 
-  var avatar: SDGAvatar.Avatar {
-    .init(showFace: isPhotoEnabled, showRetry: isRetryEnabled)
-  }
-
-  var ic: Image? {
-    isIconEnabled ? selectedRole.icon : nil
-  }
-
-  var outline: Color? {
-    guard isOutlineEnabled else { return nil }
-    return (outlineColors[safe: selectedOutlineColorIndex] ?? .pink).color
-  }
-  
   private static let sampleImageURL: URL? = {
     guard let image = UIImage(named: "Avatar_Sample"),
           let imageData = image.jpegData(compressionQuality: 1) else {
@@ -115,7 +109,7 @@ enum SDGAvatarDemoSize: String, CaseIterable, Identifiable {
     rawValue
   }
   
-  var avatarSpec: SDGAvatar.Spec {
+  var avatarSize: SDGAvatar.Size {
     switch self {
     case .xlarge:
       return .xl

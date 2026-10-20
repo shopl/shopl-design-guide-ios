@@ -66,10 +66,6 @@ struct SDGAvatarDemoView: View {
     VStack(spacing: 0) {
       SDGAvatar(
         model: state.avatarModel,
-        avatar: state.avatar,
-        outline: state.outline,
-        ic: state.ic,
-        spec: state.selectedSize.avatarSpec,
         // 샘플 호출부의 상태 갱신 예시입니다. 실제 프로필 API를 요청하지 않습니다.
         onRetry: { state.isRetryEnabled = false },
         action: { _ in }
