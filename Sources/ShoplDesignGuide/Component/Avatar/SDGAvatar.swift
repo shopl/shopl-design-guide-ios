@@ -82,7 +82,7 @@ public struct SDGAvatar: View {
     /// Face와 Retry의 표시 옵션을 모두 명시해 생성합니다.
     /// - Parameters:
     ///   - showFace: Retry가 꺼져 있을 때 이미지 표시 여부입니다. `false`여도 모델의 이미지 URL은 유지됩니다.
-    ///   - showRetry: `true`이면 Face보다 Retry를 우선 표시합니다.
+    ///   - showRetry: `true`이면 Face와 이미지 다운로드를 생략하고 Retry를 우선 표시합니다.
     public init(showFace: Bool, showRetry: Bool) {
       self.showFace = showFace
       self.showRetry = showRetry
@@ -224,7 +224,7 @@ public struct SDGAvatar: View {
         }
       } label: {
         content
-          // 눌림 효과를 Avatar 전체에 적용해 Retry 아래의 이미지가 비치지 않게 합니다.
+          // 눌림 효과를 아바타 전체에 한 번 적용해 각 레이어의 합성 결과를 유지합니다.
           .compositingGroup()
       }
       .buttonStyle(.plain)
@@ -233,10 +233,6 @@ public struct SDGAvatar: View {
 
   private var content: some View {
     ZStack {
-      face
-        .frame(width: spec.rawValue, height: spec.rawValue)
-        .clipShape(Circle())
-
       if avatar.showRetry {
         Circle()
           .fill(Color.sdgCoolGray)
@@ -247,6 +243,10 @@ public struct SDGAvatar: View {
               .foregroundStyle(Color.neutral600)
               .frame(width: retryIconSize, height: retryIconSize)
           }
+      } else {
+        face
+          .frame(width: spec.rawValue, height: spec.rawValue)
+          .clipShape(Circle())
       }
     }
     .frame(width: spec.rawValue, height: spec.rawValue)
