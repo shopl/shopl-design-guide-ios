@@ -1,3 +1,6 @@
+require "json"
+require "digest"
+
 
 default_platform(:ios)
 
@@ -15,6 +18,11 @@ GIT_REMOTE        = "origin"
 TEAM_ID           = "4Z4H456LU8"
 
 platform :ios do
+
+  # 수동 배포는 기존 동작을 유지하고 Builder 요청만 별도로 식별한다.
+  def sdg_builder?
+    ENV["SDG_BUILDER_MODE"] == "1"
+  end
   
   desc "SDG 샘플 앱 빌드 및 Firebase 배포"
   lane :distribute do
@@ -27,7 +35,7 @@ platform :ios do
       prepare_build
       
       # 릴리즈 노트 생성
-      changelog = generate_changelog
+      changelog = sdg_builder? ? "SDG Builder · #{ENV.fetch("SOURCE_SHA")}" : generate_changelog
       
       # 키체인 생성 및 Match 실행
       prepare_certificates
@@ -39,14 +47,14 @@ platform :ios do
       upload_to_firebase(changelog: changelog)
       
       # 버전 커밋 & 태그 푸시 (배포 성공 시)
-      commit_and_tag_version
+      commit_and_tag_version unless sdg_builder?
       
       # 성공 알림
-      notify_slack_success(changelog: changelog)
+      notify_slack_success(changelog: changelog) unless sdg_builder?
       
     rescue => exception
       # 실패 알림
-      on_error(exception: exception)
+      on_error(exception: exception) unless sdg_builder?
       raise exception
       
     ensure
@@ -254,7 +262,11 @@ platform :ios do
       workspace: XCODE_WORKSPACE,
       scheme: APP_SCHEME,
       export_method: "ad-hoc",
-      clean: true,
+      # Builder만 로컬 DerivedData를 재사용한다. 일반 수동 배포는 clean을 유지한다.
+      clean: !sdg_builder?,
+      derived_data_path: sdg_builder? ? ENV.fetch("SDG_DERIVED_DATA_PATH") : nil,
+      build_timing_summary: sdg_builder?,
+      buildlog_path: sdg_builder? ? File.dirname(ENV.fetch("SDG_RECEIPT_PATH")) : nil,
       output_directory: OUTPUT_DIR,
       output_name: IPA_NAME,
       export_options: {
@@ -272,12 +284,35 @@ platform :ios do
     version = lane_context[:SDG_VERSION]
     build_num = lane_context[:SDG_BUILD_NUMBER]
     
-    firebase_app_distribution(
+    release = firebase_app_distribution(
       app: FIREBASE_APP_ID,
       groups: TESTER_GROUPS,
       release_notes: "Ver: #{version}(#{build_num})\n\n[변경 사항]\n#{options[:changelog]}",
       service_credentials_json_data: ENV["FIREBASE_SERVICE_ACCOUNT_JSON"]
     )
+
+    if sdg_builder?
+      # 자격 정보 대신 해당 배포의 식별 정보만 보관한다. 실제 설치 여부는 별도 확인한다.
+      value = ->(key) { release[key] || release[key.to_sym] }
+      name = value.call("name")
+      testing_uri = value.call("testingUri")
+      UI.user_error!("Firebase release information is missing.") if name.to_s.empty? || testing_uri.to_s.empty?
+      ipa = File.expand_path("../#{OUTPUT_DIR}/#{IPA_NAME}", __dir__)
+      receipt = {
+        source_sha: ENV.fetch("SOURCE_SHA"), source_base: ENV.fetch("SOURCE_BASE"),
+        source_branch: ENV.fetch("SOURCE_BRANCH"), build_id: ENV.fetch("BUILD_ID"),
+        run_id: ENV.fetch("GITHUB_RUN_ID"), run_attempt: ENV.fetch("GITHUB_RUN_ATTEMPT"),
+        firebase_app_id: FIREBASE_APP_ID, firebase_release: name, testing_uri: testing_uri,
+        ipa_sha256: Digest::SHA256.file(ipa).hexdigest,
+        runner: ENV.fetch("RUNNER_NAME"),
+        derived_data_reused_candidate: ENV.fetch("SDG_CACHE_PRESENT") == "true",
+        cache_key: ENV.fetch("SDG_CACHE_KEY"),
+        xcode_version: ENV.fetch("SDG_XCODE_VERSION"),
+        tuist_version: ENV.fetch("SDG_TUIST_VERSION"), ruby_version: ENV.fetch("SDG_RUBY_VERSION"),
+        note: "Cache directory presence is not proof of an incremental cache hit."
+      }
+      File.write(ENV.fetch("SDG_RECEIPT_PATH"), JSON.pretty_generate(receipt) + "\n")
+    end
   end
 
   private_lane :notify_slack_success do |options|
