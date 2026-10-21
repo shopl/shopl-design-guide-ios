@@ -57,7 +57,7 @@ changed = subprocess.check_output([
     'git', 'diff', '--name-only', '--no-renames', '-z', base, sha,
 ]).decode().split('\0')
 for source in filter(None, changed):
-    require(re.fullmatch(r'(Sources/ShoplDesignGuide|SampleApp/Sources)/[\w/]+\.swift', source),
+    require(re.fullmatch(r'(Sources/ShoplDesignGuide|SampleApp/Sources)/[\w/+]+\.swift', source),
             f'Changes outside permitted Swift sources: {source}')
     require(not source.startswith('Sources/ShoplDesignGuide/Generated/'), 'Generated sources are protected.')
     entry = git('ls-tree', sha, '--', source) or git('ls-tree', base, '--', source)
@@ -68,7 +68,7 @@ main_changes = subprocess.check_output([
     'git', 'diff', '--name-only', '--no-renames', '-z', 'origin/main', sha,
 ]).decode().split('\0')
 for source in filter(None, main_changes):
-    require(re.fullmatch(r'(Sources/ShoplDesignGuide|SampleApp/Sources)/[\w/]+\.swift', source),
+    require(re.fullmatch(r'(Sources/ShoplDesignGuide|SampleApp/Sources)/[\w/+]+\.swift', source),
             f'Update the working branch to current main before building: {source}')
     require(not source.startswith('Sources/ShoplDesignGuide/Generated/'), 'Update generated sources from main.')
 print('Verified exact iOS SDG source and protected paths.')
