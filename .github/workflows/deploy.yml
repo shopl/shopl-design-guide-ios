@@ -24,7 +24,6 @@ jobs:
   manual:
     name: manual
     if: >-
-      github.ref == 'refs/heads/main' &&
       github.repository == 'shopl/shopl-design-guide-ios' &&
       inputs.source_sha == '' && inputs.source_branch == '' && inputs.source_base == '' &&
       inputs.build_id == '' && inputs.design_name == ''
@@ -44,7 +43,9 @@ jobs:
     name: builder
     # 일부 입력만 온 요청도 Builder에서 검증한다. 수동 배포로 실행하지 않는다.
     if: >-
-      github.event_name == 'workflow_dispatch' && github.repository == 'shopl/shopl-design-guide-ios' && github.ref == 'refs/heads/roadmap/sangun/SH-24419-ios-git-isolation' && github.actor == 'san-gun' && github.triggering_actor == 'san-gun' && inputs.source_sha == '43c71ab74e5efbb7a669edf14648bff562142b39' && inputs.source_base == '43c71ab74e5efbb7a669edf14648bff562142b39' && inputs.source_branch == 'roadmap/sangun/SH-24419-ios-builder-validation' && inputs.build_id == 'c2f17fcd-c1ad-492f-9b7a-ee51ea48843b'
+      github.repository == 'shopl/shopl-design-guide-ios' &&
+      (inputs.source_sha != '' || inputs.source_branch != '' || inputs.source_base != '' ||
+      inputs.build_id != '' || inputs.design_name != '')
     uses: ./.github/workflows/deploy-builder.yml
     with:
       build_number: ${{ github.run_number }}
