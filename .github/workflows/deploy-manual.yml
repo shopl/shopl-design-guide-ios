@@ -32,6 +32,11 @@ jobs:
         run: |
           set -euo pipefail
           git_config="$(mktemp "$RUNNER_TEMP/sdg-ios-git.XXXXXX")"
+          for key in user.name user.email; do
+            if value="$(git config --global --get "$key")"; then
+              GIT_CONFIG_GLOBAL="$git_config" git config --global "$key" "$value"
+            fi
+          done
           printf 'GIT_CONFIG_GLOBAL=%s\n' "$git_config" >> "$GITHUB_ENV"
       - name: Checkout Code
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
