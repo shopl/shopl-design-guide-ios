@@ -21,8 +21,6 @@ permissions:
 
 jobs:
   validate-request:
-    if: >-
-      github.event_name == 'workflow_dispatch' && github.repository == 'shopl/shopl-design-guide-ios' && github.ref == 'refs/heads/roadmap/sangun/SH-24419-ios-git-isolation' && github.actor == 'san-gun' && github.triggering_actor == 'san-gun' && inputs.source_sha == '43c71ab74e5efbb7a669edf14648bff562142b39' && inputs.source_base == '43c71ab74e5efbb7a669edf14648bff562142b39' && inputs.source_branch == 'roadmap/sangun/SH-24419-ios-builder-validation' && (inputs.build_id == '8e422ae4-07e9-4e00-81da-ff01c02636df' || inputs.build_id == '268260d1-cfa5-431b-afea-b18262dfa2e2')
     runs-on: ubuntu-24.04
     permissions: {}
     steps:
@@ -36,7 +34,7 @@ jobs:
           python3 - <<'PYTHON'
           import os, re
           assert os.environ['GITHUB_REPOSITORY'] == 'shopl/shopl-design-guide-ios'
-          assert os.environ['GITHUB_REF'] == 'refs/heads/roadmap/sangun/SH-24419-ios-git-isolation'
+          assert os.environ['GITHUB_REF'] == 'refs/heads/main'
           assert re.fullmatch('[a-f0-9]{40}', os.environ['SOURCE_SHA'])
           assert re.fullmatch('[a-f0-9]{40}', os.environ['SOURCE_BASE'])
           assert re.fullmatch('[a-f0-9-]{36}', os.environ['BUILD_ID'])
@@ -45,8 +43,7 @@ jobs:
 
   notify-start:
     needs: validate-request
-    if: >-
-      github.event_name == 'workflow_dispatch' && github.repository == 'shopl/shopl-design-guide-ios' && github.ref == 'refs/heads/roadmap/sangun/SH-24419-ios-git-isolation' && github.actor == 'san-gun' && github.triggering_actor == 'san-gun' && inputs.source_sha == '43c71ab74e5efbb7a669edf14648bff562142b39' && inputs.source_base == '43c71ab74e5efbb7a669edf14648bff562142b39' && inputs.source_branch == 'roadmap/sangun/SH-24419-ios-builder-validation' && (inputs.build_id == '8e422ae4-07e9-4e00-81da-ff01c02636df' || inputs.build_id == '268260d1-cfa5-431b-afea-b18262dfa2e2')
+    if: github.repository == 'shopl/shopl-design-guide-ios' && github.ref == 'refs/heads/main' && inputs.source_sha != ''
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     continue-on-error: true
@@ -82,7 +79,8 @@ jobs:
   build:
     needs: [validate-request, notify-start]
     if: >-
-      always() && !cancelled() && needs.validate-request.result == 'success' && github.event_name == 'workflow_dispatch' && github.repository == 'shopl/shopl-design-guide-ios' && github.ref == 'refs/heads/roadmap/sangun/SH-24419-ios-git-isolation' && github.actor == 'san-gun' && github.triggering_actor == 'san-gun' && inputs.source_sha == '43c71ab74e5efbb7a669edf14648bff562142b39' && inputs.source_base == '43c71ab74e5efbb7a669edf14648bff562142b39' && inputs.source_branch == 'roadmap/sangun/SH-24419-ios-builder-validation' && (inputs.build_id == '8e422ae4-07e9-4e00-81da-ff01c02636df' || inputs.build_id == '268260d1-cfa5-431b-afea-b18262dfa2e2')
+      always() && !cancelled() && github.repository == 'shopl/shopl-design-guide-ios' &&
+      github.ref == 'refs/heads/main' && needs.validate-request.result == 'success'
     runs-on: [self-hosted, macOS, arm64, SpiderMan]
     timeout-minutes: 60
     defaults:
@@ -110,7 +108,7 @@ jobs:
       - name: Checkout trusted validation code
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: ${{ github.sha }} # exact workflow snapshot includes the restricted test validator
+          ref: main
           persist-credentials: false
       - name: Save trusted source validator
         run: cp .github/scripts/sdg-builder-validate.py "$RUNNER_TEMP/sdg-builder-ios-validate.py"
@@ -233,8 +231,7 @@ jobs:
   # #sdg-builder-build 알림 토큰은 앱 소스를 실행하지 않는 hosted job에서만 사용한다.
   notify-slack:
     needs: [notify-start, build]
-    if: >-
-      always() && github.event_name == 'workflow_dispatch' && github.repository == 'shopl/shopl-design-guide-ios' && github.ref == 'refs/heads/roadmap/sangun/SH-24419-ios-git-isolation' && github.actor == 'san-gun' && github.triggering_actor == 'san-gun' && inputs.source_sha == '43c71ab74e5efbb7a669edf14648bff562142b39' && inputs.source_base == '43c71ab74e5efbb7a669edf14648bff562142b39' && inputs.source_branch == 'roadmap/sangun/SH-24419-ios-builder-validation' && (inputs.build_id == '8e422ae4-07e9-4e00-81da-ff01c02636df' || inputs.build_id == '268260d1-cfa5-431b-afea-b18262dfa2e2')
+    if: ${{ always() && github.repository == 'shopl/shopl-design-guide-ios' && github.ref == 'refs/heads/main' && inputs.source_sha != '' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     continue-on-error: true
