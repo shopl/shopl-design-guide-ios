@@ -88,7 +88,7 @@ platform :ios do
     
     if ENV["CI"]
       offset = 0
-      build_number = (ENV["GITHUB_RUN_NUMBER"].to_i + offset).to_s
+      build_number = (ENV.fetch("SDG_BUILD_NUMBER", ENV["GITHUB_RUN_NUMBER"]).to_i + offset).to_s
     else
       build_number = Time.now.strftime("%Y%m%d%H%M")
     end
