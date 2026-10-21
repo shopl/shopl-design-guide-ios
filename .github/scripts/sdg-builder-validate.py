@@ -17,7 +17,7 @@ def git(*args):
 
 repository = os.environ['GITHUB_REPOSITORY']
 require(repository == 'shopl/shopl-design-guide-ios', 'Unexpected SDG repository.')
-require(os.environ['GITHUB_REF'] == 'refs/heads/main', 'Dispatch the trusted main workflow.')
+require(os.environ['GITHUB_REF'] == 'refs/heads/roadmap/sangun/SH-24419-ios-git-isolation' and os.environ.get('GITHUB_ACTOR') == 'san-gun' and os.environ.get('GITHUB_TRIGGERING_ACTOR') == 'san-gun' and os.environ.get('SOURCE_SHA') == '43c71ab74e5efbb7a669edf14648bff562142b39' and os.environ.get('SOURCE_BASE') == '43c71ab74e5efbb7a669edf14648bff562142b39' and os.environ.get('SOURCE_BRANCH') == 'roadmap/sangun/SH-24419-ios-builder-validation' and os.environ.get('BUILD_ID') in ('8e422ae4-07e9-4e00-81da-ff01c02636df', '268260d1-cfa5-431b-afea-b18262dfa2e2'), 'Only the approved pre-merge validation request may run.')
 sha = os.environ['SOURCE_SHA']
 base = os.environ['SOURCE_BASE']
 branch = os.environ['SOURCE_BRANCH']
