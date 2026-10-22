@@ -27,6 +27,17 @@ jobs:
       SDG_BUILDER_MODE: '0'
       SDG_BUILD_NUMBER: ${{ inputs.build_number }}
     steps:
+      # 이전 배포의 SSH 주소 변환 규칙을 다음 실행이 상속하지 않도록 Git 전역 설정을 실행별로 분리한다.
+      - name: Isolate job Git configuration
+        run: |
+          set -euo pipefail
+          git_config="$(mktemp "$RUNNER_TEMP/sdg-ios-git.XXXXXX")"
+          for key in user.name user.email; do
+            if value="$(git config --global --get "$key")"; then
+              GIT_CONFIG_GLOBAL="$git_config" git config --global "$key" "$value"
+            fi
+          done
+          printf 'GIT_CONFIG_GLOBAL=%s\n' "$git_config" >> "$GITHUB_ENV"
       - name: Checkout Code
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:

@@ -60,9 +60,9 @@ jobs:
           set -euo pipefail
           jq -cn --arg branch "$SOURCE_BRANCH" --arg design "$DESIGN_NAME" \
             --arg url "https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" '
-            {channel:"C0CAC49CLH3",text:"SDG iOS 빌드 시작",mrkdwn:false,parse:"none",
+            {channel:"C0CAC49CLH3",text:"🍎 [iOS] 빌드 시작",mrkdwn:false,parse:"none",
              unfurl_links:false,unfurl_media:false,blocks:[
-              {type:"section",text:{type:"plain_text",text:("SDG iOS 빌드 시작\n디자인: "+$design[:200]+"\n브랜치: "+$branch[:300]+"\n러너 배정 후 빌드합니다. 완료 결과는 이 스레드에 안내합니다.")}},
+              {type:"section",text:{type:"plain_text",text:("🍎 [iOS] 빌드 시작\n디자인: "+$design[:200]+"\n브랜치: "+$branch[:300]+"\n러너 배정 후 빌드합니다. 완료 결과는 이 스레드에 안내합니다.")}},
               {type:"actions",elements:[{type:"button",text:{type:"plain_text",text:"Actions 실행 보기"},url:$url}]}
              ]}' > "$RUNNER_TEMP/sdg-start.json"
       - name: Send build start to Slack
@@ -94,6 +94,17 @@ jobs:
       SDG_BUILDER_MODE: '1'
       SDG_BUILD_NUMBER: ${{ inputs.build_number }}
     steps:
+      # 이전 배포의 SSH 주소 변환 규칙을 다음 실행이 상속하지 않도록 Git 전역 설정을 실행별로 분리한다.
+      - name: Isolate job Git configuration
+        run: |
+          set -euo pipefail
+          git_config="$(mktemp "$RUNNER_TEMP/sdg-ios-git.XXXXXX")"
+          for key in user.name user.email; do
+            if value="$(git config --global --get "$key")"; then
+              GIT_CONFIG_GLOBAL="$git_config" git config --global "$key" "$value"
+            fi
+          done
+          printf 'GIT_CONFIG_GLOBAL=%s\n' "$git_config" >> "$GITHUB_ENV"
       - name: Checkout trusted validation code
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -268,7 +279,7 @@ jobs:
                   link = receipt['testing_uri']
               except (OSError, ValueError, KeyError, AssertionError):
                   pass
-          text = ('SDG iOS Firebase 배포 완료 · 아이폰의 App Distribution에서 SDG 새 버전을 설치하세요.' if link else 'SDG iOS 빌드 완료 · Firebase 배포 결과를 확인해 주세요.') if result == 'success' else 'SDG iOS 빌드·배포 ' + {'failure':'실패', 'cancelled':'취소', 'skipped':'미실행'}[result]
+          text = ('🍎 [iOS] 빌드 완료 ✅\n아이폰의 App Distribution에서 SDG 새 버전을 설치하세요.' if link else '🍎 [iOS] 빌드 완료 ⚠️\nFirebase 배포 결과를 확인해 주세요.') if result == 'success' else {'failure':'🍎 [iOS] 빌드 실패 ❌', 'cancelled':'🍎 [iOS] 빌드 취소 ⏹️', 'skipped':'🍎 [iOS] 빌드 미실행 ⏭️'}[result]
           buttons = ([{'type':'button','text':{'type':'plain_text','text':'Firebase에서 앱 설치'},'url':link}] if link else [])
           buttons.append({'type':'button','text':{'type':'plain_text','text':'Actions 실행 보기'},'url':f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}"})
           payload = {'channel':'C0CAC49CLH3','text':text,'mrkdwn':False,'parse':'none','unfurl_links':False,'unfurl_media':False,
