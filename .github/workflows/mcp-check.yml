@@ -13,6 +13,7 @@ on:
       - 'mcp/**'
       - 'plugins/**'
       - '.claude-plugin/**'
+      - '.cursor-plugin/**'
       - '.github/workflows/mcp-check.yml'
   push:
     branches:
@@ -25,6 +26,7 @@ on:
       - 'mcp/**'
       - 'plugins/**'
       - '.claude-plugin/**'
+      - '.cursor-plugin/**'
       - '.github/workflows/mcp-check.yml'
 
 permissions:

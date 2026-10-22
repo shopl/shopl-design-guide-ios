@@ -1,0 +1,15 @@
+{
+  "name": "sdg-ios",
+  "version": "0.1.0",
+  "description": "SDG iOS(ShoplDesignGuide) 디자인 시스템 MCP 서버와 에이전트 스킬. 에이전트가 SwiftUI 코드를 실제 토큰·컴포넌트 API·아이콘 기준으로 작성하도록 돕습니다.",
+  "author": {
+    "name": "Shopl",
+    "url": "https://github.com/shopl/shopl-design-guide-ios"
+  },
+  "homepage": "https://github.com/shopl/shopl-design-guide-ios/tree/main/plugins/sdg-ios",
+  "repository": "https://github.com/shopl/shopl-design-guide-ios",
+  "license": "Apache-2.0",
+  "keywords": ["design-system", "swiftui", "ios", "sdg", "shopl", "mcp"],
+  "skills": "./skills/",
+  "mcpServers": "./.codex.mcp.json"
+}

@@ -2,6 +2,9 @@
 // 사용: npm run bundle && npm run smoke   (서버·추출기·데이터를 바꾼 뒤 실행)
 
 import assert from 'node:assert/strict';
+import { existsSync, readFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
@@ -39,6 +42,11 @@ assert.match(client.getInstructions() ?? '', /setProvider/);
 // SDG.Color는 ShapeStyle이 아니어서 SwiftUI API에 넘기면 컴파일되지 않는다. 바꿔 써도 되는 것처럼 안내하지 않되, 공개 변환(.color)은 알려 준다.
 assert.match(client.getInstructions() ?? '', /`SDG\.Color` is not a ShapeStyle/);
 assert.match(client.getInstructions() ?? '', /sdgColor\.color/);
+// Codex는 instructions의 앞 512자만으로도 핵심이 전달되게 쓰라고 권장한다. 규칙 5개의 요약이 그 안에 있어야 한다.
+const instructionsHead = (client.getInstructions() ?? '').slice(0, 512);
+for (const anchor of ['search_component', 'get_component_api', 'list_tokens', 'search_icon', 'centerConfirmPopup', 'setProvider', 'get_setup_guide']) {
+  assert.ok(instructionsHead.includes(anchor), `the first 512 characters of instructions must mention ${anchor}`);
+}
 step(`tools: ${tools.length}, instructions ok`);
 
 // 토큰
@@ -181,4 +189,55 @@ assert.ok(JSON.parse(componentResource.contents[0].text).views.length > 0);
 step('resources');
 
 await client.close();
+
+// 마켓플레이스 카탈로그가 가리키는 폴더에 그 호스트의 매니페스트가 같은 이름으로 있어야 설치된다.
+// Codex는 Claude Code용 카탈로그를 읽고, 가리킨 폴더에서 .codex-plugin을 먼저 찾는다.
+const repoRoot = fileURLToPath(new URL('../..', import.meta.url));
+const readJson = (...path) => JSON.parse(readFileSync(join(...path), 'utf8'));
+for (const [catalog, hosts] of [['.claude-plugin', ['claude', 'codex']], ['.cursor-plugin', ['cursor']]]) {
+  const marketplace = readJson(repoRoot, catalog, 'marketplace.json');
+  assert.equal(marketplace.name, 'sdg-marketplace', `${catalog}: marketplace name`);
+  for (const entry of marketplace.plugins) {
+    for (const host of hosts) {
+      assert.equal(readJson(repoRoot, entry.source, `.${host}-plugin`, 'plugin.json').name, entry.name, `${catalog} → ${host}: plugin name`);
+    }
+  }
+}
+
+// 호스트별 매니페스트의 MCP 선언대로 서버를 띄워 본다. 플러그인 경로를 넘기는 방식이 호스트마다 달라 선언을 따로 둔다.
+// Claude Code·Cursor는 경로 변수를 치환하고, Codex는 변수를 치환하지 않는 대신 상대 cwd를 플러그인 루트 기준으로 푼다.
+const pluginRoot = fileURLToPath(new URL('../../plugins/sdg-ios', import.meta.url));
+const codexServers = readJson(pluginRoot, '.codex-plugin', 'plugin.json').mcpServers;
+const declarations = [
+  { host: 'claude', server: readJson(pluginRoot, '.claude-plugin', 'plugin.json').mcpServers['sdg-ios'], rootVariable: '${CLAUDE_PLUGIN_ROOT}' },
+  { host: 'cursor', server: readJson(pluginRoot, '.cursor-plugin', 'plugin.json').mcpServers['sdg-ios'], rootVariable: '${CURSOR_PLUGIN_ROOT}' },
+  {
+    host: 'codex',
+    // mcpServers는 MCP 설정 파일 경로이거나 인라인 객체다.
+    server: (typeof codexServers === 'string' ? readJson(pluginRoot, codexServers).mcpServers : codexServers)['sdg-ios'],
+    relativeCwdBase: pluginRoot,
+  },
+];
+// cwd를 선언하지 않으면 클라이언트는 사용자의 프로젝트 폴더에서 서버를 띄운다. 플러그인과 무관한 폴더로 흉내 낸다.
+const projectDirectory = tmpdir();
+for (const { host, server, rootVariable, relativeCwdBase = projectDirectory } of declarations) {
+  assert.equal(server.command, 'node', `${host}: the server must be launched with node`);
+  const expand = (value) => (rootVariable ? value.replaceAll(rootVariable, () => pluginRoot) : value);
+  const hostTransport = new StdioClientTransport({
+    // CI의 Node 18 단계에서도 그 런타임으로 확인하도록 PATH의 node 대신 지금 실행 중인 node를 쓴다.
+    command: process.execPath,
+    args: server.args.map(expand),
+    cwd: server.cwd ? resolve(relativeCwdBase, expand(server.cwd)) : projectDirectory,
+    // 경로가 틀려 서버가 바로 종료되면 원인이 CI 로그에 남도록 서버의 stderr를 그대로 보여 준다.
+    stderr: 'inherit',
+  });
+  const hostClient = new Client({ name: `sdg-ios-smoke-${host}`, version: '0.0.0' });
+  await hostClient.connect(hostTransport);
+  assert.equal((await hostClient.listTools()).tools.length, tools.length, `${host}: tools must load`);
+  await hostClient.close();
+}
+// Claude Code는 플러그인 루트에 .mcp.json이 있으면 plugin.json의 선언 대신 그 파일을 쓴다.
+assert.ok(!existsSync(join(pluginRoot, '.mcp.json')), 'a plugin-root .mcp.json would replace the Claude Code declaration');
+step('plugin manifests: claude / cursor / codex');
+
 console.log('✓ smoke test passed');
