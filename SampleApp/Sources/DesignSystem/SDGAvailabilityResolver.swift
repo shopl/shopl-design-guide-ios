@@ -74,6 +74,7 @@ enum SDGImplementationManifest {
     "SDGCustomHistory",
     "SDGIconHeader",
     "SDGIconLabel",
+    "SDGIconLabelBuilderTest",
     "SDGIconPopup",
     "SDGIconTab",
     "SDGInfoPopup",

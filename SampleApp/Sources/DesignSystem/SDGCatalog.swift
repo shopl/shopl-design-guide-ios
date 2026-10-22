@@ -248,6 +248,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
   case filterChip
   case indicator
   case iconLabel
+  case iconLabelBuilderTest
   case listHeaderLabel
   case navigation
   case numberPicker
@@ -277,6 +278,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
     case .emptyIcon: return "component_empty_icon"
     case .filterChip: return "component_filter_chip"
     case .indicator: return "component_indicator"
+    case .iconLabelBuilderTest: return "component_icon_label_builder_test"
     case .iconLabel: return "component_icon_label"
     case .listHeaderLabel: return "component_list_header_label"
     case .navigation: return "component_navigation"
@@ -309,6 +311,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
     case .emptyIcon: return "Empty Icon"
     case .filterChip: return "Filter Chip"
     case .indicator: return "Indicator"
+    case .iconLabelBuilderTest: return "Icon Label Builder Test"
     case .iconLabel: return "Icon Label"
     case .listHeaderLabel: return "List Header label"
     case .navigation: return "Navigation"
@@ -353,7 +356,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
 
   var viewID: String? {
     switch self {
-    case .avatar, .attachmentElement, .checkbox, .checkOption, .dropdown, .numberPicker, .radio, .toggle:
+    case .avatar, .attachmentElement, .checkbox, .checkOption, .dropdown, .iconLabelBuilderTest, .numberPicker, .radio, .toggle:
       return id
     default:
       return nil
@@ -373,6 +376,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
     case .emptyIcon: return SDGEmptyIconCatalog.allCases.flatMap(\.implementationNames)
     case .filterChip: return SDGFilterChipCatalog.allCases.flatMap(\.implementationNames)
     case .indicator: return SDGIndicatorCatalog.allCases.flatMap(\.implementationNames)
+    case .iconLabelBuilderTest: return ["SDGIconLabelBuilderTest"]
     case .iconLabel: return ["SDGIconLabel"]
     case .listHeaderLabel: return ["SDGListHeaderLabel"]
     case .navigation: return SDGNavigationCatalog.allCases.flatMap(\.implementationNames)
