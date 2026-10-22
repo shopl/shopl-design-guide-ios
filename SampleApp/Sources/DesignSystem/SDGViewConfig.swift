@@ -32,6 +32,7 @@ struct SDGViewConfig {
     registry.register(id: "component_scroll_tab") { SDGScrollTabDemoView() }
     registry.register(id: "component_toggle") { SDGToggleDemoView() }
     registry.register(id: "template_multi_time_picker") { SDGMultiTimePickerDemoView() }
+    registry.register(id: "component_text_navigation") { SDGTextNaviDemoView() }
     registry.register(id: "template_history") { SDGCustomHistoryDemoView() }
     
     let bottomSheetControlRegistry = SDGBottomSheetControlRegistry.shared
