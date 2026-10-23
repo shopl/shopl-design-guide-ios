@@ -121,6 +121,8 @@ struct SDGGuideDetailView: View {
       return SDGToggle.version
     case "component_thumbnails":
       return SDGThumbnails.version
+    case "component_text_navigation":
+      return SDGTextNavi.version
     case "template_multi_time_picker":
       return SDGMultiTimePicker.version
     default:

@@ -1,52 +1,64 @@
+# SDG_BUILDER_PROTOCOL: ios-firebase-v1
 name: Deploy SDG Sample App
+run-name: ${{ inputs.source_sha && format('SDG Builder iOS · {0} · {1} · {2}', inputs.source_branch, inputs.source_sha, inputs.build_id) || format('SDG Sample App · {0}', github.ref_name) }}
 
 on:
   workflow_dispatch:
-          
+    inputs:
+      source_sha: {required: false, type: string, description: 'Builder가 지정한 커밋. 일반 수동 배포에서는 비워둡니다.'}
+      source_branch: {required: false, type: string}
+      source_base: {required: false, type: string}
+      design_name: {required: false, type: string}
+      build_id: {required: false, type: string}
+
+permissions:
+  contents: read
+
+# 두 배포 경로가 같은 Mac 키체인을 동시에 사용하지 않도록 진입점에서 제어한다.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: sdg-ios-sample-deploy
   cancel-in-progress: false
-  
+  queue: max
+
 jobs:
-  deploy:
-    runs-on: [self-hosted, macOS, arm64, SpiderMan]
-    
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+  manual:
+    name: manual
+    if: >-
+      github.repository == 'shopl/shopl-design-guide-ios' &&
+      inputs.source_sha == '' && inputs.source_branch == '' && inputs.source_base == '' &&
+      inputs.build_id == '' && inputs.design_name == ''
+    uses: ./.github/workflows/deploy-manual.yml
+    with:
+      build_number: ${{ github.run_number }}
+    secrets:
+      MATCH_GIT_SSH_PRIVATE_KEY: ${{ secrets.MATCH_GIT_SSH_PRIVATE_KEY }}
+      SDG_GIT_SSH_PRIVATE_KEY: ${{ secrets.SDG_GIT_SSH_PRIVATE_KEY }}
+      MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+      FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+      SLACK_URL: ${{ secrets.SLACK_URL }}
+    permissions:
+      contents: read
 
-      - name: Setup mise
-        uses: jdx/mise-action@v2
-        with:
-          cache: true
-          install: false
-
-      - name: Environment Setup
-        run: make setup
-      
-      # -----------------------------------------------------------------------
-      # Setup SSH
-      # -----------------------------------------------------------------------
-      - name: Setup SSH Keys
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: |
-            ${{ secrets.MATCH_GIT_SSH_PRIVATE_KEY }}
-            ${{ secrets.SDG_GIT_SSH_PRIVATE_KEY }}
-            
-      - name: Add Known Hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-                    
-      - name: Run Fastlane
-        env:
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
-          SLACK_URL: ${{ secrets.SLACK_URL }}
-        run: |
-          git remote set-url origin git@github.com:${{ github.repository }}.git
-          
-          bundle exec fastlane distribute
+  builder:
+    name: builder
+    # 일부 입력만 온 요청도 Builder에서 검증한다. 수동 배포로 실행하지 않는다.
+    if: >-
+      github.repository == 'shopl/shopl-design-guide-ios' &&
+      (inputs.source_sha != '' || inputs.source_branch != '' || inputs.source_base != '' ||
+      inputs.build_id != '' || inputs.design_name != '')
+    uses: ./.github/workflows/deploy-builder.yml
+    with:
+      build_number: ${{ github.run_number }}
+      source_sha: ${{ inputs.source_sha }}
+      source_branch: ${{ inputs.source_branch }}
+      source_base: ${{ inputs.source_base }}
+      design_name: ${{ inputs.design_name }}
+      build_id: ${{ inputs.build_id }}
+    secrets:
+      MATCH_GIT_SSH_PRIVATE_KEY: ${{ secrets.MATCH_GIT_SSH_PRIVATE_KEY }}
+      MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+      FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+      SDG_BUILDER_SLACK_TOKEN: ${{ secrets.SDG_BUILDER_SLACK_TOKEN }}
+    permissions:
+      contents: read
+      actions: read
