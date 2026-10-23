@@ -1,5 +1,5 @@
 {
-  "count" : 196,
+  "count" : 201,
   "examples" : {
     "Divider" : [
       {
@@ -223,6 +223,11 @@
         "code" : "SDGCapsuleBadge(\n  option: .init(\n    style: .solid,\n    size: .small,\n    //        icon: .left(image: Image(systemName: \"heart.fill\"), color: .red),\n    title: \"Hello\",\n    titleColor: .white,\n    backgroundColor: .red,\n    fullSize: false\n  ),\n  action: {\n    \n  }\n)",
         "file" : "Sources/ShoplDesignGuide/Component/Badge/SDGCapsuleBadge.swift",
         "source" : "preview"
+      },
+      {
+        "code" : "SDGCapsuleBadge(option: .init(\n  style: .solid, size: .xsmall,\n  title: index == 0 ? \"승인\" : \"반려\",\n  titleColor: .neutral0,\n  backgroundColor: index == 0 ? .primary300 : .red300\n), action: {})",
+        "file" : "Sources/ShoplDesignGuide/Template/History/SDGCustomHistory.swift",
+        "source" : "preview"
       }
     ],
     "SDGCapsuleButton" : [
@@ -324,17 +329,17 @@
     ],
     "SDGCheckOption" : [
       {
-        "code" : "SDGCheckOption(\n  model: .init(\n    status: .default,\n    type: .solid,\n    spec: .medim\n  ),\n  selected: {\n    \n  }\n)",
+        "code" : "SDGCheckOption(\n  model: .init(\n    state: .default,\n    style: .solid,\n    spec: .medim,\n    selectColor: .normal\n  ),\n  selected: {\n    \n  }\n)",
         "file" : "Sources/ShoplDesignGuide/Component/CheckOption/SDGCheckOption.swift",
         "source" : "preview"
       },
       {
-        "code" : "SDGCheckOption(\n  model: .init(\n    status: .selected,\n    type: .solid,\n    spec: .medim\n  ),\n  selected: {\n    \n  }\n)",
+        "code" : "SDGCheckOption(\n  model: .init(\n    state: .selected,\n    style: .solid,\n    spec: .medim,\n    selectColor: .normal\n  ),\n  selected: {\n    \n  }\n)",
         "file" : "Sources/ShoplDesignGuide/Component/CheckOption/SDGCheckOption.swift",
         "source" : "preview"
       },
       {
-        "code" : "SDGCheckOption(\n  model: .init(\n    status: .disabled,\n    type: .solid,\n    spec: .medim\n  ),\n  selected: {\n    \n  }\n)",
+        "code" : "SDGCheckOption(\n  model: .init(\n    state: .selected,\n    style: .solid,\n    spec: .medim,\n    selectColor: .neutral\n  ),\n  selected: {\n\n  }\n)",
         "file" : "Sources/ShoplDesignGuide/Component/CheckOption/SDGCheckOption.swift",
         "source" : "preview"
       },
@@ -359,6 +364,24 @@
         "code" : "SDGCircularProgress(size: 28, lineWidth: 2.5)",
         "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGCircularProgress.swift",
         "source" : "preview"
+      }
+    ],
+    "SDGCustomHistory" : [
+      {
+        "code" : "SDGCustomHistory(\n  index: index,\n  totalCount: 3,\n  dotColor: index == 2 ? .neutral700 : .neutral300\n) {\n  VStack(alignment: .leading, spacing: 4) {\n    HStack(spacing: 4) {\n      Text(\"\\(index + 1)단계\")\n        .typo(.body1_SB, .neutral700)\n      SDGBoxBadge(\n        text: index == 2 ? \"협조\" : \"승인\",\n        type: .solid(.init(backgroundColor: .neutral150, textColor: .neutral600))\n      )\n      Spacer()\n      Image(sdg: .icCommonNextS)\n        .resizable().frame(width: 14, height: 14)\n    }\n    if index == 1 {\n      Text(\"추가 설명이 포함된 Header\")\n        .typo(.body2_R, .neutral400)\n    }\n  }\n // .padding(.vertical, index == 1 ? 12 : 0)\n} bodyArea: {\n  VStack(alignment: .leading, spacing: 8) {\n    if index != 1 {\n      Text(\"전원 승인 필요\")\n        .typo(.body3_SB, .neutral600)\n    }\n    VStack(alignment: .leading, spacing: 8) {\n      HStack(spacing: 8) {\n        SDGAvatar(\n          type: .round,\n          model: .init(userId: \"preview\", imageURL: nil, roleType: .leader),\n          size: .xs,\n          action: { _ in }\n        )\n        Text(\"직원명 +2\").typo(.body2_R, .neutral700)\n        Spacer()\n        if index < 2 {\n          SDGCapsuleBadge(option: .init(\n            style: .solid, size: \n…",
+        "file" : "Sources/ShoplDesignGuide/Template/History/SDGCustomHistory.swift",
+        "source" : "preview",
+        "truncated" : true
+      },
+      {
+        "code" : "SDGCustomHistory(\n  index: index,\n  totalCount: itemCount,\n  dotColor: item.id == 1 ? .red300 : .primary300\n) {\n  header(item.title, date: \"2026.09.23\")\n} bodyArea: {\n  VStack(alignment: .leading, spacing: 12) {\n    Text(item.detail)\n      .typo(.body2_R, .neutral700)\n    if item.id == 1 {\n      Button(isExpanded ? \"상세 접기\" : \"상세 펼치기\") {\n        isExpanded.toggle()\n      }\n      if isExpanded {\n        Text(String(repeating: \"추가 점검 내역입니다. 콘텐츠가 늘어나면 타임라인도 함께 늘어납니다.\\n\", count: 4))\n          .typo(.body2_R, .neutral700)\n      }\n    }\n  }\n}",
+        "file" : "SampleApp/Sources/DemoViews/Template/History/SDGCustomHistoryDemoView.swift",
+        "source" : "sample-app"
+      },
+      {
+        "code" : "SDGCustomHistory(index: index, totalCount: itemCount) {\n  header(item.title, date: \"2026.09.23\")\n}",
+        "file" : "SampleApp/Sources/DemoViews/Template/History/SDGCustomHistoryDemoView.swift",
+        "source" : "sample-app"
       }
     ],
     "SDGDotIndicator" : [
@@ -436,12 +459,17 @@
     ],
     "SDGFixedTab" : [
       {
-        "code" : "SDGFixedTab(\n  list: [\n    .init(id: UUID().uuidString, title: \"첫번째 요소\"),\n    .init(id: UUID().uuidString, title: \"두번째 요소\")\n  ],\n  selectedIndex: $firstSelectedIndex\n)",
+        "code" : "SDGFixedTab(options: .two(first, second), selectedIndex: $selectedIndex)",
         "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGFixedTab.swift",
         "source" : "preview"
       },
       {
-        "code" : "SDGFixedTab(\n  list: [\n    .init(id: UUID().uuidString, title: \"아주 길고 긴 첫번째 요소인데 어떻게 나오지\"),\n    .init(id: UUID().uuidString, title: \"두번째 요소\"),\n    .init(id: UUID().uuidString, title: \"세번째 요소\")\n  ],\n  selectedIndex: $secondSelectedIndex\n)",
+        "code" : "SDGFixedTab(options: .three(first, second, third), selectedIndex: $threeSelectedIndex)",
+        "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGFixedTab.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGFixedTab(\n  options: .two(first, second), selectedIndex: $selectedIndex,\n  showsBaselineDivider: true, horizontalInset: 20\n)",
         "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGFixedTab.swift",
         "source" : "preview"
       }
@@ -754,17 +782,17 @@
     ],
     "SDGScrollTab" : [
       {
-        "code" : "SDGScrollTab(\n  type: .text,\n  list: [\n    .init(id: \"0\", title: \"첫번째\"),\n    .init(id: \"1\", title: \"두번째\"),\n    .init(id: \"2\", title: \"세번째\"),\n    .init(id: \"3\", title: \"네번째\")\n  ],\n  selectedIndex: $textSelectedIndex\n)",
+        "code" : "SDGScrollTab(\n  style: style,\n  size: size,\n  items: (0..<itemCount).map { index in\n    .init(\n      id: String(index),\n      title: longTitle && index == 0\n        ? \"긴 라벨도 한 줄에 전체 표시하고 수평 스크롤로 탐색합니다\"\n        : \"Label\"\n    )\n  },\n  selectedIndex: selectedIndex,\n  horizontalPadding: 16,\n  showsBaselineDivider: showsBaselineDivider,\n  onItemTapped: { selectedIndex = $0 }\n)",
         "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGScrollTab.swift",
         "source" : "preview"
       },
       {
-        "code" : "SDGScrollTab(\n  type: .underline,\n  list: [\n    .init(id: \"0\", title: \"첫번째 요소\"),\n    .init(id: \"1\", title: \"두번째 요소\"),\n    .init(id: \"2\", title: \"세번째 요소\"),\n    .init(id: \"3\", title: \"네번째 요소\")\n  ],\n  selectedIndex: $underlineSelectedIndex\n)",
+        "code" : "SDGScrollTab(\n  style: style,\n  size: size,\n  items: (0..<itemCount).map { .init(id: String($0), title: \"Label \\($0 + 1)\") },\n  selectedIndex: selectedIndex,\n  horizontalPadding: 16,\n  onItemTapped: { selectedIndex = $0 }\n)",
         "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGScrollTab.swift",
         "source" : "preview"
       },
       {
-        "code" : "SDGScrollTab(\n  type: .underline,\n  list: [\n    .init(id: \"0\", title: \"아주 길고 긴 첫번째 요소인데 어떻게 나오지\"),\n    .init(id: \"1\", title: \"두번째 요소\"),\n    .init(id: \"2\", title: \"세번째 요소\"),\n    .init(id: \"3\", title: \"네번째 요소\")\n  ],\n  selectedIndex: $longTextSelectedIndex\n)",
+        "code" : "SDGScrollTab(\n  size: size,\n  items: items,\n  selectedIndex: selectedIndex,\n  horizontalPadding: 16,\n  showsBaselineDivider: showsBaselineDivider,\n  onItemTapped: { index in\n    lastClickedIndex = index\n    if acceptsSelection {\n      selectedIndex = index\n    }\n  }\n)",
         "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGScrollTab.swift",
         "source" : "preview"
       },
@@ -842,18 +870,13 @@
     ],
     "SDGSelectInput" : [
       {
-        "code" : "SDGSelectInput(\n  model: .init(placeholder: \"Placeholder\", inputField: .gray, state: .default)\n) { }",
-        "file" : "Sources/ShoplDesignGuide/Component/SelelctInput/SDGSelectInput.swift",
+        "code" : "SDGSelectInput(model: model, onClearTapped: connectsClearAction ? {} : nil) { }",
+        "file" : "Sources/ShoplDesignGuide/Component/SelelctInput/SDGSelectInputPreview.swift",
         "source" : "preview"
       },
       {
-        "code" : "SDGSelectInput(\n  model: .init(\n    selectedElements: [.init(text: \"Selected Text\")],\n    placeholder: \"Placeholder\",\n    inputField: .gray,\n    state: .selected\n  )\n) { }",
-        "file" : "Sources/ShoplDesignGuide/Component/SelelctInput/SDGSelectInput.swift",
-        "source" : "preview"
-      },
-      {
-        "code" : "SDGSelectInput(\n  model: .init(\n    selectedElements: [.init(text: \"Selected Text\") {\n      SDG.Image.icBarcode.image.templateIcon(size: 20, color: SDG.Color.neutral700.color)\n    }],\n    placeholder: \"Placeholder\",\n    inputField: .white,\n    state: .selected\n  )\n) { }",
-        "file" : "Sources/ShoplDesignGuide/Component/SelelctInput/SDGSelectInput.swift",
+        "code" : "SDGSelectInput(\n  model: SelectInputPreviewSamples.model(\n    state: state.value,\n    elements: hasSelection ? [.init(text: \"Selected Text\")] : [],\n    showClearIcon: showClearIcon\n  ),\n  onClearTapped: {\n    hasSelection = false\n    state = .default\n    clearTapCount += 1\n  }\n) {\n  hasSelection = true\n  state = .selected\n  selectionTapCount += 1\n}",
+        "file" : "Sources/ShoplDesignGuide/Component/SelelctInput/SDGSelectInputPreview.swift",
         "source" : "preview"
       }
     ],
@@ -1104,8 +1127,13 @@
         "source" : "preview"
       },
       {
-        "code" : ".typo(.special1_SB, .neutral600)",
-        "file" : "Sources/ShoplDesignGuide/Component/TextInput/SDGFixedTextInput.swift",
+        "code" : ".typo(.body2_R, .neutral500)",
+        "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGScrollTab.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : ".typo(.body3_SB, .neutral500)",
+        "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGScrollTab.swift",
         "source" : "preview"
       },
       {

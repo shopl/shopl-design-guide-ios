@@ -1,6 +1,6 @@
 {
   "counts" : {
-    "described" : 16,
+    "described" : 17,
     "implemented" : 59,
     "items" : 67
   },
@@ -671,6 +671,7 @@
               "implementedSymbols" : [
                 "SDGScrollTab"
               ],
+              "subDescription" : "수평 스크롤을 통해 다수의 카테고리를 탐색하고, 선택 상태를 전달하는 탭 컴포넌트",
               "title" : "Scroll Tab"
             }
           ],
@@ -897,11 +898,13 @@
         {
           "id" : "template_history",
           "implementationNames" : [
-            "SDGHistoryHeader"
+            "SDGHistoryHeader",
+            "SDGCustomHistory"
           ],
           "implemented" : true,
           "implementedSymbols" : [
-            "SDGHistoryHeader"
+            "SDGHistoryHeader",
+            "SDGCustomHistory"
           ],
           "title" : "History"
         },

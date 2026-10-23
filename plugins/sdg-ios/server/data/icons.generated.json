@@ -1,7 +1,7 @@
 {
-  "count" : 144,
+  "count" : 154,
   "countsByKind" : {
-    "icon" : 132,
+    "icon" : 142,
     "image" : 12
   },
   "icons" : [
@@ -143,6 +143,19 @@
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_alignup.imageset"
     },
     {
+      "assetName" : "ic_all",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "all"
+      ],
+      "kind" : "icon",
+      "name" : "icAll",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_all.imageset"
+    },
+    {
       "assetName" : "ic_allbold",
       "formats" : [
         "svg"
@@ -180,6 +193,19 @@
       "name" : "icBarcode",
       "renderingMode" : "template",
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_barcode.imageset"
+    },
+    {
+      "assetName" : "ic_checker",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "checker"
+      ],
+      "kind" : "icon",
+      "name" : "icChecker",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_checker.imageset"
     },
     {
       "assetName" : "ic_circlewarning",
@@ -222,6 +248,20 @@
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_+.imageset"
     },
     {
+      "assetName" : "ic_common_cancel",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "common",
+        "cancel"
+      ],
+      "kind" : "icon",
+      "name" : "icCommonCancel",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_cancel.imageset"
+    },
+    {
       "assetName" : "ic_common_check_s",
       "formats" : [
         "pdf"
@@ -235,6 +275,20 @@
       "name" : "icCommonCheckS",
       "renderingMode" : "template",
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_check_s.imageset"
+    },
+    {
+      "assetName" : "ic_common_checkbold",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "common",
+        "checkbold"
+      ],
+      "kind" : "icon",
+      "name" : "icCommonCheckbold",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_checkbold.imageset"
     },
     {
       "assetName" : "ic_common_checksbold",
@@ -394,6 +448,20 @@
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_edit.imageset"
     },
     {
+      "assetName" : "ic_common_go",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "common",
+        "go"
+      ],
+      "kind" : "icon",
+      "name" : "icCommonGo",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_go.imageset"
+    },
+    {
       "assetName" : "ic_common_gps",
       "formats" : [
         "svg"
@@ -547,6 +615,20 @@
       "name" : "icCommonNextS",
       "renderingMode" : "template",
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_next_s.imageset"
+    },
+    {
+      "assetName" : "ic_common_paper",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "common",
+        "paper"
+      ],
+      "kind" : "icon",
+      "name" : "icCommonPaper",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_paper.imageset"
     },
     {
       "assetName" : "ic_common_photo",
@@ -859,6 +941,20 @@
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_x.imageset"
     },
     {
+      "assetName" : "ic_common_xbold",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "common",
+        "xbold"
+      ],
+      "kind" : "icon",
+      "name" : "icCommonXbold",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_xbold.imageset"
+    },
+    {
       "assetName" : "ic_copy",
       "formats" : [
         "svg"
@@ -898,6 +994,20 @@
       "name" : "icCrownSolid",
       "renderingMode" : "template",
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_crown_solid.imageset"
+    },
+    {
+      "assetName" : "ic_dash_person",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "dash",
+        "person"
+      ],
+      "kind" : "icon",
+      "name" : "icDashPerson",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_dash_person.imageset"
     },
     {
       "assetName" : "ic_detail_empty_info",
@@ -940,6 +1050,20 @@
       "name" : "icEmptyData",
       "renderingMode" : "template",
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_empty_data.imageset"
+    },
+    {
+      "assetName" : "ic_etc_arrow",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "etc",
+        "arrow"
+      ],
+      "kind" : "icon",
+      "name" : "icEtcArrow",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_etc_arrow.imageset"
     },
     {
       "assetName" : "ic_etc_filter",
@@ -1919,6 +2043,19 @@
       "name" : "icWeek",
       "renderingMode" : "template",
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_week.imageset"
+    },
+    {
+      "assetName" : "ic_writer",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "writer"
+      ],
+      "kind" : "icon",
+      "name" : "icWriter",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_writer.imageset"
     },
     {
       "assetName" : "icons",
