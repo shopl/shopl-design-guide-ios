@@ -9,6 +9,10 @@
 let packageSettings = PackageSettings(
   productTypes: [
     "Kingfisher": .framework,
+  ],
+  targetSettings: [
+    // Match the app's minimum iOS version; newer Xcode SDKs no longer support iOS 12.
+    "Kingfisher": .settings(base: ["IPHONEOS_DEPLOYMENT_TARGET": "16.0"]),
   ]
 )
 
