@@ -58,7 +58,7 @@ public struct SDGIconLabelBuilderTest: View {
   /// - Parameters:
   ///   - size: Medium/Small/XSmall과 Regular/Semibold 조합입니다.
   ///   - spacing: 아이콘과 라벨 사이 간격으로 2pt 또는 4pt이며 기본값은 2pt입니다.
-  ///   - icons: 최소 한쪽 아이콘을 지정합니다. 이미지는 16×16pt로 표시합니다.
+  ///   - icons: 최소 한쪽 아이콘을 지정합니다. 이미지는 16×16pt로 표시합니다. .left와 .right는 라벨이 남은 가용 너비를 채우며, .both는 가용 너비 채움을 강제하지 않습니다.
   ///   - title: 표시할 전체 라벨 문구입니다.
   ///   - imageForegroundColor: 템플릿 아이콘에 적용할 색상입니다.
   ///   - titleColor: 라벨에 적용할 SDG 색상입니다.
