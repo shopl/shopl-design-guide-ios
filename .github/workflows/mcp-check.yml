@@ -74,6 +74,8 @@ jobs:
           cp .github/scripts/sdg-builder-validate.py "$RUNNER_TEMP/sdg-builder-validate.py"
           cp .github/scripts/sdg-builder-mcp-artifact.py "$RUNNER_TEMP/sdg-builder-mcp-artifact.py"
           [[ "$SOURCE_SHA" =~ ^[a-f0-9]{40}$ ]]
+          # PR merge 결과에도 같은 데이터가 되도록 앱 빌드 때의 main과 일치해야 한다.
+          test "$SOURCE_BASE" = "$GITHUB_SHA"
           git check-ref-format "refs/heads/$SOURCE_BRANCH"
           git fetch --no-tags origin "refs/heads/$SOURCE_BRANCH"
           git checkout --detach "$SOURCE_SHA"
