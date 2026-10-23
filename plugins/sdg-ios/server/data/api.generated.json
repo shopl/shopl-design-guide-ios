@@ -2,8 +2,8 @@
   "counts" : {
     "extensions" : 10,
     "modifiers" : 24,
-    "types" : 166,
-    "views" : 82
+    "types" : 168,
+    "views" : 83
   },
   "excluded" : [
     "Sources/ShoplDesignGuide/Generated"
@@ -6004,6 +6004,87 @@
 
       ],
       "name" : "SDGIconLabel.Spacing",
+      "nestedTypes" : [
+
+      ],
+      "properties" : [
+
+      ]
+    },
+    {
+      "cases" : [
+        {
+          "associatedValues" : "(Image)",
+          "doc" : "왼쪽에만 16×16pt 이미지를 표시합니다.",
+          "name" : "left"
+        },
+        {
+          "associatedValues" : "(Image)",
+          "doc" : "오른쪽에만 16×16pt 이미지를 표시합니다.",
+          "name" : "right"
+        },
+        {
+          "associatedValues" : "(left: Image, right: Image)",
+          "doc" : "왼쪽과 오른쪽에 각각 16×16pt 이미지를 표시합니다.",
+          "name" : "both"
+        }
+      ],
+      "declaration" : "public enum Icons",
+      "doc" : "SDG 아이콘을 포함해 전달한 이미지를 왼쪽·오른쪽·양쪽에 배치합니다.\n아이콘이 없는 조합은 지원하지 않습니다.",
+      "inherits" : [
+
+      ],
+      "initializers" : [
+
+      ],
+      "isView" : false,
+      "kind" : "enum",
+      "location" : {
+        "file" : "Sources/ShoplDesignGuide/Component/IconLabel/SDGIconLabelBuilderTest.swift",
+        "group" : "IconLabel",
+        "layer" : "Component"
+      },
+      "methods" : [
+
+      ],
+      "name" : "SDGIconLabelBuilderTest.Icons",
+      "nestedTypes" : [
+
+      ],
+      "properties" : [
+
+      ]
+    },
+    {
+      "cases" : [
+        {
+          "doc" : "가용 너비에서 줄바꿈하여 전체 문구를 표시합니다.",
+          "name" : "full"
+        },
+        {
+          "doc" : "한 줄만 표시하고 넘치는 문구는 끝에서 말줄임합니다.",
+          "name" : "singleLine"
+        }
+      ],
+      "declaration" : "public enum TextDisplay",
+      "doc" : "라벨의 긴 문구를 표시하는 방식입니다.",
+      "inherits" : [
+
+      ],
+      "initializers" : [
+
+      ],
+      "isView" : false,
+      "kind" : "enum",
+      "location" : {
+        "file" : "Sources/ShoplDesignGuide/Component/IconLabel/SDGIconLabelBuilderTest.swift",
+        "group" : "IconLabel",
+        "layer" : "Component"
+      },
+      "methods" : [
+
+      ],
+      "name" : "SDGIconLabelBuilderTest.TextDisplay",
       "nestedTypes" : [
 
       ],
@@ -12595,6 +12676,83 @@
       "properties" : [
 
       ]
+    },
+    {
+      "cases" : [
+
+      ],
+      "declaration" : "public struct SDGIconLabelBuilderTest: View",
+      "doc" : "16pt 아이콘과 라벨을 상단 정렬하는 Icon Label Builder Test 컴포넌트입니다.\n한쪽 아이콘만 사용하면 라벨이 남은 가용 너비를 채웁니다.",
+      "inherits" : [
+        "View"
+      ],
+      "initializers" : [
+        {
+          "doc" : "아이콘과 라벨의 표시 규격을 설정합니다. 별도의 상태나 이벤트는 소유하지 않습니다.\n- Parameters:\n- size: Medium/Small/XSmall과 Regular/Semibold 조합입니다.\n- spacing: 아이콘과 라벨 사이 간격으로 2pt 또는 4pt이며 기본값은 2pt입니다.\n- icons: 최소 한쪽 아이콘을 지정합니다. 이미지는 16×16pt로 표시합니다. .left와 .right는 라벨이 남은 가용 너비를 채우며, .both는 가용 너비 채움을 강제하지 않습니다.\n- title: 표시할 전체 라벨 문구입니다.\n- imageForegroundColor: 템플릿 아이콘에 적용할 색상입니다.\n- titleColor: 라벨에 적용할 SDG 색상입니다.\n- textDisplay: 기본값은 전체 노출이며 singleLine은 한 줄 끝 말줄임입니다.",
+          "file" : "Sources/ShoplDesignGuide/Component/IconLabel/SDGIconLabelBuilderTest.swift",
+          "kind" : "initializer",
+          "name" : "init",
+          "parameters" : [
+            {
+              "label" : "size",
+              "name" : "size",
+              "type" : "SDGIconLabel.Size"
+            },
+            {
+              "defaultValue" : ".two",
+              "label" : "spacing",
+              "name" : "spacing",
+              "type" : "SDGIconLabel.Spacing"
+            },
+            {
+              "label" : "icons",
+              "name" : "icons",
+              "type" : "Icons"
+            },
+            {
+              "label" : "title",
+              "name" : "title",
+              "type" : "String"
+            },
+            {
+              "label" : "imageForegroundColor",
+              "name" : "imageForegroundColor",
+              "type" : "Color"
+            },
+            {
+              "label" : "titleColor",
+              "name" : "titleColor",
+              "type" : "SDG.Color"
+            },
+            {
+              "defaultValue" : ".full",
+              "label" : "textDisplay",
+              "name" : "textDisplay",
+              "type" : "TextDisplay"
+            }
+          ],
+          "signature" : "init(size: SDGIconLabel.Size, spacing: SDGIconLabel.Spacing = .two, icons: Icons, title: String, imageForegroundColor: Color, titleColor: SDG.Color, textDisplay: TextDisplay = .full)"
+        }
+      ],
+      "isView" : true,
+      "kind" : "struct",
+      "location" : {
+        "file" : "Sources/ShoplDesignGuide/Component/IconLabel/SDGIconLabelBuilderTest.swift",
+        "group" : "IconLabel",
+        "layer" : "Component"
+      },
+      "methods" : [
+
+      ],
+      "name" : "SDGIconLabelBuilderTest",
+      "nestedTypes" : [
+        "SDGIconLabelBuilderTest.Icons",
+        "SDGIconLabelBuilderTest.TextDisplay"
+      ],
+      "properties" : [
+
+      ],
+      "version" : "2.1.29"
     },
     {
       "cases" : [

@@ -1,5 +1,5 @@
 {
-  "count" : 201,
+  "count" : 202,
   "examples" : {
     "Divider" : [
       {
@@ -598,6 +598,13 @@
         "code" : "SDGIconLabel(\n  size: .medium(isBold: false),\n  rightImage: Image(sdg: .icView),\n  title: \"고정\",\n  imageForegroundColor: .neutral400,\n  titleColor: .neutral400,\n  lineLimit: 1\n)",
         "file" : "Sources/ShoplDesignGuide/Component/IconLabel/SDGIconLabel.swift",
         "source" : "preview"
+      }
+    ],
+    "SDGIconLabelBuilderTest" : [
+      {
+        "code" : "SDGIconLabelBuilderTest(\n  size: size(index: index, isBold: isBold),\n  spacing: gap == 2 ? .two : .four,\n  icons: icons,\n  title: title,\n  imageForegroundColor: .primary400,\n  titleColor: isBold ? .primary400 : .neutral700,\n  textDisplay: display\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/IconLabel/SDGIconLabelBuilderTestDemoView.swift",
+        "source" : "sample-app"
       }
     ],
     "SDGIconTab" : [
