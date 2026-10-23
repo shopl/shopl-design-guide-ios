@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "sdg-ios": {
+      "command": "node",
+      "args": ["./server/index.mjs"],
+      "cwd": "."
+    }
+  }
+}

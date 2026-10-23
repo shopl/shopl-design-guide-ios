@@ -1,0 +1,117 @@
+name: SDG MCP Check
+
+# SDG 소스가 바뀌면 플러그인의 생성 데이터·번들도 같은 PR에서 갱신되어야 한다.
+# 여기서 다시 생성한 결과가 커밋된 파일과 다르면 실패시켜, 오래된 메타데이터가 배포되는 것을 막는다.
+
+on:
+  pull_request:
+    paths:
+      - 'Sources/**'
+      - 'SampleApp/Sources/**'
+      - 'Package.swift'
+      - 'Tools/SDGMetadataExtractor/**'
+      - 'mcp/**'
+      - 'plugins/**'
+      - '.claude-plugin/**'
+      - '.cursor-plugin/**'
+      - '.github/workflows/mcp-check.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'Sources/**'
+      - 'SampleApp/Sources/**'
+      - 'Package.swift'
+      - 'Tools/SDGMetadataExtractor/**'
+      - 'mcp/**'
+      - 'plugins/**'
+      - '.claude-plugin/**'
+      - '.cursor-plugin/**'
+      - '.github/workflows/mcp-check.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mcp:
+    # 공개 레포라 포크 PR도 실행된다. self-hosted 러너 대신 GitHub 호스트 러너를 쓴다.
+    runs-on: macos-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # SDG 소스는 Swift 6.1 문법을 쓰고 추출기는 swift-syntax 604를 빌드하므로, 러너에 있는 가장 최신 정식 Xcode를 쓴다.
+      - name: Select latest stable Xcode
+        id: toolchain
+        run: |
+          latest="$(ls -d /Applications/Xcode_*.app 2>/dev/null | grep -viE 'beta|rc|release_candidate' | sort -V | tail -1)"
+          if [ -n "$latest" ]; then sudo xcode-select -s "$latest"; fi
+          xcodebuild -version
+          swift --version
+          echo "swift=$(swift --version 2>&1 | shasum | cut -c1-12)" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mcp/package-lock.json
+
+      # 툴체인이 바뀌면 이전 컴파일 결과(.build)를 쓰지 않도록 Swift 버전을 키에 넣는다.
+      - name: Cache extractor build
+        uses: actions/cache@v4
+        with:
+          path: Tools/SDGMetadataExtractor/.build
+          key: sdg-extractor-${{ runner.os }}-${{ steps.toolchain.outputs.swift }}-${{ hashFiles('Tools/SDGMetadataExtractor/Package.resolved') }}
+
+      - name: Extractor tests
+        run: swift test --package-path Tools/SDGMetadataExtractor
+
+      - name: Install MCP dependencies
+        working-directory: mcp
+        run: npm ci
+
+      - name: Type check
+        working-directory: mcp
+        run: npm run typecheck
+
+      - name: Regenerate metadata and bundle
+        working-directory: mcp
+        run: npm run build
+
+      - name: Check committed plugin files are up to date
+        run: |
+          if ! git diff --exit-code --stat -- plugins/sdg-ios/server; then
+            echo "::error::plugins/sdg-ios/server가 현재 소스로 생성한 결과와 다릅니다. 'cd mcp && npm run build'를 실행하고 변경된 파일을 커밋하세요."
+            exit 1
+          fi
+          untracked="$(git ls-files --others --exclude-standard -- plugins/sdg-ios/server)"
+          if [ -n "$untracked" ]; then
+            echo "::error::커밋되지 않은 생성 파일이 있습니다: $untracked"
+            exit 1
+          fi
+
+      - name: Smoke test
+        working-directory: mcp
+        run: npm run smoke
+
+      - name: Validate marketplace and plugin manifests
+        run: |
+          npx --yes @anthropic-ai/claude-code@2.1.296 plugin validate .
+          npx --yes @anthropic-ai/claude-code@2.1.296 plugin validate ./plugins/sdg-ios
+
+      # 플러그인 문서가 안내하는 최소 실행 환경(Node 18)에서도 번들이 동작하는지 확인한다.
+      - name: Setup Node 18 (minimum supported runtime)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Smoke test on Node 18
+        working-directory: mcp
+        run: node scripts/smoke.mjs
