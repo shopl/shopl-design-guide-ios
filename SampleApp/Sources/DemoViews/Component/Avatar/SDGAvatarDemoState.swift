@@ -6,19 +6,25 @@
 //
 
 import Combine
+import SwiftUI
 import UIKit
 import ShoplDesignGuide
 
+/// 샘플의 데이터와 Figma 표시 옵션을 하나의 아바타 Model로 전달합니다.
 final class SDGAvatarDemoState: ObservableObject {
   static let shared = SDGAvatarDemoState()
   
   let roles = SDGAvatarDemoRole.allCases
   let sizes = SDGAvatarDemoSize.allCases
+  let outlineColors = SDGAvatarDemoOutlineColor.allCases
   
   @Published var selectedRoleIndex = 0
   @Published var selectedSizeIndex = 0
   @Published var isPhotoEnabled = false
-  @Published var isMaternityEnabled = false
+  @Published var isIconEnabled = true
+  @Published var isOutlineEnabled = false
+  @Published var selectedOutlineColorIndex = 0
+  @Published var isRetryEnabled = false
   
   private init() { }
   
@@ -30,24 +36,20 @@ final class SDGAvatarDemoState: ObservableObject {
     sizes[safe: selectedSizeIndex] ?? .xlarge
   }
   
-  var avatarModel: AvatarModel {
-    AvatarModel(
+  var avatarModel: SDGAvatar.Model {
+    SDGAvatar.Model(
       userId: "avatar_sample_user",
-      imageURL: isPhotoEnabled ? Self.sampleImageURL : nil,
-      roleType: selectedRole.roleType,
-      maternity: isMaternityEnabled ? .pre : .none
+      imageURL: Self.sampleImageURL,
+      size: selectedSize.avatarSize,
+      showFace: isPhotoEnabled,
+      showIc: isIconEnabled,
+      showOutline: isOutlineEnabled,
+      showRetry: isRetryEnabled,
+      outline: (outlineColors[safe: selectedOutlineColorIndex] ?? .pink).color,
+      ic: selectedRole.icon
     )
   }
-  
-  var avatarPreviewID: String {
-    [
-      selectedRole.id,
-      selectedSize.id,
-      isPhotoEnabled ? "photo_on" : "photo_off",
-      isMaternityEnabled ? "maternity_on" : "maternity_off"
-    ].joined(separator: "_")
-  }
-  
+
   private static let sampleImageURL: URL? = {
     guard let image = UIImage(named: "Avatar_Sample"),
           let imageData = image.jpegData(compressionQuality: 1) else {
@@ -79,14 +81,14 @@ enum SDGAvatarDemoRole: String, CaseIterable, Identifiable {
     rawValue
   }
   
-  var roleType: AvatarModel.RoleType {
+  var icon: Image? {
     switch self {
     case .admin:
-      return .opLeader
+      return Image(sdg: .adminBadge)
     case .leader:
-      return .leader
+      return Image(sdg: .leaderBadge)
     case .staff:
-      return .worker
+      return nil
     }
   }
 }
@@ -121,6 +123,20 @@ enum SDGAvatarDemoSize: String, CaseIterable, Identifiable {
       return .xs
     case .xxsmall:
       return .xxs
+    }
+  }
+}
+
+enum SDGAvatarDemoOutlineColor: String, CaseIterable {
+  case pink = "Pink"
+  case primary = "Primary"
+  case neutral = "Neutral"
+
+  var color: Color {
+    switch self {
+    case .pink: return .sdgSpecialPink
+    case .primary: return .primary300
+    case .neutral: return .neutral700
     }
   }
 }
