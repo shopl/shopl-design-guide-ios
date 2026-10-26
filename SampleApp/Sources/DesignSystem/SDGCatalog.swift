@@ -248,6 +248,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
   case filterChip
   case indicator
   case iconLabel
+  case iconLabelBuilderTest
   case listHeaderLabel
   case navigation
   case numberPicker
@@ -278,6 +279,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
     case .filterChip: return "component_filter_chip"
     case .indicator: return "component_indicator"
     case .iconLabel: return "component_icon_label"
+    case .iconLabelBuilderTest: return "component_icon_label_builder_test"
     case .listHeaderLabel: return "component_list_header_label"
     case .navigation: return "component_navigation"
     case .numberPicker: return "component_number_picker"
@@ -310,6 +312,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
     case .filterChip: return "Filter Chip"
     case .indicator: return "Indicator"
     case .iconLabel: return "Icon Label"
+    case .iconLabelBuilderTest: return "Icon Label Builder Test"
     case .listHeaderLabel: return "List Header label"
     case .navigation: return "Navigation"
     case .numberPicker: return "Number Picker"
@@ -330,6 +333,8 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
 
   var catalogSubDescription: String? {
     switch self {
+    case .iconLabelBuilderTest:
+      return "아이콘과 텍스트를 조합하여 보여주는 템플릿"
     case .avatar:
       return "직원의 얼굴 사진 또는 설정된 이미지를 보여주는 컴포넌트"
     case .attachmentElement:
@@ -353,7 +358,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
 
   var viewID: String? {
     switch self {
-    case .avatar, .attachmentElement, .checkbox, .checkOption, .dropdown, .numberPicker, .radio, .toggle:
+    case .avatar, .attachmentElement, .checkbox, .checkOption, .dropdown, .numberPicker, .radio, .toggle, .iconLabelBuilderTest:
       return id
     default:
       return nil
@@ -374,6 +379,7 @@ enum SDGComponentCatalog: CaseIterable, SDGCatalogItemRepresentable {
     case .filterChip: return SDGFilterChipCatalog.allCases.flatMap(\.implementationNames)
     case .indicator: return SDGIndicatorCatalog.allCases.flatMap(\.implementationNames)
     case .iconLabel: return ["SDGIconLabel"]
+    case .iconLabelBuilderTest: return ["SDGIconLabelBuilderTest"]
     case .listHeaderLabel: return ["SDGListHeaderLabel"]
     case .navigation: return SDGNavigationCatalog.allCases.flatMap(\.implementationNames)
     case .numberPicker: return ["SDGNumberPicker"]
