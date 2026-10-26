@@ -1,5 +1,5 @@
 {
-  "count" : 201,
+  "count" : 203,
   "examples" : {
     "Divider" : [
       {
@@ -598,6 +598,18 @@
         "code" : "SDGIconLabel(\n  size: .medium(isBold: false),\n  rightImage: Image(sdg: .icView),\n  title: \"고정\",\n  imageForegroundColor: .neutral400,\n  titleColor: .neutral400,\n  lineLimit: 1\n)",
         "file" : "Sources/ShoplDesignGuide/Component/IconLabel/SDGIconLabel.swift",
         "source" : "preview"
+      }
+    ],
+    "SDGIconLabelBuilderTest" : [
+      {
+        "code" : "SDGIconLabelBuilderTest(\n  size: size(sizeIndex, isBold: isBold),\n  spacing: spacingIndex == 0 ? .two : .four,\n  icons: icons(2),\n  title: \"Label\",\n  imageForegroundColor: .neutral700,\n  titleColor: .neutral700\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/IconLabelBuilderTest/SDGIconLabelBuilderTestDemoView.swift",
+        "source" : "sample-app"
+      },
+      {
+        "code" : "SDGIconLabelBuilderTest(\n  size: size(sizeIndex, isBold: isBold),\n  spacing: spacingIndex == 0 ? .two : .four,\n  icons: icons(iconIndex),\n  title: longTitle,\n  imageForegroundColor: .neutral700,\n  titleColor: .neutral700\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/IconLabelBuilderTest/SDGIconLabelBuilderTestDemoView.swift",
+        "source" : "sample-app"
       }
     ],
     "SDGIconTab" : [

@@ -1,8 +1,8 @@
 {
   "counts" : {
-    "described" : 17,
-    "implemented" : 59,
-    "items" : 67
+    "described" : 18,
+    "implemented" : 60,
+    "items" : 68
   },
   "sections" : [
     {
@@ -402,6 +402,18 @@
             "SDGIconLabel"
           ],
           "title" : "Icon Label"
+        },
+        {
+          "id" : "component_icon_label_builder_test",
+          "implementationNames" : [
+            "SDGIconLabelBuilderTest"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGIconLabelBuilderTest"
+          ],
+          "subDescription" : "아이콘과 텍스트를 조합하여 보여주는 템플릿",
+          "title" : "Icon Label Builder Test"
         },
         {
           "id" : "component_list_header_label",
