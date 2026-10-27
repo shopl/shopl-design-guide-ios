@@ -1,0 +1,35 @@
+{
+  "dependencies" : [
+    {
+      "requirement" : "exact: 7.10.0",
+      "url" : "https://github.com/onevcat/Kingfisher"
+    }
+  ],
+  "localizedSymbols" : [
+    "SDGDeletePopup",
+    "SDGMiniProfile",
+    "SDGSecondProfile",
+    "View.centerDeletePopup"
+  ],
+  "platforms" : [
+    {
+      "name" : "iOS",
+      "version" : "16.0"
+    },
+    {
+      "name" : "macOS",
+      "version" : "12.0"
+    }
+  ],
+  "products" : [
+    "ShoplDesignGuide"
+  ],
+  "sources" : [
+    "Package.swift",
+    "Sources/ShoplDesignGuide/Template/Popup/CenterPopup/Variants/SDGDeletePopup.swift",
+    "Sources/ShoplDesignGuide/Template/Profile/SDGMiniProfile.swift",
+    "Sources/ShoplDesignGuide/Template/Profile/SDGSecondProfile.swift",
+    "Sources/ShoplDesignGuide/Util/View/SDGProgressView.swift"
+  ],
+  "swiftToolsVersion" : "6.0"
+}

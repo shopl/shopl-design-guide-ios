@@ -1,0 +1,298 @@
+# Builder의 입력·소스 검증과 캐시·Firebase 증거·Slack 안내를 담당한다.
+name: SDG Builder iOS distribution
+
+on:
+  workflow_call:
+    inputs:
+      build_number: {required: true, type: string}
+      source_sha: {required: true, type: string}
+      source_branch: {required: true, type: string}
+      source_base: {required: true, type: string}
+      design_name: {required: false, type: string}
+      build_id: {required: true, type: string}
+    secrets:
+      MATCH_GIT_SSH_PRIVATE_KEY: {required: true}
+      MATCH_PASSWORD: {required: false}
+      FIREBASE_SERVICE_ACCOUNT_JSON: {required: true}
+      SDG_BUILDER_SLACK_TOKEN: {required: true}
+
+permissions:
+  contents: read
+
+jobs:
+  validate-request:
+    runs-on: ubuntu-24.04
+    permissions: {}
+    steps:
+      - name: Require a complete main Builder request
+        env:
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          SOURCE_BASE: ${{ inputs.source_base }}
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+          BUILD_ID: ${{ inputs.build_id }}
+        run: |
+          python3 - <<'PYTHON'
+          import os, re
+          assert os.environ['GITHUB_REPOSITORY'] == 'shopl/shopl-design-guide-ios'
+          assert os.environ['GITHUB_REF'] == 'refs/heads/main'
+          assert re.fullmatch('[a-f0-9]{40}', os.environ['SOURCE_SHA'])
+          assert re.fullmatch('[a-f0-9]{40}', os.environ['SOURCE_BASE'])
+          assert re.fullmatch('[a-f0-9-]{36}', os.environ['BUILD_ID'])
+          assert os.environ['SOURCE_BRANCH']
+          PYTHON
+
+  notify-start:
+    needs: validate-request
+    if: github.repository == 'shopl/shopl-design-guide-ios' && github.ref == 'refs/heads/main' && inputs.source_sha != ''
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    continue-on-error: true
+    permissions: {}
+    outputs:
+      thread_ts: ${{ steps.slack_start.outputs.ts }}
+    steps:
+      - name: Prepare build start message
+        shell: bash
+        env:
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+          DESIGN_NAME: ${{ inputs.design_name }}
+        run: |
+          set -euo pipefail
+          jq -cn --arg branch "$SOURCE_BRANCH" --arg design "$DESIGN_NAME" \
+            --arg url "https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" '
+            {channel:"C0CAC49CLH3",text:"🍎 [iOS] 빌드 시작",mrkdwn:false,parse:"none",
+             unfurl_links:false,unfurl_media:false,blocks:[
+              {type:"section",text:{type:"plain_text",text:("🍎 [iOS] 빌드 시작\n디자인: "+$design[:200]+"\n브랜치: "+$branch[:300]+"\n러너 배정 후 빌드합니다. 완료 결과는 이 스레드에 안내합니다.")}},
+              {type:"actions",elements:[{type:"button",text:{type:"plain_text",text:"Actions 실행 보기"},url:$url}]}
+             ]}' > "$RUNNER_TEMP/sdg-start.json"
+      - name: Send build start to Slack
+        id: slack_start
+        uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3, Shopl QA와 동일
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.SDG_BUILDER_SLACK_TOKEN }}
+          errors: true
+          retries: 0
+          payload-file-path: ${{ runner.temp }}/sdg-start.json
+
+  # 검증된 Builder 요청만 기존 Fastlane 배포를 실행한다.
+  build:
+    needs: [validate-request, notify-start]
+    if: >-
+      always() && !cancelled() && github.repository == 'shopl/shopl-design-guide-ios' &&
+      github.ref == 'refs/heads/main' && needs.validate-request.result == 'success'
+    runs-on: [self-hosted, macOS, arm64, SpiderMan]
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      SOURCE_SHA: ${{ inputs.source_sha }}
+      SOURCE_BASE: ${{ inputs.source_base }}
+      SOURCE_BRANCH: ${{ inputs.source_branch }}
+      BUILD_ID: ${{ inputs.build_id }}
+      SDG_BUILDER_MODE: '1'
+      SDG_BUILD_NUMBER: ${{ inputs.build_number }}
+    steps:
+      # 이전 배포의 SSH 주소 변환 규칙을 다음 실행이 상속하지 않도록 Git 전역 설정을 실행별로 분리한다.
+      - name: Isolate job Git configuration
+        run: |
+          set -euo pipefail
+          git_config="$(mktemp "$RUNNER_TEMP/sdg-ios-git.XXXXXX")"
+          for key in user.name user.email; do
+            if value="$(git config --global --get "$key")"; then
+              GIT_CONFIG_GLOBAL="$git_config" git config --global "$key" "$value"
+            fi
+          done
+          printf 'GIT_CONFIG_GLOBAL=%s\n' "$git_config" >> "$GITHUB_ENV"
+      - name: Checkout trusted validation code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Save trusted source validator
+        run: cp .github/scripts/sdg-builder-validate.py "$RUNNER_TEMP/sdg-builder-ios-validate.py"
+      - name: Checkout Code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ inputs.source_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Validate dispatched source
+        run: python3 "$RUNNER_TEMP/sdg-builder-ios-validate.py"
+      - name: Setup mise
+        uses: jdx/mise-action@v2
+        with:
+          cache: true
+          install: false
+      - name: Environment Setup
+        run: |
+          set -euo pipefail
+          make setup
+          git diff --exit-code HEAD -- Tuist/Package.resolved
+      # 캐시는 소스 checkout 밖에 보관한다. 도구·설정·작업 경로가 바뀌면 분리한다.
+      - name: Configure local Xcode cache and build evidence
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/sdg-ios-output"
+          python3 - <<'PYTHON'
+          import hashlib, os, subprocess
+          from pathlib import Path
+          def command(*args):
+              return subprocess.check_output(args, text=True).strip()
+          xcode = command('xcodebuild', '-version').replace('\n', ' / ')
+          sdk = command('xcrun', '--sdk', 'iphoneos', '--show-sdk-version')
+          tuist = command('tuist', 'version').replace('\n', ' / ')
+          ruby = command('ruby', '-e', 'print RUBY_DESCRIPTION').replace('\n', ' / ')
+          files = command('git', 'ls-files', 'Project.swift', 'Tuist.swift', 'Tuist', 'Package.swift', 'Package.resolved', '.ruby-version', '.tuist-version', 'Gemfile.lock', 'fastlane/Fastfile').splitlines()
+          digest = hashlib.sha256((xcode + sdk + tuist + ruby + str(Path.cwd()) + 'Release-iphoneos').encode())
+          for name in sorted(files):
+              digest.update(name.encode() + b'\0' + Path(name).read_bytes())
+          key = digest.hexdigest()[:24]
+          cache = Path(os.environ.get('SDG_IOS_CACHE_ROOT', str(Path.home() / 'Library/Caches/sdg-builder-ios'))) / key / 'DerivedData'
+          present = cache.is_dir()
+          cache.mkdir(parents=True, exist_ok=True)
+          values = {'SDG_CACHE_KEY': key, 'SDG_DERIVED_DATA_PATH': str(cache),
+                    'SDG_CACHE_PRESENT': str(present).lower(), 'SDG_XCODE_VERSION': xcode,
+                    'SDG_TUIST_VERSION': tuist, 'SDG_RUBY_VERSION': ruby,
+                    'SDG_RECEIPT_PATH': str(Path(os.environ['RUNNER_TEMP']) / 'sdg-ios-output/receipt.json')}
+          with open(os.environ['GITHUB_ENV'], 'a') as out:
+              for name, value in values.items():
+                  out.write(f'{name}={value}\n')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as out:
+              out.write(f'### SDG iOS cache\nXcode: {xcode} / SDK: {sdk}\nTuist: {tuist} / Ruby: {ruby}\n\nCache key: {key} / existing directory: {present}\n\nDirectory presence is not a measured cache hit.\n')
+          PYTHON
+      - name: Setup SSH Keys
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          # Builder는 기존 Match 읽기 경로만 사용하며 배포 태그 push 키를 받지 않는다.
+          ssh-private-key: ${{ secrets.MATCH_GIT_SSH_PRIVATE_KEY }}
+      - name: Add Known Hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - name: Run Fastlane
+        env:
+          SDG_MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          set -euo pipefail
+          # Secret이 비어 있으면 러너 환경과 match의 기존 키체인 조회를 유지한다.
+          if [[ -n "${SDG_MATCH_PASSWORD:-}" ]]; then
+            export MATCH_PASSWORD="$SDG_MATCH_PASSWORD"
+          elif [[ -z "${MATCH_PASSWORD:-}" ]]; then
+            unset MATCH_PASSWORD
+          fi
+          unset SDG_MATCH_PASSWORD
+          # Shopl QA처럼 이번 실행의 프로세스 그룹만 정리한다.
+          FASTLANE_PID=''
+          cleanup_fastlane() {
+            if [[ -n "$FASTLANE_PID" ]] && kill -0 -- "-$FASTLANE_PID" 2>/dev/null; then
+              kill -TERM -- "-$FASTLANE_PID" || true
+              sleep 3
+              kill -KILL -- "-$FASTLANE_PID" 2>/dev/null || true
+            fi
+          }
+          trap cleanup_fastlane EXIT
+          trap 'exit 143' INT TERM
+          export SDG_FASTLANE_LOG="$RUNNER_TEMP/sdg-ios-fastlane.log"
+          set -m
+          # Setup mise가 준비한 기존 환경에서 동일한 distribute 레인을 실행한다.
+          # shellcheck disable=SC2016 # 로그 경로는 자식 Bash에서 확장한다.
+          bash -c 'set -o pipefail; bundle exec fastlane distribute 2>&1 | tee "$SDG_FASTLANE_LOG"' &
+          FASTLANE_PID=$!
+          set +m
+          if wait "$FASTLANE_PID"; then
+            cleanup_fastlane
+            FASTLANE_PID=''
+          else
+            result=$?
+            exit "$result"
+          fi
+          git diff --exit-code HEAD -- Tuist/Package.resolved
+          test -s "$SDG_RECEIPT_PATH"
+      - name: Collect Builder logs
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/sdg-ios-output"
+          if [[ -f "$RUNNER_TEMP/sdg-ios-fastlane.log" ]]; then
+            cp "$RUNNER_TEMP/sdg-ios-fastlane.log" "$RUNNER_TEMP/sdg-ios-output/fastlane.log"
+          fi
+      - name: Upload Firebase receipt and build evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sdg-builder-ios-${{ inputs.source_sha }}
+          path: ${{ runner.temp }}/sdg-ios-output/
+          if-no-files-found: warn
+          retention-days: 3
+          overwrite: true
+
+  # #sdg-builder-build 알림 토큰은 앱 소스를 실행하지 않는 hosted job에서만 사용한다.
+  notify-slack:
+    needs: [notify-start, build]
+    if: ${{ always() && github.repository == 'shopl/shopl-design-guide-ios' && github.ref == 'refs/heads/main' && inputs.source_sha != '' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    continue-on-error: true
+    permissions:
+      actions: read
+    steps:
+      - name: Download Firebase receipt
+        if: needs.build.result == 'success'
+        continue-on-error: true
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: sdg-builder-ios-${{ inputs.source_sha }}
+          path: ${{ runner.temp }}/sdg-ios-receipt
+      - name: Prepare build result message
+        env:
+          BUILD_RESULT: ${{ needs.build.result }}
+          PARENT_TS: ${{ needs.notify-start.outputs.thread_ts }}
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          SOURCE_BASE: ${{ inputs.source_base }}
+          SOURCE_BRANCH: ${{ inputs.source_branch }}
+          BUILD_ID: ${{ inputs.build_id }}
+        run: |
+          python3 - <<'PYTHON'
+          import json, os, re
+          from pathlib import Path
+          from urllib.parse import urlparse, unquote
+          result, thread = os.environ['BUILD_RESULT'], os.environ['PARENT_TS']
+          assert result in ['success', 'failure', 'cancelled', 'skipped']
+          assert not thread or re.fullmatch(r'[0-9]+\.[0-9]+', thread)
+          link = ''
+          if result == 'success':
+              try:
+                  receipt = json.loads((Path(os.environ['RUNNER_TEMP']) / 'sdg-ios-receipt/receipt.json').read_text())
+                  assert receipt['source_sha'] == os.environ['SOURCE_SHA'] and receipt['build_id'] == os.environ['BUILD_ID']
+                  assert receipt['source_base'] == os.environ['SOURCE_BASE'] and receipt['source_branch'] == os.environ['SOURCE_BRANCH']
+                  assert receipt['run_id'] == os.environ['GITHUB_RUN_ID'] and receipt['run_attempt'] == os.environ['GITHUB_RUN_ATTEMPT']
+                  parsed = urlparse(receipt['testing_uri'])
+                  assert parsed.scheme == 'https' and parsed.netloc == 'appdistribution.firebase.google.com'
+                  app = '1:358638001737:ios:ffecd4783bbf774960a998'
+                  assert receipt['firebase_app_id'] == app
+                  assert receipt['firebase_release'].startswith(f'projects/358638001737/apps/{app}/releases/')
+                  release = receipt['firebase_release'].split('/')[-1]
+                  assert re.fullmatch('[A-Za-z0-9_-]+', release)
+                  assert unquote(parsed.path) == f'/testerapps/{app}/releases/{release}'
+                  link = receipt['testing_uri']
+              except (OSError, ValueError, KeyError, AssertionError):
+                  pass
+          text = ('🍎 [iOS] 빌드 완료 ✅\n아이폰의 App Distribution에서 SDG 새 버전을 설치하세요.' if link else '🍎 [iOS] 빌드 완료 ⚠️\nFirebase 배포 결과를 확인해 주세요.') if result == 'success' else {'failure':'🍎 [iOS] 빌드 실패 ❌', 'cancelled':'🍎 [iOS] 빌드 취소 ⏹️', 'skipped':'🍎 [iOS] 빌드 미실행 ⏭️'}[result]
+          buttons = ([{'type':'button','text':{'type':'plain_text','text':'Firebase에서 앱 설치'},'url':link}] if link else [])
+          buttons.append({'type':'button','text':{'type':'plain_text','text':'Actions 실행 보기'},'url':f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}"})
+          payload = {'channel':'C0CAC49CLH3','text':text,'mrkdwn':False,'parse':'none','unfurl_links':False,'unfurl_media':False,
+                     'blocks':[{'type':'section','text':{'type':'plain_text','text':text}},{'type':'actions','elements':buttons}]}
+          if thread:
+              payload.update(thread_ts=thread, reply_broadcast=False)
+          (Path(os.environ['RUNNER_TEMP']) / 'sdg-result.json').write_text(json.dumps(payload))
+          PYTHON
+      - name: Send build result to Slack
+        uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.SDG_BUILDER_SLACK_TOKEN }}
+          errors: true
+          retries: 0
+          payload-file-path: ${{ runner.temp }}/sdg-result.json
