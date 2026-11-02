@@ -23,7 +23,7 @@ struct SDGIconTabDemoView: View {
     SDGIconTab(
       option: state.option,
       selectedIndex: state.selectedIndex,
-      onTabClick: state.tabClicked
+      onItemTapped: state.tabClicked
     )
     .padding(.horizontal, 16)
     .padding(.vertical, 40)

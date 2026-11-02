@@ -1,0 +1,105 @@
+# 기존 수동 배포의 checkout·태그·알림 정책을 유지한다. 실행은 deploy.yml에서 시작한다.
+name: SDG manual iOS distribution
+
+on:
+  workflow_call:
+    inputs:
+      build_number: {required: true, type: string}
+    secrets:
+      MATCH_GIT_SSH_PRIVATE_KEY: {required: true}
+      SDG_GIT_SSH_PRIVATE_KEY: {required: true}
+      MATCH_PASSWORD: {required: false}
+      FIREBASE_SERVICE_ACCOUNT_JSON: {required: true}
+      SLACK_URL: {required: true}
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    if: github.repository == 'shopl/shopl-design-guide-ios'
+    runs-on: [self-hosted, macOS, arm64, SpiderMan]
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      SDG_BUILDER_MODE: '0'
+      SDG_BUILD_NUMBER: ${{ inputs.build_number }}
+    steps:
+      # 이전 배포의 SSH 주소 변환 규칙을 다음 실행이 상속하지 않도록 Git 전역 설정을 실행별로 분리한다.
+      - name: Isolate job Git configuration
+        run: |
+          set -euo pipefail
+          git_config="$(mktemp "$RUNNER_TEMP/sdg-ios-git.XXXXXX")"
+          for key in user.name user.email; do
+            if value="$(git config --global --get "$key")"; then
+              GIT_CONFIG_GLOBAL="$git_config" git config --global "$key" "$value"
+            fi
+          done
+          printf 'GIT_CONFIG_GLOBAL=%s\n' "$git_config" >> "$GITHUB_ENV"
+      - name: Checkout Code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Setup mise
+        uses: jdx/mise-action@v2
+        with:
+          cache: true
+          install: false
+      - name: Environment Setup
+        run: |
+          set -euo pipefail
+          make setup
+      # 캐시는 소스 checkout 밖에 보관한다. 도구·설정·작업 경로가 바뀌면 분리한다.
+      - name: Setup SSH Keys
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: |
+            ${{ secrets.MATCH_GIT_SSH_PRIVATE_KEY }}
+            ${{ secrets.SDG_GIT_SSH_PRIVATE_KEY }}
+      - name: Add Known Hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - name: Run Fastlane
+        env:
+          SDG_MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          SLACK_URL: ${{ secrets.SLACK_URL }}
+        run: |
+          set -euo pipefail
+          # Secret이 비어 있으면 러너 환경과 match의 기존 키체인 조회를 유지한다.
+          if [[ -n "${SDG_MATCH_PASSWORD:-}" ]]; then
+            export MATCH_PASSWORD="$SDG_MATCH_PASSWORD"
+          elif [[ -z "${MATCH_PASSWORD:-}" ]]; then
+            unset MATCH_PASSWORD
+          fi
+          unset SDG_MATCH_PASSWORD
+          git remote set-url origin "git@github.com:$GITHUB_REPOSITORY.git"
+          # Shopl QA처럼 이번 실행의 프로세스 그룹만 정리한다.
+          FASTLANE_PID=''
+          cleanup_fastlane() {
+            if [[ -n "$FASTLANE_PID" ]] && kill -0 -- "-$FASTLANE_PID" 2>/dev/null; then
+              kill -TERM -- "-$FASTLANE_PID" || true
+              sleep 3
+              kill -KILL -- "-$FASTLANE_PID" 2>/dev/null || true
+            fi
+          }
+          trap cleanup_fastlane EXIT
+          trap 'exit 143' INT TERM
+          export SDG_FASTLANE_LOG="$RUNNER_TEMP/sdg-ios-fastlane.log"
+          set -m
+          # Setup mise가 준비한 기존 환경에서 동일한 distribute 레인을 실행한다.
+          # shellcheck disable=SC2016 # 로그 경로는 자식 Bash에서 확장한다.
+          bash -c 'set -o pipefail; bundle exec fastlane distribute 2>&1 | tee "$SDG_FASTLANE_LOG"' &
+          FASTLANE_PID=$!
+          set +m
+          if wait "$FASTLANE_PID"; then
+            cleanup_fastlane
+            FASTLANE_PID=''
+          else
+            result=$?
+            exit "$result"
+          fi

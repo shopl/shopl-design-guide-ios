@@ -71,6 +71,7 @@ enum SDGImplementationManifest {
     "SDGFloatingButton",
     "SDGGhostButton",
     "SDGHistoryHeader",
+    "SDGCustomHistory",
     "SDGIconHeader",
     "SDGIconLabel",
     "SDGIconPopup",
