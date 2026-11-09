@@ -1,7 +1,7 @@
 {
-  "count" : 154,
+  "count" : 155,
   "countsByKind" : {
-    "icon" : 142,
+    "icon" : 143,
     "image" : 12
   },
   "icons" : [
@@ -657,6 +657,21 @@
       "name" : "icCommonPlay",
       "renderingMode" : "template",
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_play.imageset"
+    },
+    {
+      "assetName" : "ic_common_plus_s",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "common",
+        "plus",
+        "s"
+      ],
+      "kind" : "icon",
+      "name" : "icCommonPlusS",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_plus_s.imageset"
     },
     {
       "assetName" : "ic_common_position",
