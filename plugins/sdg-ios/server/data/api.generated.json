@@ -4409,11 +4409,13 @@
 
       ],
       "declaration" : "public struct Model: Equatable",
+      "doc" : "체크박스의 크기, 선택 배경색과 표시 상태를 묶는 모델입니다.",
       "inherits" : [
         "Equatable"
       ],
       "initializers" : [
         {
+          "doc" : "- Parameters:\n- size: 체크박스와 아이콘의 크기입니다.\n- selectedColor: 선택 상태에만 적용하는 배경색입니다. 기본값은 primary300입니다.\n- status: Default는 neutral250, Disabled는 neutral200 배경을 표시합니다.",
           "file" : "Sources/ShoplDesignGuide/Component/CheckBox/SDGCheckBox.swift",
           "kind" : "initializer",
           "name" : "init",
@@ -11010,11 +11012,13 @@
 
       ],
       "declaration" : "public struct SDGCheckBox: View",
+      "doc" : "크기와 상태에 따라 배경색을 표시하는 체크박스입니다. 선택 상태는 호출부에서 관리합니다.",
       "inherits" : [
         "View"
       ],
       "initializers" : [
         {
+          "doc" : "- Parameters:\n- model: 체크박스의 크기와 표시 상태입니다.\n- onSelect: 탭 시 호출합니다. Disabled 상태의 선택 차단 및 안내는 호출부에서 처리합니다.",
           "file" : "Sources/ShoplDesignGuide/Component/CheckBox/SDGCheckBox.swift",
           "kind" : "initializer",
           "name" : "init",
