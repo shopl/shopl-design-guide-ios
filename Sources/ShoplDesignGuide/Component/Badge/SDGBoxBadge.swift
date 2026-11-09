@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 텍스트와 선택적인 아이콘을 사각형 배지로 표시합니다.
 public struct SDGBoxBadge: View {
   
   public enum `Type`: Equatable {
@@ -175,7 +176,7 @@ private extension SDGBoxBadge {
       EmptyView()
     case .line(let line):
       RoundedRectangle(cornerRadius: spec.cornerRadius, style: .continuous)
-        .stroke(line.borderColor, lineWidth: 1)
+        .strokeBorder(line.borderColor, lineWidth: 1)
     }
   }
 }
