@@ -120,276 +120,161 @@ public struct SDGTextNavi: View {
   }
   
   
-  private let _naviType: NaviType
-  private let _backgroundColor: Color
-  private var _backButtonColor: Color = .neutral700
-  
+  private struct LeftItem {
+    let image: Image
+    var color: Color
+    let action: () -> Void
+    let resizesImage: Bool
+    let usesBackColor: Bool
+  }
+
+  // 입력 API의 차이는 여기서 흡수하고, 각 아이템은 아래 공통 뷰에서 한 번만 그립니다.
+  private struct Items {
+    var left: LeftItem?
+    var title: NaviType.Title?
+    var right: NaviType.Right?
+    var search: AnyView?
+    var rightVerticalPadding: CGFloat = 0
+  }
+
+  private var items: Items
+  private let backgroundColor: Color
+
+  /// 기존 구성·여백·아이콘 생략·콜백 동작을 유지하는 호환 초기화 함수입니다.
   /// - Parameters:
   ///   - naviType: 좌측 요소, 타이틀, 우측 액션 구성. 버튼을 누르면 전달한 콜백을 실행합니다.
   ///   - backgroundColor: 배경색. 기본 디자인은 Neutral/100이며 투명색도 사용할 수 있습니다.
-  public init(
-    naviType: NaviType,
-    backgroundColor: Color
-  ) {
-    _naviType = naviType
-    _backgroundColor = backgroundColor
+  @available(*, deprecated, message: "새 Text Navi는 init(model:onBack:onAction:)을 사용하세요. 기존 full/text/search 구성은 이 호환 API에서 유지됩니다.")
+  public init(naviType: NaviType, backgroundColor: Color) {
+    switch naviType {
+    case .full(let left, let title, let right):
+      items = Items(
+        left: LeftItem(image: left.image, color: left.color, action: left.action,
+                       resizesImage: true, usesBackColor: false),
+        title: title, right: right
+      )
+    case .back(let back, let title, let right):
+      items = Items(
+        left: LeftItem(image: Image(sdg: .icNaviBack), color: .neutral700, action: back,
+                       resizesImage: false, usesBackColor: true),
+        title: title, right: right, rightVerticalPadding: 14
+      )
+    case .text(let title, let right):
+      items = Items(title: title, right: right)
+    case .search(let back, let view):
+      items = Items(
+        left: LeftItem(image: Image(sdg: .icNaviBack), color: .neutral700, action: back,
+                       resizesImage: false, usesBackColor: true),
+        search: view
+      )
+    }
+    self.backgroundColor = backgroundColor
   }
-  
+
   /// 기본 뒤로가기 아이콘의 색상을 지정합니다. 진한 배경에서는 Neutral/0을 사용할 수 있습니다.
-  /// - Parameter color: `.back`, `.search` 타입의 아이콘 색상. 미설정 시 Neutral/700입니다.
+  /// - Parameter color: 기존 `.back`·`.search` 및 새 Model 구성의 뒤로가기 색상입니다.
+  ///   `.full`의 사용자 지정 좌측 아이콘에는 적용하지 않습니다. 새 API에서는 Model.backColor를 사용합니다.
   /// - Returns: 뒤로가기 색상을 적용한 내비게이션입니다.
   public func backButtonColor(_ color: Color) -> Self {
     var view = self
-    view._backButtonColor = color
+    if view.items.left?.usesBackColor == true {
+      view.items.left?.color = color
+    }
     return view
   }
 
+  /// Model 값은 호출 화면에서 소유하며 버튼을 누를 때 해당 콜백만 실행합니다.
+  /// - Parameters:
+  ///   - model: Figma 표시 설정, 콘텐츠와 색상입니다.
+  ///   - onBack: 뒤로가기 버튼을 누를 때 실행합니다.
+  ///   - onAction: 우측 아이콘·문구로 구성된 단일 버튼을 누를 때 실행합니다.
+  public init(model: Model, onBack: @escaping () -> Void, onAction: @escaping () -> Void) {
+    items = Items(
+      left: LeftItem(image: model.backIc, color: model.backColor, action: onBack,
+                     resizesImage: true, usesBackColor: true),
+      // 숨긴 타이틀도 기존 빈 타이틀과 같은 폭 협상을 유지해 긴 액션의 크기가 달라지지 않게 합니다.
+      title: .init(text: model.showLabel ? model.label : "", color: model.labelColor),
+      right: .init(image: model.showActionIc ? model.actionIc : nil,
+                   text: model.actionLabel, color: model.actionColor, action: onAction)
+    )
+    backgroundColor = model.backgroundColor
+  }
+
   public var body: some View {
-    
     HStack(spacing: 0) {
-      
-      switch _naviType {
-        case .full(let left, let title, let right):
-          
-          Button {
-            
-            left.action()
-            
-          } label: {
-            left.image
-              .resizable()
-              .frame(width: 40, height: 40)
-              .foregroundColor(left.color)
-          }
-          .layoutPriority(2)
-          .padding(.leading, 10)
-          
-          Text(title.text)
-            .typo(.naviTitle)
-            .foregroundColor(title.color)
-            .lineLimit(1)
-            .truncationMode(.tail)
-            .frame(height: 24)
-            .multilineTextAlignment(.leading)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, 2)
-            .padding(.trailing, right == nil ? 10 : 0)
-          
-          if let _right = right {
-            Button {
-              
-              _right.action()
-              
-            } label: {
-              
-              HStack(spacing: 0) {
-                
-                if let rightImage = _right.image {
-                  rightImage
-                    .resizable()
-                    .frame(width: 20, height: 20)
-                    .foregroundColor(_right.color)
-                }
-                
-                Text(_right.text)
-                  .typo(.body1_R)
-                  .foregroundColor(_right.color)
-                  .lineLimit(1)
-                  .truncationMode(.tail)
-                  .frame(height: 20)
-                
-              }
-              
-            }
-            .layoutPriority(1)
-            .padding(.leading, 8)
-            .padding(.trailing, 16)
-          }
-          
-        case .back(let back, let title, let right):
-          
-          Button {
-            
-            back()
-            
-          } label: {
-            Image(sdg: .icNaviBack)
-              .frame(width: 40, height: 40)
-              .foregroundColor(_backButtonColor)
-          }
-          .layoutPriority(2)
-          .padding(.leading, 10)
-          
-          Text(title.text)
-            .typo(.naviTitle)
-            .foregroundColor(title.color)
-            .lineLimit(1)
-            .truncationMode(.tail)
-            .frame(height: 24)
-            .multilineTextAlignment(.leading)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, 2)
-            .padding(.trailing, right == nil ? 10 : 0)
-          
-          if let _right = right {
-            Button {
-              
-              _right.action()
-              
-            } label: {
-              
-              HStack(spacing: 0) {
-                
-                if let rightImage = _right.image {
-                  rightImage
-                    .resizable()
-                    .frame(width: 20, height: 20)
-                    .foregroundColor(_right.color)
-                }
-                
-                Text(_right.text)
-                  .typo(.body1_R)
-                  .foregroundColor(_right.color)
-                  .lineLimit(1)
-                  .truncationMode(.tail)
-                  .frame(height: 20)
-                
-              }
-              
-            }
-            .layoutPriority(1)
-            .padding(.leading, 8)
-            .padding(.trailing, 16)
-            .padding(.vertical, 14)
-          }
-          
-        case .text(let title, let right):
-          
-          Text(title.text)
-            .typo(.naviTitle)
-            .foregroundColor(title.color)
-            .lineLimit(1)
-            .truncationMode(.tail)
-            .frame(height: 24)
-            .multilineTextAlignment(.leading)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, 16)
-            .padding(.trailing, right == nil ? 10 : 0)
-          
-          if let _right = right {
-            Button {
-              
-              _right.action()
-              
-            } label: {
-              
-              HStack(spacing: 0) {
-                
-                if let rightImage = _right.image {
-                  rightImage
-                    .resizable()
-                    .frame(width: 20, height: 20)
-                    .foregroundColor(_right.color)
-                }
-                
-                Text(_right.text)
-                  .typo(.body1_R)
-                  .foregroundColor(_right.color)
-                  .lineLimit(1)
-                  .truncationMode(.tail)
-                  .frame(height: 20)
-                
-              }
-              
-            }
-            .layoutPriority(1)
-            .padding(.leading, 8)
-            .padding(.trailing, 16)
-          }
-        
-      case .search(let back, let view):
-        
-        Button {
-          
-          back()
-          
-        } label: {
-          Image(sdg: .icNaviBack)
-            .frame(width: 40, height: 40)
-            .foregroundColor(_backButtonColor)
-        }
-        .padding(.leading, 10)
-        
-        view
-        
+      if let left = items.left {
+        leftButton(left)
       }
-      
+      if let search = items.search {
+        search
+      } else {
+        if let title = items.title {
+          titleLabel(title)
+        } else {
+          Spacer(minLength: 0)
+        }
+        if let right = items.right {
+          actionButton(right)
+        }
+      }
     }
     .frame(height: 48)
-    .background(_backgroundColor)
+    .background(backgroundColor)
   }
-  
+
+  private func leftButton(_ item: LeftItem) -> some View {
+    Button(action: item.action) {
+      // 기존 back/search는 원본 에셋, full은 리사이즈한 이미지를 사용하던 동작을 유지합니다.
+      (item.resizesImage ? item.image.resizable() : item.image)
+        .frame(width: 40, height: 40)
+        .foregroundColor(item.color)
+    }
+    .layoutPriority(items.search == nil ? 2 : 0)
+    .padding(.leading, 10)
+  }
+
+  private func titleLabel(_ item: NaviType.Title) -> some View {
+    Text(item.text)
+      .typo(.naviTitle)
+      .foregroundColor(item.color)
+      .lineLimit(1)
+      .truncationMode(.tail)
+      .frame(height: 24)
+      .multilineTextAlignment(.leading)
+      .frame(maxWidth: .infinity, alignment: .leading)
+      .padding(.leading, items.left == nil ? 16 : 2)
+      .padding(.trailing, items.right == nil ? 10 : 0)
+  }
+
+  private func actionButton(_ item: NaviType.Right) -> some View {
+    Button(action: item.action) {
+      HStack(spacing: 0) {
+        if let image = item.image {
+          image
+            .resizable()
+            .frame(width: 20, height: 20)
+            .foregroundColor(item.color)
+        }
+        Text(item.text)
+          .typo(.body1_R)
+          .foregroundColor(item.color)
+          .lineLimit(1)
+          .truncationMode(.tail)
+          .frame(height: 20)
+      }
+    }
+    .layoutPriority(1)
+    .padding(.leading, 8)
+    .padding(.trailing, 16)
+    .padding(.vertical, items.rightVerticalPadding)
+  }
 }
 
 
 #Preview {
-  VStack {
-    SDGTextNavi(
-      naviType: .full(
-        left: .init(image: Image(sdg: .icCommonCompany), action: { }),
-        title: .init(
-          text: "긴 타이틀은 한 줄로 표시하고 끝을 말줄임합니다"
-        ),
-        right: .init(image: Image(sdg: .icCommonCompany), text: "Text더 길어지는", action: { })
-      ),
-      backgroundColor: .neutral100
-    )
-    
-    SDGTextNavi(
-      naviType: .back(
-        back: { },
-        title: .init(
-          text: "긴 타이틀은 한 줄로 표시하고 끝을 말줄임합니다"
-        ),
-        right: .init(image: Image(sdg: .icCommonCompany), text: "Text더 길어지는", action: { })
-      ),
-      backgroundColor: .neutral100
-    )
-    
-    SDGTextNavi(
-      naviType: .text(
-        title: .init(
-          text: "긴 타이틀은 한 줄로 표시하고 끝을 말줄임합니다"
-        ),
-        right: .init(image: Image(sdg: .icCommonCompany), text: "Text더 길어지는", action: { })
-      ),
-      backgroundColor: .neutral100
-    )
-  }
-  .frame(maxHeight: .infinity)
-  .background(
-    Color.neutral700
-      .ignoresSafeArea()
+  SDGTextNavi(
+    model: .init(showLabel: true, label: "타이틀", showActionIc: true,
+                 actionLabel: "저장", actionIc: Image(sdg: .icCommonCompany)),
+    onBack: {}, onAction: {}
   )
-}
-
-#Preview("액션 아이콘 없음 · 액션 없음 · 진한 배경") {
-  VStack(spacing: 20) {
-    SDGTextNavi(
-      naviType: .back(back: {}, title: .init(text: "긴 타이틀이 있어도 우측 액션 문구를 먼저 보존합니다"),
-                      right: .init(image: nil, text: "전체 저장", action: {})),
-      backgroundColor: .neutral100
-    )
-    SDGTextNavi(
-      naviType: .back(back: {}, title: .init(text: "우측 액션 없는 타이틀"), right: nil),
-      backgroundColor: .neutral100
-    )
-    SDGTextNavi(
-      naviType: .back(back: {}, title: .init(text: "진한 배경", color: .neutral0),
-                      right: .init(image: nil, text: "완료", color: .neutral0, action: {})),
-      backgroundColor: .neutral700
-    )
-    .backButtonColor(.neutral0)
-  }
-  .frame(width: 320)
 }
