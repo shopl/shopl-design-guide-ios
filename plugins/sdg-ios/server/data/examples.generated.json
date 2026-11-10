@@ -1,0 +1,1155 @@
+{
+  "count" : 201,
+  "examples" : {
+    "Divider" : [
+      {
+        "code" : "Divider(color: .neutral700,\n        option: .init(direction: .horizental, thickness: 1))",
+        "file" : "Sources/ShoplDesignGuide/Component/NumberPicker/SDGNumberPicker.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "Divider(\n  color: .primary300,\n  option: .init(direction: .horizental, thickness: 1)\n)",
+        "file" : "Sources/ShoplDesignGuide/Util/View/Divider.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "Divider(color: .neutral200, option: .init(direction: .horizental, thickness: 1))",
+        "file" : "SampleApp/Sources/DemoViews/Foundation/SDGTypoGraphyDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGAttachmentElement" : [
+      {
+        "code" : "SDGAttachmentElement(\n  model: .init(\n    type: .photo(image: Image(sdg: .avatarEmpty)),\n    id: UUID().uuidString,\n    fileName: \"이미지파일.jpg\",\n    fileSize: \"4MB\"\n  ),\n  selectedItem: { _ in }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/AttachmentElement/SDGAttachmentElement.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGAttachmentElement(\n  model: .init(\n    type: .document,\n    id: UUID().uuidString,\n    fileName: \"문서파일.jpg\",\n    fileSize: \"4MB\"\n  ),\n  selectedItem: { _ in }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/AttachmentElement/SDGAttachmentElement.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGAttachmentElement(\n  model: .init(\n    type: .video(thumbnail: Image(sdg: .profileSmall)),\n    id: UUID().uuidString,\n    fileName: \"비디오파일.jpg\",\n    fileSize: \"4MB\"\n  ),\n  selectedItem: { _ in }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/AttachmentElement/SDGAttachmentElement.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGAttachmentElement(\n  model: state.attachmentModel,\n  selectedItem: { _ in }\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/AttachmentElement/SDGAttachmentElementDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGAvatar" : [
+      {
+        "code" : "SDGAvatar(\n  type: .round,\n  model: AvatarModel(\n    userId: \"\",\n    imageURL: nil,\n    roleType: .worker\n  ),\n  size: .xxs,\n  action: { userId in\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGAvatar(\n  type: .round,\n  model: AvatarModel(\n    userId: \"\",\n    imageURL: nil,\n    roleType: .leader\n  ),\n  size: .xxs,\n  action: { userId in\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGAvatar(\n  type: .round,\n  model: AvatarModel(\n    userId: \"\",\n    imageURL: nil,\n    roleType: .opLeader\n  ),\n  size: .xxs,\n  action: { userId in\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGAvatar(\n  type: .round,\n  model: state.avatarModel,\n  size: state.selectedSize.avatarSize,\n  action: { _ in }\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/Avatar/SDGAvatarDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGBasicNavi" : [
+      {
+        "code" : "SDGBasicNavi(\n  naviType:\n      .pop(tintColor: nil, onDismiss: {\n        \n      }),\n  title: .init(\n    string: \"뭔가엄청긴NavigationTitle입니다.말줄임도포함이고요.\", tintColor: nil\n  ),\n  backgroundColor: .neutral0\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGBasicNavi.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBasicNavi(\n  naviType:\n      .dismiss(onDismiss: {\n        \n      }),\n  title: .init(\n    string: \"뭔가 엄청 긴 Navigation Title 입니다. 말줄임도 포함이고요.\"\n  ),\n  backgroundColor: .neutral0\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGBasicNavi.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBasicNavi(\n  naviType:\n      .dismiss(onDismiss: {\n        \n      }),\n  title: .init(\n    string: \"dismiss 테스트 네비게이션\"\n  ),\n  backgroundColor: .neutral0,\n  buttons: [\n    .init(\n      image: Image(sdg: .icNaviSearch),\n      tintColor: .neutral700,\n      touchUpInside: {\n        \n      }\n    )]\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGBasicNavi.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBasicNavi(\n  naviType: .pop(\n    tintColor: .neutral700,\n    onDismiss: {\n      dismiss()\n    }\n  ),\n  title: nil,\n  backgroundColor: .neutral0\n)",
+        "file" : "SampleApp/Sources/AppView.swift",
+        "source" : "sample-app"
+      },
+      {
+        "code" : "SDGBasicNavi(\n  naviType: .pop(\n    tintColor: .neutral700,\n    onDismiss: {\n      dismiss()\n    }\n  ),\n  title: nil,\n  backgroundColor: .neutral0,\n  buttons: [\n    TopNaviButtonOption(\n      image: Image(sdg: .icNaviDrawer),\n      tintColor: .neutral700,\n      touchUpInside: onMenuTap\n    )\n  ]\n)",
+        "file" : "SampleApp/Sources/DemoViews/Guide/SDGGuideDetailView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGBottomButton" : [
+      {
+        "code" : "SDGBottomButton(\n  option: .init(type: .primary, spec: .full, title: \"Primary\"),\n  action: { }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Button/SDGBottomButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBottomButton(\n  option: .init(type: .neutral, spec: .full, title: \"Neutral\"),\n  action: { }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Button/SDGBottomButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBottomButton(\n  option: .init(type: .point, spec: .full, title: \"Point\"),\n  action: { }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Button/SDGBottomButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBottomButton(\n  option: state.previewOption,\n  isDisable: state.isPreviewDisabled,\n  action: { }\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/BottomButton/SDGBottomButtonDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGBottomPopupButton" : [
+      {
+        "code" : "SDGBottomPopupButton(\n  button: .oneOption(\n    option: .init(\n      title: \"확인\",\n      action: { print(\"확인\") }\n    )\n  ),\n  status: .active\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/Element/SDGBottomPopupButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBottomPopupButton(\n  button: .twoOptions(\n    option1: .init(\n      title: \"취소\",\n      action: { print(\"취소\") }\n    ),\n    option2: .init(\n      title: \"확인\",\n      action: { print(\"확인\") }\n    )\n  ),\n  status: .active\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/Element/SDGBottomPopupButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBottomPopupButton(\n  button: .delete(\n    option1: .init(\n      title: \"취소\",\n      action: { print(\"취소\") }\n    ),\n    option2: .init(\n      title: \"삭제\",\n      action: { print(\"삭제\") }\n    )\n  ),\n  status: .disabled\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/Element/SDGBottomPopupButton.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGBoxBadge" : [
+      {
+        "code" : "SDGBoxBadge(\n  text: \"Solid / Text only\",\n  type: .solid(.init(backgroundColor: .primary300, textColor: .neutral0)),\n  imageDirection: nil\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Badge/SDGBoxBadge.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBoxBadge(\n  text: \"Solid / Icon Left\",\n  type: .solid(.init(backgroundColor: .primary300, textColor: .neutral0)),\n  imageDirection: .left(.init(sdg: .emptyMember))\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Badge/SDGBoxBadge.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBoxBadge(\n  text: \"Solid / Icon Right\",\n  type: .solid(.init(backgroundColor: .primary300, textColor: .neutral0)),\n  imageDirection: .right(.init(sdg: .emptyMember))\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Badge/SDGBoxBadge.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBoxBadge(\n  text: badge.title,\n  type: .solid(\n    .init(\n      backgroundColor: .neutral50,\n      textColor: badge.isImplemented ? .neutral400 : .neutral250\n    )\n  )\n)",
+        "file" : "SampleApp/Sources/DemoViews/Overview/SDGOverviewView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGBoxButton" : [
+      {
+        "code" : "SDGBoxButton(\n  option: .init(\n    size: .medium,\n    title: \"테스트\",\n    color: .init(\n      backgroundColor: .neutral200,\n      textColor: .neutral600.opacity(0.3)\n    ),\n    selectedColor: .init(\n      backgroundColor: .neutral600,\n      textColor: .neutral0\n    )\n  ),\n  isSelected: .constant(false),\n  isLoading: .constant(false),\n  action: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Button/SDGBoxButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBoxButton(\n  option: .init(\n    size: .medium,\n    title: \"테스트\",\n    color: .init(\n      backgroundColor: .neutral200,\n      textColor: .neutral600.opacity(0.3)\n    ),\n    selectedColor: .init(\n      backgroundColor: .neutral600,\n      textColor: .neutral0\n    )\n  ),\n  isSelected: .constant(true),\n  isDisable: true,\n  isLoading: .constant(false),\n  action: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Button/SDGBoxButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBoxButton(\n  option: .init(\n    size: .medium,\n    icon: .left(image: Image(sdg: .icClip), color: .neutral600),\n    title: \"테스트\",\n    color: .init(\n      backgroundColor: .neutral200,\n      textColor: .neutral600.opacity(0.3)\n    ),\n    selectedColor: .init(\n      backgroundColor: .neutral600,\n      textColor: .neutral0\n    )\n  ),\n  isSelected: .constant(true),\n  isLoading: .constant(false),\n  action: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Button/SDGBoxButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBoxButton(\n  option: state.previewOption,\n  isSelected: $state.isPreviewSelected,\n  isDisable: state.isPreviewDisabled,\n  isLoading: .constant(false)\n) {\n  state.togglePreviewSelected()\n}",
+        "file" : "SampleApp/Sources/DemoViews/Component/BoxButton/SDGBoxButtonDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGBoxSearch" : [
+      {
+        "code" : "SDGBoxSearch(\n  placeHolder: \"입력\",\n  searchText: .constant(\"\"),\n  type: .soild,\n  backgroundColor: .neutral0,\n  clear: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/SearchBar/SDGBoxSearch.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBoxSearch(\n  placeHolder: \"입력\",\n  searchText: .constant(\"\"),\n  type: .line(.neutral100),\n  backgroundColor: .neutral0,\n  clear: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/SearchBar/SDGBoxSearch.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBoxSearch(\n  placeHolder: \"입력\",\n  searchText: .constant(\"\"),\n  type: .soild,\n  backgroundColor: .neutral100,\n  clear: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/SearchBar/SDGBoxSearch.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGBoxTab" : [
+      {
+        "code" : "SDGBoxTab(\n  type: .oneLine,\n  hasOutline: false,\n  list: [\n    .init(title: \"타이틀이 길어지면 줄바꿈으로 전체를 노출해줍니다 3줄이든 뭐든 다 노출\", selectedItem: nil, count: 0),\n    .init(title: \"Label\", selectedItem: nil, count: 0)\n  ],\n  selectedIndex: $firstSelectedIndex\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGBoxTab.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBoxTab(\n  type: .oneLine,\n  hasOutline: false,\n  list: [\n    .init(title: \"Label\", selectedItem: nil, count: 0),\n    .init(title: \"Label\", selectedItem: nil, count: 0),\n    .init(title: \"Label\", selectedItem: nil, count: 0)\n  ],\n  selectedIndex: $secondSelectedIndex\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGBoxTab.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGBoxTab(\n  type: .oneLine,\n  hasOutline: true,\n  list: [\n    .init(title: \"Label\", selectedItem: nil, count: 0),\n    .init(title: \"Label\", selectedItem: nil, count: 0),\n    .init(title: \"Label\", selectedItem: nil, count: 0)\n  ],\n  selectedIndex: $thirdSelectedIndex\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGBoxTab.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGButtonHeader" : [
+      {
+        "code" : "SDGButtonHeader(\n  type: .box,\n  title: .init(title: \"title\", count: 9999, isShowDropdownIcon: true),\n  buttonModel: SDGButtonHeader.ButtonModel(\n    icon: .right(image: Image(sdg: .icClip), color: .neutral0),\n    title: \"Button\",\n    color: SDGButtonColor(backgroundColor: .neutral400, textColor: .neutral0),\n    selectedColor: SDGButtonColor(backgroundColor: .neutral400, textColor: .neutral0),\n    isSelected: .constant(false),\n    isLoading: .constant(false),\n    action: { }\n  )\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/ListHeader/SDGButtonHeader.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGButtonHeader(\n  type: .capsule,\n  title: .init(title: \"title\", count: 9999, isShowDropdownIcon: true),\n  buttonModel: SDGButtonHeader.ButtonModel(\n    icon: .right(image: Image(sdg: .icClip), color: .neutral0),\n    title: \"Button\",\n    color: SDGButtonColor(backgroundColor: .neutral400, textColor: .neutral0),\n    selectedColor: SDGButtonColor(backgroundColor: .neutral400, textColor: .neutral0),\n    isSelected: .constant(false),\n    isLoading: .constant(false),\n    action: { }\n  )\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/ListHeader/SDGButtonHeader.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGCapsuleBadge" : [
+      {
+        "code" : "SDGCapsuleBadge(\n  option: .init(\n    style: .solid,\n    size: .small,\n    //        icon: .left(image: Image(systemName: \"heart.fill\"), color: .red),\n    title: \"Hello\",\n    titleColor: .white,\n    backgroundColor: .red,\n    fullSize: false\n  ),\n  action: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Badge/SDGCapsuleBadge.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGCapsuleBadge(option: .init(\n  style: .solid, size: .xsmall,\n  title: index == 0 ? \"승인\" : \"반려\",\n  titleColor: .neutral0,\n  backgroundColor: index == 0 ? .primary300 : .red300\n), action: {})",
+        "file" : "Sources/ShoplDesignGuide/Template/History/SDGCustomHistory.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGCapsuleButton" : [
+      {
+        "code" : "SDGCapsuleButton(\n  option: .init(\n    size: .medium,\n    title: \"테스트\",\n    color: .init(\n      backgroundColor: .neutral200,\n      textColor: .neutral600.opacity(0.3)\n    ),\n    selectedColor: .init(\n      backgroundColor: .neutral600,\n      textColor: .neutral0\n    )\n  ),\n  isSelected: .constant(false),\n  isLoading: .constant(false),\n  action: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Button/SDGCapsuleButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGCapsuleButton(\n  option: .init(\n    size: .medium,\n    title: \"테스트\",\n    color: .init(\n      backgroundColor: .neutral200,\n      textColor: .neutral600.opacity(0.3)\n    ),\n    selectedColor: .init(\n      backgroundColor: .neutral600,\n      textColor: .neutral0\n    )\n  ),\n  isSelected: .constant(true),\n  isDisable: true,\n  isLoading: .constant(false),\n  action: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Button/SDGCapsuleButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGCapsuleButton(\n  option: .init(\n    size: .medium,\n    icon: .left(image: Image(sdg: .icClip), color: .neutral600),\n    title: \"테스트\",\n    color: .init(\n      backgroundColor: .neutral200,\n      textColor: .neutral600.opacity(0.3)\n    ),\n    selectedColor: .init(\n      backgroundColor: .neutral600,\n      textColor: .neutral0\n    )\n  ),\n  isSelected: .constant(true),\n  isLoading: .constant(false),\n  action: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Button/SDGCapsuleButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGCapsuleButton(\n  option: state.previewOption,\n  isSelected: $state.isPreviewSelected,\n  isDisable: state.isPreviewDisabled,\n  isLoading: .constant(false)\n) {\n  state.togglePreviewSelected()\n}",
+        "file" : "SampleApp/Sources/DemoViews/Component/CapsuleButton/SDGCapsuleButtonDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGCapsuleSearch" : [
+      {
+        "code" : "SDGCapsuleSearch(\n  placeHolder: \"입력\",\n  searchText: .constant(\"\"),\n  type: .soild,\n  backgroundColor: .neutral0,\n  clearAllButtonTapped: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/SearchBar/SDGCapsuleSearch.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGCapsuleSearch(\n  placeHolder: \"입력\",\n  searchText: .constant(\"\"),\n  type: .line(.neutral100),\n  backgroundColor: .neutral0,\n  clearAllButtonTapped: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/SearchBar/SDGCapsuleSearch.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGCapsuleSearch(\n  placeHolder: \"입력\",\n  searchText: .constant(\"\"),\n  type: .soild,\n  backgroundColor: .neutral100,\n  clearAllButtonTapped: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/SearchBar/SDGCapsuleSearch.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGCategoryNavi" : [
+      {
+        "code" : "SDGCategoryNavi(\n  naviType: .pop(tintColor: nil, onDismiss: {\n    \n  }),\n  title: .init(string: \"타이틀\"),\n  backgroundColor: .neutral50,\n  buttons: [\n    .init(\n      image: Image(sdg: .icNaviFilter),\n      tintColor: .neutral700\n    )\n  ],\n  category: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGCategoryNavi.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGCategoryNavi(\n  naviType: .dismiss(tintColor: nil, onDismiss: {\n    \n  }),\n  title: .init(string: \"타이틀\"),\n  backgroundColor: .neutral50,\n  buttons: [\n    .init(\n      image: Image(sdg: .icNaviFilter),\n      tintColor: .neutral700\n    )\n  ],\n  category: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGCategoryNavi.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGCategorySearch" : [
+      {
+        "code" : "SDGCategorySearch(\n  searchText: .constant(\"\"),\n  placeholder: .constant(\"placeholder\"),\n  isFocused: .constant(false),\n  iconModel: .constant(.init(id: \"\", label: \"\", icon: Image(sdg: .icCommonDistributor))),\n  _searchTapped: { },\n  _showSearchCategoryPopup: { },\n  _clearAllButtonTapped: { }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/SearchBar/SDGCategorySearch.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGCenterPopupButton" : [
+      {
+        "code" : "SDGCenterPopupButton(\n  button: .oneOption(\n    option: .init(\n      title: \"확인\",\n      action: { print(\"확인\") }\n    )\n  ),\n  status: .active\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/Element/SDGCenterPopupButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGCenterPopupButton(\n  button: .twoOptions(\n    option1: .init(\n      title: \"취소\",\n      action: { print(\"취소\") }\n    ),\n    option2: .init(\n      title: \"확인\",\n      action: { print(\"확인\") }\n    )\n  ),\n  status: .active\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/Element/SDGCenterPopupButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGCenterPopupButton(\n  button: .delete(\n    option1: .init(\n      title: \"취소\",\n      action: { print(\"취소\") }\n    ),\n    option2: .init(\n      title: \"삭제\",\n      action: { print(\"삭제\") }\n    )\n  ),\n  status: .disabled\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/Element/SDGCenterPopupButton.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGCheckBox" : [
+      {
+        "code" : "SDGCheckBox(\n  model: .init(size: .large, status: .default)\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/CheckBox/SDGCheckBox.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGCheckBox(\n  model: .init(size: .large, status: .selected)\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/CheckBox/SDGCheckBox.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGCheckBox(\n  model: .init(size: .large, status: .disabled),\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/CheckBox/SDGCheckBox.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGCheckBox(model: item.element)",
+        "file" : "SampleApp/Sources/DemoViews/Component/CheckBox/SDGCheckBoxDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGCheckOption" : [
+      {
+        "code" : "SDGCheckOption(\n  model: .init(\n    state: .default,\n    style: .solid,\n    spec: .medim,\n    selectColor: .normal\n  ),\n  selected: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/CheckOption/SDGCheckOption.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGCheckOption(\n  model: .init(\n    state: .selected,\n    style: .solid,\n    spec: .medim,\n    selectColor: .normal\n  ),\n  selected: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/CheckOption/SDGCheckOption.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGCheckOption(\n  model: .init(\n    state: .selected,\n    style: .solid,\n    spec: .medim,\n    selectColor: .neutral\n  ),\n  selected: {\n\n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/CheckOption/SDGCheckOption.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGCheckOption(model: item.model, selected: { })",
+        "file" : "SampleApp/Sources/DemoViews/Component/CheckOption/SDGCheckOptionDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGCircularProgress" : [
+      {
+        "code" : "SDGCircularProgress(size: 44, lineWidth: 4)",
+        "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGCircularProgress.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGCircularProgress(size: 36, lineWidth: 3)",
+        "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGCircularProgress.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGCircularProgress(size: 28, lineWidth: 2.5)",
+        "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGCircularProgress.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGCustomHistory" : [
+      {
+        "code" : "SDGCustomHistory(\n  index: index,\n  totalCount: 3,\n  dotColor: index == 2 ? .neutral700 : .neutral300\n) {\n  VStack(alignment: .leading, spacing: 4) {\n    HStack(spacing: 4) {\n      Text(\"\\(index + 1)단계\")\n        .typo(.body1_SB, .neutral700)\n      SDGBoxBadge(\n        text: index == 2 ? \"협조\" : \"승인\",\n        type: .solid(.init(backgroundColor: .neutral150, textColor: .neutral600))\n      )\n      Spacer()\n      Image(sdg: .icCommonNextS)\n        .resizable().frame(width: 14, height: 14)\n    }\n    if index == 1 {\n      Text(\"추가 설명이 포함된 Header\")\n        .typo(.body2_R, .neutral400)\n    }\n  }\n // .padding(.vertical, index == 1 ? 12 : 0)\n} bodyArea: {\n  VStack(alignment: .leading, spacing: 8) {\n    if index != 1 {\n      Text(\"전원 승인 필요\")\n        .typo(.body3_SB, .neutral600)\n    }\n    VStack(alignment: .leading, spacing: 8) {\n      HStack(spacing: 8) {\n        SDGAvatar(\n          type: .round,\n          model: .init(userId: \"preview\", imageURL: nil, roleType: .leader),\n          size: .xs,\n          action: { _ in }\n        )\n        Text(\"직원명 +2\").typo(.body2_R, .neutral700)\n        Spacer()\n        if index < 2 {\n          SDGCapsuleBadge(option: .init(\n            style: .solid, size: \n…",
+        "file" : "Sources/ShoplDesignGuide/Template/History/SDGCustomHistory.swift",
+        "source" : "preview",
+        "truncated" : true
+      },
+      {
+        "code" : "SDGCustomHistory(\n  index: index,\n  totalCount: itemCount,\n  dotColor: item.id == 1 ? .red300 : .primary300\n) {\n  header(item.title, date: \"2026.09.23\")\n} bodyArea: {\n  VStack(alignment: .leading, spacing: 12) {\n    Text(item.detail)\n      .typo(.body2_R, .neutral700)\n    if item.id == 1 {\n      Button(isExpanded ? \"상세 접기\" : \"상세 펼치기\") {\n        isExpanded.toggle()\n      }\n      if isExpanded {\n        Text(String(repeating: \"추가 점검 내역입니다. 콘텐츠가 늘어나면 타임라인도 함께 늘어납니다.\\n\", count: 4))\n          .typo(.body2_R, .neutral700)\n      }\n    }\n  }\n}",
+        "file" : "SampleApp/Sources/DemoViews/Template/History/SDGCustomHistoryDemoView.swift",
+        "source" : "sample-app"
+      },
+      {
+        "code" : "SDGCustomHistory(index: index, totalCount: itemCount) {\n  header(item.title, date: \"2026.09.23\")\n}",
+        "file" : "SampleApp/Sources/DemoViews/Template/History/SDGCustomHistoryDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGDotIndicator" : [
+      {
+        "code" : "SDGDotIndicator(\n  maxStep: 5,\n  currentIndex: .constant(0)\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Indicator/SDGDotIndicator.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGDotIndicator(\n  maxStep: 5,\n  currentIndex: .constant(1)\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Indicator/SDGDotIndicator.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGDotIndicator(\n  maxStep: 5,\n  currentIndex: .constant(2)\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Indicator/SDGDotIndicator.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGDotProgress" : [
+      {
+        "code" : "SDGDotProgress(size: 4)",
+        "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGDotProgress.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGDotProgress(size: 6)",
+        "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGDotProgress.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGDotProgress(size: 8)",
+        "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGDotProgress.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGDropdown" : [
+      {
+        "code" : "SDGDropdown(\n  model: .init(\n    placeHolder: \"Hint\",\n    text: \"2023.08.04(금)\",\n    status: .selected,\n    backgroundColor: .neutral50\n  ),\n  onTap: { }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Dropdown/SDGDropdown.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGDropdown(\n  model: .init(\n    placeHolder: \"Hint\",\n    text: \"16:00\",\n    status: .selected,\n    backgroundColor: .neutral50\n  ),\n  onTap: { }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Dropdown/SDGDropdown.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGDropdown(\n  model: .init(\n    placeHolder: \"Hint\",\n    text: \"Selected\",\n    status: .selected,\n    backgroundColor: .neutral0\n  ),\n  onTap: { }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Dropdown/SDGDropdown.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGDropdown(\n  model: state.dropdownModel,\n  onTap: {\n    state.showListPopup()\n  }\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/Dropdown/SDGDropdownDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGDropdownForm" : [
+      {
+        "code" : "SDGDropdownForm(\n  title: \"타이틀\",\n  type: .empha,\n  selectedText: nil,\n  placeHolder: \"입력\",\n  disabled: .constant(true),\n  onRefresh: { },\n  onSelect: { }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Form/SDGDropdownForm.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGDropdownForm(\n  title: \"타이틀\",\n  icon: FormIconModel(image: Image(sdg: .icCommonEdit), tintColor: .neutral600),\n  type: .empha,\n  selectedText: nil,\n  placeHolder: \"입력\",\n  isRequiered: true,\n  disabled: .constant(false),\n  onRefresh: { },\n  onSelect: { }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Form/SDGDropdownForm.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGDropdownForm(\n  title: \"타이틀\",\n  icon: FormIconModel(image: Image(sdg: .icCommonEdit), tintColor: .neutral600),\n  type: .empha,\n  selectedText: \"누구누구\",\n  placeHolder: \"입력\",\n  isRequiered: true,\n  disabled: .constant(false),\n  onRefresh: { },\n  onSelect: { }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Form/SDGDropdownForm.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGFixedTab" : [
+      {
+        "code" : "SDGFixedTab(options: .two(first, second), selectedIndex: $selectedIndex)",
+        "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGFixedTab.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGFixedTab(options: .three(first, second, third), selectedIndex: $threeSelectedIndex)",
+        "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGFixedTab.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGFixedTab(\n  options: .two(first, second), selectedIndex: $selectedIndex,\n  showsBaselineDivider: true, horizontalInset: 20\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGFixedTab.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGFixedTextForm" : [
+      {
+        "code" : "SDGFixedTextForm(\n  title: \"타이틀\",\n  icon: .init(image: Image(sdg: .icClip), tintColor: .neutral500),\n  type: .normal,\n  text: .constant(\"awdawdad\"),\n  placeHolder: \"입력\",\n  inputField: .lightGray,\n  isFocused: .constant(false),\n  inputViewHeight: 104,\n  isRequiered: false,\n  isError: .constant(nil)\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Form/SDGFixedTextForm.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGFixedTextForm(\n  title: \"타이틀\",\n  icon: .init(image: Image(sdg: .icClip), tintColor: .neutral500),\n  type: .normal,\n  text: .constant(\"입력입력입력\"),\n  placeHolder: \"입력\",\n  inputField: .lightGray,\n  isFocused: .constant(false),\n  inputViewHeight: 104,\n  isRequiered: true,\n  isError: .constant(nil)\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Form/SDGFixedTextForm.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGFixedTextForm(\n  title: \"타이틀\",\n  icon: .init(image: Image(sdg: .icClip), tintColor: .neutral500),\n  type: .normal,\n  text: .constant(\"\"),\n  placeHolder: \"입력\",\n  inputField: .lightGray,\n  isFocused: .constant(false),\n  inputViewHeight: 104,\n  isRequiered: true,\n  isError: .constant(\"에러 에러에러에러에러에러에러에러에러에러에러\")\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Form/SDGFixedTextForm.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGFixedTextInput" : [
+      {
+        "code" : "SDGFixedTextInput(\n  style: style,\n  inputField: inputField,\n  state: state,\n  text: .constant(state == .default ? \"\" : text),\n  placeholder: placeholder\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/TextInput/SDGFixedTextInput.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGFloatingButton" : [
+      {
+        "code" : "SDGFloatingButton(\n  icon: Image(sdg: .icCommonCheckS),\n  iconTintColor: .neutral0,\n  isDisabled: false,\n  action: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Button/SDGFloatingButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGFloatingButton(\n  icon: Image(sdg: .icCommonCheckS),\n  iconTintColor: .neutral0,\n  isDisabled: true,\n  action: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Button/SDGFloatingButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGFloatingButton(\n  icon: Image(sdg: .icAddPlus),\n  iconTintColor: .neutral0,\n  isDisabled: state.isPreviewDisabled,\n  action: { }\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/FloatingButton/SDGFloatingButtonDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGGhostButton" : [
+      {
+        "code" : "SDGGhostButton(\n  title: \"Button\",\n  titleColor: .neutral900,\n  size: .large,\n  labelWeight: .SB,\n  status: .default,\n  iconOption: nil,\n  action: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Button/SDGGhostButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGGhostButton(\n  title: \"Button\",\n  titleColor: .neutral900,\n  size: .medium,\n  labelWeight: .SB,\n  status: .default,\n  iconOption: .init(\n    image: Image(systemName: \"heart.fill\"),\n    color: .blue,\n    position: .left,\n    downSized: false\n  ),\n  action: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Button/SDGGhostButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGGhostButton(\n  title: \"Button\",\n  titleColor: .neutral900,\n  size: .small,\n  labelWeight: .SB,\n  status: .default,\n  iconOption: .init(\n    image: Image(systemName: \"heart.fill\"),\n    color: .blue,\n    position: .right,\n    downSized: false\n  ),\n  action: {\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Button/SDGGhostButton.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGGhostButton(\n  title: state.title,\n  titleColor: .neutral600,\n  size: state.selectedSpec.buttonSize,\n  labelWeight: labelWeight,\n  status: state.status,\n  iconOption: iconPosition.map {\n    .init(\n      image: Image(sdg: .icons),\n      color: .neutral600,\n      position: $0,\n      downSized: false\n    )\n  },\n  action: { }\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/GhostButton/SDGGhostButtonDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGGuideContainer" : [
+      {
+        "code" : "SDGGuideContainer(\n  model: .init(\n    text: \"text area\",\n    textColor: .red300,\n    textAlignment: .left\n  )\n) {\n  SDGSelectForm(\n    title: \"Select Form\",\n    type: .normal,\n    inputModel: .init(\n      placeholder: \"입력\",\n      inputField: .white,\n      state: .default\n    ),\n    onRefresh: {},\n    onSelect: {}\n  )\n}",
+        "file" : "Sources/ShoplDesignGuide/Template/GuideContainer/SDGGuideContainer.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGGuideContainer(\n  model: .init(\n    text: \"right aligned text area\",\n    textColor: .neutral700,\n    textAlignment: .right\n  )\n) {\n  SDGSelectForm(\n    title: \"Select Form\",\n    type: .normal,\n    inputModel: .init(\n      placeholder: \"입력\",\n      inputField: .white,\n      state: .default\n    ),\n    onRefresh: {},\n    onSelect: {}\n  )\n}",
+        "file" : "Sources/ShoplDesignGuide/Template/GuideContainer/SDGGuideContainer.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGHistoryHeader" : [
+      {
+        "code" : "SDGHistoryHeader(\n  foregroundColor: .neutral700,\n  profileForegroundColor: .neutral50,\n  historyModel: .init(\n    id: UUID(),\n    date: \"2023.02.10(금) 11:00\",\n    title: \"재작업 요청\",\n    positionType: .first,\n    profileModel: ProfileModel(\n      avatarModel: .init(userId: \"\", imageURL: nil, roleType: .leader),\n      name: \"직원명\",\n      groupName: \"그룹명\",\n      activeStatus: .active\n    )\n  ),\n  avatarAction: { _ in\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/History/SDGHistoryHeader.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGHistoryHeader(\n  foregroundColor: .neutral700,\n  profileForegroundColor: .neutral50,\n  historyModel: .init(\n    id: UUID(),\n    date: \"2023.02.10(금) 11:00\",\n    title: \"재작업 요청\",\n    positionType: .middle,\n    profileModel: nil\n  ),\n  avatarAction: { _ in\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/History/SDGHistoryHeader.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGHistoryHeader(\n  foregroundColor: .primary300,\n  profileForegroundColor: .primary300.opacity(0.1),\n  historyModel: .init(\n    id: UUID(),\n    date: \"2023.02.10(금) 11:00\",\n    title: \"검수 성공\",\n    positionType: .middle,\n    profileModel: ProfileModel(\n      avatarModel: .init(userId: \"\", imageURL: nil, roleType: .leader),\n      name: \"직원명\",\n      groupName: \"그룹명\",\n      activeStatus: .active\n    )\n  ),\n  avatarAction: { _ in\n    \n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/History/SDGHistoryHeader.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGIconHeader" : [
+      {
+        "code" : "SDGIconHeader(\n  type: .box,\n  title: .init(title: \"TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle\", count: 1, isShowDropdownIcon: true),\n  icons: [.init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400)],\n  selectedIcon: { _ in }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/ListHeader/SDGIconHeader.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGIconHeader(\n  type: .box,\n  title: .init(title: \"Title\", count: 1, isShowDropdownIcon: true),\n  icons: [\n    .init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400),\n    .init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400)\n  ],\n  selectedIcon: { _ in }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/ListHeader/SDGIconHeader.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGIconHeader(\n  type: .box,\n  title: .init(title: \"Title\", count: 1, isShowDropdownIcon: true),\n  icons: [\n    .init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400),\n    .init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400),\n    .init(id: UUID().uuidString, icon: Image(sdg: .icClip), tintColor: .neutral400)\n  ],\n  selectedIcon: { _ in }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/ListHeader/SDGIconHeader.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGIconLabel" : [
+      {
+        "code" : "SDGIconLabel(\n  size: .medium(isBold: false),\n  leftImage: Image(sdg: .icCommonWarning),\n  title: \"이 직원에 대한 출퇴근 현황 조회 권한이 없습니다.\",\n  imageForegroundColor: .neutral400,\n  titleColor: .neutral400,\n  lineLimit: 1,\n  fullSize: true\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/IconLabel/SDGIconLabel.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGIconLabel(\n  size: .medium(isBold: false),\n  leftImage: Image(sdg: .icCommonWarning),\n  title: \"선택한 항목 중, 스케줄 배정 규칙에 어긋난 스케줄 변경 신청 건이 있습니다.\",\n  imageForegroundColor: .red300,\n  titleColor: .red300,\n  fullSize: true\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/IconLabel/SDGIconLabel.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGIconLabel(\n  size: .medium(isBold: false),\n  rightImage: Image(sdg: .icView),\n  title: \"고정\",\n  imageForegroundColor: .neutral400,\n  titleColor: .neutral400,\n  lineLimit: 1\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/IconLabel/SDGIconLabel.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGIconTab" : [
+      {
+        "code" : "SDGIconTab(\n  option: .three(item(0), item(1), item(2)),\n  selectedIndex: threeSelectedIndex,\n  onItemTapped: { threeSelectedIndex = $0 }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGIconTab.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGIconTab(\n  option: .four(item(0), item(1), item(2), item(3)),\n  selectedIndex: fourSelectedIndex,\n  onItemTapped: { fourSelectedIndex = $0 }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGIconTab.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGIconTab(\n  option: .five(item(0), item(1), item(2), item(3), item(4)),\n  selectedIndex: fiveSelectedIndex,\n  onItemTapped: { fiveSelectedIndex = $0 }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGIconTab.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGIconTab(\n  option: state.option,\n  selectedIndex: state.selectedIndex,\n  onItemTapped: state.tabClicked\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/Tab/SDGIconTabDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGLinearProgress" : [
+      {
+        "code" : "SDGLinearProgress(\n  isComplete: .constant(true),\n  title: \"업로드 중입니다.\"\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGLinearProgress.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGListHeaderLabel" : [
+      {
+        "code" : "SDGListHeaderLabel(\n\t\tmodel: .init(\n\t\t  title: \"타이틀\",\n\t\t  count: 0,\n\t\t  isShowDropdownIcon: true\n\t\t)\n\t  )",
+        "file" : "Sources/ShoplDesignGuide/Component/ListHeaderLabel/SDGListHeaderLabel.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGListHeaderLabel(\n\t\tmodel: .init(\n\t\t  title: \"타이틀\",\n\t\t  count: 2,\n\t\t  isShowDropdownIcon: false\n\t\t)\n\t  )",
+        "file" : "Sources/ShoplDesignGuide/Component/ListHeaderLabel/SDGListHeaderLabel.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGListHeaderLabel(\n\t\tmodel: .init(\n\t\t  title: \"타이틀 엄청 긴 텍스트입니다아아아아아아아\",\n\t\t  count: nil,\n\t\t  isShowDropdownIcon: true\n\t\t)\n\t  )",
+        "file" : "Sources/ShoplDesignGuide/Component/ListHeaderLabel/SDGListHeaderLabel.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGNaviFilterChip" : [
+      {
+        "code" : "SDGNaviFilterChip(\n  filters: [\n    .init(id: UUID().uuidString, title: \"필터명\", count: 3),\n    .init(id: UUID().uuidString, title: \"필터명\", count: 1),\n    .init(id: UUID().uuidString, title: \"필터명\", count: 1)\n  ],\n  refresh: { },\n  remove: { _ in }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/FilterChip/SDGNaviFilterChip.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGNaviFilterChip(\n  filters: [\n    .init(id: UUID().uuidString, title: \"필터명이 길어져도 모두 노출gkgkgkgkgk\", count: 3),\n    .init(id: UUID().uuidString, title: \"필터명\", count: 1),\n    .init(id: UUID().uuidString, title: \"필터명\", count: 1),\n    .init(id: UUID().uuidString, title: \"필터명\", count: 9999)\n  ],\n  refresh: { },\n  remove: { _ in }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/FilterChip/SDGNaviFilterChip.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGNaviFilterChip(\n  filters: [\n    .init(id: UUID().uuidString, title: \"필터명\", count: 3),\n    .init(id: UUID().uuidString, title: \"필터명\", count: 1),\n    .init(id: UUID().uuidString, title: \"필터명\", count: 1)\n  ],\n  backgroundColor: .neutral0,\n  refresh: { },\n  remove: { _ in }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/FilterChip/SDGNaviFilterChip.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGNumberIndicator" : [
+      {
+        "code" : "SDGNumberIndicator(\n  maxStep: 5,\n  currentIndex: .constant(0)\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Indicator/SDGNumberIndicator.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGNumberIndicator(\n  maxStep: 5,\n  currentIndex: .constant(1)\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Indicator/SDGNumberIndicator.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGNumberIndicator(\n  maxStep: 5,\n  currentIndex: .constant(2)\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Indicator/SDGNumberIndicator.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGNumberPicker" : [
+      {
+        "code" : "SDGNumberPicker(\n  type: .one(\n    $selectedHour,\n    Array(0...maxHour)\n  )\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/NumberPicker/SDGNumberPicker.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGNumberPicker(\n  type: .two(\n    $selectedHour,\n    Array(0...maxHour),\n    $selectedMinute,\n    Array(stride(from: 0, to: 60, by: minuteInterval))\n  )\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/NumberPicker/SDGNumberPicker.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGNumberPicker(\n  type: .one(\n    $state.selectedValue,\n    state.oneOptionValues\n  )\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/NumberPicker/SDGNumberPickerDemoView.swift",
+        "source" : "sample-app"
+      },
+      {
+        "code" : "SDGNumberPicker(\n  type: .two(\n    $state.selectedFirstValue,\n    state.firstOptionValues,\n    $state.selectedSecondValue,\n    state.secondOptionValues\n  )\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/NumberPicker/SDGNumberPickerDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGPhotoThumbnailGrid" : [
+      {
+        "code" : "SDGPhotoThumbnailGrid(\n  photos: [\n    .init(id: \"image-0\", image: Image(sdg: .profileSmall))\n  ],\n  onDelete: { _ in },\n  onThumbnailTapped: { _ in },\n  onRemainingCountTapped: {}\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/PhotoThumbnailGrid/SDGPhotoThumbnailGrid.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGPhotoThumbnailGrid(\n  photos: (0..<5).map {\n    .init(id: \"image-\\($0)\", image: Image(sdg: .profileSmall))\n  },\n  rowCount: 1,\n  onDelete: { _ in },\n  onThumbnailTapped: { _ in },\n  onRemainingCountTapped: {}\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/PhotoThumbnailGrid/SDGPhotoThumbnailGrid.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGPhotoThumbnailGrid(\n  photos: (0..<8).map {\n    .init(id: \"image-\\($0)\", image: Image(sdg: .profileSmall))\n  },\n  rowCount: 2,\n  layout: .lazyGrid,\n  onThumbnailTapped: { _ in },\n  onRemainingCountTapped: {}\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/PhotoThumbnailGrid/SDGPhotoThumbnailGrid.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGPopupBodyText" : [
+      {
+        "code" : "SDGPopupBodyText(\n  bodyText: \"내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용\",\n  labelWeight: .R,\n  color: .neutral700,\n  alignment: .leading\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/BottomPopup/SDGBottomPopup.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGRadio" : [
+      {
+        "code" : "SDGRadio(\n  model: .init(status: .default, spec: .large)\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Radio/SDGRadio.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGRadio(\n  model: .init(status: .selected, spec: .large)\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Radio/SDGRadio.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGRadio(\n  model: .init(status: .disabled, spec: .large)\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Radio/SDGRadio.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGRadio(\n  model: item.model\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/Radio/SDGRadioDemoView.swift",
+        "source" : "sample-app"
+      },
+      {
+        "code" : "SDGRadio(\n  model: SDGRadio.Model(\n    status: state.selectedStatus == status ? .selected : .default,\n    spec: .medium,\n    isPrimaryColor: false\n  ),\n  selected: { }\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/Toggle/SDGToggleDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGRadioLabel" : [
+      {
+        "code" : "SDGRadioLabel(\n  model: RadioLabelModel(\n    id: UUID().uuidString,\n    isSelected: false,\n    isLabelColorPrimary: false,\n    isSelectedColorNeturel: false,\n    isDisabled: false,\n    title: \"타이틀\"\n  ),\n  onTap: { _ in }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/RadioLabel/SDGRadioLabel.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGRadioLabel(\n  model: RadioLabelModel(\n    id: UUID().uuidString,\n    isSelected: false,\n    isLabelColorPrimary: false,\n    isSelectedColorNeturel: false,\n    isDisabled: true,\n    title: \"타이틀\"\n  ),\n  onTap: { _ in }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/RadioLabel/SDGRadioLabel.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGRadioLabel(\n  model: RadioLabelModel(\n    id: UUID().uuidString,\n    isSelected: true,\n    isLabelColorPrimary: true,\n    isSelectedColorNeturel: false,\n    isDisabled: false,\n    title: \"타이틀\"\n  ),\n  onTap: { _ in }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/RadioLabel/SDGRadioLabel.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGRadioLabel(\n  model: RadioLabelModel(\n    id: demoState.id,\n    isSelected: state.selectedStateIndex == index,\n    isSelectedColorNeturel: true,\n    title: demoState.title\n  ),\n  onTap: { _ in\n    state.selectedStateIndex = index\n  }\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/BottomButton/SDGBottomButtonDemoView.swift",
+        "source" : "sample-app"
+      },
+      {
+        "code" : "SDGRadioLabel(\n  model: RadioLabelModel(\n    id: status.id,\n    isSelected: state.selectedStatus == status,\n    isSelectedColorNeturel: true,\n    title: status.title\n  ),\n  onTap: { _ in\n    state.selectedStatus = status\n  }\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/CheckBox/SDGCheckBoxDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGScrollTab" : [
+      {
+        "code" : "SDGScrollTab(\n  style: style,\n  size: size,\n  items: (0..<itemCount).map { index in\n    .init(\n      id: String(index),\n      title: longTitle && index == 0\n        ? \"긴 라벨도 한 줄에 전체 표시하고 수평 스크롤로 탐색합니다\"\n        : \"Label\"\n    )\n  },\n  selectedIndex: selectedIndex,\n  horizontalPadding: 16,\n  showsBaselineDivider: showsBaselineDivider,\n  onItemTapped: { selectedIndex = $0 }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGScrollTab.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGScrollTab(\n  style: style,\n  size: size,\n  items: (0..<itemCount).map { .init(id: String($0), title: \"Label \\($0 + 1)\") },\n  selectedIndex: selectedIndex,\n  horizontalPadding: 16,\n  onItemTapped: { selectedIndex = $0 }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGScrollTab.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGScrollTab(\n  size: size,\n  items: items,\n  selectedIndex: selectedIndex,\n  horizontalPadding: 16,\n  showsBaselineDivider: showsBaselineDivider,\n  onItemTapped: { index in\n    lastClickedIndex = index\n    if acceptsSelection {\n      selectedIndex = index\n    }\n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGScrollTab.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGScrollTab(\n  type: .text,\n  list: typeTabModels,\n  selectedIndex: $state.selectedTypeIndex\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/AttachmentElement/SDGAttachmentElementDemoView.swift",
+        "source" : "sample-app"
+      },
+      {
+        "code" : "SDGScrollTab(\n  type: .text,\n  list: roleTabModels,\n  selectedIndex: $state.selectedRoleIndex,\n  horizontalPadding: 16\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/Avatar/SDGAvatarDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGSearchNavi" : [
+      {
+        "code" : "SDGSearchNavi(\n  leadingButton:  .init(\n    image: SDG.Image.icNaviBack.image,\n    tintColor: .black,\n    touchUpInside: {}\n  ),\n  textFieldType: .capsule,\n  trailingButton: .init(\n    image: SDG.Image.icNaviClose.image,\n    tintColor: .black,\n    touchUpInside: {}\n  ),\n  backgroundColor: .neutral50,\n  placeHolder: \"이름/사번/휴대폰번호\",\n  text: .constant(\"\"),\n  search: { text in\n    print(\"search: \\(text)\")\n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGSearchNavi.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGSearchNavi(\n  leadingButton: nil,\n  textFieldType: .category(icon: .init(id: \"d\", label: \"tt\", icon: SDG.Image.icAlignup.image), showSearchCategoryPopup: {\n    print(\"7870 tap\")\n  }),\n  trailingButton: .init(\n    image: SDG.Image.icNaviClose.image,\n    tintColor: .black,\n    touchUpInside: {}\n  ),\n  backgroundColor: .neutral50,\n  placeHolder: \"이름/사번/휴대폰번호\",\n  text: .constant(\"\"),\n  search: { text in\n    print(\"search: \\(text)\")\n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGSearchNavi.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGSearchNavi(\n  leadingButton:  .init(\n    image: SDG.Image.icNaviBack.image,\n    tintColor: .black,\n    touchUpInside: {}\n  ),\n  textFieldType: .capsule,\n  trailingButton: nil,\n  backgroundColor: .neutral50,\n  placeHolder: \"이름/사번/휴대폰번호\",\n  text: .constant(\"\"),\n  search: { text in\n    print(\"search: \\(text)\")\n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGSearchNavi.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGSegment" : [
+      {
+        "code" : "SDGSegment(\n  selectedSegmentIndex: $selectionFixedOne,\n  textLine: .one,\n  items: optionsOneLine,\n  style: .fixed\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Segment/SDGSegment.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGSegment(\n  selectedSegmentIndex: $selectionFixedTwo,\n  textLine: .two,\n  items: optionsTwoLine,\n  style: .fixed\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Segment/SDGSegment.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGSegment(\n  selectedSegmentIndex: $selectionDynamicOne,\n  textLine: .one,\n  items: optionsOneLine,\n  style: .dynamic\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Segment/SDGSegment.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGSegment(\n  selectedSegmentIndex: .constant(0),\n  textLine: .one,\n  items: [\"Label\", \"Label\"]\n)",
+        "file" : "SampleApp/Sources/DemoViews/Common/SDGSampleBottomSheet.swift",
+        "source" : "sample-app"
+      },
+      {
+        "code" : "SDGSegment(\n  selectedSegmentIndex: .constant(0),\n  textLine: .one,\n  items: [\"Basic\", \"Simple\"]\n)",
+        "file" : "SampleApp/Sources/DemoViews/Common/SDGSampleBottomSheetControls.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGSelectForm" : [
+      {
+        "code" : "SDGSelectForm(\n  title: \"타이틀\",\n  type: .empha,\n  inputModel: .init(\n    placeholder: \"입력\",\n    inputField: .gray,\n    state: .default\n  ),\n  onRefresh: { },\n  onSelect: { }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Form/SDGSelectForm.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGSelectForm(\n  title: \"타이틀\",\n  iconList: [FormIconModel(image: Image(sdg: .icCommonEdit), tintColor: .neutral400)],\n  type: .empha,\n  isRequiered: true,\n  inputModel: .init(\n    placeholder: \"입력\",\n    inputField: .gray,\n    state: .default\n  ),\n  onRefresh: { },\n  onSelect: { }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Form/SDGSelectForm.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGSelectForm(\n  title: \"타이틀\",\n  iconList: [FormIconModel(image: Image(sdg: .icCommonEdit), tintColor: .neutral600)],\n  type: .empha,\n  isRequiered: true,\n  inputModel: .init(\n    selectedElements: [.init(text: \"입력했음\")],\n    placeholder: \"입력\",\n    inputField: .gray,\n    state: .selected\n  ),\n  onRefresh: { },\n  onSelect: { }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Form/SDGSelectForm.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGSelectInput" : [
+      {
+        "code" : "SDGSelectInput(model: model, onClearTapped: connectsClearAction ? {} : nil) { }",
+        "file" : "Sources/ShoplDesignGuide/Component/SelelctInput/SDGSelectInputPreview.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGSelectInput(\n  model: SelectInputPreviewSamples.model(\n    state: state.value,\n    elements: hasSelection ? [.init(text: \"Selected Text\")] : [],\n    showClearIcon: showClearIcon\n  ),\n  onClearTapped: {\n    hasSelection = false\n    state = .default\n    clearTapCount += 1\n  }\n) {\n  hasSelection = true\n  state = .selected\n  selectionTapCount += 1\n}",
+        "file" : "Sources/ShoplDesignGuide/Component/SelelctInput/SDGSelectInputPreview.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGSimpleInput" : [
+      {
+        "code" : "SDGSimpleInput(\n  style: style,\n  inputField: inputField,\n  state: state,\n  text: .constant(state == .default ? \"\" : text),\n  placeholder: placeholder\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/TextInput/SDGSimpleInput.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGSystemProgress" : [
+      {
+        "code" : "SDGSystemProgress()",
+        "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGSystemProgress.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGSystemProgress(color: .neutral700)",
+        "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGSystemProgress.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGTextIndicator" : [
+      {
+        "code" : "SDGTextIndicator(\n  maxStep: 5,\n  currentIndex: .constant(0),\n  title: \"Label\"\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Indicator/SDGTextIndicator.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGTextIndicator(\n  maxStep: 5,\n  currentIndex: .constant(1),\n  title: \"Label\"\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Indicator/SDGTextIndicator.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGTextIndicator(\n  maxStep: 5,\n  currentIndex: .constant(2),\n  title: \"Label\"\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Indicator/SDGTextIndicator.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGTextNavi" : [
+      {
+        "code" : "SDGTextNavi(\n  naviType: .full(\n    left: .init(image: Image(sdg: .icCommonCompany), action: { }),\n    title: .init(\n      text: \"Title이 꽤 기다란 Title인데 이게 두줄 이상은 또 안보여야 돼\",\n      color: .neutral700\n    ),\n    right: .init(image: Image(sdg: .icCommonCompany), text: \"Text더 길어지는\", action: { })\n  ),\n  backgroundColor: .neutral100\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGTextNavi.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGTextNavi(\n  naviType: .back(\n    back: { },\n    title: .init(\n      text: \"Title이 꽤 기다란 Title인데 이게 두줄 이상은 또 안보여야 돼\",\n      color: .neutral700\n    ),\n    right: .init(image: Image(sdg: .icCommonCompany), text: \"Text더 길어지는\", action: { })\n  ),\n  backgroundColor: .neutral100\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGTextNavi.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGTextNavi(\n  naviType: .text(\n    title: .init(\n      text: \"Title이 꽤 기다란 Title인데 이게 두줄 이상은 또 안보여야 돼\",\n      color: .neutral700\n    ),\n    right: .init(image: Image(sdg: .icCommonCompany), text: \"Text더 길어지는\", action: { })\n  ),\n  backgroundColor: .neutral100\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGTextNavi.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGThumbnails" : [
+      {
+        "code" : "SDGThumbnails(\n  thumbnails: [\n    .init(id: \"photo-0\", image: Image(sdg: .avatarEmptyDot))\n  ],\n  onDelete: { _ in },\n  onThumbnailTapped: { _ in },\n  onRemainingCountTapped: {}\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Thumbnails/SDGThumbnails.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGThumbnails(\n  thumbnails: (0..<4).map {\n    .init(id: \"video-\\($0)\", image: Image(sdg: .avatarEmptyDot))\n  },\n  type: .video,\n  onThumbnailTapped: { _ in }\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Thumbnails/SDGThumbnails.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGThumbnails(\n  thumbnails: (0..<8).map {\n    .init(id: \"photo-\\($0)\", image: Image(sdg: .avatarEmptyDot))\n  },\n  rowCount: 1,\n  layout: .lazyGrid,\n  onThumbnailTapped: { _ in },\n  onRemainingCountTapped: {}\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/Thumbnails/SDGThumbnails.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGTimePicker" : [
+      {
+        "code" : "SDGTimePicker(selectedDate: $selectedDate)",
+        "file" : "Sources/ShoplDesignGuide/Component/Time/SDGTimePicker.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGTimeSelectForm" : [
+      {
+        "code" : "SDGTimeSelectForm(\n  title: \"타이틀\",\n  icon: .init(image: Image(sdg: .avatarEmpty), tintColor: .neutral500),\n  type: .empha,\n  status: .constant(.default),\n  startTime: nil,\n  endTime: nil,\n  startPlaceHolder: \"시간\",\n  endPlaceHolder: \"시간\",\n  onRefresh: { },\n  onSelect: { }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Form/SDGTimeSelectForm.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGTimeSelectForm(\n  title: \"타이틀\",\n  icon: .init(image: Image(sdg: .avatarEmpty), tintColor: .neutral500),\n  type: .empha,\n  status: .constant(.default),\n  startTime: \"1:11\",\n  endTime: \"2:22\",\n  startPlaceHolder: \"시간\",\n  endPlaceHolder: \"시간\",\n  onRefresh: { },\n  onSelect: { }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Form/SDGTimeSelectForm.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGTimeSelectForm(\n  title: \"타이틀\",\n  icon: .init(image: Image(sdg: .avatarEmpty), tintColor: .neutral500),\n  type: .empha,\n  status: .constant(.error(\" 시간입력 오류  시간입력 오류 시간입력 오류 시간입력 오류 시간입력 오류 시간입력 오류 \")),\n  startTime: \"1:11\",\n  endTime: \"2:22\",\n  startPlaceHolder: \"시간\",\n  endPlaceHolder: \"시간\",\n  onRefresh: { },\n  onSelect: { }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Form/SDGTimeSelectForm.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGTimeSelectInput" : [
+      {
+        "code" : "SDGTimeSelectInput(\n  status: .constant(.`default`),\n  startTime: nil,\n  endTime: nil,\n  startPlaceholder: \"시간\",\n  endPlaceholder: \"시간\"\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/TimeSelectInput/SDGTimeSelectInput.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGTimeSelectInput(\n  status: .constant(.`default`),\n  startTime: \"1:11\",\n  endTime: \"2.22\",\n  startPlaceholder: \"시간\",\n  endPlaceholder: \"시간\"\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/TimeSelectInput/SDGTimeSelectInput.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGTimeSelectInput(\n  status: .constant(.error(\"에러에러에러에러\")),\n  startTime: \"1:11\",\n  endTime: \"2.22\",\n  startPlaceholder: \"시간\",\n  endPlaceholder: \"시간\"\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/TimeSelectInput/SDGTimeSelectInput.swift",
+        "source" : "preview"
+      }
+    ],
+    "SDGToggle" : [
+      {
+        "code" : "SDGToggle(size: .m, isEnabled: true, onColorType: .primary, isOn: .constant(false))",
+        "file" : "Sources/ShoplDesignGuide/Component/Toggle/SDGToggle.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGToggle(size: .m, isEnabled: true, onColorType: .primary, isOn: .constant(true))",
+        "file" : "Sources/ShoplDesignGuide/Component/Toggle/SDGToggle.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGToggle(size: .m, isEnabled: false, onColorType: .primary, isOn: .constant(false))",
+        "file" : "Sources/ShoplDesignGuide/Component/Toggle/SDGToggle.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGToggle(size: .m, isOn: .constant(true))",
+        "file" : "SampleApp/Sources/DemoViews/Common/SDGSampleBottomSheet.swift",
+        "source" : "sample-app"
+      },
+      {
+        "code" : "SDGToggle(size: .m, isOn: .constant(false))",
+        "file" : "SampleApp/Sources/DemoViews/Common/SDGSampleBottomSheetControls.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "SDGUnderlineInput" : [
+      {
+        "code" : "SDGUnderlineInput(\n  placeHolder: \"placeHolder\",\n  text: .constant(\"\"),\n  option: .constant(\n    .init(\n      messages: [\"dd\", \"d\"],\n      validateMessages: [\n        .init(\n          status: .notSolved,\n          message: \"dd\"\n        )\n      ]\n    )\n  ),\n  isFocused: .constant(false),\n  isSecureTextEntry: false\n)",
+        "file" : "Sources/ShoplDesignGuide/Component/TextInput/SDGUnderlineInput.swift",
+        "source" : "preview"
+      }
+    ],
+    "View.bottomPopup" : [
+      {
+        "code" : ".bottomPopup(\n  isPresented: showScrollablePopup,\n  title: .init(\n    title: \"타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀\",\n    color: .neutral400,\n    alignment: .leading\n  ),\n  body: {\n    VStack(spacing: 0) {\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n    }\n    .frame(maxWidth: .infinity)\n  },\n  button: .init(\n    button: .twoOptions(\n      option1: .init(\n        title: \"취소취소취소취소취소취소취소취소취소취소취소취소\",\n        action: {\n          showScrollablePopup.toggle()\n        }\n      ),\n      option2: .init(\n        title: \"확인확인확인확인확인확인확인확인확인확인확인확인\",\n        action: {\n          showScrollablePopup.toggle()\n        }\n      )\n    ),\n    status: .disabled\n  )\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/BottomPopup/SDGBottomPopup.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : ".bottomPopup(\n  isPresented: showPopup,\n  title: .init(\n    title: \"타이틀\",\n    color: .neutral400,\n    alignment: .leading\n  ),\n  body: {\n    SDGPopupBodyText(\n      bodyText: \"내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용\",\n      labelWeight: .R,\n      color: .neutral700,\n      alignment: .leading\n    )\n  },\n  button: .init(\n    button: .oneOption(\n      option: .init(\n        title: \"확인\",\n        action: {\n          showPopup.toggle()\n        }\n      )\n    )\n  ),\n  tapOutsideAction: {\n    showPopup.toggle()\n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/BottomPopup/SDGBottomPopup.swift",
+        "source" : "preview"
+      }
+    ],
+    "View.centerConfirmPopup" : [
+      {
+        "code" : ".centerConfirmPopup(\n  isPresented: showPopup,\n  title: \"타이틀\",\n  bodyText: \"내용\",\n  leftButtonOption: .init(\n    title: \"취소\",\n    action: { showPopup.toggle() }),\n  rightButtonOption: .init(\n    title: \"확인\",\n    action: { showPopup.toggle() }\n  )\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/CenterPopup/Variants/SDGConfirmPopup.swift",
+        "source" : "preview"
+      }
+    ],
+    "View.centerDeletePopup" : [
+      {
+        "code" : ".centerDeletePopup(\n  isPresented: showPopup,\n  title: \"타이틀\",\n  bodyText: \"내용\",\n  leftButtonOption: .init(\n    title: \"취소\",\n    action: { showPopup.toggle() }),\n  deleteButtonAction: { showPopup.toggle() }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/CenterPopup/Variants/SDGDeletePopup.swift",
+        "source" : "preview"
+      }
+    ],
+    "View.centerInfoPopup" : [
+      {
+        "code" : ".centerInfoPopup(\n  isPresented: showPopup,\n  title: \"타이틀\",\n  bodyText: \"내용\",\n  buttonOption: .init(\n    title: \"확인\",\n    action: { showPopup.toggle() }\n  )\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/CenterPopup/Variants/SDGInfoPopup.swift",
+        "source" : "preview"
+      }
+    ],
+    "View.centerInputPopup" : [
+      {
+        "code" : ".centerInputPopup(\n  isPresented: showPopup,\n  title: \"타이틀\",\n  bodyText: \"내용\",\n  inputTitle: \"인풋 타이틀\",\n  placeholder: \"플레이스홀더\",\n  input: $input,\n  leftButtonOption: .init(\n    title: \"취소\",\n    action: { showPopup.toggle() }\n  ),\n  rightButtonOption: .init(\n    title: \"확인\",\n    action: { showPopup.toggle() }\n  )\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/CenterPopup/Variants/SDGInputPopup.swift",
+        "source" : "preview"
+      }
+    ],
+    "View.centerPopup" : [
+      {
+        "code" : ".centerPopup(\n  isPresented: showScrollablePopup,\n  title: .init(\n    title: \"타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀타이틀\",\n    color: .neutral400,\n    alignment: .leading\n  ),\n  body: {\n    VStack(spacing: 0) {\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n      Text(\"길어지면\")\n    }\n    .frame(maxWidth: .infinity)\n  },\n  button: .init(\n    button: .twoOptions(\n      option1: .init(\n        title: \"취소취소취소취소취소취소취소취소취소취소취소취소\",\n        action: {\n          showScrollablePopup.toggle()\n        }\n      ),\n      option2: .init(\n        title: \"확인확인확인확인확인확인확인확인확인확인확인확인\",\n        action: {\n          showScrollablePopup.toggle()\n        }\n      )\n    ),\n    status: .disabled\n  )\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/CenterPopup/SDGCenterPopup.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : ".centerPopup(\n  isPresented: showPopup,\n  title: .init(\n    title: \"타이틀\",\n    color: .neutral400,\n    alignment: .leading\n  ),\n  body: {\n    SDGPopupBodyText(\n      bodyText: \"내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용\",\n      labelWeight: .R,\n      color: .neutral700,\n      alignment: .leading\n    )\n  },\n  button: .init(\n    button: .oneOption(\n      option: .init(\n        title: \"확인\",\n        action: {\n          showPopup.toggle()\n        }\n      )\n    )\n  )\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/CenterPopup/SDGCenterPopup.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : ".centerPopup(\n  isPresented: isPreviewPopupPresented,\n  title: nil,\n  body: {\n    if let selectedGroup {\n      SDGTypographyPreviewPopupBody(group: selectedGroup)\n    }\n  },\n  button: .init(\n    button: .oneOption(\n      option: .init(\n        title: \"닫기\",\n        action: {\n          dismissPreviewPopup()\n        }\n      )\n    )\n  ),\n  tapOutsideAction: {\n    dismissPreviewPopup()\n  }\n)",
+        "file" : "SampleApp/Sources/DemoViews/Foundation/SDGTypoGraphyDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "View.iconPopup" : [
+      {
+        "code" : ".iconPopup(\n  isPresented: showPopup,\n  icon: {\n    Image(systemName: \"exclamationmark.triangle.fill\")\n      .frame(width: 20, height: 20)\n      .padding(10)\n      .background(.neutral100)\n      .cornerRadius(8)\n  },\n  iconAlignment: .leading,\n  title: .init(\n    title: \"타이틀\",\n    color: .neutral400,\n    alignment: .leading\n  ),\n  subText: .init(\n    bodyText: \"내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용\",\n    labelWeight: .R,\n    color: .neutral700,\n    alignment: .leading\n  ),\n  button: .init(\n    button: .twoOptions(\n      option1: .init(\n        title: \"취소\",\n        action: {\n          showPopup.toggle()\n        }\n      ),\n      option2: .init(\n        title: \"확인\",\n        action: {\n          showPopup.toggle()\n        }\n      )\n    )\n  )\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/IconPopup/SDGIconPopup.swift",
+        "source" : "preview"
+      }
+    ],
+    "View.listPopup" : [
+      {
+        "code" : ".listPopup(\n  isPresented: showScrollablePopup,\n  list:[\n    .init(id: UUID().uuidString, title: \"내용이 길어지면 전체 노출 내용이 길어지면 전체 노출 내용이 길어지면 전체 노출\"),\n    .init(id: UUID().uuidString, title: \"1\"),\n    .init(id: UUID().uuidString, title: \"2\"),\n    .init(id: UUID().uuidString, title: \"3\"),\n    .init(id: UUID().uuidString, title: \"4\"),\n    .init(id: UUID().uuidString, title: \"5\"),\n    .init(id: UUID().uuidString, title: \"6\"),\n    .init(id: UUID().uuidString, title: \"7\"),\n    .init(id: UUID().uuidString, title: \"8\"),\n    .init(id: UUID().uuidString, title: \"9\"),\n    .init(id: UUID().uuidString, title: \"10\"),\n    .init(id: UUID().uuidString, title: \"11\"),\n    .init(id: UUID().uuidString, title: \"12\"),\n    .init(id: UUID().uuidString, title: \"13\"),\n    .init(id: UUID().uuidString, title: \"delete\", status: .delete)\n  ],\n  selectAction: { id in\n    showScrollablePopup.toggle()\n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/ListPopup/SDGListPopup.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : ".listPopup(\n  isPresented: showPopup,\n  list:\n    list.map {\n      .init(id: $0, title: $0, status: $0 == selectedID ? .selected : .default)\n    },\n  selectAction: { id in\n    showPopup.toggle()\n    selectedID = id\n  }\n)",
+        "file" : "Sources/ShoplDesignGuide/Template/Popup/ListPopup/SDGListPopup.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : ".listPopup(\n  isPresented: state.isListPopupPresented,\n  list: state.listPopupItems,\n  selectAction: { id in\n    state.selectOption(id: id)\n  },\n  tapOutsideAction: {\n    state.hideListPopup()\n  }\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/Dropdown/SDGDropdownDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "View.multiTimePicker" : [
+      {
+        "code" : ".multiTimePicker(\n  isPresented: state.isPresented,\n  title: state.title,\n  type: state.pickerType,\n  cancelTitle: \"Cancel\",\n  confirmTitle: \"Confirm\",\n  cancelAction: {\n    state.cancel()\n  },\n  confirmAction: {\n    state.confirm($0)\n  },\n  tapOutsideAction: {\n    state.cancel()\n  }\n)",
+        "file" : "SampleApp/Sources/DemoViews/Template/MultiTimePicker/SDGMultiTimePickerDemoView.swift",
+        "source" : "sample-app"
+      }
+    ],
+    "View.systemProgress" : [
+      {
+        "code" : ".systemProgress(isLoading: .constant(true))",
+        "file" : "Sources/ShoplDesignGuide/Component/Progress/Modifier/systemProgress.swift",
+        "source" : "preview"
+      }
+    ],
+    "View.typo" : [
+      {
+        "code" : ".typo(.body1_SB, .neutral500)",
+        "file" : "Sources/ShoplDesignGuide/Component/Radio/SDGRadio.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : ".typo(.body2_R, .neutral500)",
+        "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGScrollTab.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : ".typo(.body3_SB, .neutral500)",
+        "file" : "Sources/ShoplDesignGuide/Component/Tab/SDGScrollTab.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : ".typo(.title2_SB, .neutral700)",
+        "file" : "SampleApp/Sources/AppView.swift",
+        "source" : "sample-app"
+      },
+      {
+        "code" : ".typo(.body2_SB, .neutral350)",
+        "file" : "SampleApp/Sources/AppView.swift",
+        "source" : "sample-app"
+      }
+    ]
+  },
+  "sources" : [
+    "Sources/ShoplDesignGuide (#Preview)",
+    "SampleApp/Sources"
+  ]
+}

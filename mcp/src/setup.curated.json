@@ -1,0 +1,16 @@
+{
+  "_note": "사람이 직접 관리하는 유일한 파일. 설치 절차·주의사항처럼 코드에서 뽑을 수 없는 판단만 둔다. 플랫폼·의존성·다국어 대상 컴포넌트·Provider API처럼 코드에서 확인되는 사실은 setup.generated.json과 api.generated.json에서 자동으로 합쳐지므로 여기에 다시 적지 않는다.",
+  "packageURL": "https://github.com/shopl/shopl-design-guide-ios",
+  "packageName": "shopl-design-guide-ios",
+  "installSteps": [
+    "Xcode > File > Add Package Dependencies에서 패키지 URL을 추가한다. 버전은 GitHub Releases의 최신 태그를 확인해 지정한다.",
+    "앱 타깃에 ShoplDesignGuide 라이브러리를 연결하고, 사용하는 파일에서 import ShoplDesignGuide 한다.",
+    "다국어 문자열을 내장한 컴포넌트(localization.affectedSymbols)를 쓴다면 앱 시작 시 SDGString.shared.setProvider(provider:)로 문자열 공급자를 등록한다. 등록하지 않으면 해당 컴포넌트가 화면에 그려질 때 fatalError가 발생한다."
+  ],
+  "notes": [
+    "텍스트 스타일은 .typo(_:_:)로 적용한다. Pretendard 폰트 등록과 줄 높이 보정이 함께 처리되므로 .font(.system(...))로 대체하지 않는다.",
+    "UserDefaults의 \"language\" 값이 \"ja\"이면 Pretendard JP 폰트가 사용된다.",
+    "한국어 문장은 Text(sdg:)로 만들면 기기 언어가 한국어일 때 어절 단위로 줄바꿈된다."
+  ],
+  "instructions": "SDG iOS (ShoplDesignGuide) SwiftUI rules: (1) Never guess APIs: `search_component`, then copy the real init from `get_component_api`. (2) Use tokens (`list_tokens`): `.neutral700`, `.typo(.body1_R, .neutral700)`, `.padding(.spacing16)`, `.cornerRadius(.radius8)`. (3) Icons only as `Image(sdg: .<name>)` from `search_icon`. (4) Present popups with View modifiers (`.centerConfirmPopup`). (5) Localized components fatalError without `SDGString.shared.setProvider(provider:)` at launch (`get_setup_guide`). Details: SDG components are configured through nested `Option`/`Model` structs, enums and `Binding`s; use tokens instead of raw values. SwiftUI `Color` and `SDG.Color` share the same token names, but `SDG.Color` is not a ShapeStyle: never pass an `SDG.Color` value directly to SwiftUI APIs such as `.foregroundStyle`; write `.neutral700` or `Color.neutral700` there, and convert an `SDG.Color` value you already hold with `.color`, e.g. `.foregroundStyle(sdgColor.color)`. Spacing tokens also work as `VStack(spacing: .spacing12)`. Popup views such as `SDGConfirmPopup` have no public initializer; present them with modifiers such as `.centerConfirmPopup(isPresented:...)`. Rule (5) covers SDG components with built-in localized strings; `get_setup_guide` lists them and shows the provider code. Import with `import ShoplDesignGuide` (iOS 16+)."
+}

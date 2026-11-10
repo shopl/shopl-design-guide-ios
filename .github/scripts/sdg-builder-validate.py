@@ -1,5 +1,6 @@
 """Mac 빌드 전에 iOS SDG의 요청 커밋·브랜치·허용 파일 범위를 검사한다."""
 
+import json
 import os
 import re
 import subprocess
@@ -52,14 +53,40 @@ require(remote.stdout.strip() == f'{sha}\trefs/heads/{branch}',
 subprocess.run(['git', 'merge-base', '--is-ancestor', base, 'origin/main'], check=True)
 subprocess.run(['git', 'merge-base', '--is-ancestor', base, sha], check=True)
 
-# 기준 커밋 이후에는 SDG/SampleApp Swift 소스만 변경할 수 있다. 삭제·이름 변경도 검사한다.
+# SDG_BUILDER_MCP_DATA: ios-metadata-v1
+# MCP 생성 도구가 쓰는 데이터만 허용한다. 실행 번들(index.mjs)·도구·설정은 계속 보호한다.
+# 데이터와 Swift 소스의 일치는 기존 mcp-check.yml이 재생성하여 검사한다.
+MCP_DATA_FILES = {
+    f'plugins/sdg-ios/server/data/{name}.generated.json'
+    for name in ('api', 'catalog', 'examples', 'icons', 'setup', 'tokens')
+}
+
+
+def allowed_file(source):
+    return (re.fullmatch(r'(Sources/ShoplDesignGuide|SampleApp/Sources)/[\w/+]+\.swift', source)
+            and not source.startswith('Sources/ShoplDesignGuide/Generated/')) or source in MCP_DATA_FILES
+
+
+def validate_metadata(source):
+    entry = git('ls-tree', sha, '--', source)
+    require(entry.startswith('100644 blob '), f'MCP data must remain a regular file: {source}')
+    size = int(git('cat-file', '-s', f'{sha}:{source}'))
+    require(size <= 20 * 1024 * 1024, f'MCP data is too large: {source}')
+    try:
+        value = json.loads(git('show', f'{sha}:{source}'))
+    except (ValueError, UnicodeError):
+        raise SystemExit(f'MCP data is not valid JSON: {source}') from None
+    require(isinstance(value, dict), f'MCP data must be a JSON object: {source}')
+
+
+# 기준 이후의 Swift·정해진 MCP 데이터만 허용한다. 삭제·이름 변경도 검사한다.
 changed = subprocess.check_output([
     'git', 'diff', '--name-only', '--no-renames', '-z', base, sha,
 ]).decode().split('\0')
 for source in filter(None, changed):
-    require(re.fullmatch(r'(Sources/ShoplDesignGuide|SampleApp/Sources)/[\w/+]+\.swift', source),
-            f'Changes outside permitted Swift sources: {source}')
-    require(not source.startswith('Sources/ShoplDesignGuide/Generated/'), 'Generated sources are protected.')
+    require(allowed_file(source), f'Changes outside permitted Swift sources and MCP data: {source}')
+    if source in MCP_DATA_FILES:
+        validate_metadata(source)
     entry = git('ls-tree', sha, '--', source) or git('ls-tree', base, '--', source)
     require(entry.startswith('100644 blob '), f'Unexpected source file mode: {source}')
 
@@ -68,7 +95,7 @@ main_changes = subprocess.check_output([
     'git', 'diff', '--name-only', '--no-renames', '-z', 'origin/main', sha,
 ]).decode().split('\0')
 for source in filter(None, main_changes):
-    require(re.fullmatch(r'(Sources/ShoplDesignGuide|SampleApp/Sources)/[\w/+]+\.swift', source),
-            f'Update the working branch to current main before building: {source}')
-    require(not source.startswith('Sources/ShoplDesignGuide/Generated/'), 'Update generated sources from main.')
+    require(allowed_file(source), f'Update the working branch to current main before building: {source}')
+    if source in MCP_DATA_FILES:
+        validate_metadata(source)
 print('Verified exact iOS SDG source and protected paths.')
