@@ -10382,6 +10382,7 @@
 
       ],
       "declaration" : "public struct SDGBoxBadge: View",
+      "doc" : "텍스트와 선택적인 아이콘을 사각형 배지로 표시합니다.",
       "inherits" : [
         "View"
       ],
