@@ -1,5 +1,5 @@
 {
-  "count" : 206,
+  "count" : 200,
   "examples" : {
     "Divider" : [
       {
@@ -933,27 +933,12 @@
     ],
     "SDGTextNavi" : [
       {
-        "code" : "SDGTextNavi(\n  naviType: .full(\n    left: .init(image: Image(sdg: .icCommonCompany), action: { }),\n    title: .init(\n      text: \"긴 타이틀은 한 줄로 표시하고 끝을 말줄임합니다\"\n    ),\n    right: .init(image: Image(sdg: .icCommonCompany), text: \"Text더 길어지는\", action: { })\n  ),\n  backgroundColor: .neutral100\n)",
+        "code" : "SDGTextNavi(\n  model: .init(showLabel: true, label: \"타이틀\", showActionIc: true,\n               actionLabel: \"저장\", actionIc: Image(sdg: .icCommonCompany)),\n  onBack: {}, onAction: {}\n)",
         "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGTextNavi.swift",
         "source" : "preview"
       },
       {
-        "code" : "SDGTextNavi(\n  naviType: .back(\n    back: { },\n    title: .init(\n      text: \"긴 타이틀은 한 줄로 표시하고 끝을 말줄임합니다\"\n    ),\n    right: .init(image: Image(sdg: .icCommonCompany), text: \"Text더 길어지는\", action: { })\n  ),\n  backgroundColor: .neutral100\n)",
-        "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGTextNavi.swift",
-        "source" : "preview"
-      },
-      {
-        "code" : "SDGTextNavi(\n  naviType: .text(\n    title: .init(\n      text: \"긴 타이틀은 한 줄로 표시하고 끝을 말줄임합니다\"\n    ),\n    right: .init(image: Image(sdg: .icCommonCompany), text: \"Text더 길어지는\", action: { })\n  ),\n  backgroundColor: .neutral100\n)",
-        "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGTextNavi.swift",
-        "source" : "preview"
-      },
-      {
-        "code" : "SDGTextNavi(\n  naviType: .back(back: { lastEvent = \"뒤로가기\" }, title: titleOption, right: rightOption),\n  backgroundColor: backgroundColor\n)",
-        "file" : "SampleApp/Sources/DemoViews/Component/Navigation/SDGTextNaviDemoView.swift",
-        "source" : "sample-app"
-      },
-      {
-        "code" : "SDGTextNavi(\n  naviType: .full(\n    left: .init(image: Image(sdg: .icNaviBack), color: foregroundColor,\n                action: { lastEvent = \"좌측 버튼\" }),\n    title: titleOption, right: rightOption\n  ),\n  backgroundColor: backgroundColor\n)",
+        "code" : "SDGTextNavi(\n  model: .init(\n    showLabel: showLabel,\n    label: title,\n    showActionIc: showsIcon,\n    actionLabel: actionText,\n    actionIc: Image(sdg: .icCommonCompany),\n    labelColor: darkBackground ? .neutral0 : .neutral900,\n    actionColor: foregroundColor,\n    backColor: foregroundColor,\n    backgroundColor: backgroundColor\n  ),\n  onBack: { lastEvent = \"뒤로가기\" },\n  onAction: { lastEvent = \"우측 액션\" }\n)",
         "file" : "SampleApp/Sources/DemoViews/Component/Navigation/SDGTextNaviDemoView.swift",
         "source" : "sample-app"
       }
