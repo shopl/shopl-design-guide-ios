@@ -42,22 +42,22 @@
     ],
     "SDGAvatar" : [
       {
-        "code" : "SDGAvatar(\n  type: .round,\n  model: AvatarModel(\n    userId: \"\",\n    imageURL: nil,\n    roleType: .worker\n  ),\n  size: .xxs,\n  action: { userId in\n    \n  }\n)",
+        "code" : "SDGAvatar(\n  model: .init(\n    userId: \"preview\",\n    imageURL: nil,\n    size: size,\n    showFace: true,\n    showIc: false,\n    showOutline: false,\n    showRetry: false\n  ),\n  action: { _ in }\n)",
         "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
         "source" : "preview"
       },
       {
-        "code" : "SDGAvatar(\n  type: .round,\n  model: AvatarModel(\n    userId: \"\",\n    imageURL: nil,\n    roleType: .leader\n  ),\n  size: .xxs,\n  action: { userId in\n    \n  }\n)",
+        "code" : "SDGAvatar(\n  model: .init(\n    userId: \"preview\",\n    imageURL: nil,\n    size: size,\n    showFace: true,\n    showIc: false,\n    showOutline: true,\n    showRetry: false,\n    outline: .sdgSpecialPink\n  ),\n  action: { _ in }\n)",
         "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
         "source" : "preview"
       },
       {
-        "code" : "SDGAvatar(\n  type: .round,\n  model: AvatarModel(\n    userId: \"\",\n    imageURL: nil,\n    roleType: .opLeader\n  ),\n  size: .xxs,\n  action: { userId in\n    \n  }\n)",
+        "code" : "SDGAvatar(\n  model: .init(\n    userId: \"preview\",\n    imageURL: nil,\n    size: size,\n    showFace: true,\n    showIc: true,\n    showOutline: false,\n    showRetry: false,\n    ic: Image(sdg: .leaderBadge)\n  ),\n  action: { _ in }\n)",
         "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
         "source" : "preview"
       },
       {
-        "code" : "SDGAvatar(\n  type: .round,\n  model: state.avatarModel,\n  size: state.selectedSize.avatarSize,\n  action: { _ in }\n)",
+        "code" : "SDGAvatar(\n  model: state.avatarModel,\n  // 샘플 호출부의 상태 갱신 예시입니다. 실제 프로필 API를 요청하지 않습니다.\n  onRetry: { state.isRetryEnabled = false },\n  action: { _ in }\n)",
         "file" : "SampleApp/Sources/DemoViews/Component/Avatar/SDGAvatarDemoView.swift",
         "source" : "sample-app"
       }

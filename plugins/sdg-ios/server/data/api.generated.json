@@ -2,7 +2,7 @@
   "counts" : {
     "extensions" : 10,
     "modifiers" : 24,
-    "types" : 167,
+    "types" : 168,
     "views" : 82
   },
   "excluded" : [
@@ -984,6 +984,8 @@
 
       ],
       "declaration" : "public struct AvatarModel: Equatable, Hashable",
+      "deprecated" : "데이터와 표시 설정을 SDGAvatar.Model에 담아 사용하세요.",
+      "doc" : "기존 역할 뱃지와 임산부 Outline 호출의 호환성을 유지하는 아바타 모델입니다.",
       "inherits" : [
         "Equatable",
         "Hashable"
@@ -2789,6 +2791,153 @@
     },
     {
       "cases" : [
+
+      ],
+      "declaration" : "public struct Model: Equatable",
+      "doc" : "아바타의 데이터와 디자인 설정을 한 단위로 전달하는 모델입니다.\n표시 상태는 호출 화면이 소유하며, 아바타 내부에서 변경하지 않습니다.",
+      "inherits" : [
+        "Equatable"
+      ],
+      "initializers" : [
+        {
+          "doc" : "데이터와 크기·표시 옵션을 명시해 아바타 입력을 생성합니다.\nRetry를 해제하면 현재 `showFace`와 `imageURL`에 따라 표시합니다.\n- Parameters:\n- userId: 정상 탭 이벤트에 전달할 유저 식별자입니다.\n- imageURL: 표시할 이미지 URL입니다. 서버 Empty 이미지도 그대로 표시합니다.\nURL 없음·이미지 로딩 중·다운로드 실패는 로컬 placeholder로 처리합니다.\n- size: Figma의 Size에 대응하는 아바타 크기입니다.\n- showFace: Retry가 꺼져 있을 때 이미지 표시 여부입니다. `false`여도 모델의 이미지 URL은 유지됩니다.\n- showIc: 우측 하단 아이콘 표시 여부입니다. `true`여도 `ic`가 없으면 숨깁니다.\n- showOutline: 외곽선 표시 여부입니다. `true`여도 `outline`이 없으면 숨깁니다.\n- showRetry: `true`이면 Face와 이미지 다운로드를 생략하고 Retry를 우선 표시합니다.\n- outline: 외곽선 색상입니다. 기본값인 `nil`이면 표시하지 않습니다.\n- ic: 우측 하단 아이콘입니다. 기본값인 `nil`이면 표시하지 않습니다.",
+          "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
+          "kind" : "initializer",
+          "name" : "init",
+          "parameters" : [
+            {
+              "label" : "userId",
+              "name" : "userId",
+              "type" : "String"
+            },
+            {
+              "label" : "imageURL",
+              "name" : "imageURL",
+              "type" : "URL?"
+            },
+            {
+              "label" : "size",
+              "name" : "size",
+              "type" : "Size"
+            },
+            {
+              "label" : "showFace",
+              "name" : "showFace",
+              "type" : "Bool"
+            },
+            {
+              "label" : "showIc",
+              "name" : "showIc",
+              "type" : "Bool"
+            },
+            {
+              "label" : "showOutline",
+              "name" : "showOutline",
+              "type" : "Bool"
+            },
+            {
+              "label" : "showRetry",
+              "name" : "showRetry",
+              "type" : "Bool"
+            },
+            {
+              "defaultValue" : "nil",
+              "label" : "outline",
+              "name" : "outline",
+              "type" : "Color?"
+            },
+            {
+              "defaultValue" : "nil",
+              "label" : "ic",
+              "name" : "ic",
+              "type" : "Image?"
+            }
+          ],
+          "signature" : "init(userId: String, imageURL: URL?, size: Size, showFace: Bool, showIc: Bool, showOutline: Bool, showRetry: Bool, outline: Color? = nil, ic: Image? = nil)"
+        }
+      ],
+      "isView" : false,
+      "kind" : "struct",
+      "location" : {
+        "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
+        "group" : "Avatar",
+        "layer" : "Component"
+      },
+      "methods" : [
+
+      ],
+      "name" : "SDGAvatar.Model",
+      "nestedTypes" : [
+
+      ],
+      "properties" : [
+        {
+          "doc" : "정상 상태에서 아바타를 누르면 `action`에 전달하는 식별자입니다.",
+          "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
+          "kind" : "property",
+          "name" : "userId",
+          "signature" : "let userId: String"
+        },
+        {
+          "doc" : "서버에서 받은 표시용 URL입니다. 서버의 Empty 이미지 URL도 포함합니다.",
+          "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
+          "kind" : "property",
+          "name" : "imageURL",
+          "signature" : "let imageURL: URL?"
+        },
+        {
+          "doc" : "Figma의 Size입니다. 아바타 크기와 Outline·아이콘 규격을 결정합니다.",
+          "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
+          "kind" : "property",
+          "name" : "size",
+          "signature" : "var size: Size"
+        },
+        {
+          "doc" : "Figma의 Show Face입니다. Retry가 꺼져 있을 때 `false`이면 URL을 사용하지 않고 placeholder를 표시합니다.",
+          "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
+          "kind" : "property",
+          "name" : "showFace",
+          "signature" : "var showFace: Bool"
+        },
+        {
+          "doc" : "Figma의 Show Ic입니다. `true`이고 `ic`가 있을 때 우측 하단 아이콘을 표시합니다.",
+          "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
+          "kind" : "property",
+          "name" : "showIc",
+          "signature" : "var showIc: Bool"
+        },
+        {
+          "doc" : "Figma의 Show Outline입니다. `true`이고 `outline`이 있을 때 외곽선을 표시합니다.",
+          "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
+          "kind" : "property",
+          "name" : "showOutline",
+          "signature" : "var showOutline: Bool"
+        },
+        {
+          "doc" : "Figma의 Show Retry입니다. `true`이면 Face보다 우선하며 이미지 뷰를 생성하지 않습니다.\n호출 화면의 프로필 API 실패 표시에 사용하며, 내부 이미지 다운로드 실패로 자동 변경되지 않습니다.",
+          "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
+          "kind" : "property",
+          "name" : "showRetry",
+          "signature" : "var showRetry: Bool"
+        },
+        {
+          "doc" : "원 바깥에 그릴 외곽선 색상입니다. `showOutline`을 꺼도 값은 유지합니다.",
+          "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
+          "kind" : "property",
+          "name" : "outline",
+          "signature" : "var outline: Color?"
+        },
+        {
+          "doc" : "우측 하단에 표시할 아이콘입니다. `showIc`를 꺼도 값은 유지합니다.",
+          "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
+          "kind" : "property",
+          "name" : "ic",
+          "signature" : "var ic: Image?"
+        }
+      ]
+    },
+    {
+      "cases" : [
         {
           "name" : "xxs",
           "rawValue" : "20"
@@ -2815,6 +2964,7 @@
         }
       ],
       "declaration" : "public enum Size: CGFloat",
+      "doc" : "Figma의 Size에 대응하며 아바타의 너비와 높이를 포인트 단위로 정의합니다.",
       "inherits" : [
         "CGFloat"
       ],
@@ -10102,11 +10252,39 @@
 
       ],
       "declaration" : "public struct SDGAvatar: View",
+      "doc" : "Figma의 Size와 Show Face·Show Ic·Show Outline·Show Retry 설정으로 원형 프로필을 표시합니다.\n데이터와 디자인 설정은 Model로 받고, 탭·재시도 동작은 별도 콜백으로 연결합니다.\n프로필 API의 재요청과 표시 상태 갱신은 호출 화면에서 담당합니다.",
       "inherits" : [
         "View"
       ],
       "initializers" : [
         {
+          "doc" : "데이터와 디자인 설정을 담은 Model로 아바타를 생성합니다.\nRetry가 Face보다 우선하며, 해제하면 전달된 Face 설정과 이미지 URL로 표시합니다.\nURL 없음·이미지 로딩 중·다운로드 실패는 로컬 placeholder로 처리하고 Retry를 자동으로 켜지 않습니다.\n- Parameters:\n- model: 유저 식별자·이미지 URL과 Figma의 Size·표시 옵션, 외곽선 색상·하단 아이콘입니다.\nOutline과 ic는 Retry 표시 중에도 각 표시 옵션과 값에 따라 독립적으로 표시합니다.\n- onRetry: Retry 상태에서 탭하면 호출합니다. 기본값인 `nil`이면 표시만 합니다.\n프로필 API 재요청과 결과에 따른 모델·표시 옵션 갱신은 호출 화면에서 담당합니다.\n- action: Retry가 꺼진 상태에서 탭하면 유저 식별자를 전달합니다.",
+          "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
+          "kind" : "initializer",
+          "name" : "init",
+          "parameters" : [
+            {
+              "label" : "model",
+              "name" : "model",
+              "type" : "Model"
+            },
+            {
+              "defaultValue" : "nil",
+              "label" : "onRetry",
+              "name" : "onRetry",
+              "type" : "(() -> Void)?"
+            },
+            {
+              "label" : "action",
+              "name" : "action",
+              "type" : "@escaping (String) -> Void"
+            }
+          ],
+          "signature" : "init(model: Model, onRetry: (() -> Void)? = nil, action: @escaping (String) -> Void)"
+        },
+        {
+          "deprecated" : "데이터와 표시 설정을 SDGAvatar.Model에 담아 init(model:onRetry:action:)을 사용하세요.",
+          "doc" : "기존 배포 API의 역할 뱃지와 임산부 Outline을 새 표시 옵션으로 변환합니다.\nFace는 표시하고 Retry는 숨겨 기존 동작을 유지합니다.\n- Parameters:\n- type: 기존 원형 아바타 타입입니다.\n- model: 이미지와 역할·임산부 정보입니다. 리더·관리자는 기존 뱃지, 임산부는 분홍색 테두리로 표시합니다.\n- size: 기존 아바타 크기입니다. 새 Model의 `size`와 동일한 규격입니다.\n- action: 아바타를 누르면 유저 식별자를 전달합니다.",
           "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
           "kind" : "initializer",
           "name" : "init",
@@ -10147,13 +10325,14 @@
       ],
       "name" : "SDGAvatar",
       "nestedTypes" : [
+        "SDGAvatar.Model",
         "SDGAvatar.AvatarType",
         "SDGAvatar.Size"
       ],
       "properties" : [
 
       ],
-      "version" : "2.0.0"
+      "version" : "2.3.50"
     },
     {
       "cases" : [
