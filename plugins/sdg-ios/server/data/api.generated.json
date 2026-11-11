@@ -2,7 +2,7 @@
   "counts" : {
     "extensions" : 10,
     "modifiers" : 24,
-    "types" : 166,
+    "types" : 167,
     "views" : 82
   },
   "excluded" : [
@@ -8363,6 +8363,169 @@
     },
     {
       "cases" : [
+
+      ],
+      "declaration" : "public struct Model",
+      "doc" : "Figma Text Navi의 표시 설정과 콘텐츠를 묶습니다.\n표시 Bool을 꺼도 label과 actionIc 값은 유지되며, 다시 켜면 같은 값을 표시합니다.",
+      "inherits" : [
+
+      ],
+      "initializers" : [
+        {
+          "doc" : "- Parameters:\n- showLabel: 타이틀 표시 여부. false여도 label 데이터는 보존합니다.\n- label: 한 줄 타이틀. 가용 폭을 넘으면 끝을 말줄임합니다.\n- showActionIc: 액션 아이콘 표시 여부. false여도 actionIc 데이터는 보존합니다.\n- actionLabel: 항상 표시할 액션 문구. 타이틀보다 우선 표시하되 폭을 넘으면 말줄임합니다.\n- actionIc: 표시할 액션 아이콘. nil이면 아이콘을 생략합니다.\n- backIc: 뒤로가기 아이콘. 기본값은 SDG iOS 뒤로가기 아이콘입니다.\n- labelColor: 타이틀 색상. 기본값은 Neutral/900입니다.\n- actionColor: 액션 색상. 기본값은 Neutral/700입니다.\n- backColor: 뒤로가기 색상. 기본값은 Neutral/700입니다.\n- backgroundColor: 배경색. 기본값은 Neutral/100이며 투명색도 허용합니다.",
+          "file" : "Sources/ShoplDesignGuide/Template/Navigation/Model/SDGTextNaviModel.swift",
+          "kind" : "initializer",
+          "name" : "init",
+          "parameters" : [
+            {
+              "label" : "showLabel",
+              "name" : "showLabel",
+              "type" : "Bool"
+            },
+            {
+              "label" : "label",
+              "name" : "label",
+              "type" : "String"
+            },
+            {
+              "label" : "showActionIc",
+              "name" : "showActionIc",
+              "type" : "Bool"
+            },
+            {
+              "label" : "actionLabel",
+              "name" : "actionLabel",
+              "type" : "String"
+            },
+            {
+              "defaultValue" : "nil",
+              "label" : "actionIc",
+              "name" : "actionIc",
+              "type" : "Image?"
+            },
+            {
+              "defaultValue" : "Image(sdg: .icNaviBack)",
+              "label" : "backIc",
+              "name" : "backIc",
+              "type" : "Image"
+            },
+            {
+              "defaultValue" : ".neutral900",
+              "label" : "labelColor",
+              "name" : "labelColor",
+              "type" : "Color"
+            },
+            {
+              "defaultValue" : ".neutral700",
+              "label" : "actionColor",
+              "name" : "actionColor",
+              "type" : "Color"
+            },
+            {
+              "defaultValue" : ".neutral700",
+              "label" : "backColor",
+              "name" : "backColor",
+              "type" : "Color"
+            },
+            {
+              "defaultValue" : ".neutral100",
+              "label" : "backgroundColor",
+              "name" : "backgroundColor",
+              "type" : "Color"
+            }
+          ],
+          "signature" : "init(showLabel: Bool, label: String, showActionIc: Bool, actionLabel: String, actionIc: Image? = nil, backIc: Image = Image(sdg: .icNaviBack), labelColor: Color = .neutral900, actionColor: Color = .neutral700, backColor: Color = .neutral700, backgroundColor: Color = .neutral100)"
+        }
+      ],
+      "isView" : false,
+      "kind" : "struct",
+      "location" : {
+        "file" : "Sources/ShoplDesignGuide/Template/Navigation/Model/SDGTextNaviModel.swift",
+        "group" : "Navigation",
+        "layer" : "Template"
+      },
+      "methods" : [
+
+      ],
+      "name" : "SDGTextNavi.Model",
+      "nestedTypes" : [
+
+      ],
+      "properties" : [
+        {
+          "doc" : "Figma `Show Label`: 타이틀 노출 여부입니다.",
+          "file" : "Sources/ShoplDesignGuide/Template/Navigation/Model/SDGTextNaviModel.swift",
+          "kind" : "property",
+          "name" : "showLabel",
+          "signature" : "var showLabel: Bool"
+        },
+        {
+          "doc" : "Figma `Label`: 타이틀 문구입니다.",
+          "file" : "Sources/ShoplDesignGuide/Template/Navigation/Model/SDGTextNaviModel.swift",
+          "kind" : "property",
+          "name" : "label",
+          "signature" : "var label: String"
+        },
+        {
+          "doc" : "Figma `Show Action ic`: 우측 아이콘 노출 여부입니다.",
+          "file" : "Sources/ShoplDesignGuide/Template/Navigation/Model/SDGTextNaviModel.swift",
+          "kind" : "property",
+          "name" : "showActionIc",
+          "signature" : "var showActionIc: Bool"
+        },
+        {
+          "doc" : "Figma `Action Label`: 항상 노출하는 우측 액션 문구입니다.",
+          "file" : "Sources/ShoplDesignGuide/Template/Navigation/Model/SDGTextNaviModel.swift",
+          "kind" : "property",
+          "name" : "actionLabel",
+          "signature" : "var actionLabel: String"
+        },
+        {
+          "doc" : "우측 20×20pt 아이콘입니다. nil이면 showActionIc가 true여도 아이콘을 그리지 않습니다.",
+          "file" : "Sources/ShoplDesignGuide/Template/Navigation/Model/SDGTextNaviModel.swift",
+          "kind" : "property",
+          "name" : "actionIc",
+          "signature" : "var actionIc: Image?"
+        },
+        {
+          "doc" : "Figma `Back ic`: 40×40pt 영역의 뒤로가기 아이콘입니다.",
+          "file" : "Sources/ShoplDesignGuide/Template/Navigation/Model/SDGTextNaviModel.swift",
+          "kind" : "property",
+          "name" : "backIc",
+          "signature" : "var backIc: Image"
+        },
+        {
+          "doc" : "타이틀 색상입니다.",
+          "file" : "Sources/ShoplDesignGuide/Template/Navigation/Model/SDGTextNaviModel.swift",
+          "kind" : "property",
+          "name" : "labelColor",
+          "signature" : "var labelColor: Color"
+        },
+        {
+          "doc" : "우측 아이콘과 액션 문구 색상입니다.",
+          "file" : "Sources/ShoplDesignGuide/Template/Navigation/Model/SDGTextNaviModel.swift",
+          "kind" : "property",
+          "name" : "actionColor",
+          "signature" : "var actionColor: Color"
+        },
+        {
+          "doc" : "뒤로가기 아이콘 색상입니다.",
+          "file" : "Sources/ShoplDesignGuide/Template/Navigation/Model/SDGTextNaviModel.swift",
+          "kind" : "property",
+          "name" : "backColor",
+          "signature" : "var backColor: Color"
+        },
+        {
+          "doc" : "내비게이션 배경색입니다. .clear로 배경만 숨길 수 있습니다.",
+          "file" : "Sources/ShoplDesignGuide/Template/Navigation/Model/SDGTextNaviModel.swift",
+          "kind" : "property",
+          "name" : "backgroundColor",
+          "signature" : "var backgroundColor: Color"
+        }
+      ]
+    },
+    {
+      "cases" : [
         {
           "associatedValues" : "(left: Left, title: Title, right: Right?)",
           "name" : "full"
@@ -8381,6 +8544,7 @@
         }
       ],
       "declaration" : "public enum NaviType: Equatable",
+      "doc" : "내비게이션 구성입니다. 동등 비교는 표시 값만 비교하며 콜백 변경은 비교하지 않습니다.\n`.search`의 AnyView는 비교할 수 없어 기존처럼 항상 비동등으로 처리합니다.",
       "inherits" : [
         "Equatable"
       ],
@@ -8464,11 +8628,13 @@
 
       ],
       "declaration" : "public struct Right: Equatable",
+      "doc" : "선택적 아이콘과 짧은 액션 문구를 하나의 버튼으로 묶습니다.",
       "inherits" : [
         "Equatable"
       ],
       "initializers" : [
         {
+          "doc" : "- Parameters:\n- image: 문구 왼쪽의 20×20pt 아이콘. nil이면 표시하지 않습니다.\n- text: 타이틀보다 우선 표시할 짧은 동사형 문구. 액션 자체가 가용 폭을 넘으면 말줄임합니다.\n- color: 아이콘과 문구 색상. nil이면 Neutral/700을 사용합니다.\n- action: 액션 버튼을 누를 때 실행할 콜백입니다.",
           "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGTextNavi.swift",
           "kind" : "initializer",
           "name" : "init",
@@ -8521,11 +8687,13 @@
 
       ],
       "declaration" : "public struct Title: Equatable",
+      "doc" : "한 줄로 표시하는 타이틀과 색상입니다. 빈 문자열로 타이틀을 생략할 수 있습니다.",
       "inherits" : [
         "Equatable"
       ],
       "initializers" : [
         {
+          "doc" : "- Parameters:\n- text: 타이틀 문구. 영역을 넘으면 끝을 말줄임합니다.\n- color: 타이틀 색상. nil이면 Neutral/900을 사용합니다.",
           "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGTextNavi.swift",
           "kind" : "initializer",
           "name" : "init",
@@ -14471,11 +14639,14 @@
 
       ],
       "declaration" : "public struct SDGTextNavi: View",
+      "doc" : "화면 상단에 한 줄 타이틀과 화면 이동, 우측 실행 기능을 제공하는 내비게이션입니다.\n긴 타이틀은 말줄임하고 우측 액션을 우선 표시합니다. 액션 자체가 가용 폭을 넘으면 말줄임합니다.",
       "inherits" : [
         "View"
       ],
       "initializers" : [
         {
+          "deprecated" : "새 Text Navi는 init(model:onBack:onAction:)을 사용하세요. 기존 full/text/search 구성은 이 호환 API에서 유지됩니다.",
+          "doc" : "기존 구성·여백·아이콘 생략·콜백 동작을 유지하는 호환 초기화 함수입니다.\n- Parameters:\n- naviType: 좌측 요소, 타이틀, 우측 액션 구성. 버튼을 누르면 전달한 콜백을 실행합니다.\n- backgroundColor: 배경색. 기본 디자인은 Neutral/100이며 투명색도 사용할 수 있습니다.",
           "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGTextNavi.swift",
           "kind" : "initializer",
           "name" : "init",
@@ -14492,6 +14663,30 @@
             }
           ],
           "signature" : "init(naviType: NaviType, backgroundColor: Color)"
+        },
+        {
+          "doc" : "Model 값은 호출 화면에서 소유하며 버튼을 누를 때 해당 콜백만 실행합니다.\n- Parameters:\n- model: Figma 표시 설정, 콘텐츠와 색상입니다.\n- onBack: 뒤로가기 버튼을 누를 때 실행합니다.\n- onAction: 우측 아이콘·문구로 구성된 단일 버튼을 누를 때 실행합니다.",
+          "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGTextNavi.swift",
+          "kind" : "initializer",
+          "name" : "init",
+          "parameters" : [
+            {
+              "label" : "model",
+              "name" : "model",
+              "type" : "Model"
+            },
+            {
+              "label" : "onBack",
+              "name" : "onBack",
+              "type" : "@escaping () -> Void"
+            },
+            {
+              "label" : "onAction",
+              "name" : "onAction",
+              "type" : "@escaping () -> Void"
+            }
+          ],
+          "signature" : "init(model: Model, onBack: @escaping () -> Void, onAction: @escaping () -> Void)"
         }
       ],
       "isView" : true,
@@ -14502,15 +14697,30 @@
         "layer" : "Template"
       },
       "methods" : [
-
+        {
+          "doc" : "기본 뒤로가기 아이콘의 색상을 지정합니다. 진한 배경에서는 Neutral/0을 사용할 수 있습니다.\n- Parameter color: 기존 `.back`·`.search` 및 새 Model 구성의 뒤로가기 색상입니다.\n`.full`의 사용자 지정 좌측 아이콘에는 적용하지 않습니다. 새 API에서는 Model.backColor를 사용합니다.\n- Returns: 뒤로가기 색상을 적용한 내비게이션입니다.",
+          "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGTextNavi.swift",
+          "kind" : "method",
+          "name" : "backButtonColor",
+          "parameters" : [
+            {
+              "name" : "color",
+              "type" : "Color"
+            }
+          ],
+          "returnType" : "Self",
+          "signature" : "func backButtonColor(_ color: Color) -> Self"
+        }
       ],
       "name" : "SDGTextNavi",
       "nestedTypes" : [
-        "SDGTextNavi.NaviType"
+        "SDGTextNavi.NaviType",
+        "SDGTextNavi.Model"
       ],
       "properties" : [
 
-      ]
+      ],
+      "version" : "2.3.53"
     },
     {
       "cases" : [
