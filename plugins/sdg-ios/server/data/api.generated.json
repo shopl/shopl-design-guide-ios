@@ -10853,11 +10853,13 @@
 
       ],
       "declaration" : "public struct SDGCapsuleSearch: View",
+      "doc" : "텍스트 검색과 지우기 기능을 제공하는 캡슐형 검색창입니다.",
       "inherits" : [
         "View"
       ],
       "initializers" : [
         {
+          "doc" : "- Parameter autoFocus: 화면에 나타날 때 입력 포커스를 요청합니다. 기본값은 `false`입니다.",
           "file" : "Sources/ShoplDesignGuide/Component/SearchBar/SDGCapsuleSearch.swift",
           "kind" : "initializer",
           "name" : "init",
@@ -10883,6 +10885,12 @@
               "type" : "Color"
             },
             {
+              "defaultValue" : "false",
+              "label" : "autoFocus",
+              "name" : "autoFocus",
+              "type" : "Bool"
+            },
+            {
               "label" : "clearAllButtonTapped",
               "name" : "clearAllButtonTapped",
               "type" : "@escaping () -> Void"
@@ -10900,7 +10908,7 @@
               "type" : "((String) -> Void)?"
             }
           ],
-          "signature" : "init(placeHolder: String, searchText: Binding<String>, type: `Type`, backgroundColor: Color, clearAllButtonTapped: @escaping () -> Void, searchButtonTapped: ((String) -> Void)? = nil, searchTextChanged: ((String) -> Void)? = nil)"
+          "signature" : "init(placeHolder: String, searchText: Binding<String>, type: `Type`, backgroundColor: Color, autoFocus: Bool = false, clearAllButtonTapped: @escaping () -> Void, searchButtonTapped: ((String) -> Void)? = nil, searchTextChanged: ((String) -> Void)? = nil)"
         }
       ],
       "isView" : true,
@@ -13908,11 +13916,13 @@
 
       ],
       "declaration" : "public struct SDGSearchNavi: View",
+      "doc" : "검색창과 좌우 버튼으로 구성된 검색 내비게이션입니다.",
       "inherits" : [
         "View"
       ],
       "initializers" : [
         {
+          "doc" : "- Parameter autoFocus: 캡슐형 검색창 진입 시 입력 포커스를 요청합니다. 기본값은 `false`입니다.",
           "file" : "Sources/ShoplDesignGuide/Template/Navigation/SDGSearchNavi.swift",
           "kind" : "initializer",
           "name" : "init",
@@ -13948,6 +13958,12 @@
               "type" : "Binding<String>"
             },
             {
+              "defaultValue" : "false",
+              "label" : "autoFocus",
+              "name" : "autoFocus",
+              "type" : "Bool"
+            },
+            {
               "defaultValue" : "nil",
               "label" : "onClear",
               "name" : "onClear",
@@ -13959,7 +13975,7 @@
               "type" : "@escaping (String) -> Void"
             }
           ],
-          "signature" : "init(leadingButton: TopNaviButtonOption?, textFieldType: TextFieldType, trailingButton: TopNaviButtonOption?, backgroundColor: Color, placeHolder: String, text: Binding<String>, onClear: (() -> Void)? = nil, search: @escaping (String) -> Void)"
+          "signature" : "init(leadingButton: TopNaviButtonOption?, textFieldType: TextFieldType, trailingButton: TopNaviButtonOption?, backgroundColor: Color, placeHolder: String, text: Binding<String>, autoFocus: Bool = false, onClear: (() -> Void)? = nil, search: @escaping (String) -> Void)"
         }
       ],
       "isView" : true,
