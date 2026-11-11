@@ -1,0 +1,1000 @@
+{
+  "counts" : {
+    "described" : 17,
+    "implemented" : 59,
+    "items" : 67
+  },
+  "sections" : [
+    {
+      "description" : "일관된 레이아웃과 그에 따른 사용자 경험을 만드는 데 필수적인 시각적 요소입니다.",
+      "id" : "foundation",
+      "items" : [
+        {
+          "description" : "SDG의 컬러 팔레트",
+          "id" : "foundation_color",
+          "implementationNames" : [
+            "SDG.Color",
+            "Color"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDG.Color"
+          ],
+          "subDescription" : "샤플 앱의 모든 요소에 적용되며, 일관된/뚜렷한/계층적인 컬러 사용으로 서비스의 아이덴티티 및 브랜드 경험을 만들어 줄 수 있는 주요 요소",
+          "title" : "Color"
+        },
+        {
+          "id" : "foundation_corner_radius",
+          "implementationNames" : [
+            "SDGCornerRadius"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGCornerRadius"
+          ],
+          "title" : "Corner Radius"
+        },
+        {
+          "description" : "SDG의 아이콘 스타일",
+          "id" : "foundation_iconography",
+          "implementationNames" : [
+            "SDG.Image",
+            "Image"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDG.Image"
+          ],
+          "subDescription" : "기호로 만든 시각 언어로 한정된 공간에서 정보를 효율적으로 전달하는 요소",
+          "title" : "Iconography"
+        },
+        {
+          "description" : "SDG의 여백 스타일",
+          "id" : "foundation_spacing",
+          "implementationNames" : [
+            "SDGSpacing"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGSpacing"
+          ],
+          "subDescription" : "컴포넌트 및 템플릿, 그리고 모든 화면과 구성 요소 사이의 여백",
+          "title" : "Spacing"
+        },
+        {
+          "description" : "SDG의 폰트 스타일",
+          "id" : "foundation_typography",
+          "implementationNames" : [
+            "SDG.Typography",
+            "Typography"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDG.Typography"
+          ],
+          "subDescription" : "정의된 서체, 크기, 색상을 통해 콘텐츠 중요도 및 전체 텍스트의 균형을 조정하여 서비스와 사용자의 커뮤니케이션을 돕는 주요 요소",
+          "title" : "Typography"
+        }
+      ],
+      "title" : "Foundation"
+    },
+    {
+      "description" : "각각의 기능을 구성하는 요소들의 조합입니다.",
+      "id" : "component",
+      "items" : [
+        {
+          "id" : "component_avatar",
+          "implementationNames" : [
+            "SDGAvatar"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGAvatar"
+          ],
+          "subDescription" : "직원의 얼굴 사진 또는 설정된 이미지를 보여주는 컴포넌트",
+          "title" : "Avatar"
+        },
+        {
+          "id" : "component_attachment_element",
+          "implementationNames" : [
+            "SDGAttachmentElement"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGAttachmentElement"
+          ],
+          "subDescription" : "사진, 문서, 동영상을 표시하는 컴포넌트",
+          "title" : "Attachment Element"
+        },
+        {
+          "children" : [
+            {
+              "id" : "component_box_badge",
+              "implementationNames" : [
+                "SDGBoxBadge"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGBoxBadge"
+              ],
+              "title" : "Box Badge"
+            },
+            {
+              "id" : "component_capsule_badge",
+              "implementationNames" : [
+                "SDGCapsuleBadge"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGCapsuleBadge"
+              ],
+              "title" : "Capsule Badge"
+            }
+          ],
+          "id" : "component_badge",
+          "implementationNames" : [
+            "SDGBoxBadge",
+            "SDGCapsuleBadge"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGBoxBadge",
+            "SDGCapsuleBadge"
+          ],
+          "title" : "Badge"
+        },
+        {
+          "children" : [
+            {
+              "id" : "component_bottom_button",
+              "implementationNames" : [
+                "SDGBottomButton"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGBottomButton"
+              ],
+              "subDescription" : "화면 하단에 고정으로 위치한 버튼 컴포넌트",
+              "title" : "Bottom Button"
+            },
+            {
+              "id" : "component_box_button",
+              "implementationNames" : [
+                "SDGBoxButton"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGBoxButton"
+              ],
+              "subDescription" : "화면 내에 배치하여 사용하는 일반적인 사각 형태의 버튼 컴포넌트",
+              "title" : "Box Button"
+            },
+            {
+              "id" : "component_capsule_button",
+              "implementationNames" : [
+                "SDGCapsuleButton"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGCapsuleButton"
+              ],
+              "title" : "Capsule Button"
+            },
+            {
+              "id" : "component_floating_button",
+              "implementationNames" : [
+                "SDGFloatingButton"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGFloatingButton"
+              ],
+              "subDescription" : "화면 우측 하단에 고정으로 위치하며, 생성&추가 등의 동작을 위한 버튼 컴포넌트",
+              "title" : "Floating Button"
+            },
+            {
+              "id" : "component_ghost_button",
+              "implementationNames" : [
+                "SDGGhostButton"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGGhostButton"
+              ],
+              "subDescription" : "화면의 내용 영역에 배치하여 사용하는 배경이 없는 형태의 버튼 컴포넌트",
+              "title" : "Ghost Button"
+            }
+          ],
+          "id" : "component_button",
+          "implementationNames" : [
+            "SDGBottomButton",
+            "SDGBoxButton",
+            "SDGCapsuleButton",
+            "SDGFloatingButton",
+            "SDGGhostButton"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGBottomButton",
+            "SDGBoxButton",
+            "SDGCapsuleButton",
+            "SDGFloatingButton",
+            "SDGGhostButton"
+          ],
+          "title" : "Button"
+        },
+        {
+          "id" : "component_calendar",
+          "implementationNames" : [
+            "SDGCalendar"
+          ],
+          "implemented" : false,
+          "implementedSymbols" : [
+
+          ],
+          "title" : "Calendar"
+        },
+        {
+          "id" : "component_checkbox",
+          "implementationNames" : [
+            "SDGCheckBox"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGCheckBox"
+          ],
+          "subDescription" : "여러개의 옵션 중 다중 선택을 위한 컴포넌트",
+          "title" : "Check Box"
+        },
+        {
+          "id" : "component_check_option",
+          "implementationNames" : [
+            "SDGCheckOption"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGCheckOption"
+          ],
+          "subDescription" : "하나의 옵션을 선택 또는 확인하는 컴포넌트",
+          "title" : "Check Option"
+        },
+        {
+          "id" : "component_dropdown",
+          "implementationNames" : [
+            "SDGDropdown"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGDropdown"
+          ],
+          "subDescription" : "여러 개의 리스트 옵션 중 하나의 옵션을 선택하기 위한 컴포넌트",
+          "title" : "Dropdown"
+        },
+        {
+          "children" : [
+            {
+              "id" : "component_basic_empty_icon",
+              "implementationNames" : [
+                "SDGBasicEmptyIcon"
+              ],
+              "implemented" : false,
+              "implementedSymbols" : [
+
+              ],
+              "title" : "Basic Empty Icon"
+            },
+            {
+              "id" : "component_contents_empty_icon",
+              "implementationNames" : [
+                "SDGContentsEmptyIcon"
+              ],
+              "implemented" : false,
+              "implementedSymbols" : [
+
+              ],
+              "title" : "Contents Empty Icon"
+            }
+          ],
+          "id" : "component_empty_icon",
+          "implementationNames" : [
+            "SDGBasicEmptyIcon",
+            "SDGContentsEmptyIcon"
+          ],
+          "implemented" : false,
+          "implementedSymbols" : [
+
+          ],
+          "title" : "Empty Icon"
+        },
+        {
+          "children" : [
+            {
+              "id" : "component_body_filter_chip",
+              "implementationNames" : [
+                "SDGBodyFilterChip"
+              ],
+              "implemented" : false,
+              "implementedSymbols" : [
+
+              ],
+              "title" : "Body Filter Chip"
+            },
+            {
+              "id" : "component_navi_filter_chip",
+              "implementationNames" : [
+                "SDGNaviFilterChip"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGNaviFilterChip"
+              ],
+              "title" : "Navi Filter Chip"
+            }
+          ],
+          "id" : "component_filter_chip",
+          "implementationNames" : [
+            "SDGBodyFilterChip",
+            "SDGNaviFilterChip"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGNaviFilterChip"
+          ],
+          "title" : "Filter Chip"
+        },
+        {
+          "children" : [
+            {
+              "id" : "component_dot_indicator",
+              "implementationNames" : [
+                "SDGDotIndicator"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGDotIndicator"
+              ],
+              "title" : "Dot Indicator"
+            },
+            {
+              "id" : "component_number_indicator",
+              "implementationNames" : [
+                "SDGNumberIndicator"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGNumberIndicator"
+              ],
+              "title" : "Number Indicator"
+            },
+            {
+              "id" : "component_text_indicator",
+              "implementationNames" : [
+                "SDGTextIndicator"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGTextIndicator"
+              ],
+              "title" : "Text Indicator"
+            }
+          ],
+          "id" : "component_indicator",
+          "implementationNames" : [
+            "SDGDotIndicator",
+            "SDGNumberIndicator",
+            "SDGTextIndicator"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGDotIndicator",
+            "SDGNumberIndicator",
+            "SDGTextIndicator"
+          ],
+          "title" : "Indicator"
+        },
+        {
+          "id" : "component_icon_label",
+          "implementationNames" : [
+            "SDGIconLabel"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGIconLabel"
+          ],
+          "title" : "Icon Label"
+        },
+        {
+          "id" : "component_list_header_label",
+          "implementationNames" : [
+            "SDGListHeaderLabel"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGListHeaderLabel"
+          ],
+          "title" : "List Header label"
+        },
+        {
+          "children" : [
+            {
+              "id" : "component_basic_navigation",
+              "implementationNames" : [
+                "SDGBasicNavi"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGBasicNavi"
+              ],
+              "title" : "Basic Navigation"
+            },
+            {
+              "id" : "component_category_navigation",
+              "implementationNames" : [
+                "SDGCategoryNavi"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGCategoryNavi"
+              ],
+              "title" : "Category Navigation"
+            },
+            {
+              "id" : "component_text_navigation",
+              "implementationNames" : [
+                "SDGTextNavi"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGTextNavi"
+              ],
+              "title" : "Text Navigation"
+            }
+          ],
+          "id" : "component_navigation",
+          "implementationNames" : [
+            "SDGBasicNavi",
+            "SDGCategoryNavi",
+            "SDGTextNavi"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGBasicNavi",
+            "SDGCategoryNavi",
+            "SDGTextNavi"
+          ],
+          "title" : "Navigation"
+        },
+        {
+          "id" : "component_number_picker",
+          "implementationNames" : [
+            "SDGNumberPicker"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGNumberPicker"
+          ],
+          "subDescription" : "어떤 특정한 값의 숫자를 스피너로 선택하는 컴포넌트",
+          "title" : "Number Picker"
+        },
+        {
+          "children" : [
+            {
+              "id" : "component_circular_progress",
+              "implementationNames" : [
+                "SDGCircularProgress"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGCircularProgress"
+              ],
+              "title" : "Circle Progress"
+            },
+            {
+              "id" : "component_dot_progress",
+              "implementationNames" : [
+                "SDGDotProgress"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGDotProgress"
+              ],
+              "title" : "Dot Progress"
+            },
+            {
+              "id" : "component_linear_progress",
+              "implementationNames" : [
+                "SDGLinearProgress"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGLinearProgress"
+              ],
+              "title" : "Linear Progress"
+            },
+            {
+              "id" : "component_system_progress",
+              "implementationNames" : [
+                "SDGSystemProgress",
+                "View.systemProgress"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGSystemProgress",
+                "View.systemProgress"
+              ],
+              "title" : "System Progress"
+            }
+          ],
+          "id" : "component_progress",
+          "implementationNames" : [
+            "SDGCircularProgress",
+            "SDGDotProgress",
+            "SDGLinearProgress",
+            "SDGSystemProgress",
+            "View.systemProgress"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGCircularProgress",
+            "SDGDotProgress",
+            "SDGLinearProgress",
+            "SDGSystemProgress",
+            "View.systemProgress"
+          ],
+          "title" : "Progress"
+        },
+        {
+          "id" : "component_radio",
+          "implementationNames" : [
+            "SDGRadio"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGRadio"
+          ],
+          "subDescription" : "여러개의 옵션 중 단일 선택을 위한 컴포넌트",
+          "title" : "Radio"
+        },
+        {
+          "children" : [
+            {
+              "id" : "component_box_search",
+              "implementationNames" : [
+                "SDGBoxSearch"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGBoxSearch"
+              ],
+              "title" : "Box Search"
+            },
+            {
+              "id" : "component_category_search",
+              "implementationNames" : [
+                "SDGCategorySearch"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGCategorySearch"
+              ],
+              "title" : "Category Search"
+            },
+            {
+              "id" : "component_capsule_search",
+              "implementationNames" : [
+                "SDGCapsuleSearch"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGCapsuleSearch"
+              ],
+              "title" : "Capsule Search"
+            }
+          ],
+          "id" : "component_search_bar",
+          "implementationNames" : [
+            "SDGBoxSearch",
+            "SDGCategorySearch",
+            "SDGCapsuleSearch"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGBoxSearch",
+            "SDGCategorySearch",
+            "SDGCapsuleSearch"
+          ],
+          "title" : "Search Bar"
+        },
+        {
+          "id" : "component_segment",
+          "implementationNames" : [
+            "SDGSegment"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGSegment"
+          ],
+          "title" : "Segment"
+        },
+        {
+          "id" : "component_select_input",
+          "implementationNames" : [
+            "SDGSelectInput"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGSelectInput"
+          ],
+          "title" : "Select Input"
+        },
+        {
+          "children" : [
+            {
+              "id" : "component_box_tab",
+              "implementationNames" : [
+                "SDGBoxTab"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGBoxTab"
+              ],
+              "title" : "Box Tab"
+            },
+            {
+              "id" : "component_fixed_tab",
+              "implementationNames" : [
+                "SDGFixedTab"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGFixedTab"
+              ],
+              "title" : "Fixed Tab"
+            },
+            {
+              "id" : "component_icon_tab",
+              "implementationNames" : [
+                "SDGIconTab"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGIconTab"
+              ],
+              "title" : "Icon Tab"
+            },
+            {
+              "id" : "component_scroll_tab",
+              "implementationNames" : [
+                "SDGScrollTab"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGScrollTab"
+              ],
+              "subDescription" : "수평 스크롤을 통해 다수의 카테고리를 탐색하고, 선택 상태를 전달하는 탭 컴포넌트",
+              "title" : "Scroll Tab"
+            }
+          ],
+          "id" : "component_tab",
+          "implementationNames" : [
+            "SDGBoxTab",
+            "SDGFixedTab",
+            "SDGIconTab",
+            "SDGScrollTab"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGBoxTab",
+            "SDGFixedTab",
+            "SDGIconTab",
+            "SDGScrollTab"
+          ],
+          "title" : "Tab"
+        },
+        {
+          "children" : [
+            {
+              "id" : "component_fixed_text_input",
+              "implementationNames" : [
+                "SDGFixedTextInput"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGFixedTextInput"
+              ],
+              "title" : "Fixed Text Input"
+            },
+            {
+              "id" : "component_login_input",
+              "implementationNames" : [
+                "SDGLoginInput"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGLoginInput"
+              ],
+              "title" : "Login Input"
+            },
+            {
+              "id" : "component_simple_text_input",
+              "implementationNames" : [
+                "SDGSimpleInput"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGSimpleInput"
+              ],
+              "title" : "Simple Text Input"
+            },
+            {
+              "id" : "component_underline_input",
+              "implementationNames" : [
+                "SDGUnderlineInput"
+              ],
+              "implemented" : true,
+              "implementedSymbols" : [
+                "SDGUnderlineInput"
+              ],
+              "title" : "Underline Input"
+            }
+          ],
+          "id" : "component_text_input",
+          "implementationNames" : [
+            "SDGFixedTextInput",
+            "SDGLoginInput",
+            "SDGSimpleInput",
+            "SDGUnderlineInput"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGFixedTextInput",
+            "SDGLoginInput",
+            "SDGSimpleInput",
+            "SDGUnderlineInput"
+          ],
+          "title" : "Text Input"
+        },
+        {
+          "id" : "component_thumbnails",
+          "implementationNames" : [
+            "SDGThumbnails"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGThumbnails"
+          ],
+          "title" : "Thumbnails"
+        },
+        {
+          "id" : "component_time_picker",
+          "implementationNames" : [
+            "SDGTimePicker"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGTimePicker"
+          ],
+          "title" : "Time Picker"
+        },
+        {
+          "id" : "component_time_select_input",
+          "implementationNames" : [
+            "SDGTimeSelectInput"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGTimeSelectInput"
+          ],
+          "title" : "Time Select Input"
+        },
+        {
+          "id" : "component_toggle",
+          "implementationNames" : [
+            "SDGToggle"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGToggle"
+          ],
+          "subDescription" : "항목의 활성 또는 비활성 상태를 결정하는 컴포넌트",
+          "title" : "Toggle"
+        },
+        {
+          "id" : "component_tooltip",
+          "implementationNames" : [
+            "SDGTooltipSpec",
+            "SDGTooltipDirection",
+            "View.tooltip"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGTooltipSpec",
+            "SDGTooltipDirection",
+            "View.tooltip"
+          ],
+          "title" : "Tooltip"
+        }
+      ],
+      "title" : "Component"
+    },
+    {
+      "description" : "컴포넌트를 포함한 요소들의 조합입니다.",
+      "id" : "template",
+      "items" : [
+        {
+          "id" : "template_calendar_time",
+          "implementationNames" : [
+            "SDGCalendarAndTime"
+          ],
+          "implemented" : false,
+          "implementedSymbols" : [
+
+          ],
+          "title" : "Calendar & Time"
+        },
+        {
+          "id" : "template_checkbox_label",
+          "implementationNames" : [
+            "SDGCheckBoxLabel"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGCheckBoxLabel"
+          ],
+          "title" : "Checkbox Label"
+        },
+        {
+          "id" : "template_check_option_label",
+          "implementationNames" : [
+            "CheckOptionLabel"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "CheckOptionLabel"
+          ],
+          "title" : "Check Option Label"
+        },
+        {
+          "id" : "template_empty_img",
+          "implementationNames" : [
+            "SDGEmptyImg"
+          ],
+          "implemented" : false,
+          "implementedSymbols" : [
+
+          ],
+          "title" : "Empty Img"
+        },
+        {
+          "id" : "template_form",
+          "implementationNames" : [
+            "SDGFixedTextForm",
+            "SDGDropdownForm",
+            "SDGSelectForm",
+            "SDGSimpleTextForm",
+            "SDGTimeSelectForm"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGFixedTextForm",
+            "SDGDropdownForm",
+            "SDGSelectForm",
+            "SDGSimpleTextForm",
+            "SDGTimeSelectForm"
+          ],
+          "title" : "Form"
+        },
+        {
+          "id" : "template_foundation_list",
+          "implementationNames" : [
+            "SDGFoundationList"
+          ],
+          "implemented" : false,
+          "implementedSymbols" : [
+
+          ],
+          "title" : "Foundation List"
+        },
+        {
+          "id" : "template_history",
+          "implementationNames" : [
+            "SDGHistoryHeader",
+            "SDGCustomHistory"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGHistoryHeader",
+            "SDGCustomHistory"
+          ],
+          "title" : "History"
+        },
+        {
+          "id" : "template_list_header",
+          "implementationNames" : [
+            "SDGButtonHeader",
+            "SDGIconHeader"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGButtonHeader",
+            "SDGIconHeader"
+          ],
+          "title" : "List Header"
+        },
+        {
+          "id" : "template_multi_calendar",
+          "implementationNames" : [
+            "SDGMultiCalendar"
+          ],
+          "implemented" : false,
+          "implementedSymbols" : [
+
+          ],
+          "title" : "MultiCalendar"
+        },
+        {
+          "id" : "template_multi_time_picker",
+          "implementationNames" : [
+            "SDGMultiTimePicker"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGMultiTimePicker"
+          ],
+          "title" : "Multi Time Picker"
+        },
+        {
+          "id" : "template_popup",
+          "implementationNames" : [
+            "SDGBottomPopup",
+            "SDGCenterPopup",
+            "SDGIconPopup",
+            "SDGConfirmPopup",
+            "SDGDeletePopup",
+            "SDGInfoPopup",
+            "SDGInputPopup"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGBottomPopup",
+            "SDGCenterPopup",
+            "SDGIconPopup",
+            "SDGConfirmPopup",
+            "SDGDeletePopup",
+            "SDGInfoPopup",
+            "SDGInputPopup"
+          ],
+          "title" : "Popup"
+        },
+        {
+          "id" : "template_profile",
+          "implementationNames" : [
+            "SDGMiniProfile",
+            "SDGSecondProfile"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGMiniProfile",
+            "SDGSecondProfile"
+          ],
+          "title" : "Profile"
+        },
+        {
+          "id" : "template_radio_label",
+          "implementationNames" : [
+            "SDGRadioLabel"
+          ],
+          "implemented" : true,
+          "implementedSymbols" : [
+            "SDGRadioLabel"
+          ],
+          "title" : "Radio Label"
+        }
+      ],
+      "title" : "Template"
+    }
+  ],
+  "sources" : [
+    "SampleApp/Sources/DesignSystem/SDGCatalog.swift"
+  ]
+}

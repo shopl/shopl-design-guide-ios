@@ -8,23 +8,24 @@
 import SwiftUI
 import ShoplDesignGuide
 
+/// 아바타의 Size와 우측 하단 ic에 사용할 뱃지 예시를 보여주는 샘플입니다.
 struct SDGAvatarDemoView: View {
   @ObservedObject private var state = SDGAvatarDemoState.shared
   
   var body: some View {
     VStack(alignment: .leading, spacing: 16) {
-      typeSection
-      specSection
+      icSection
+      sizeSection
     }
     .padding(.top, 16)
     .padding(.bottom, 40)
     .frame(maxWidth: .infinity, alignment: .leading)
   }
   
-  private var typeSection: some View {
+  private var icSection: some View {
     VStack(alignment: .leading, spacing: 12) {
       VStack(alignment: .leading, spacing: 8) {
-        sectionTitle("Type")
+        sectionTitle("ic")
           .padding(.horizontal, 16)
         
         SDGScrollTab(
@@ -43,10 +44,10 @@ struct SDGAvatarDemoView: View {
     .frame(maxWidth: .infinity, alignment: .leading)
   }
   
-  private var specSection: some View {
+  private var sizeSection: some View {
     VStack(alignment: .leading, spacing: 12) {
       VStack(alignment: .leading, spacing: 8) {
-        sectionTitle("Spec")
+        sectionTitle("Size")
         
         SDGScrollTab(
           type: .text,
@@ -64,12 +65,11 @@ struct SDGAvatarDemoView: View {
   private var avatarPreviewCard: some View {
     VStack(spacing: 0) {
       SDGAvatar(
-        type: .round,
         model: state.avatarModel,
-        size: state.selectedSize.avatarSize,
+        // 샘플 호출부의 상태 갱신 예시입니다. 실제 프로필 API를 요청하지 않습니다.
+        onRetry: { state.isRetryEnabled = false },
         action: { _ in }
       )
-      .id(state.avatarPreviewID)
     }
     .frame(maxWidth: .infinity)
     .frame(minHeight: 170)

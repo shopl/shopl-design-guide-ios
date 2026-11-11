@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 텍스트 검색과 지우기 기능을 제공하는 캡슐형 검색창입니다.
 public struct SDGCapsuleSearch: View {
   
   public enum `Type` {
@@ -19,6 +20,8 @@ public struct SDGCapsuleSearch: View {
   
   private let type: `Type`
   private let backgroundColor: Color
+  private let autoFocus: Bool
+  @FocusState private var isTextFieldFocused: Bool
   
   private var clearAllButtonTapped: () -> Void
   private let searchButtonTapped: ((String) -> Void)?
@@ -31,11 +34,13 @@ public struct SDGCapsuleSearch: View {
     }
   }
   
+  /// - Parameter autoFocus: 화면에 나타날 때 입력 포커스를 요청합니다. 기본값은 `false`입니다.
   public init(
     placeHolder: String,
     searchText: Binding<String>,
     type: `Type`,
     backgroundColor: Color,
+    autoFocus: Bool = false,
     clearAllButtonTapped: @escaping () -> Void,
     searchButtonTapped: ((String) -> Void)? = nil,
     searchTextChanged: ((String) -> Void)? = nil
@@ -44,6 +49,7 @@ public struct SDGCapsuleSearch: View {
     self._searchText = searchText
     self.type = type
     self.backgroundColor = backgroundColor
+    self.autoFocus = autoFocus
     self.clearAllButtonTapped = clearAllButtonTapped
     self.searchButtonTapped = searchButtonTapped
     self.searchTextChanged = searchTextChanged
@@ -68,6 +74,12 @@ public struct SDGCapsuleSearch: View {
         .font(.system(size: 14, weight: .regular))
         .foregroundStyle(.neutral700)
         .submitLabel(.search)
+        .focused($isTextFieldFocused)
+        .task {
+          if autoFocus {
+            isTextFieldFocused = true
+          }
+        }
         .frame(maxWidth: .infinity)
         .onSubmit {
           searchButtonTapped?(searchText)
