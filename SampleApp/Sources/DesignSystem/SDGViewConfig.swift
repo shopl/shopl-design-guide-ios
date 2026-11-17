@@ -27,11 +27,13 @@ struct SDGViewConfig {
     registry.register(id: "component_floating_button") { SDGFloatingButtonDemoView() }
     registry.register(id: "component_ghost_button") { SDGGhostButtonDemoView() }
     registry.register(id: "component_icon_tab") { SDGIconTabDemoView() }
+    registry.register(id: "component_linear_progress") { SDGLinearProgressDemoView() }
     registry.register(id: "component_number_picker") { SDGNumberPickerDemoView() }
     registry.register(id: "component_radio") { SDGRadioDemoView() }
     registry.register(id: "component_scroll_tab") { SDGScrollTabDemoView() }
     registry.register(id: "component_toggle") { SDGToggleDemoView() }
     registry.register(id: "template_multi_time_picker") { SDGMultiTimePickerDemoView() }
+    registry.register(id: "component_text_navigation") { SDGTextNaviDemoView() }
     registry.register(id: "template_history") { SDGCustomHistoryDemoView() }
     
     let bottomSheetControlRegistry = SDGBottomSheetControlRegistry.shared

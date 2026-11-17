@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 검색창과 좌우 버튼으로 구성된 검색 내비게이션입니다.
 public struct SDGSearchNavi: View {
   
   public enum TextFieldType {
@@ -21,11 +22,11 @@ public struct SDGSearchNavi: View {
   private let backgroundColor: Color
   private let text: Binding<String>
   private let onClear: (() -> Void)?
+  private let autoFocus: Bool
   public let placeHolder: String
   public let search: (String) -> Void
   
-  @FocusState private var isTextFieldFocused: Bool
-  
+  /// - Parameter autoFocus: 캡슐형 검색창 진입 시 입력 포커스를 요청합니다. 기본값은 `false`입니다.
   public init(
     leadingButton: TopNaviButtonOption?,
     textFieldType: TextFieldType,
@@ -33,6 +34,7 @@ public struct SDGSearchNavi: View {
     backgroundColor: Color,
     placeHolder: String,
     text: Binding<String>,
+    autoFocus: Bool = false,
     onClear: (() -> Void)? = nil,
     search: @escaping (String) -> Void
   ) {
@@ -44,6 +46,7 @@ public struct SDGSearchNavi: View {
     self.placeHolder = placeHolder
     self.text = text
     self.onClear = onClear
+    self.autoFocus = autoFocus
     self.search = search
   }
   
@@ -86,6 +89,7 @@ public struct SDGSearchNavi: View {
         searchText: text,
         type: .soild,
         backgroundColor: SDG.Color.neutral0.color,
+        autoFocus: autoFocus,
         clearAllButtonTapped: {
           text.wrappedValue = ""
           onClear?()
