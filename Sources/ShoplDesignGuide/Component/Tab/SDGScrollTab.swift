@@ -69,6 +69,7 @@ public struct SDGScrollTab: View {
   // 이전 초기화 API의 너비 제한만 호환합니다. 새 API는 라벨의 내용 너비를 유지합니다.
   private var legacyMaxWidth: CGFloat? = nil
 
+  @Environment(\.isEnabled) private var isEnabled
   @Namespace private var underlineNamespace
   @Namespace private var contentCoordinateSpace
   @Namespace private var viewportCoordinateSpace
@@ -187,6 +188,9 @@ public struct SDGScrollTab: View {
         .coordinateSpace(name: viewportCoordinateSpace)
         .scrollIndicators(.hidden)
         .scrollDisabled(contentFrame.width <= viewport.size.width)
+        .contentShape(Rectangle())
+        // 아이템 외의 영역에서 끝난 탭도 이 스크롤 영역에서 받습니다.
+        .onTapGesture { }
         .onPreferenceChange(ContentFrameKey.self) { frame in
           guard let frame else { return }
           contentFrame = frame
@@ -279,50 +283,50 @@ public struct SDGScrollTab: View {
     let isSelected = index == selectedIndex
     let textColor: SDG.Color = isSelected ? .neutral700 : .neutral350
 
-    return Button {
-      onItemTapped(index)
-      // 탭하기 전부터 선택된 항목만 재탭으로 처리합니다.
-      if isSelected {
-        reselectionCount &+= 1
-      }
-    } label: {
-      Text(item.title)
-        .typo(size.typography, textColor)
-        .lineLimit(1)
-        .truncationMode(.tail)
-        .fixedSize(horizontal: legacyMaxWidth == nil, vertical: false)
-        .frame(height: size.typography.lineHeight)
-        .padding(.bottom, SDGSpacing.spacing6)
-        .overlay(alignment: .bottom) {
-          if style == .withUnderline, isSelected {
-            Color.neutral700
-              .frame(height: 2)
-              .matchedGeometryEffect(id: "underline", in: underlineNamespace)
-          }
+    return Text(item.title)
+      .typo(size.typography, textColor)
+      .lineLimit(1)
+      .truncationMode(.tail)
+      .fixedSize(horizontal: legacyMaxWidth == nil, vertical: false)
+      .frame(height: size.typography.lineHeight)
+      .padding(.bottom, SDGSpacing.spacing6)
+      .overlay(alignment: .bottom) {
+        if style == .withUnderline, isSelected {
+          Color.neutral700
+            .frame(height: 2)
+            .matchedGeometryEffect(id: "underline", in: underlineNamespace)
         }
-    }
-    .buttonStyle(NoTapAnimationButtonStyle())
-    .background {
-      if isSelected {
-        GeometryReader { geometry in
-          Color.clear.preference(
-            key: SelectionGeometryKey.self,
-            value: SelectionGeometry(
-              itemID: item.id,
-              frame: geometry.frame(in: .named(contentCoordinateSpace))
+      }
+      .contentShape(Rectangle())
+      .onTapGesture {
+        guard isEnabled else { return }
+        onItemTapped(index)
+        // 탭하기 전부터 선택된 항목만 재탭으로 처리합니다.
+        if isSelected {
+          reselectionCount &+= 1
+        }
+      }
+      .background {
+        if isSelected {
+          GeometryReader { geometry in
+            Color.clear.preference(
+              key: SelectionGeometryKey.self,
+              value: SelectionGeometry(
+                itemID: item.id,
+                frame: geometry.frame(in: .named(contentCoordinateSpace))
+              )
             )
-          )
-          .background(alignment: .trailing) {
-            // 표시 너비와 간격은 그대로 두고, 스크롤 목표만 앞쪽 간격까지 확장합니다.
-            Color.clear
-              .frame(width: geometry.size.width + size.spacing, height: geometry.size.height)
-              .id(ScrollTarget.itemLeading(item.id))
-              .allowsHitTesting(false)
+            .background(alignment: .trailing) {
+              // 표시 너비와 간격은 그대로 두고, 스크롤 목표만 앞쪽 간격까지 확장합니다.
+              Color.clear
+                .frame(width: geometry.size.width + size.spacing, height: geometry.size.height)
+                .id(ScrollTarget.itemLeading(item.id))
+                .allowsHitTesting(false)
+            }
           }
         }
       }
-    }
-    .id(ScrollTarget.item(item.id))
+      .id(ScrollTarget.item(item.id))
   }
 }
 
