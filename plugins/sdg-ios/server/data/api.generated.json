@@ -2,7 +2,7 @@
   "counts" : {
     "extensions" : 10,
     "modifiers" : 24,
-    "types" : 168,
+    "types" : 169,
     "views" : 82
   },
   "excluded" : [
@@ -2794,13 +2794,13 @@
 
       ],
       "declaration" : "public struct Model: Equatable",
-      "doc" : "아바타의 데이터와 디자인 설정을 한 단위로 전달하는 모델입니다.\n표시 상태는 호출 화면이 소유하며, 아바타 내부에서 변경하지 않습니다.",
+      "doc" : "아바타의 데이터와 디자인 설정을 한 단위로 전달하는 모델입니다.\n모델의 표시 상태는 호출 화면이 소유하며, 아바타 내부에서 변경하지 않습니다.\n이미지 연결 실패 기록은 모델과 별개로 아바타가 소유합니다.",
       "inherits" : [
         "Equatable"
       ],
       "initializers" : [
         {
-          "doc" : "데이터와 크기·표시 옵션을 명시해 아바타 입력을 생성합니다.\nRetry를 해제하면 현재 `showFace`와 `imageURL`에 따라 표시합니다.\n- Parameters:\n- userId: 정상 탭 이벤트에 전달할 유저 식별자입니다.\n- imageURL: 표시할 이미지 URL입니다. 서버 Empty 이미지도 그대로 표시합니다.\nURL 없음·이미지 로딩 중·다운로드 실패는 로컬 placeholder로 처리합니다.\n- size: Figma의 Size에 대응하는 아바타 크기입니다.\n- showFace: Retry가 꺼져 있을 때 이미지 표시 여부입니다. `false`여도 모델의 이미지 URL은 유지됩니다.\n- showIc: 우측 하단 아이콘 표시 여부입니다. `true`여도 `ic`가 없으면 숨깁니다.\n- showOutline: 외곽선 표시 여부입니다. `true`여도 `outline`이 없으면 숨깁니다.\n- showRetry: `true`이면 Face와 이미지 다운로드를 생략하고 Retry를 우선 표시합니다.\n- outline: 외곽선 색상입니다. 기본값인 `nil`이면 표시하지 않습니다.\n- ic: 우측 하단 아이콘입니다. 기본값인 `nil`이면 표시하지 않습니다.",
+          "doc" : "데이터와 크기·표시 옵션을 명시해 아바타 입력을 생성합니다.\nRetry를 해제하면 현재 `showFace`와 `imageURL`에 따라 표시합니다.\n- Parameters:\n- userId: 정상 탭 이벤트에 전달할 유저 식별자입니다.\n- imageURL: 표시할 이미지 URL입니다. 서버 Empty 이미지도 그대로 표시합니다.\nURL 없음·이미지 로딩 중과 연결 실패가 아닌 다운로드 실패는 로컬 placeholder로,\n연결 실패는 Retry로 처리합니다.\n- size: Figma의 Size에 대응하는 아바타 크기입니다.\n- showFace: Retry가 꺼져 있을 때 이미지 표시 여부입니다. `false`여도 모델의 이미지 URL은 유지됩니다.\n- showIc: 우측 하단 아이콘 표시 여부입니다. `true`여도 `ic`가 없으면 숨깁니다.\n- showOutline: 외곽선 표시 여부입니다. `true`여도 `outline`이 없으면 숨깁니다.\n- showRetry: `true`이면 Face와 이미지 다운로드를 생략하고 Retry를 우선 표시합니다.\n- outline: 외곽선 색상입니다. 기본값인 `nil`이면 표시하지 않습니다.\n- ic: 우측 하단 아이콘입니다. 기본값인 `nil`이면 표시하지 않습니다.",
           "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
           "kind" : "initializer",
           "name" : "init",
@@ -2914,7 +2914,7 @@
           "signature" : "var showOutline: Bool"
         },
         {
-          "doc" : "Figma의 Show Retry입니다. `true`이면 Face보다 우선하며 이미지 뷰를 생성하지 않습니다.\n호출 화면의 프로필 API 실패 표시에 사용하며, 내부 이미지 다운로드 실패로 자동 변경되지 않습니다.",
+          "doc" : "Figma의 Show Retry입니다. `true`이면 Face보다 우선하며 이미지 뷰를 생성하지 않습니다.\n호출 화면의 프로필 API 실패 표시에 사용합니다. 이미지 다운로드의 연결 실패는 아바타가 따로 기억해\nRetry로 표시하며, 그때도 이 값은 바뀌지 않습니다.",
           "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
           "kind" : "property",
           "name" : "showRetry",
@@ -6354,6 +6354,43 @@
 
       ],
       "name" : "SDGIconTab.Option",
+      "nestedTypes" : [
+
+      ],
+      "properties" : [
+
+      ]
+    },
+    {
+      "cases" : [
+        {
+          "associatedValues" : "(Double)",
+          "doc" : "0~1 사이의 진행률. 범위를 벗어나면 보정하며 NaN은 0으로 처리합니다.",
+          "name" : "determinate"
+        },
+        {
+          "doc" : "일정 길이의 인디케이터가 트랙 안에서 좌우로 반복 이동합니다.",
+          "name" : "indeterminate"
+        }
+      ],
+      "declaration" : "public enum ProgressType: Equatable",
+      "inherits" : [
+        "Equatable"
+      ],
+      "initializers" : [
+
+      ],
+      "isView" : false,
+      "kind" : "enum",
+      "location" : {
+        "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGLinearProgress.swift",
+        "group" : "Progress",
+        "layer" : "Component"
+      },
+      "methods" : [
+
+      ],
+      "name" : "SDGLinearProgress.ProgressType",
       "nestedTypes" : [
 
       ],
@@ -10252,13 +10289,13 @@
 
       ],
       "declaration" : "public struct SDGAvatar: View",
-      "doc" : "Figma의 Size와 Show Face·Show Ic·Show Outline·Show Retry 설정으로 원형 프로필을 표시합니다.\n데이터와 디자인 설정은 Model로 받고, 탭·재시도 동작은 별도 콜백으로 연결합니다.\n프로필 API의 재요청과 표시 상태 갱신은 호출 화면에서 담당합니다.",
+      "doc" : "Figma의 Size와 Show Face·Show Ic·Show Outline·Show Retry 설정으로 원형 프로필을 표시합니다.\n데이터와 디자인 설정은 Model로 받고, 탭·재시도 동작은 별도 콜백으로 연결합니다.\n프로필 API의 재요청과 표시 상태 갱신은 호출 화면에서 담당합니다.\n연결 실패로 이미지를 받지 못하면 아바타가 Retry로 바꿔 표시하고, 탭하면 직접 다시 받습니다.",
       "inherits" : [
         "View"
       ],
       "initializers" : [
         {
-          "doc" : "데이터와 디자인 설정을 담은 Model로 아바타를 생성합니다.\nRetry가 Face보다 우선하며, 해제하면 전달된 Face 설정과 이미지 URL로 표시합니다.\nURL 없음·이미지 로딩 중·다운로드 실패는 로컬 placeholder로 처리하고 Retry를 자동으로 켜지 않습니다.\n- Parameters:\n- model: 유저 식별자·이미지 URL과 Figma의 Size·표시 옵션, 외곽선 색상·하단 아이콘입니다.\nOutline과 ic는 Retry 표시 중에도 각 표시 옵션과 값에 따라 독립적으로 표시합니다.\n- onRetry: Retry 상태에서 탭하면 호출합니다. 기본값인 `nil`이면 표시만 합니다.\n프로필 API 재요청과 결과에 따른 모델·표시 옵션 갱신은 호출 화면에서 담당합니다.\n- action: Retry가 꺼진 상태에서 탭하면 유저 식별자를 전달합니다.",
+          "doc" : "데이터와 디자인 설정을 담은 Model로 아바타를 생성합니다.\nRetry가 Face보다 우선하며, 해제하면 전달된 Face 설정과 이미지 URL로 표시합니다.\nURL 없음·이미지 로딩 중과 연결 실패가 아닌 다운로드 실패(서버 오류 응답 등)는 로컬 placeholder로 처리합니다.\n연결 실패(오프라인·시간 초과처럼 URLSession 단계에서 요청이 실패한 경우)로 이미지를 받지 못하면\n`showRetry`가 꺼져 있어도 Retry로 표시합니다. 이 Retry는 탭하면 같은 URL을 다시 받고,\n이미지 URL이나 `showRetry`가 바뀌어도 풀려 다시 받습니다. 탭을 막아 둔 아바타에도 표시됩니다.\n- Parameters:\n- model: 유저 식별자·이미지 URL과 Figma의 Size·표시 옵션, 외곽선 색상·하단 아이콘입니다.\nOutline과 ic는 Retry 표시 중에도 각 표시 옵션과 값에 따라 독립적으로 표시합니다.\n- onRetry: `showRetry`가 켜진 상태에서 탭하면 호출합니다. 기본값인 `nil`이면 표시만 합니다.\n프로필 API 재요청과 결과에 따른 모델·표시 옵션 갱신은 호출 화면에서 담당합니다.\n이미지 연결 실패로 표시한 Retry는 아바타가 직접 다시 받으며 호출하지 않습니다.\n- action: Retry를 표시하지 않는 상태에서 탭하면 유저 식별자를 전달합니다.",
           "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
           "kind" : "initializer",
           "name" : "init",
@@ -10284,7 +10321,7 @@
         },
         {
           "deprecated" : "데이터와 표시 설정을 SDGAvatar.Model에 담아 init(model:onRetry:action:)을 사용하세요.",
-          "doc" : "기존 배포 API의 역할 뱃지와 임산부 Outline을 새 표시 옵션으로 변환합니다.\nFace는 표시하고 Retry는 숨겨 기존 동작을 유지합니다.\n- Parameters:\n- type: 기존 원형 아바타 타입입니다.\n- model: 이미지와 역할·임산부 정보입니다. 리더·관리자는 기존 뱃지, 임산부는 분홍색 테두리로 표시합니다.\n- size: 기존 아바타 크기입니다. 새 Model의 `size`와 동일한 규격입니다.\n- action: 아바타를 누르면 유저 식별자를 전달합니다.",
+          "doc" : "기존 배포 API의 역할 뱃지와 임산부 Outline을 새 표시 옵션으로 변환합니다.\nFace는 표시하고 Retry는 숨겨 기존 동작을 유지합니다.\n이미지 다운로드 실패도 기존처럼 placeholder로 표시하고 Retry로 바꾸지 않습니다.\n- Parameters:\n- type: 기존 원형 아바타 타입입니다.\n- model: 이미지와 역할·임산부 정보입니다. 리더·관리자는 기존 뱃지, 임산부는 분홍색 테두리로 표시합니다.\n- size: 기존 아바타 크기입니다. 새 Model의 `size`와 동일한 규격입니다.\n- action: 아바타를 누르면 유저 식별자를 전달합니다.",
           "file" : "Sources/ShoplDesignGuide/Component/Avatar/SDGAvatar.swift",
           "kind" : "initializer",
           "name" : "init",
@@ -13136,11 +13173,91 @@
 
       ],
       "declaration" : "public struct SDGLinearProgress: View",
+      "doc" : "실제 진행률 또는 완료 시간을 알 수 없는 작업을 표시하는 160pt 너비의 프로그레스입니다.",
       "inherits" : [
         "View"
       ],
       "initializers" : [
         {
+          "doc" : "- Parameters:\n- type: 실제 진행률 표시 또는 진행률을 알 수 없는 반복 로딩입니다.\n- label: 생략하거나 빈 문자열이면 바만 표시합니다. 긴 문구는 160pt 안에서 중앙 정렬로 줄바꿈합니다.\n- labelColor: 라벨 색상. 기본값은 neutral700이며 SDG 색상을 사용할 수 있습니다.",
+          "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGLinearProgress.swift",
+          "kind" : "initializer",
+          "name" : "init",
+          "parameters" : [
+            {
+              "label" : "type",
+              "name" : "type",
+              "type" : "ProgressType"
+            },
+            {
+              "defaultValue" : "nil",
+              "label" : "label",
+              "name" : "label",
+              "type" : "String?"
+            },
+            {
+              "defaultValue" : ".neutral700",
+              "label" : "labelColor",
+              "name" : "labelColor",
+              "type" : "Color"
+            }
+          ],
+          "signature" : "init(type: ProgressType, label: String? = nil, labelColor: Color = .neutral700)"
+        },
+        {
+          "doc" : "실제 진행률을 표시합니다. 라벨을 생략하면 바만 표시합니다.",
+          "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGLinearProgress.swift",
+          "kind" : "initializer",
+          "name" : "init",
+          "parameters" : [
+            {
+              "label" : "progress",
+              "name" : "progress",
+              "type" : "Double"
+            },
+            {
+              "defaultValue" : "nil",
+              "label" : "label",
+              "name" : "label",
+              "type" : "String?"
+            },
+            {
+              "defaultValue" : ".neutral700",
+              "label" : "labelColor",
+              "name" : "labelColor",
+              "type" : "Color"
+            }
+          ],
+          "signature" : "init(progress: Double, label: String? = nil, labelColor: Color = .neutral700)"
+        },
+        {
+          "deprecated" : "Use init(progress:label:labelColor:) instead.",
+          "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGLinearProgress.swift",
+          "kind" : "initializer",
+          "name" : "init",
+          "parameters" : [
+            {
+              "label" : "progress",
+              "name" : "progress",
+              "type" : "Double"
+            },
+            {
+              "label" : "title",
+              "name" : "title",
+              "type" : "String"
+            },
+            {
+              "defaultValue" : "nil",
+              "label" : "titleColor",
+              "name" : "titleColor",
+              "type" : "Color?"
+            }
+          ],
+          "signature" : "init(progress: Double, title: String, titleColor: Color? = nil)"
+        },
+        {
+          "deprecated" : "Use init(progress:label:labelColor:) to display actual progress.",
+          "doc" : "기존 호출부 호환용입니다. 완료 전에는 0%, 완료 후에는 100%를 표시합니다.",
           "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGLinearProgress.swift",
           "kind" : "initializer",
           "name" : "init",
@@ -13177,11 +13294,12 @@
       ],
       "name" : "SDGLinearProgress",
       "nestedTypes" : [
-
+        "SDGLinearProgress.ProgressType"
       ],
       "properties" : [
 
-      ]
+      ],
+      "version" : "2.3.52"
     },
     {
       "cases" : [

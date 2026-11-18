@@ -1,5 +1,5 @@
 {
-  "count" : 200,
+  "count" : 203,
   "examples" : {
     "Divider" : [
       {
@@ -624,9 +624,24 @@
     ],
     "SDGLinearProgress" : [
       {
-        "code" : "SDGLinearProgress(\n  isComplete: .constant(true),\n  title: \"업로드 중입니다.\"\n)",
+        "code" : "SDGLinearProgress(progress: 0.65, label: \"업로드 중입니다\")",
         "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGLinearProgress.swift",
         "source" : "preview"
+      },
+      {
+        "code" : "SDGLinearProgress(type: .indeterminate, label: \"데이터를 불러오고 있습니다. 잠시만 기다려 주세요.\")",
+        "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGLinearProgress.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGLinearProgress(progress: 0.3)",
+        "file" : "Sources/ShoplDesignGuide/Component/Progress/SDGLinearProgress.swift",
+        "source" : "preview"
+      },
+      {
+        "code" : "SDGLinearProgress(\n  type: mode == .determinate ? .determinate(progress) : .indeterminate,\n  label: showsLabel ? label : nil,\n  labelColor: usesPrimaryLabel ? .primary300 : .neutral700\n)",
+        "file" : "SampleApp/Sources/DemoViews/Component/LinearProgress/SDGLinearProgressDemoView.swift",
+        "source" : "sample-app"
       }
     ],
     "SDGListHeaderLabel" : [

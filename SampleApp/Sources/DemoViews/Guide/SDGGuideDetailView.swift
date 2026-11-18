@@ -109,6 +109,8 @@ struct SDGGuideDetailView: View {
       return SDGGhostButton.version
     case "component_icon_tab":
       return SDGIconTab.version
+    case "component_linear_progress":
+      return SDGLinearProgress.version
     case "component_number_picker":
       return SDGNumberPicker.version
     case "component_radio":
