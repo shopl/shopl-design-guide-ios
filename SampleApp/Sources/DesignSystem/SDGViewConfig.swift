@@ -26,6 +26,7 @@ struct SDGViewConfig {
     registry.register(id: "component_dropdown") { SDGDropdownDemoView() }
     registry.register(id: "component_floating_button") { SDGFloatingButtonDemoView() }
     registry.register(id: "component_ghost_button") { SDGGhostButtonDemoView() }
+    registry.register(id: "component_icon_label") { SDGIconLabelDemoView() }
     registry.register(id: "component_icon_tab") { SDGIconTabDemoView() }
     registry.register(id: "component_linear_progress") { SDGLinearProgressDemoView() }
     registry.register(id: "component_number_picker") { SDGNumberPickerDemoView() }
