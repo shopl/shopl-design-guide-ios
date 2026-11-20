@@ -51,12 +51,14 @@ public struct AvatarModel: Equatable, Hashable {
 /// Figma의 Size와 Show Face·Show Ic·Show Outline·Show Retry 설정으로 원형 프로필을 표시합니다.
 /// 데이터와 디자인 설정은 Model로 받고, 탭·재시도 동작은 별도 콜백으로 연결합니다.
 /// 프로필 API의 재요청과 표시 상태 갱신은 호출 화면에서 담당합니다.
+/// 연결 실패로 이미지를 받지 못하면 아바타가 Retry로 바꿔 표시하고, 탭하면 직접 다시 받습니다.
 public struct SDGAvatar: View {
   /// 이 컴포넌트에 적용된 디자인 가이드 버전입니다.
   public static let version = "2.3.50"
 
   /// 아바타의 데이터와 디자인 설정을 한 단위로 전달하는 모델입니다.
-  /// 표시 상태는 호출 화면이 소유하며, 아바타 내부에서 변경하지 않습니다.
+  /// 모델의 표시 상태는 호출 화면이 소유하며, 아바타 내부에서 변경하지 않습니다.
+  /// 이미지 연결 실패 기록은 모델과 별개로 아바타가 소유합니다.
   public struct Model: Equatable {
     /// 정상 상태에서 아바타를 누르면 `action`에 전달하는 식별자입니다.
     public let userId: String
@@ -71,7 +73,8 @@ public struct SDGAvatar: View {
     /// Figma의 Show Outline입니다. `true`이고 `outline`이 있을 때 외곽선을 표시합니다.
     public var showOutline: Bool
     /// Figma의 Show Retry입니다. `true`이면 Face보다 우선하며 이미지 뷰를 생성하지 않습니다.
-    /// 호출 화면의 프로필 API 실패 표시에 사용하며, 내부 이미지 다운로드 실패로 자동 변경되지 않습니다.
+    /// 호출 화면의 프로필 API 실패 표시에 사용합니다. 이미지 다운로드의 연결 실패는 아바타가 따로 기억해
+    /// Retry로 표시하며, 그때도 이 값은 바뀌지 않습니다.
     public var showRetry: Bool
     /// 원 바깥에 그릴 외곽선 색상입니다. `showOutline`을 꺼도 값은 유지합니다.
     public var outline: Color?
@@ -83,7 +86,8 @@ public struct SDGAvatar: View {
     /// - Parameters:
     ///   - userId: 정상 탭 이벤트에 전달할 유저 식별자입니다.
     ///   - imageURL: 표시할 이미지 URL입니다. 서버 Empty 이미지도 그대로 표시합니다.
-    ///     URL 없음·이미지 로딩 중·다운로드 실패는 로컬 placeholder로 처리합니다.
+    ///     URL 없음·이미지 로딩 중과 연결 실패가 아닌 다운로드 실패는 로컬 placeholder로,
+    ///     연결 실패는 Retry로 처리합니다.
     ///   - size: Figma의 Size에 대응하는 아바타 크기입니다.
     ///   - showFace: Retry가 꺼져 있을 때 이미지 표시 여부입니다. `false`여도 모델의 이미지 URL은 유지됩니다.
     ///   - showIc: 우측 하단 아이콘 표시 여부입니다. `true`여도 `ic`가 없으면 숨깁니다.
@@ -131,6 +135,21 @@ public struct SDGAvatar: View {
   private let model: Model
   private let onRetry: (() -> Void)?
   private let action: (String) -> Void
+  /// 기존 배포 API는 다운로드 실패를 placeholder로 표시하던 동작을 유지하려고 `false`로 둡니다.
+  private let showsRetryOnImageLoadFailure: Bool
+
+  /// 연결 실패로 받지 못한 이미지 URL입니다. 현재 URL과 같을 때만 Retry로 표시해,
+  /// 이전 URL의 실패가 뒤늦게 도착해도 새 URL에 영향을 주지 않습니다.
+  @State private var failedImageURL: URL?
+
+  private var isImageLoadFailed: Bool {
+    guard model.showFace, let imageURL = model.imageURL else { return false }
+    return failedImageURL == imageURL
+  }
+
+  private var showsRetry: Bool {
+    model.showRetry || isImageLoadFailed
+  }
 
   private var outlineWidth: CGFloat {
     switch model.size {
@@ -167,25 +186,45 @@ public struct SDGAvatar: View {
 
   /// 데이터와 디자인 설정을 담은 Model로 아바타를 생성합니다.
   /// Retry가 Face보다 우선하며, 해제하면 전달된 Face 설정과 이미지 URL로 표시합니다.
-  /// URL 없음·이미지 로딩 중·다운로드 실패는 로컬 placeholder로 처리하고 Retry를 자동으로 켜지 않습니다.
+  /// URL 없음·이미지 로딩 중과 연결 실패가 아닌 다운로드 실패(서버 오류 응답 등)는 로컬 placeholder로 처리합니다.
+  /// 연결 실패(오프라인·시간 초과처럼 URLSession 단계에서 요청이 실패한 경우)로 이미지를 받지 못하면
+  /// `showRetry`가 꺼져 있어도 Retry로 표시합니다. 이 Retry는 탭하면 같은 URL을 다시 받고,
+  /// 이미지 URL이나 `showRetry`가 바뀌어도 풀려 다시 받습니다. 탭을 막아 둔 아바타에도 표시됩니다.
   /// - Parameters:
   ///   - model: 유저 식별자·이미지 URL과 Figma의 Size·표시 옵션, 외곽선 색상·하단 아이콘입니다.
   ///     Outline과 ic는 Retry 표시 중에도 각 표시 옵션과 값에 따라 독립적으로 표시합니다.
-  ///   - onRetry: Retry 상태에서 탭하면 호출합니다. 기본값인 `nil`이면 표시만 합니다.
+  ///   - onRetry: `showRetry`가 켜진 상태에서 탭하면 호출합니다. 기본값인 `nil`이면 표시만 합니다.
   ///     프로필 API 재요청과 결과에 따른 모델·표시 옵션 갱신은 호출 화면에서 담당합니다.
-  ///   - action: Retry가 꺼진 상태에서 탭하면 유저 식별자를 전달합니다.
+  ///     이미지 연결 실패로 표시한 Retry는 아바타가 직접 다시 받으며 호출하지 않습니다.
+  ///   - action: Retry를 표시하지 않는 상태에서 탭하면 유저 식별자를 전달합니다.
   public init(
     model: Model,
     onRetry: (() -> Void)? = nil,
     action: @escaping (String) -> Void
   ) {
+    self.init(
+      model: model,
+      onRetry: onRetry,
+      showsRetryOnImageLoadFailure: true,
+      action: action
+    )
+  }
+
+  private init(
+    model: Model,
+    onRetry: (() -> Void)?,
+    showsRetryOnImageLoadFailure: Bool,
+    action: @escaping (String) -> Void
+  ) {
     self.model = model
     self.onRetry = onRetry
+    self.showsRetryOnImageLoadFailure = showsRetryOnImageLoadFailure
     self.action = action
   }
 
   /// 기존 배포 API의 역할 뱃지와 임산부 Outline을 새 표시 옵션으로 변환합니다.
   /// Face는 표시하고 Retry는 숨겨 기존 동작을 유지합니다.
+  /// 이미지 다운로드 실패도 기존처럼 placeholder로 표시하고 Retry로 바꾸지 않습니다.
   /// - Parameters:
   ///   - type: 기존 원형 아바타 타입입니다.
   ///   - model: 이미지와 역할·임산부 정보입니다. 리더·관리자는 기존 뱃지, 임산부는 분홍색 테두리로 표시합니다.
@@ -220,33 +259,46 @@ public struct SDGAvatar: View {
         outline: model.maternity == .none ? nil : .sdgSpecialPink,
         ic: icon
       ),
+      onRetry: nil,
+      showsRetryOnImageLoadFailure: false,
       action: action
     )
   }
 
-  @ViewBuilder
   public var body: some View {
-    if model.showRetry, onRetry == nil {
-      content
-    } else {
-      Button {
-        if model.showRetry {
-          onRetry?()
-        } else {
-          action(model.userId)
-        }
-      } label: {
+    Group {
+      if model.showRetry, onRetry == nil {
         content
-          // 눌림 효과를 아바타 전체에 한 번 적용해 각 레이어의 합성 결과를 유지합니다.
-          .compositingGroup()
+      } else {
+        Button {
+          if model.showRetry {
+            onRetry?()
+          } else if isImageLoadFailed {
+            // 실패 기록을 지우면 이미지 뷰가 다시 만들어져 같은 URL을 다시 받습니다.
+            failedImageURL = nil
+          } else {
+            action(model.userId)
+          }
+        } label: {
+          content
+            // 눌림 효과를 아바타 전체에 한 번 적용해 각 레이어의 합성 결과를 유지합니다.
+            .compositingGroup()
+        }
+        .buttonStyle(.plain)
       }
-      .buttonStyle(.plain)
+    }
+    // 표시할 URL이나 호출 화면의 Retry가 바뀌면 실패 기록을 지워 이미지를 다시 받습니다.
+    .onChange(of: model.imageURL) { _ in
+      failedImageURL = nil
+    }
+    .onChange(of: model.showRetry) { _ in
+      failedImageURL = nil
     }
   }
 
   private var content: some View {
     ZStack {
-      if model.showRetry {
+      if showsRetry {
         retry
       } else {
         face
@@ -271,11 +323,23 @@ public struct SDGAvatar: View {
         .placeholder {
           emptyImage
         }
+        .onFailure { error in
+          guard showsRetryOnImageLoadFailure, Self.isConnectionFailure(error) else { return }
+          failedImageURL = imageURL
+        }
         .resizable()
         .scaledToFill()
     } else {
       emptyImage
     }
+  }
+
+  /// URLSession 단계에서 요청이 실패한 경우(오프라인·시간 초과 등)만 Retry 대상으로 봅니다.
+  /// 서버가 오류로 응답한 이미지(없는 파일 등)는 다시 받아도 같아서 placeholder로 둡니다.
+  /// Kingfisher가 취소한 다운로드는 다른 오류로 전달되므로, URLSession이 직접 취소한 경우만 여기서 제외합니다.
+  private static func isConnectionFailure(_ error: KingfisherError) -> Bool {
+    guard case .responseError(reason: .URLSessionError(let sessionError)) = error else { return false }
+    return (sessionError as? URLError)?.code != .cancelled
   }
 
   private var retry: some View {
