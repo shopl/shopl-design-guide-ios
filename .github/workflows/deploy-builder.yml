@@ -128,8 +128,61 @@ jobs:
       - name: Environment Setup
         run: |
           set -euo pipefail
-          make setup
-          git diff --exit-code HEAD -- Tuist/Package.resolved
+          # Builder만 실행별 gem 환경을 사용한다. 공통 make setup과 전역 gem은 변경하지 않는다.
+          mise install
+          ruby_root="$(mktemp -d "$RUNNER_TEMP/sdg-builder-ruby.XXXXXX")"
+          export SDG_BUILDER_RUBY_ROOT="$ruby_root"
+          # 기존 셸의 Bundler 설정이 이번 빌드로 섞이지 않도록 job 안에서만 비운다.
+          for name in ${!BUNDLE_@}; do
+            unset "$name"
+            printf '%s=\n' "$name" >> "$GITHUB_ENV"
+          done
+          for name in ${!BUNDLER_ORIG_@}; do
+            unset "$name"
+          done
+          unset RUBYOPT RUBYLIB RUBYGEMS_GEMDEPS BUNDLER_VERSION
+          export GEM_HOME="$ruby_root/gems"
+          export GEM_PATH="$GEM_HOME"
+          export GEM_SPEC_CACHE="$ruby_root/specs"
+          export BUNDLE_USER_HOME="$ruby_root/user"
+          export BUNDLE_APP_CONFIG="$ruby_root/config"
+          export BUNDLE_IGNORE_CONFIG=true
+          export BUNDLE_PATH="$ruby_root/bundle"
+          export BUNDLE_DISABLE_SHARED_GEMS=true
+          export BUNDLE_FROZEN=true
+          BUNDLER_VERSION="$(mise exec ruby -- ruby -e '
+            lock = File.read("Gemfile.lock")
+            versions = lock.scan(/^BUNDLED WITH\r?\n[ \t]+(\d+\.\d+\.\d+)[ \t]*\r?$/).flatten
+            abort "Gemfile.lock must specify exactly one Bundler version" unless versions.length == 1
+            puts versions.first
+          ')"
+          export BUNDLER_VERSION
+          [[ "$BUNDLER_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          mise exec ruby -- gem install bundler --norc --version "$BUNDLER_VERSION" --no-document \
+            --install-dir "$GEM_HOME" --bindir "$GEM_HOME/bin"
+          export PATH="$GEM_HOME/bin:$PATH"
+          mise exec ruby -- ruby "$GEM_HOME/bin/bundle" install --jobs 4 --retry 2
+          # Fastlane과 자식 Ruby가 lockfile과 같은 Bundler를 사용하는지 빌드 전에 확인한다.
+          mise exec ruby -- ruby "$GEM_HOME/bin/bundle" exec ruby -rbundler -rrbconfig -e '
+            check = %q{
+              expected = ENV.fetch("BUNDLER_VERSION")
+              spec = Gem.loaded_specs.fetch("bundler")
+              abort "Bundler version mismatch" unless Bundler::VERSION == expected && spec.version.to_s == expected
+              home = File.realpath(ENV.fetch("SDG_BUILDER_RUBY_ROOT")) + File::SEPARATOR
+              abort "Bundler escaped the job gem directory" unless File.realpath(spec.full_gem_path).start_with?(home)
+            }
+            eval(check)
+            abort "Child Ruby Bundler check failed" unless system(RbConfig.ruby, "-rbundler", "-e", check)
+          '
+          for name in SDG_BUILDER_RUBY_ROOT GEM_HOME GEM_PATH GEM_SPEC_CACHE BUNDLE_USER_HOME BUNDLE_APP_CONFIG \
+            BUNDLE_IGNORE_CONFIG BUNDLE_PATH BUNDLE_DISABLE_SHARED_GEMS BUNDLE_FROZEN BUNDLER_VERSION; do
+            printf '%s=%s\n' "$name" "${!name}" >> "$GITHUB_ENV"
+          done
+          printf 'RUBYOPT=\nRUBYLIB=\nRUBYGEMS_GEMDEPS=\n' >> "$GITHUB_ENV"
+          printf '%s\n' "$GEM_HOME/bin" >> "$GITHUB_PATH"
+          mise exec tuist -- tuist install
+          mise exec node -- npm ci
+          git diff --exit-code HEAD -- Gemfile.lock Tuist/Package.resolved
       # 캐시는 소스 checkout 밖에 보관한다. 도구·설정·작업 경로가 바뀌면 분리한다.
       - name: Configure local Xcode cache and build evidence
         run: |
@@ -177,6 +230,10 @@ jobs:
           FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
         run: |
           set -euo pipefail
+          # 상속된 Bundler 백업 환경이 자식 Ruby에서 복원되지 않도록 제거한다.
+          for name in ${!BUNDLER_ORIG_@}; do
+            unset "$name"
+          done
           # Secret이 비어 있으면 러너 환경과 match의 기존 키체인 조회를 유지한다.
           if [[ -n "${SDG_MATCH_PASSWORD:-}" ]]; then
             export MATCH_PASSWORD="$SDG_MATCH_PASSWORD"
