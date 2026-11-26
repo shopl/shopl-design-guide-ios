@@ -1,8 +1,8 @@
 {
-  "count" : 155,
+  "count" : 169,
   "countsByKind" : {
-    "icon" : 143,
-    "image" : 12
+    "icon" : 156,
+    "image" : 13
   },
   "icons" : [
     {
@@ -60,6 +60,21 @@
       "name" : "emptyData",
       "renderingMode" : "template",
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/empty_data.imageset"
+    },
+    {
+      "assetName" : "empty_illust_sad",
+      "formats" : [
+        "pdf"
+      ],
+      "keywords" : [
+        "empty",
+        "illust",
+        "sad"
+      ],
+      "kind" : "image",
+      "name" : "emptyIllustSad",
+      "renderingMode" : "original",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/empty_illust_sad.imageset"
     },
     {
       "assetName" : "empty_member",
@@ -248,6 +263,20 @@
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_+.imageset"
     },
     {
+      "assetName" : "ic_common_bullet",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "common",
+        "bullet"
+      ],
+      "kind" : "icon",
+      "name" : "icCommonBullet",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_bullet.imageset"
+    },
+    {
       "assetName" : "ic_common_cancel",
       "formats" : [
         "svg"
@@ -260,6 +289,21 @@
       "name" : "icCommonCancel",
       "renderingMode" : "template",
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_cancel.imageset"
+    },
+    {
+      "assetName" : "ic_common_caution_s",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "common",
+        "caution",
+        "s"
+      ],
+      "kind" : "icon",
+      "name" : "icCommonCautionS",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_caution_s.imageset"
     },
     {
       "assetName" : "ic_common_check_s",
@@ -544,6 +588,20 @@
       "name" : "icCommonMail",
       "renderingMode" : "template",
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_mail.imageset"
+    },
+    {
+      "assetName" : "ic_common_members",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "common",
+        "members"
+      ],
+      "kind" : "icon",
+      "name" : "icCommonMembers",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_members.imageset"
     },
     {
       "assetName" : "ic_common_memo",
@@ -842,6 +900,21 @@
       "name" : "icCommonStaff",
       "renderingMode" : "template",
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_staff.imageset"
+    },
+    {
+      "assetName" : "ic_common_staff_s",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "common",
+        "staff",
+        "s"
+      ],
+      "kind" : "icon",
+      "name" : "icCommonStaffS",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_staff_s.imageset"
     },
     {
       "assetName" : "ic_common_time",
@@ -1231,6 +1304,19 @@
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_input_delete.imageset"
     },
     {
+      "assetName" : "ic_inside",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "inside"
+      ],
+      "kind" : "icon",
+      "name" : "icInside",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_inside.imageset"
+    },
+    {
       "assetName" : "ic_login_company",
       "formats" : [
         "svg"
@@ -1313,6 +1399,20 @@
       "name" : "icMenuMember",
       "renderingMode" : "template",
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_menu_member.imageset"
+    },
+    {
+      "assetName" : "ic_menu_members",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "menu",
+        "members"
+      ],
+      "kind" : "icon",
+      "name" : "icMenuMembers",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_menu_members.imageset"
     },
     {
       "assetName" : "ic_menu_price",
@@ -1411,6 +1511,20 @@
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_navi_chat.imageset"
     },
     {
+      "assetName" : "ic_navi_check",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "navi",
+        "check"
+      ],
+      "kind" : "icon",
+      "name" : "icNaviCheck",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_navi_check.imageset"
+    },
+    {
       "assetName" : "ic_navi_close",
       "formats" : [
         "pdf"
@@ -1467,6 +1581,35 @@
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_navi_help.imageset"
     },
     {
+      "assetName" : "ic_navi_invite_resend",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "navi",
+        "invite",
+        "resend"
+      ],
+      "kind" : "icon",
+      "name" : "icNaviInviteResend",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_navi_invite_resend.imageset"
+    },
+    {
+      "assetName" : "ic_navi_linestar",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "navi",
+        "linestar"
+      ],
+      "kind" : "icon",
+      "name" : "icNaviLinestar",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_navi_linestar.imageset"
+    },
+    {
       "assetName" : "ic_navi_link",
       "formats" : [
         "svg"
@@ -1479,6 +1622,20 @@
       "name" : "icNaviLink",
       "renderingMode" : "template",
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_navi_link.imageset"
+    },
+    {
+      "assetName" : "ic_navi_members",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "navi",
+        "members"
+      ],
+      "kind" : "icon",
+      "name" : "icNaviMembers",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_navi_members.imageset"
     },
     {
       "assetName" : "ic_navi_mode",
@@ -1509,6 +1666,20 @@
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_navi_search.imageset"
     },
     {
+      "assetName" : "ic_navi_solidstar",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "navi",
+        "solidstar"
+      ],
+      "kind" : "icon",
+      "name" : "icNaviSolidstar",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_navi_solidstar.imageset"
+    },
+    {
       "assetName" : "ic_navi_temporary",
       "formats" : [
         "svg"
@@ -1534,6 +1705,19 @@
       "name" : "icNetwork",
       "renderingMode" : "template",
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_network.imageset"
+    },
+    {
+      "assetName" : "ic_noti",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "noti"
+      ],
+      "kind" : "icon",
+      "name" : "icNoti",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_noti.imageset"
     },
     {
       "assetName" : "ic_organization",
@@ -1612,6 +1796,19 @@
       "name" : "icSearchtext",
       "renderingMode" : "template",
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_searchtext.imageset"
+    },
+    {
+      "assetName" : "ic_star",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "star"
+      ],
+      "kind" : "icon",
+      "name" : "icStar",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_star.imageset"
     },
     {
       "assetName" : "ic_star_solid",
