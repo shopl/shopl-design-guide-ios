@@ -91,6 +91,7 @@ public extension SDG.Image {
     static let icCommonS = SDG.Image(name: "ic_common_+_s", bundle: dsBundle)
     static let icCommonBullet = SDG.Image(name: "ic_common_bullet", bundle: dsBundle)
     static let icCommonCancel = SDG.Image(name: "ic_common_cancel", bundle: dsBundle)
+    static let icCommonCautionS = SDG.Image(name: "ic_common_caution_s", bundle: dsBundle)
     static let icCommonCheckS = SDG.Image(name: "ic_common_check_s", bundle: dsBundle)
     static let icCommonCheckbold = SDG.Image(name: "ic_common_checkbold", bundle: dsBundle)
     static let icCommonChecksbold = SDG.Image(name: "ic_common_checksbold", bundle: dsBundle)

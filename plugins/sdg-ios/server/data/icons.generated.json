@@ -1,7 +1,7 @@
 {
-  "count" : 168,
+  "count" : 169,
   "countsByKind" : {
-    "icon" : 155,
+    "icon" : 156,
     "image" : 13
   },
   "icons" : [
@@ -289,6 +289,21 @@
       "name" : "icCommonCancel",
       "renderingMode" : "template",
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_cancel.imageset"
+    },
+    {
+      "assetName" : "ic_common_caution_s",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "common",
+        "caution",
+        "s"
+      ],
+      "kind" : "icon",
+      "name" : "icCommonCautionS",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_common_caution_s.imageset"
     },
     {
       "assetName" : "ic_common_check_s",
