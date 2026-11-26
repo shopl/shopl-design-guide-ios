@@ -1,7 +1,7 @@
 {
-  "count" : 167,
+  "count" : 168,
   "countsByKind" : {
-    "icon" : 154,
+    "icon" : 155,
     "image" : 13
   },
   "icons" : [
@@ -1690,6 +1690,19 @@
       "name" : "icNetwork",
       "renderingMode" : "template",
       "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_network.imageset"
+    },
+    {
+      "assetName" : "ic_noti",
+      "formats" : [
+        "svg"
+      ],
+      "keywords" : [
+        "noti"
+      ],
+      "kind" : "icon",
+      "name" : "icNoti",
+      "renderingMode" : "template",
+      "source" : "Sources/ShoplDesignGuide/Resources/Assets/Images.xcassets/ic_noti.imageset"
     },
     {
       "assetName" : "ic_organization",

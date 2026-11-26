@@ -190,6 +190,7 @@ public extension SDG.Image {
     static let icNaviSolidstar = SDG.Image(name: "ic_navi_solidstar", bundle: dsBundle)
     static let icNaviTemporary = SDG.Image(name: "ic_navi_temporary", bundle: dsBundle)
     static let icNetwork = SDG.Image(name: "ic_network", bundle: dsBundle)
+    static let icNoti = SDG.Image(name: "ic_noti", bundle: dsBundle)
     static let icOrganization = SDG.Image(name: "ic_organization", bundle: dsBundle)
     static let icOt = SDG.Image(name: "ic_ot", bundle: dsBundle)
     static let icProgress = SDG.Image(name: "ic_progress", bundle: dsBundle)
